@@ -39,14 +39,14 @@ Format : **Date | Décision | Raison | Impact**
 
 ---
 
-## 2025-01-20 : Commander.js au lieu de yargs/oclif
+## 2025-01-20 : Choix de Commander.js au lieu de yargs/oclif
 **Décision** : Commander pour le CLI framework  
 **Raison** : Plus simple, bien documenté, suffisant  
 **Impact** : 50% moins de boilerplate
 
 ---
 
-## 2025-01-20 : 4 dépendances max
+## 2025-01-20 : Utiliser 4 dépendances max
 **Décision** : commander, typescript, chalk, fast-glob only  
 **Raison** : Chaque dep = risque de maintenance  
 **Impact** : Bundle <10MB, moins de bugs
