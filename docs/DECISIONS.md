@@ -4,6 +4,27 @@ Format : **Date | Décision | Raison | Impact**
 
 ---
 
+## 2025-06-24 : Parser avec TypeScript Compiler API
+**Décision** : Utiliser l'API officielle TypeScript plutôt qu'un parser custom  
+**Raison** : Précision maximale, maintenance par Microsoft, gratuit  
+**Impact** : Parsing 100% fiable, support futur garanti
+
+---
+
+## 2025-06-24 : Complexité cyclomatique simple (McCabe)
+**Décision** : Compter uniquement les points de décision, pas de cognitive complexity  
+**Raison** : Standard industrie, simple à comprendre et expliquer  
+**Impact** : Métrique claire et actionnable
+
+---
+
+## 2025-06-24 : Duplication par hash de blocs
+**Décision** : Hash MD5 de blocs de 5 lignes pour détecter duplication  
+**Raison** : Balance entre précision et performance  
+**Impact** : Détection rapide, peu de faux positifs
+
+---
+
 ## 2025-06-24 : Réduction à 3 métriques au lieu de 5
 **Décision** : MVP avec seulement complexity, duplication, maintainability  
 **Raison** : Simplicité > Features. 80% de la valeur avec 40% de l'effort  
