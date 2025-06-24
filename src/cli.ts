@@ -2,7 +2,8 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { CliOptions } from './types.js';
+import { CliOptions } from './types';
+import { parseDirectory } from './parser';
 
 const program = new Command();
 
@@ -21,15 +22,24 @@ program
       console.log(chalk.blue('📊 InsightCode Analysis\n'));
       console.log(chalk.gray(`Analyzing: ${path}`));
       
-      // TODO: Implémenter le parser
-      console.log(chalk.yellow('\n⚠️  Parser not implemented yet'));
+      // Parse files
+      const files = await parseDirectory(path, options.exclude);
+      console.log(chalk.gray(`Found ${files.length} files\n`));
       
       // TODO: Implémenter l'analyzer
       // TODO: Implémenter le reporter
       
       if (options.json) {
-        console.log(JSON.stringify({ status: 'not_implemented' }, null, 2));
+        console.log(JSON.stringify({ files, status: 'parser_implemented' }, null, 2));
       } else {
+        // Temporary output to test parser
+        console.log(chalk.yellow('📁 Files analyzed:'));
+        for (const file of files.slice(0, 5)) {
+          console.log(`  ${file.path} - Complexity: ${file.complexity}, LOC: ${file.loc}`);
+        }
+        if (files.length > 5) {
+          console.log(`  ... and ${files.length - 5} more files`);
+        }
         console.log(chalk.green('\n✅ Analysis complete!'));
       }
     } catch (error) {
