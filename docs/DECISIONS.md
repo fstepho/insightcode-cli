@@ -4,6 +4,27 @@ Format : **Date | Décision | Raison | Impact**
 
 ---
 
+## 2025-06-25 : Score pondéré 40/30/30
+**Décision** : Complexité 40%, Duplication 30%, Maintenabilité 30%  
+**Raison** : La complexité est le facteur #1 de dette technique  
+**Impact** : Score qui reflète les vraies priorités de refactoring
+
+---
+
+## 2025-06-25 : Grade D pour score 70/100
+**Décision** : Grading strict (A=90+, B=80+, C=70+, D=60+, F<60)  
+**Raison** : Pousser vers l'excellence, pas complaisance  
+**Impact** : Notre propre projet a un D, c'est honnête et motivant
+
+---
+
+## 2025-06-25 : Duplication 0% acceptable
+**Décision** : Pas de faux positifs, algorithme conservateur  
+**Raison** : Mieux vaut rater de la duplication que crier au loup  
+**Impact** : Confiance dans les résultats quand duplication détectée
+
+---
+
 ## 2025-06-24 : Parser avec TypeScript Compiler API
 **Décision** : Utiliser l'API officielle TypeScript plutôt qu'un parser custom  
 **Raison** : Précision maximale, maintenance par Microsoft, gratuit  
