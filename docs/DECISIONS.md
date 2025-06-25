@@ -4,6 +4,13 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
+## 2025-06-26: Use Chalk 4.x instead of 5.x
+**Decision**: Stay on Chalk 4.x (CommonJS)
+**Reason**: Chalk 5.x is ESM-only, our project uses CommonJS
+**Impact**: Avoid compatibility issues, simpler setup
+
+---
+
 ## 2025-06-25: Tests with Vitest and temporary files
 **Decision**: Use temporary files created on the fly for tests  
 **Reason**: More flexible than static fixtures, truly isolated tests  
