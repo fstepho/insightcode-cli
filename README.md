@@ -29,12 +29,17 @@ insightcode analyze ./src
 insightcode analyze --json > report.json
 ```
 
+## 📋 Requirements
+
+- Node.js 16.0 or higher
+- TypeScript/JavaScript projects
+
 ## 📊 Example Output
 
 ```
 📊 InsightCode Analysis Report
 
-Overall Score: B (78/100)
+Overall Score: B (82/100)
 
 Summary:
   Files analyzed: 23
@@ -50,10 +55,17 @@ Metrics:
 ⚠️ Top Issues:
 
 ❌ src/utils/validator.ts
-   Complexité élevée: 34 (max recommandé: 20)
+   High complexity: 34 (recommended: < 20)
 
 ⚠️ src/services/user.service.ts
-   Code dupliqué: 23%
+   Medium duplication: 15% of code is duplicated
+
+💡 Tips to improve:
+  • Break down complex functions into smaller ones
+  • Extract common code into shared utilities
+
+──────────────────────────────────────────────────
+✅ Analysis complete! Run regularly to track progress.
 ```
 
 ## 🎯 What It Measures
@@ -67,42 +79,46 @@ Percentage of duplicated code blocks. Identifies copy-paste code.
 ### Maintainability (30% weight)
 Composite score based on complexity, duplication, and file size.
 
-## 🔧 Configuration (Optional)
+## 📐 How Scores Work
 
-Create `.insightcoderc` in your project root:
+- **A** (90-100): Excellent! Keep it up
+- **B** (80-89): Good, minor improvements possible
+- **C** (70-79): Fair, consider refactoring
+- **D** (60-69): Poor, needs attention
+- **F** (0-59): Critical, major refactoring needed
 
-```json
-{
-  "exclude": [
-    "**/*.spec.ts",
-    "**/generated/**"
-  ],
-  "thresholds": {
-    "complexity": 20,
-    "duplication": 15
-  }
-}
+## 🔧 CLI Options
+
+```bash
+# Exclude patterns
+insightcode analyze --exclude "**/*.spec.ts" --exclude "**/vendor/**"
+
+# JSON output
+insightcode analyze --json
+
+# Help
+insightcode --help
 ```
 
 ## 🗺️ Roadmap
 
-### v1.0 (Current)
+### v0.1.0 (Current)
 - ✅ TypeScript/JavaScript analysis
 - ✅ 3 core metrics
-- ✅ Terminal reporter
+- ✅ Terminal reporter with colors
 - ✅ JSON export
+- ✅ Exclude patterns
 
-### v1.1 (Coming Soon)
-- 🔄 Configuration file support
-- 🔄 HTML reports
-- 🔄 More file types (.jsx, .tsx)
-- 🔄 GitHub Actions integration
+### v0.2.0 (Next)
+- 📅 Configuration file support (.insightcoderc)
+- 📅 More file types (.jsx, .tsx)
+- 📅 Improved duplication detection
 
-### v1.2 (Future)
-- 📅 React/Vue/Angular specific rules
+### v0.3.0 (Future)
+- 📅 HTML reports
 - 📅 Historical tracking
-- 📅 VS Code extension
-- 📅 Team dashboards
+- 📅 GitHub Actions integration
+- 📅 More metrics (test coverage, documentation)
 
 ## 🤝 Contributing
 
@@ -110,17 +126,27 @@ Contributions are welcome! This is a solo side project, so please be patient wit
 
 ```bash
 # Clone the repo
-git clone https://github.com/[username]/insightcode-cli.git
+git clone https://github.com/fstepho/insightcode-cli.git
 
 # Install dependencies
 npm install
 
 # Run in dev mode
-npm run dev
+npm run dev -- analyze
 
 # Run tests
 npm test
+
+# Build
+npm run build
 ```
+
+### Development Guidelines
+
+- Keep it simple (KISS principle)
+- No more than 5 npm dependencies
+- Focus on performance and accuracy
+- Write tests for critical paths
 
 ## 📈 Why InsightCode?
 
@@ -132,22 +158,23 @@ npm test
 ## 🙏 Acknowledgments
 
 Built with:
-- [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)
-- [Commander.js](https://github.com/tj/commander.js/)
-- [Chalk](https://github.com/chalk/chalk)
+- [TypeScript Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) - For accurate AST parsing
+- [Commander.js](https://github.com/tj/commander.js/) - CLI framework
+- [Chalk](https://github.com/chalk/chalk) - Terminal colors
+- [Fast-glob](https://github.com/mrmlnc/fast-glob) - File discovery
 
 ## 📝 License
 
 MIT - Use it, fork it, improve it!
 
-## 📁 Project Documentation
+## 🔗 Links
 
-- `docs/AI_CONTEXT.md` - Project context for AI pair programming
-- `docs/CURRENT_TASK.md` - Current development focus
-- `docs/DECISIONS.md` - Architecture decision records
+- [NPM Package](https://www.npmjs.com/package/insightcode-cli)
+- [Issue Tracker](https://github.com/fstepho/insightcode-cli/issues)
+- [Changelog](./CHANGELOG.md)
 
 ---
 
-**Status**: 🚧 Active Development (v1.0 coming soon)
+**Status**: 🚀 v0.1.0 Released!
 
 If you find this useful, please ⭐ the repo!
