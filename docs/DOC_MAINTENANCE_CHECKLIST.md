@@ -35,7 +35,7 @@ This checklist ensures all project documentation stays synchronized and up-to-da
   - [ ] Review "To Do" list
 - [ ] **Session History** (if exists):
   - [ ] Add today's session summary
-  - [ ] Note duration and key achievements
+  - [ ] Note key achievements
 
 ### 3. Update DECISIONS.md
 - [ ] Add any new architectural decisions made
@@ -59,7 +59,6 @@ When completing a task and moving to the next:
 
 ```markdown
 ## Completed: [Task Name]
-- Duration: X hours
 - Key achievements:
   - ✅ [Achievement 1]
   - ✅ [Achievement 2]
@@ -70,7 +69,6 @@ When completing a task and moving to the next:
   - [Any architectural decisions]
 
 ## Next: [Next Task Name]
-- Estimated duration: X hours
 - Prerequisites:
   - [What needs to be ready]
 - Success criteria:
