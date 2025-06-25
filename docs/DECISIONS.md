@@ -4,6 +4,27 @@ Format : **Date | Décision | Raison | Impact**
 
 ---
 
+## 2025-06-25 : Reporter avec barres ASCII et icônes
+**Décision** : Utiliser des barres `████░░` et icônes emoji (❌/⚠️/💡)  
+**Raison** : Visuel attractif sans dépendances supplémentaires  
+**Impact** : Output professionnel qui marche dans tous les terminaux
+
+---
+
+## 2025-06-25 : Tips affichés si score < 70
+**Décision** : Seuil à 70 pour afficher les conseils d'amélioration  
+**Raison** : Grade C et moins = besoin d'aide  
+**Impact** : Valeur ajoutée pour ceux qui en ont besoin
+
+---
+
+## 2025-06-25 : Complexité du reporter acceptée à 25
+**Décision** : Ne pas refactorer le reporter malgré sa complexité  
+**Raison** : Trade-off entre lisibilité et complexité acceptable  
+**Impact** : Notre propre score reste D mais le code est clair
+
+---
+
 ## 2025-06-25 : Score pondéré 40/30/30
 **Décision** : Complexité 40%, Duplication 30%, Maintenabilité 30%  
 **Raison** : La complexité est le facteur #1 de dette technique  
