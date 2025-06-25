@@ -4,6 +4,27 @@ Format : **Date | Décision | Raison | Impact**
 
 ---
 
+## 2025-06-25 : Tests avec Vitest et fichiers temporaires
+**Décision** : Utiliser des fichiers temporaires créés à la volée pour les tests  
+**Raison** : Plus flexible que des fixtures statiques, tests vraiment isolés  
+**Impact** : Tests plus maintenables et reproductibles
+
+---
+
+## 2025-06-25 : 27 tests couvrant les cas critiques seulement
+**Décision** : Focus sur les chemins critiques, pas de sur-test  
+**Raison** : 80/20 - couvrir 80% des risques avec 20% de l'effort  
+**Impact** : Suite de tests maintenable qui s'exécute en 1.3s
+
+---
+
+## 2025-06-25 : Accepter NaN score pour liste vide
+**Décision** : Ne pas fixer le bug du score NaN quand 0 fichiers  
+**Raison** : Cas limite rare, fix pourrait introduire d'autres bugs  
+**Impact** : Comportement documenté dans les tests
+
+---
+
 ## 2025-06-25 : Reporter avec barres ASCII et icônes
 **Décision** : Utiliser des barres `████░░` et icônes emoji (❌/⚠️/💡)  
 **Raison** : Visuel attractif sans dépendances supplémentaires  
