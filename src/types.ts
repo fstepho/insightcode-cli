@@ -1,4 +1,4 @@
-// Types pour InsightCode CLI
+// Types for InsightCode CLI
 
 export interface FileMetrics {
   path: string;

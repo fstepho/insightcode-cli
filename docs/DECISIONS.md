@@ -1,178 +1,178 @@
-# Décisions Architecturales - InsightCode CLI
+# Architectural Decisions - InsightCode CLI
 
-Format : **Date | Décision | Raison | Impact**
-
----
-
-## 2025-06-25 : Tests avec Vitest et fichiers temporaires
-**Décision** : Utiliser des fichiers temporaires créés à la volée pour les tests  
-**Raison** : Plus flexible que des fixtures statiques, tests vraiment isolés  
-**Impact** : Tests plus maintenables et reproductibles
+Format: **Date | Decision | Reason | Impact**
 
 ---
 
-## 2025-06-25 : 27 tests couvrant les cas critiques seulement
-**Décision** : Focus sur les chemins critiques, pas de sur-test  
-**Raison** : 80/20 - couvrir 80% des risques avec 20% de l'effort  
-**Impact** : Suite de tests maintenable qui s'exécute en 1.3s
+## 2025-06-25: Tests with Vitest and temporary files
+**Decision**: Use temporary files created on the fly for tests  
+**Reason**: More flexible than static fixtures, truly isolated tests  
+**Impact**: More maintainable and reproducible tests
 
 ---
 
-## 2025-06-25 : Accepter NaN score pour liste vide
-**Décision** : Ne pas fixer le bug du score NaN quand 0 fichiers  
-**Raison** : Cas limite rare, fix pourrait introduire d'autres bugs  
-**Impact** : Comportement documenté dans les tests
+## 2025-06-25: 27 tests covering critical paths only
+**Decision**: Focus on critical paths, no over-testing  
+**Reason**: 80/20 - cover 80% of risks with 20% of effort  
+**Impact**: Maintainable test suite that runs in 1.3s
 
 ---
 
-## 2025-06-25 : Reporter avec barres ASCII et icônes
-**Décision** : Utiliser des barres `████░░` et icônes emoji (❌/⚠️/💡)  
-**Raison** : Visuel attractif sans dépendances supplémentaires  
-**Impact** : Output professionnel qui marche dans tous les terminaux
+## 2025-06-25: Accept NaN score for empty list
+**Decision**: Don't fix the NaN score bug when 0 files  
+**Reason**: Rare edge case, fix could introduce other bugs  
+**Impact**: Behavior documented in tests
 
 ---
 
-## 2025-06-25 : Tips affichés si score < 70
-**Décision** : Seuil à 70 pour afficher les conseils d'amélioration  
-**Raison** : Grade C et moins = besoin d'aide  
-**Impact** : Valeur ajoutée pour ceux qui en ont besoin
+## 2025-06-25: Reporter with ASCII bars and icons
+**Decision**: Use `████░░` bars and emoji icons (❌/⚠️/💡)  
+**Reason**: Attractive visual without additional dependencies  
+**Impact**: Professional output that works in all terminals
 
 ---
 
-## 2025-06-25 : Complexité du reporter acceptée à 25
-**Décision** : Ne pas refactorer le reporter malgré sa complexité  
-**Raison** : Trade-off entre lisibilité et complexité acceptable  
-**Impact** : Notre propre score reste D mais le code est clair
+## 2025-06-25: Tips shown if score < 70
+**Decision**: Threshold at 70 to show improvement tips  
+**Reason**: Grade C and below = needs help  
+**Impact**: Added value for those who need it
 
 ---
 
-## 2025-06-25 : Score pondéré 40/30/30
-**Décision** : Complexité 40%, Duplication 30%, Maintenabilité 30%  
-**Raison** : La complexité est le facteur #1 de dette technique  
-**Impact** : Score qui reflète les vraies priorités de refactoring
+## 2025-06-25: Reporter complexity accepted at 25
+**Decision**: Don't refactor reporter despite its complexity  
+**Reason**: Trade-off between readability and acceptable complexity  
+**Impact**: Our own score remains D but code is clear
 
 ---
 
-## 2025-06-25 : Grade D pour score 70/100
-**Décision** : Grading strict (A=90+, B=80+, C=70+, D=60+, F<60)  
-**Raison** : Pousser vers l'excellence, pas complaisance  
-**Impact** : Notre propre projet a un D, c'est honnête et motivant
+## 2025-06-25: Weighted score 40/30/30
+**Decision**: Complexity 40%, Duplication 30%, Maintainability 30%  
+**Reason**: Complexity is the #1 factor in technical debt  
+**Impact**: Score that reflects real refactoring priorities
 
 ---
 
-## 2025-06-25 : Duplication 0% acceptable
-**Décision** : Pas de faux positifs, algorithme conservateur  
-**Raison** : Mieux vaut rater de la duplication que crier au loup  
-**Impact** : Confiance dans les résultats quand duplication détectée
+## 2025-06-25: Grade D for score 70/100
+**Decision**: Strict grading (A=90+, B=80+, C=70+, D=60+, F<60)  
+**Reason**: Push for excellence, not complacency  
+**Impact**: Our own project has a D, it's honest and motivating
 
 ---
 
-## 2025-06-24 : Parser avec TypeScript Compiler API
-**Décision** : Utiliser l'API officielle TypeScript plutôt qu'un parser custom  
-**Raison** : Précision maximale, maintenance par Microsoft, gratuit  
-**Impact** : Parsing 100% fiable, support futur garanti
+## 2025-06-25: 0% duplication acceptable
+**Decision**: No false positives, conservative algorithm  
+**Reason**: Better to miss duplication than cry wolf  
+**Impact**: Trust in results when duplication detected
 
 ---
 
-## 2025-06-24 : Complexité cyclomatique simple (McCabe)
-**Décision** : Compter uniquement les points de décision, pas de cognitive complexity  
-**Raison** : Standard industrie, simple à comprendre et expliquer  
-**Impact** : Métrique claire et actionnable
+## 2025-06-24: Parser with TypeScript Compiler API
+**Decision**: Use official TypeScript API rather than custom parser  
+**Reason**: Maximum precision, maintained by Microsoft, free  
+**Impact**: 100% reliable parsing, guaranteed future support
 
 ---
 
-## 2025-06-24 : Duplication par hash de blocs
-**Décision** : Hash MD5 de blocs de 5 lignes pour détecter duplication  
-**Raison** : Balance entre précision et performance  
-**Impact** : Détection rapide, peu de faux positifs
+## 2025-06-24: Simple cyclomatic complexity (McCabe)
+**Decision**: Count only decision points, no cognitive complexity  
+**Reason**: Industry standard, simple to understand and explain  
+**Impact**: Clear and actionable metric
 
 ---
 
-## 2025-06-24 : Réduction à 3 métriques au lieu de 5
-**Décision** : MVP avec seulement complexity, duplication, maintainability  
-**Raison** : Simplicité > Features. 80% de la valeur avec 40% de l'effort  
-**Impact** : Dev 2x plus rapide, code 2x plus simple
+## 2025-06-24: Duplication by block hashing
+**Decision**: MD5 hash of 5-line blocks to detect duplication  
+**Reason**: Balance between precision and performance  
+**Impact**: Fast detection, few false positives
 
 ---
 
-## 2025-06-24 : TypeScript only, pas Angular-specific
-**Décision** : Analyser tout TypeScript/JavaScript, pas spécifique Angular  
-**Raison** : Marché 10x plus large, même complexité de dev  
-**Impact** : 500k+ utilisateurs potentiels vs 50k
+## 2025-06-24: Reduced to 3 metrics instead of 5
+**Decision**: MVP with only complexity, duplication, maintainability  
+**Reason**: Simplicity > Features. 80% of value with 40% of effort  
+**Impact**: 2x faster dev, 2x simpler code
 
 ---
 
-## 2025-06-24 : Pas de système de licence en v1
-**Décision** : 100% gratuit open source, monétisation après PMF  
-**Raison** : Acquisition first, revenue later. Réduire friction  
-**Impact** : -2 semaines de dev, +50% adoption estimée
+## 2025-06-24: TypeScript only, not Angular-specific
+**Decision**: Analyze all TypeScript/JavaScript, not specific to Angular  
+**Reason**: 10x larger market, same dev complexity  
+**Impact**: 500k+ potential users vs 50k
 
 ---
 
-## 2025-06-24 : Architecture stateless (pas de DB)
-**Décision** : Aucune persistence, export JSON pour historique  
-**Raison** : Zero maintenance, privacy by design, simplicité  
-**Impact** : Pas d'historique natif mais 10x plus simple
+## 2025-06-24: No license system in v1
+**Decision**: 100% free open source, monetization after PMF  
+**Reason**: Acquisition first, revenue later. Reduce friction  
+**Impact**: -2 weeks dev, +50% estimated adoption
 
 ---
 
-## 2025-06-24 : NPM global, pas de package scoped
-**Décision** : `insightcode-cli` au lieu de `@insightcode/cli`  
-**Raison** : Plus simple, pas besoin d'org NPM  
-**Impact** : Installation plus naturelle
+## 2025-06-24: Stateless architecture (no DB)
+**Decision**: No persistence, JSON export for history  
+**Reason**: Zero maintenance, privacy by design, simplicity  
+**Impact**: No native history but 10x simpler
 
 ---
 
-## 2025-06-24 : Choix de Commander.js au lieu de yargs/oclif
-**Décision** : Commander pour le CLI framework  
-**Raison** : Plus simple, bien documenté, suffisant  
-**Impact** : 50% moins de boilerplate
+## 2025-06-24: Global NPM, no scoped package
+**Decision**: `insightcode-cli` instead of `@insightcode/cli`  
+**Reason**: Simpler, no need for NPM org  
+**Impact**: More natural installation
 
 ---
 
-## 2025-06-24 : Utiliser 4 dépendances max
-**Décision** : commander, typescript, chalk, fast-glob only  
-**Raison** : Chaque dep = risque de maintenance  
-**Impact** : Bundle <10MB, moins de bugs
+## 2025-06-24: Choice of Commander.js over yargs/oclif
+**Decision**: Commander for CLI framework  
+**Reason**: Simpler, well documented, sufficient  
+**Impact**: 50% less boilerplate
 
 ---
 
-## 2025-06-24 : Pas de GitHub Actions complexe
-**Décision** : Simple npm publish manuel  
-**Raison** : Side project, pas besoin de CI/CD complexe  
-**Impact** : 1 commande pour release
+## 2025-06-24: Use 4 dependencies max
+**Decision**: commander, typescript, chalk, fast-glob only  
+**Reason**: Each dep = maintenance risk  
+**Impact**: Bundle <10MB, fewer bugs
 
 ---
 
-## 2025-06-24 : README comme doc principale
-**Décision** : Pas de site doc, tout dans README  
-**Raison** : 1 source de vérité, plus simple  
-**Impact** : Doc toujours à jour
+## 2025-06-24: No complex GitHub Actions
+**Decision**: Simple manual npm publish  
+**Reason**: Side project, no need for complex CI/CD  
+**Impact**: 1 command to release
 
 ---
 
-## 2025-06-24 : Tests critiques only (pas 100% coverage)
-**Décision** : Tester parsing et scoring, pas le CLI  
-**Raison** : 80/20, effort vs valeur  
-**Impact** : 2h de tests vs 2 jours
+## 2025-06-24: README as main doc
+**Decision**: No doc site, everything in README  
+**Reason**: 1 source of truth, simpler  
+**Impact**: Doc always up to date
 
 ---
 
-## À venir : [Template pour futures décisions]
-**Décision** :  
-**Raison** :  
-**Impact** :  
+## 2025-06-24: Critical tests only (not 100% coverage)
+**Decision**: Test parsing and scoring, not CLI  
+**Reason**: 80/20, effort vs value  
+**Impact**: 2h of tests vs 2 days
 
 ---
 
-## Principes Directeurs
+## Coming: [Template for future decisions]
+**Decision**:  
+**Reason**:  
+**Impact**:  
 
-1. **Si ça prend > 1 jour, c'est trop complexe**
-2. **Fonctionnel > Parfait**
-3. **Moins de code = Moins de bugs**
-4. **L'utilisateur s'en fout de ton architecture**
+---
+
+## Guiding Principles
+
+1. **If it takes > 1 day, it's too complex**
+2. **Functional > Perfect**
+3. **Less code = Fewer bugs**
+4. **Users don't care about your architecture**
 5. **Ship early, iterate often**
 
 ---
 
-*Ce document évite de refaire les mêmes débats. Quand hésitation, relire les décisions passées.*
+*This document avoids repeating the same debates. When in doubt, review past decisions.*
