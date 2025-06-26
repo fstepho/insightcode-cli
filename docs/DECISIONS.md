@@ -4,6 +4,13 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
+## 2025-06-26: Add shields.io badges to README
+**Decision**: Add NPM version and MIT license badges using shields.io
+**Reason**: Professional appearance, instant credibility, standard practice
+**Impact**: Better first impression, clear versioning and licensing info
+
+---
+
 ## 2025-06-26: Use Commander 13.1.0 instead of 14.x
 **Decision**: Use Commander 13.1.0 for broader Node.js compatibility
 **Reason**: Commander 14 requires Node 20+, v13 supports Node 18+
