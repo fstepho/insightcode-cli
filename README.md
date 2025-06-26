@@ -80,13 +80,55 @@ Percentage of duplicated code blocks. Identifies copy-paste code.
 ### Maintainability (30% weight)
 Composite score based on complexity, duplication, and file size.
 
+## 📏 How Metrics Are Calculated
+
+### Cyclomatic Complexity
+InsightCode uses McCabe's Cyclomatic Complexity (1976) to measure code complexity:
+
+- **Base complexity**: Every file starts at 1
+- **+1 for each decision point**:
+  - Control flow: `if`, `else if`, `for`, `while`, `do-while`, `for-in`, `for-of`
+  - Switch cases: Each `case` (but not `default`)
+  - Exception handling: `catch`
+  - Logical operators: `&&`, `||`, `??` (including in return statements)
+  - Ternary: `? :`
+
+**Example**:
+```javascript
+function validate(user) {              // Base: 1
+  if (!user) return false;            // +1 for if
+  if (user.age < 18) return false;    // +1 for if
+  return user.active && user.verified; // +1 for &&
+}                                      // Total: 4
+```
+
+### Code Duplication
+- **Method**: 5-line sliding window with MD5 hashing
+- **Detection**: Identifies code blocks that appear 2+ times
+- **Accuracy**: ~85% (conservative to avoid false positives)
+
+### Maintainability Score
+Calculated from three factors:
+- **40%** - Complexity score (inverted: lower complexity = higher score)
+- **30%** - Duplication score (inverted: less duplication = higher score)
+- **30%** - File size score (smaller files = higher score)
+
 ## 📐 How Scores Work
 
-- **A** (90-100): Excellent! Keep it up
+- **A** (90-100): Exceptional! Keep it up
 - **B** (80-89): Good, minor improvements possible
 - **C** (70-79): Fair, consider refactoring
 - **D** (60-69): Poor, needs attention
 - **F** (0-59): Critical, major refactoring needed
+
+### Real-World Context
+Based on our [analysis of 19 popular projects](./docs/benchmarks/):
+- Only **11%** achieved B grade (Prettier, UUID)
+- **47%** got C grade (including axios, express, nest)
+- **21%** got F grade (including ESLint!)
+- **No project got an A**
+
+Your C is actually respectable - you're in good company!
 
 ## 🔧 CLI Options
 

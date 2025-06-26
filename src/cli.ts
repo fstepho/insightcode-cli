@@ -21,7 +21,9 @@ program
   .option('-e, --exclude <patterns...>', 'Exclude patterns (e.g., "**/*.spec.ts")')
   .action(async (path = '.', options: CliOptions) => {
     try {
-      console.log(chalk.blue('🔍 Analyzing code quality...'));
+      if (!options.json) {
+        console.log(chalk.blue('🔍 Analyzing code quality...'));
+      }
       
       // Parse files
       const files = await parseDirectory(path, options.exclude);

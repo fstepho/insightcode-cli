@@ -4,6 +4,55 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
+## 2025-06-27: Support single file analysis
+**Decision**: Modify parseDirectory to handle both directories and single files
+**Reason**: Users want to analyze individual files, not just directories
+**Impact**: More flexible usage, enables validation scripts
+
+---
+
+## 2025-06-27: Benchmark 19 popular projects
+**Decision**: Create automated script to analyze axios, eslint, prettier, etc.
+**Reason**: Validate our scoring, build credibility, find marketing insights
+**Impact**: Discovered 0% got A, even ESLint got F - perfect marketing angle
+
+---
+
+## 2025-06-27: Validation script with 100% accuracy
+**Decision**: Create validate.js to test known complexity patterns
+**Reason**: Need to prove our calculations are correct
+**Impact**: 100% accuracy confirmed, full confidence in results
+
+---
+
+## 2025-06-27: Document exact complexity rules
+**Decision**: Document that || and && count everywhere, including returns
+**Reason**: Transparency builds trust, helps users understand scores
+**Impact**: No ambiguity about how metrics are calculated
+
+---
+
+## 2025-06-27: "Your C is respectable" messaging
+**Decision**: Position C grade as good, not mediocre
+**Reason**: 47% of popular projects got C, including axios
+**Impact**: Users feel better about their scores, more likely to adopt
+
+---
+
+## 2025-06-27: Conservative duplication detection accepted
+**Decision**: Keep 5-line block detection despite ~85% accuracy
+**Reason**: Better to underreport than overreport duplication
+**Impact**: Some duplication missed but no false alarms
+
+---
+
+## 2025-06-27: Archive benchmarks in docs/benchmarks/
+**Decision**: Store benchmark results in docs, not scripts folder
+**Reason**: Documentation belongs in docs/, scripts/ for executable code
+**Impact**: Better organization, easier to find
+
+---
+
 ## 2025-06-26: Add shields.io badges to README
 **Decision**: Add NPM version and MIT license badges using shields.io
 **Reason**: Professional appearance, instant credibility, standard practice

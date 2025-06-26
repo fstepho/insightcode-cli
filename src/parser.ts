@@ -140,18 +140,32 @@ export function parseFile(filePath: string): FileMetrics {
 }
 
 /**
- * Parse all TypeScript files in a directory
+ * Parse all TypeScript files in a directory or a single file
  */
 export async function parseDirectory(targetPath: string, exclude: string[] = []): Promise<FileMetrics[]> {
-  const files = await findFiles(targetPath, exclude);
+  let filesToAnalyze: string[] = [];
   
-  if (files.length === 0) {
+  // Check if targetPath is a file or directory
+  const stats = fs.statSync(targetPath);
+  
+  if (stats.isFile()) {
+    // Single file analysis
+    const absolutePath = path.isAbsolute(targetPath) ? targetPath : path.resolve(targetPath);
+    filesToAnalyze = [absolutePath];
+  } else if (stats.isDirectory()) {
+    // Directory analysis
+    filesToAnalyze = await findFiles(targetPath, exclude);
+  } else {
+    throw new Error(`Path is neither a file nor a directory: ${targetPath}`);
+  }
+  
+  if (filesToAnalyze.length === 0) {
     throw new Error('No TypeScript/JavaScript files found');
   }
   
   const results: FileMetrics[] = [];
   
-  for (const file of files) {
+  for (const file of filesToAnalyze) {
     try {
       const metrics = parseFile(file);
       results.push(metrics);
