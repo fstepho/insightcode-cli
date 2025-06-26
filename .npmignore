@@ -1,0 +1,25 @@
+# Source files (only distribute compiled)
+src/
+tests/
+
+# Config files
+tsconfig.json
+vitest.config.ts
+.gitignore
+.npmignore
+
+# Documentation
+docs/
+CHANGELOG.md
+
+# Development files
+*.log
+.DS_Store
+coverage/
+.vscode/
+
+# Keep only essentials:
+# dist/ (compiled code)
+# README.md (documentation)
+# LICENSE (legal)
+# package.json (metadata)
