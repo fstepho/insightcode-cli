@@ -4,7 +4,7 @@
   "description": "TypeScript code quality analyzer that runs 100% locally",
   "main": "dist/cli.js",
   "bin": {
-    "insightcode": "./dist/cli.js"
+    "insightcode": "dist/cli.js"
   },
   "scripts": {
     "dev": "tsx watch src/cli.ts",
@@ -36,7 +36,7 @@
   "homepage": "https://github.com/fstepho/insightcode-cli#readme",
   "dependencies": {
     "chalk": "^4.1.2",
-    "commander": "^14.0.0",
+    "commander": "^13.1.0",
     "fast-glob": "^3.3.3",
     "typescript": "^5.8.3"
   },
