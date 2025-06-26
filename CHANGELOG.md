@@ -7,8 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Planned
+- Configuration file support (.insightcoderc)
+- More file types (.jsx, .tsx)
+- Improved duplication detection
+- HTML reports
+- Historical tracking
+- GitHub Actions integration
+
+## [0.1.0] - 2025-06-26
+
 ### Added
-- Initial release of InsightCode CLI
+- Initial release of InsightCode CLI 🎉
 - TypeScript/JavaScript code quality analyzer
 - 3 core metrics: Complexity, Duplication, Maintainability
 - Beautiful terminal output with ASCII progress bars
@@ -30,10 +40,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 4 dependencies only (commander, typescript, chalk, fast-glob)
 - Comprehensive test suite (27 tests)
 - Total codebase: ~1,300 lines (431 source + 900 tests)
+- Compatible with Node.js >=18.0.0
+- Package size: 44.6 kB unpacked
 
 ### Known Issues
-- Empty directories return NaN score (edge case)
-- Our own complexity score is D (68/100) - but it works!
+- Our own complexity score is C (73/100) - but it works!
+- Empty directories may show NaN score (edge case)
 
-## [0.1.0] - 2025-06-25 (Planned)
-- First public release on NPM
+### Installation
+```bash
+npm install -g insightcode-cli
+```
+
+### Usage
+```bash
+insightcode analyze
+insightcode analyze ./src
+insightcode analyze --json > report.json
+```
+
+---
+
+[Unreleased]: https://github.com/fstepho/insightcode-cli/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/fstepho/insightcode-cli/releases/tag/v0.1.0
