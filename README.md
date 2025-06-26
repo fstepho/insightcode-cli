@@ -31,7 +31,7 @@ insightcode analyze --json > report.json
 
 ## 📋 Requirements
 
-- Node.js 16.0 or higher
+- Node.js 18.0 or higher
 - TypeScript/JavaScript projects
 
 ## 📊 Example Output

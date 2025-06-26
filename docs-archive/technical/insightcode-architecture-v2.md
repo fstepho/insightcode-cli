@@ -1044,7 +1044,7 @@ function withCache(analyzer: Analyzer): Analyzer {
 - [ ] 4 dépendances maximum
 - [ ] Build en < 5 secondes
 - [ ] Analyse 100k lignes en < 30s
-- [ ] Fonctionne sur Node 16+
+- [ ] Fonctionne sur Node 18+
 - [ ] Zero configuration requise
 
 ### 8.2 Critères Produit ✓
