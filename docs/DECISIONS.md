@@ -4,6 +4,34 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
+## 2025-06-26: Use Commander 13.1.0 instead of 14.x
+**Decision**: Use Commander 13.1.0 for broader Node.js compatibility
+**Reason**: Commander 14 requires Node 20+, v13 supports Node 18+
+**Impact**: Wider user base, compatible with Node LTS 18
+
+---
+
+## 2025-06-26: Make GitHub repository public before NPM publish
+**Decision**: Switch repo from private to public
+**Reason**: NPM links work, users can contribute, transparency
+**Impact**: Open source from day one, community engagement possible
+
+---
+
+## 2025-06-26: Create git tag before NPM publish
+**Decision**: Tag releases with v-prefix (v0.1.0)
+**Reason**: Version tracking, GitHub releases, rollback capability
+**Impact**: Professional release management, clear history
+
+---
+
+## 2025-06-26: Use .npmignore for clean package
+**Decision**: Create .npmignore to exclude non-essential files
+**Reason**: Smaller package size, cleaner distribution
+**Impact**: 44.6 kB unpacked size, fast installation
+
+---
+
 ## 2025-06-26: Use Chalk 4.x instead of 5.x
 **Decision**: Stay on Chalk 4.x (CommonJS)
 **Reason**: Chalk 5.x is ESM-only, our project uses CommonJS
@@ -49,7 +77,7 @@ Format: **Date | Decision | Reason | Impact**
 ## 2025-06-25: Reporter complexity accepted at 25
 **Decision**: Don't refactor reporter despite its complexity  
 **Reason**: Trade-off between readability and acceptable complexity  
-**Impact**: Our own score remains D but code is clear
+**Impact**: Our own score remains C but code is clear
 
 ---
 
@@ -60,10 +88,10 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
-## 2025-06-25: Grade D for score 70/100
+## 2025-06-25: Grade C for score 73/100
 **Decision**: Strict grading (A=90+, B=80+, C=70+, D=60+, F<60)  
 **Reason**: Push for excellence, not complacency  
-**Impact**: Our own project has a D, it's honest and motivating
+**Impact**: Our own project has a C, it's honest and motivating
 
 ---
 
@@ -140,7 +168,7 @@ Format: **Date | Decision | Reason | Impact**
 ## 2025-06-24: Use 4 dependencies max
 **Decision**: commander, typescript, chalk, fast-glob only  
 **Reason**: Each dep = maintenance risk  
-**Impact**: Bundle <10MB, fewer bugs
+**Impact**: Bundle <50KB, fewer bugs
 
 ---
 
