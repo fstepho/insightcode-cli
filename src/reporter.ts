@@ -39,7 +39,7 @@ export function reportToTerminal(results: AnalysisResult): void {
   console.log(`  Files analyzed: ${chalk.cyan(summary.totalFiles)}`);
   console.log(`  Total lines: ${chalk.cyan(summary.totalLines.toLocaleString())}`);
   console.log(`  Avg complexity: ${chalk.cyan(summary.avgComplexity)}`);
-  console.log(`  Code duplication: ${chalk.cyan(summary.avgDuplication + '%')}\n`);
+  console.log(`  Avg duplication: ${chalk.cyan(summary.avgDuplication + '%')} ${chalk.gray('(project average)')}\n`);
   
   // Metrics with progress bars
   console.log(chalk.bold('Metrics:'));
@@ -75,7 +75,7 @@ export function reportToTerminal(results: AnalysisResult): void {
     .slice(0, 5);
   
   if (topIssues.length > 0) {
-    console.log(chalk.bold('⚠️  Top Issues:\n'));
+    console.log(chalk.bold('⚠️  Top Issues (per file):\n'));
     
     for (const issue of topIssues) {
       const icon = issue.severity === 'high' ? '❌' : 
