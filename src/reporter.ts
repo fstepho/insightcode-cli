@@ -13,7 +13,7 @@ function progressBar(percentage: number, width: number = 20): string {
 /**
  * Get color based on score/grade
  */
-function getScoreColor(score: number): typeof chalk {
+function getScoreColor(score: number): chalk.Chalk {
   if (score >= 90) return chalk.green;
   if (score >= 80) return chalk.blue;
   if (score >= 70) return chalk.yellow;
