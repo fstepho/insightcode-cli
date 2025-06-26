@@ -248,7 +248,7 @@
 
 ## Analysis Errors
 
-- **typescript**: Command failed: insightcode analyze "/Users/fstepho/dev/insightcode-cli/temp-analysis" --json
+- **typescript**: Command failed: insightcode analyze "~/dev/insightcode-cli/temp-analysis" --json
 spawnSync /bin/sh ENOBUFS
-- **webpack**: Command failed: insightcode analyze "/Users/fstepho/dev/insightcode-cli/temp-analysis" --json
+- **webpack**: Command failed: insightcode analyze "~/dev/insightcode-cli/temp-analysis" --json
 spawnSync /bin/sh ENOBUFS
