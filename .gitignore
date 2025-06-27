@@ -139,6 +139,8 @@ dist
 
 # Benchmark results (generated)
 benchmark-results/
+temp-analysis/
+
 # Private work documents
 docs/AI_CONTEXT.md
 docs/CURRENT_TASK.md
