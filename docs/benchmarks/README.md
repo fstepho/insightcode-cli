@@ -25,7 +25,7 @@ Significant results are archived in this directory.
 Based on our validation tests (**100% accuracy** on known complexity values):
 
 #### Complexity Calculation
-- **Method**: Cyclomatic Complexity (McCabe, 1976)
+- **Method**: Extended Cyclomatic Complexity (based on McCabe, 1976)
 - **Accuracy**: 100% validated with comprehensive test suite
 - **Base**: Every file starts at complexity 1
 - **+1 for each**:
@@ -33,9 +33,12 @@ Based on our validation tests (**100% accuracy** on known complexity values):
   - `for`, `while`, `do-while`, `for-in`, `for-of`
   - `case` in switch (but NOT `default`)
   - `catch` in try-catch
-  - `&&`, `||`, `??` (everywhere, including return statements)
+  - `&&`, `||`, `??` (logical operators as decision points)*
   - `? :` (ternary operator)
 - **Calculation**: Sum of all decision points in the entire file
+- **Note**: This implementation includes logical operators (&&, ||, ??) which extends the original McCabe definition. This approach aligns with ESLint's complexity rule and provides more actionable insights for modern JavaScript/TypeScript code.
+
+*Logical operators are counted because they represent implicit branching in the control flow
 
 #### Duplication Detection
 - **Method**: 5-line sliding window with MD5 hashing
