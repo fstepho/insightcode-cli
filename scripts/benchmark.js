@@ -330,7 +330,7 @@ async function main() {
   
   // Archive significant results to docs/benchmarks
   const successful = results.filter(r => !r.error).length;
-  if (successful >= results.length - 1) { // Allow 1 failure
+  if (successful >= results.length - 2) { // Allow 2 failure
     const docsDir = path.join(projectRoot, 'docs', 'benchmarks');
     if (!fs.existsSync(docsDir)) {
       fs.mkdirSync(docsDir, { recursive: true });
