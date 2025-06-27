@@ -1,12 +1,13 @@
 import * as crypto from 'crypto';
-import { FileMetrics, AnalysisResult, Issue } from './types';
+import { FileMetrics, AnalysisResult, Issue, ThresholdConfig } from './types';
+import { DEFAULT_THRESHOLDS } from './parser';
 
 /**
  * Analyze code metrics and calculate scores
  */
-export function analyze(files: FileMetrics[]): AnalysisResult {
+export function analyze(files: FileMetrics[], thresholds: ThresholdConfig = DEFAULT_THRESHOLDS): AnalysisResult {
   // Calculate duplication for all files
-  const filesWithDuplication = detectDuplication(files);
+  const filesWithDuplication = detectDuplication(files, thresholds);
   
   // Calculate aggregate metrics
   const totalFiles = filesWithDuplication.length;
@@ -38,7 +39,7 @@ export function analyze(files: FileMetrics[]): AnalysisResult {
 /**
  * Detect code duplication using block hashing
  */
-function detectDuplication(files: FileMetrics[]): FileMetrics[] {
+function detectDuplication(files: FileMetrics[], thresholds: ThresholdConfig = DEFAULT_THRESHOLDS): FileMetrics[] {
   const blockSize = 5;
   const allBlocks = new Map<string, number>(); // hash -> count
   const fileBlocks = new Map<string, Set<string>>(); // filepath -> set of hashes
@@ -76,15 +77,19 @@ function detectDuplication(files: FileMetrics[]): FileMetrics[] {
     
     const duplicationPercentage = (duplicatedBlocks / blocks.size) * 100;
     
-    // Add duplication issues if needed
+    // Get appropriate duplication thresholds for this file type
+    const fileType = file.fileType || 'production';
+    const duplicationThresholds = thresholds.duplication[fileType as keyof typeof thresholds.duplication] || thresholds.duplication.production;
+    
+    // Add duplication issues with file-type specific thresholds
     const issues = [...file.issues];
-    if (duplicationPercentage > 30) {
+    if (duplicationPercentage > duplicationThresholds.high) {
       issues.push({
         type: 'duplication',
         severity: 'high',
         message: `High duplication: ${Math.round(duplicationPercentage)}% of code is duplicated`
       });
-    } else if (duplicationPercentage > 15) {
+    } else if (duplicationPercentage > duplicationThresholds.medium) {
       issues.push({
         type: 'duplication',
         severity: 'medium',

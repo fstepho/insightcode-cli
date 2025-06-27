@@ -4,6 +4,41 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
+## 2025-06-27: Separate benchmark reports for full vs production-only
+**Decision**: Generate different report files with suffix (-production-only)
+**Reason**: Need to compare full analysis vs production-only to showcase feature value
+**Impact**: Clear comparison data, separate archives, better feature demonstration
+
+---
+
+## 2025-06-27: Fix ENOBUFS error with 50MB buffer in benchmark
+**Decision**: Increase execSync maxBuffer from default (1MB) to 50MB
+**Reason**: Large projects like TypeScript (2.8M lines) exceeded buffer limit
+**Impact**: 100% benchmark success rate, can analyze any size project
+
+---
+
+## 2025-06-27: Production code analysis with --exclude-utility
+**Decision**: Add flag to exclude test/example/utility files from analysis
+**Reason**: Test code skews metrics (duplication OK in tests, examples have patterns)
+**Impact**: Clearer product quality view, chalk score drops from C(76) to F(58)
+
+---
+
+## 2025-06-27: Smart thresholds per file type
+**Decision**: Different thresholds for production/test/utility/example/config files
+**Reason**: Test files naturally have more duplication, scripts more complex
+**Impact**: Fewer false positives, more accurate quality assessment
+
+---
+
+## 2025-06-27: File type classification system
+**Decision**: Auto-classify files based on path patterns (test/, .spec.ts, etc.)
+**Reason**: Apply appropriate thresholds without manual configuration
+**Impact**: Zero-config smart analysis, backward compatible
+
+---
+
 ## 2025-06-27: Support single file analysis
 **Decision**: Modify parseDirectory to handle both directories and single files
 **Reason**: Users want to analyze individual files, not just directories

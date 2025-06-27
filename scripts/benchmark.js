@@ -4,6 +4,11 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+// Parse command line arguments
+const args = process.argv.slice(2);
+const excludeUtility = args.includes('--exclude-utility');
+const mode = excludeUtility ? 'production-only' : 'full';
+
 // Projects to analyze organized by size
 const PROJECTS = {
   small: [
@@ -50,7 +55,8 @@ function runCommand(command, cwd) {
       cwd, 
       encoding: 'utf-8',
       stdio: 'pipe', // Capture stdout only
-      env: { ...process.env, NO_COLOR: '1', FORCE_COLOR: '0' } // Disable colors
+      env: { ...process.env, NO_COLOR: '1', FORCE_COLOR: '0' }, // Disable colors
+      maxBuffer: 50 * 1024 * 1024 // 50MB buffer for large projects
     });
   } catch (error) {
     throw new Error(`Command failed: ${command}\n${error.message}`);
@@ -74,7 +80,8 @@ function analyzeProject(project, category) {
     // Run InsightCode analysis
     console.log(`  🔍 Running analysis...`);
     // Important: Use explicit path and suppress color output
-    const analysisOutput = runCommand(`insightcode analyze "${TEMP_DIR}" --json`, process.cwd());
+    const excludeFlag = excludeUtility ? ' --exclude-utility' : '';
+    const analysisOutput = runCommand(`insightcode analyze "${TEMP_DIR}" --json${excludeFlag}`, process.cwd());
     const analysis = JSON.parse(analysisOutput);
     
     // Extract top issues (max 3)
@@ -140,12 +147,15 @@ function analyzeProject(project, category) {
 
 function generateMarkdownReport(results) {
   const date = new Date().toISOString().split('T')[0];
+  const analysisType = excludeUtility ? 'Production Code Only' : 'Full Codebase';
+  const analysisFlag = excludeUtility ? ' (with --exclude-utility)' : '';
   
-  let markdown = `# InsightCode Benchmarks - Real World Projects
+  let markdown = `# InsightCode Benchmarks - ${analysisType}
 
 ## Methodology
 - **Date**: ${date}
-- **InsightCode Version**: 0.1.0
+- **InsightCode Version**: 0.2.0
+- **Analysis Type**: ${analysisType}${analysisFlag}
 - **Total Projects Analyzed**: ${results.length}
 - **Analysis Method**: Fresh clone, default settings, no modifications
 
@@ -292,6 +302,14 @@ async function main() {
   console.log('This will analyze popular TypeScript/JavaScript projects.');
   console.log('Make sure insightcode-cli is installed globally.\n');
   
+  if (excludeUtility) {
+    console.log('📊 Mode: Production Code Only (--exclude-utility)');
+    console.log('    Excluding: tests, examples, scripts, tools, fixtures, mocks\n');
+  } else {
+    console.log('📊 Mode: Full Codebase Analysis');
+    console.log('    Including: all TypeScript/JavaScript files\n');
+  }
+  
   // Check if insightcode is available
   try {
     runCommand('insightcode --version');
@@ -321,11 +339,12 @@ async function main() {
   
   // Generate and save markdown report
   const report = generateMarkdownReport(results);
-  const reportPath = path.join(RESULTS_DIR, 'BENCHMARKS.md');
+  const suffix = excludeUtility ? '-production-only' : '';
+  const reportPath = path.join(RESULTS_DIR, `BENCHMARKS${suffix}.md`);
   fs.writeFileSync(reportPath, report);
   
   // Save full results JSON
-  const jsonPath = path.join(RESULTS_DIR, 'all-results.json');
+  const jsonPath = path.join(RESULTS_DIR, `all-results${suffix}.json`);
   fs.writeFileSync(jsonPath, JSON.stringify(results, null, 2));
   
   // Archive significant results to docs/benchmarks
@@ -337,7 +356,7 @@ async function main() {
     }
     
     const date = new Date().toISOString().split('T')[0];
-    const archivePath = path.join(docsDir, `benchmark-${date}.md`);
+    const archivePath = path.join(docsDir, `benchmark-${date}${suffix}.md`);
     fs.copyFileSync(reportPath, archivePath);
     console.log(`📁 Archived to: ${archivePath}`);
   }

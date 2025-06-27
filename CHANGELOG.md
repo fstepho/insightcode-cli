@@ -11,9 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configuration file support (.insightcoderc)
 - More file types (.jsx, .tsx)
 - Improved duplication detection
-- HTML reports
-- Historical tracking
-- GitHub Actions integration
+
+## [0.2.0] - 2025-06-27
+
+### Added
+- `--exclude-utility` flag to analyze only production code
+- Smart file type classification (production, test, example, utility, config)
+- Configurable thresholds based on file type
+- Better product quality insights by separating concerns
+
+### Changed
+- Test files now have more lenient thresholds (complexity < 30, duplication < 50%)
+- Example code allows up to 80% duplication
+- Utility scripts have balanced thresholds
+
+### Fixed
+- ENOBUFS error when analyzing large projects (increased buffer to 50MB)
+- All 19 benchmark projects now analyze successfully including TypeScript (2.8M lines)
 
 ## [0.1.0] - 2025-06-26
 

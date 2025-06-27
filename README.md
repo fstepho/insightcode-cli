@@ -26,6 +26,9 @@ insightcode analyze
 # Analyze specific path
 insightcode analyze ./src
 
+# Focus on production code only
+insightcode analyze --exclude-utility
+
 # Output JSON for CI/CD
 insightcode analyze --json > report.json
 ```
@@ -68,6 +71,42 @@ Metrics:
 ──────────────────────────────────────────────────
 ✅ Analysis complete! Run regularly to track progress.
 ```
+
+## 🎯 Production Code Analysis
+
+InsightCode can focus on production code quality by excluding test files, examples, and utility scripts:
+
+```bash
+# Analyze only production code
+insightcode analyze --exclude-utility
+
+# This excludes:
+# - Test files (**/test/**, *.spec.ts, *.test.js)
+# - Example code (**/examples/**, **/demo/**)
+# - Scripts & tools (**/scripts/**, **/tools/**)
+# - Fixtures & mocks (**/fixtures/**, **/mocks/**)
+# - Benchmark files (**/benchmark/**)
+```
+
+### Why Use `--exclude-utility`?
+
+When analyzing popular projects, we found that including all files can skew metrics:
+- **Test files** often have acceptable code duplication (setup/teardown patterns)
+- **Example code** intentionally shows repetitive patterns for clarity
+- **Build scripts** may have complex logic that's not part of your product
+
+By focusing on production code, you get a clearer picture of your actual product quality.
+
+#### Real-World Impact
+
+When we benchmarked popular projects with `--exclude-utility`:
+
+| Project | Full Analysis | Production Only | Impact |
+|---------|---------------|-----------------|--------|
+| **Chalk** | C (76) - 15 files | F (58) - 7 files | More accurate quality view |
+| **TypeScript** | D (64) - 36k files | F (27) - 601 files | Reveals core complexity |
+
+The production-only analysis shows the true complexity of the core codebase.
 
 ## 🎯 What It Measures
 
@@ -121,6 +160,20 @@ Calculated from three factors:
 - **D** (60-69): Poor, needs attention
 - **F** (0-59): Critical, major refactoring needed
 
+### Smart Thresholds
+
+InsightCode applies different thresholds based on file type:
+
+| File Type | Complexity | File Size | Duplication |
+|-----------|------------|-----------|-------------|
+| **Production** | Medium: 10<br>High: 20 | Medium: 200<br>High: 300 | Medium: 15%<br>High: 30% |
+| **Test Files** | Medium: 15<br>High: 30 | Medium: 300<br>High: 500 | Medium: 25%<br>High: 50% |
+| **Utilities** | Medium: 15<br>High: 25 | Medium: 250<br>High: 400 | Medium: 20%<br>High: 40% |
+| **Examples** | Medium: 20<br>High: 40 | Medium: 150<br>High: 250 | Medium: 50%<br>High: 80% |
+| **Config** | Medium: 20<br>High: 35 | Medium: 300<br>High: 500 | Medium: 30%<br>High: 60% |
+
+This prevents false positives from test setup code or example patterns.
+
 ### Real-World Context
 Based on our [analysis of 19 popular projects](./docs/benchmarks/):
 - Only **11%** achieved B grade (Prettier, UUID)
@@ -136,6 +189,9 @@ Your C is actually respectable - you're in good company!
 # Exclude patterns
 insightcode analyze --exclude "**/*.spec.ts" --exclude "**/vendor/**"
 
+# Exclude utility directories (tests, examples, scripts, etc.)
+insightcode analyze --exclude-utility
+
 # JSON output
 insightcode analyze --json
 
@@ -145,19 +201,22 @@ insightcode --help
 
 ## 🗺️ Roadmap
 
-### v0.1.0 (Current)
+### v0.2.0 (Current)
 - ✅ TypeScript/JavaScript analysis
-- ✅ 3 core metrics
+- ✅ 3 core metrics with smart thresholds
 - ✅ Terminal reporter with colors
 - ✅ JSON export
 - ✅ Exclude patterns
+- ✅ Production code analysis (`--exclude-utility`)
+- ✅ File type classification (production, test, example, utility, config)
+- ✅ Configurable thresholds per file type
 
-### v0.2.0 (Next)
+### v0.3.0 (Next)
 - 📅 Configuration file support (.insightcoderc)
 - 📅 More file types (.jsx, .tsx)
 - 📅 Improved duplication detection
 
-### v0.3.0 (Future)
+### v0.4.0 (Future)
 - 📅 HTML reports
 - 📅 Historical tracking
 - 📅 GitHub Actions integration

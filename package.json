@@ -1,6 +1,6 @@
 {
   "name": "insightcode-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "TypeScript code quality analyzer that runs 100% locally",
   "main": "dist/cli.js",
   "bin": {
@@ -11,7 +11,8 @@
     "build": "tsc",
     "test": "vitest",
     "prepublishOnly": "npm run build",
-    "benchmark": "node scripts/benchmark.js"
+    "benchmark": "node scripts/benchmark.js",
+    "benchmark:production": "node scripts/benchmark.js --exclude-utility"
   },
   "keywords": [
     "typescript",
