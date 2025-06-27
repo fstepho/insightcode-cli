@@ -278,6 +278,6 @@ MIT - Use it, fork it, improve it!
 
 ---
 
-**Status**: 🚀 v0.1.0 Released!
+**Status**: 🚀 v0.2.0 Released!
 
 If you find this useful, please ⭐ the repo!
