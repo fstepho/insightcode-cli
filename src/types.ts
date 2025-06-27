@@ -6,6 +6,7 @@ export interface FileMetrics {
   duplication: number;
   loc: number; // Lines of code
   issues: Issue[];
+  fileType?: 'production' | 'test' | 'example' | 'utility' | 'config';
 }
 
 export interface Issue {
@@ -31,4 +32,29 @@ export interface CliOptions {
   path: string;
   json?: boolean;
   exclude?: string[];
+  excludeUtility?: boolean;
+}
+
+export interface ThresholdConfig {
+  complexity: {
+    production: { medium: number; high: number };
+    test: { medium: number; high: number };
+    utility: { medium: number; high: number };
+    example?: { medium: number; high: number };
+    config?: { medium: number; high: number };
+  };
+  size: {
+    production: { medium: number; high: number };
+    test: { medium: number; high: number };
+    utility: { medium: number; high: number };
+    example?: { medium: number; high: number };
+    config?: { medium: number; high: number };
+  };
+  duplication: {
+    production: { medium: number; high: number };
+    test: { medium: number; high: number };
+    utility: { medium: number; high: number };
+    example?: { medium: number; high: number };
+    config?: { medium: number; high: number };
+  };
 }

@@ -2,7 +2,7 @@ import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as path from 'path';
 import glob from 'fast-glob';
-import { FileMetrics, Issue } from './types';
+import { FileMetrics, Issue, ThresholdConfig } from './types';
 
 // Default patterns to exclude
 const DEFAULT_EXCLUDE = [
@@ -14,12 +14,64 @@ const DEFAULT_EXCLUDE = [
   '**/.git/**'
 ];
 
+// Utility directory patterns to optionally exclude
+const UTILITY_PATTERNS = [
+  '**/test/**',
+  '**/tests/**',
+  '**/__tests__/**',
+  '**/spec/**',
+  '**/examples/**',
+  '**/example/**',
+  '**/demo/**',
+  '**/docs/**',
+  '**/scripts/**',
+  '**/tools/**',
+  '**/utils/**',
+  '**/fixtures/**',
+  '**/mocks/**',
+  '**/*.test.*',
+  '**/*.spec.*',
+  '**/*.bench.*',
+  '**/benchmark/**',
+  '**/benchmarks/**'
+];
+
+// Default thresholds by file type
+const DEFAULT_THRESHOLDS: ThresholdConfig = {
+  complexity: {
+    production: { medium: 10, high: 20 },
+    test: { medium: 15, high: 30 },      // More tolerant for tests
+    utility: { medium: 15, high: 25 },   // More tolerant for utilities
+    example: { medium: 20, high: 40 },   // Examples can be complex
+    config: { medium: 20, high: 35 }     // Config files may have complex logic
+  },
+  size: {
+    production: { medium: 200, high: 300 },
+    test: { medium: 300, high: 500 },    // Tests can be longer
+    utility: { medium: 250, high: 400 }, // Utilities can be longer
+    example: { medium: 150, high: 250 }, // Examples should be concise
+    config: { medium: 300, high: 500 }   // Config files can be large
+  },
+  duplication: {
+    production: { medium: 15, high: 30 },
+    test: { medium: 25, high: 50 },      // Tests often have setup duplication
+    utility: { medium: 20, high: 40 },   // Utilities may have patterns
+    example: { medium: 50, high: 80 },   // Examples often duplicate patterns
+    config: { medium: 30, high: 60 }     // Config may have repeated structures
+  }
+};
+
 /**
  * Find all TypeScript/JavaScript files in the given path
  */
-export async function findFiles(targetPath: string, exclude: string[] = []): Promise<string[]> {
+export async function findFiles(targetPath: string, exclude: string[] = [], excludeUtility: boolean = false): Promise<string[]> {
   const patterns = ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'];
-  const ignore = [...DEFAULT_EXCLUDE, ...exclude];
+  let ignore = [...DEFAULT_EXCLUDE, ...exclude];
+  
+  // Add utility patterns if requested
+  if (excludeUtility) {
+    ignore = [...ignore, ...UTILITY_PATTERNS];
+  }
   
   const files = await glob(patterns, {
     cwd: targetPath,
@@ -30,6 +82,55 @@ export async function findFiles(targetPath: string, exclude: string[] = []): Pro
   });
   
   return files;
+}
+
+/**
+ * Classify file type based on its path
+ */
+function classifyFileType(filePath: string): FileMetrics['fileType'] {
+  const relativePath = path.relative(process.cwd(), filePath).toLowerCase();
+  
+  // Test files
+  if (relativePath.includes('/test/') || 
+      relativePath.includes('/tests/') || 
+      relativePath.includes('/__tests__/') || 
+      relativePath.includes('/spec/') ||
+      relativePath.includes('.test.') ||
+      relativePath.includes('.spec.') ||
+      relativePath.includes('.bench.')) {
+    return 'test';
+  }
+  
+  // Example/demo files
+  if (relativePath.includes('/example') || 
+      relativePath.includes('/demo') ||
+      relativePath.includes('/fixtures/') ||
+      relativePath.includes('/mocks/')) {
+    return 'example';
+  }
+  
+  // Utility/tooling files
+  if (relativePath.includes('/scripts/') || 
+      relativePath.includes('/tools/') ||
+      relativePath.includes('/utils/') ||
+      relativePath.includes('/benchmark') ||
+      relativePath.match(/^(gulpfile|webpack|rollup|vite|makefile)\./i) ||
+      relativePath.endsWith('.config.js') ||
+      relativePath.endsWith('.config.ts') ||
+      relativePath.endsWith('.config.mjs')) {
+    return 'utility';
+  }
+  
+  // Config files
+  if (relativePath.match(/\.(config|rc)\.(js|ts|json)$/) ||
+      relativePath.includes('eslint.config') ||
+      relativePath.includes('prettier.config') ||
+      relativePath.includes('tsconfig') ||
+      relativePath.includes('package.json')) {
+    return 'config';
+  }
+  
+  return 'production';
 }
 
 /**
@@ -87,7 +188,7 @@ function countLinesOfCode(content: string): number {
 /**
  * Parse a single file and extract metrics
  */
-export function parseFile(filePath: string): FileMetrics {
+export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAULT_THRESHOLDS): FileMetrics {
   const content = fs.readFileSync(filePath, 'utf-8');
   const sourceFile = ts.createSourceFile(
     filePath,
@@ -98,31 +199,36 @@ export function parseFile(filePath: string): FileMetrics {
   
   const complexity = calculateComplexity(sourceFile);
   const loc = countLinesOfCode(content);
+  const fileType = classifyFileType(filePath) || 'production';
   const issues: Issue[] = [];
   
-  // Check for high complexity
-  if (complexity > 20) {
+  // Get appropriate thresholds for this file type
+  const complexityThresholds = thresholds.complexity[fileType as keyof typeof thresholds.complexity] || thresholds.complexity.production;
+  const sizeThresholds = thresholds.size[fileType as keyof typeof thresholds.size] || thresholds.size.production;
+  
+  // Check for high complexity with file-type specific thresholds
+  if (complexity > complexityThresholds.high) {
     issues.push({
       type: 'complexity',
       severity: 'high',
-      message: `High complexity: ${complexity} (recommended: < 20)`
+      message: `High complexity: ${complexity} (recommended: < ${complexityThresholds.high})`
     });
-  } else if (complexity > 10) {
+  } else if (complexity > complexityThresholds.medium) {
     issues.push({
       type: 'complexity',
       severity: 'medium',
-      message: `Medium complexity: ${complexity} (recommended: < 10)`
+      message: `Medium complexity: ${complexity} (recommended: < ${complexityThresholds.medium})`
     });
   }
   
-  // Check for large files
-  if (loc > 300) {
+  // Check for large files with file-type specific thresholds
+  if (loc > sizeThresholds.high) {
     issues.push({
       type: 'size',
       severity: 'high',
-      message: `Large file: ${loc} lines (recommended: < 300)`
+      message: `Large file: ${loc} lines (recommended: < ${sizeThresholds.high})`
     });
-  } else if (loc > 200) {
+  } else if (loc > sizeThresholds.medium) {
     issues.push({
       type: 'size',
       severity: 'medium',
@@ -135,14 +241,20 @@ export function parseFile(filePath: string): FileMetrics {
     complexity,
     duplication: 0, // Will be calculated in analyzer
     loc,
-    issues
+    issues,
+    fileType
   };
 }
 
 /**
  * Parse all TypeScript files in a directory or a single file
  */
-export async function parseDirectory(targetPath: string, exclude: string[] = []): Promise<FileMetrics[]> {
+export async function parseDirectory(
+  targetPath: string, 
+  exclude: string[] = [], 
+  excludeUtility: boolean = false,
+  thresholds: ThresholdConfig = DEFAULT_THRESHOLDS
+): Promise<FileMetrics[]> {
   let filesToAnalyze: string[] = [];
   
   // Check if targetPath is a file or directory
@@ -154,7 +266,7 @@ export async function parseDirectory(targetPath: string, exclude: string[] = [])
     filesToAnalyze = [absolutePath];
   } else if (stats.isDirectory()) {
     // Directory analysis
-    filesToAnalyze = await findFiles(targetPath, exclude);
+    filesToAnalyze = await findFiles(targetPath, exclude, excludeUtility);
   } else {
     throw new Error(`Path is neither a file nor a directory: ${targetPath}`);
   }
@@ -167,7 +279,7 @@ export async function parseDirectory(targetPath: string, exclude: string[] = [])
   
   for (const file of filesToAnalyze) {
     try {
-      const metrics = parseFile(file);
+      const metrics = parseFile(file, thresholds);
       results.push(metrics);
     } catch (error) {
       console.warn(`Warning: Could not parse ${file}:`, error);
@@ -176,3 +288,5 @@ export async function parseDirectory(targetPath: string, exclude: string[] = [])
   
   return results;
 }
+
+export { DEFAULT_THRESHOLDS };

@@ -19,6 +19,7 @@ program
   .description('Analyze TypeScript code quality')
   .option('-j, --json', 'Output as JSON')
   .option('-e, --exclude <patterns...>', 'Exclude patterns (e.g., "**/*.spec.ts")')
+  .option('--exclude-utility', 'Exclude test, example, and utility directories from analysis')
   .action(async (path = '.', options: CliOptions) => {
     try {
       if (!options.json) {
@@ -26,7 +27,7 @@ program
       }
       
       // Parse files
-      const files = await parseDirectory(path, options.exclude);
+      const files = await parseDirectory(path, options.exclude, options.excludeUtility);
       
       if (files.length === 0) {
         console.error(chalk.red('\n❌ No TypeScript/JavaScript files found!'));
