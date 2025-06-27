@@ -145,6 +145,7 @@ function validate(user) {              // Base: 1
 - **Method**: 5-line sliding window with MD5 hashing
 - **Detection**: Identifies code blocks that appear 2+ times
 - **Accuracy**: ~85% (conservative to avoid false positives)
+- **Production Analysis**: Higher precision with `--exclude-utility` by filtering out legitimate test/example patterns
 
 ### Maintainability Score
 Calculated from three factors:
