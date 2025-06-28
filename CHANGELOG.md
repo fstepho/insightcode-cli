@@ -10,9 +10,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Planned
 - Configuration file support (.insightcoderc)
 - More file types (.jsx, .tsx)
-- Improved duplication detection
+- Framework-specific analysis (React, Angular)
 
-## [0.2.0] - 2025-06-27
+
+## [0.3.0] - 2025-06-28
+
+### Added
+- Enhanced scoring system with graduated thresholds for all metrics
+- New `scoring.ts` module for consistent calculations across analyzer and reporter
+- Advanced maintainability scoring considering both file size and function count
+- Industry-aligned duplication thresholds (3%=excellent, 8%=good, 15%=acceptable)
+- Average function count tracking for better maintainability insights
+- Penalties for extremely large files (>1000 lines)
+
+### Changed
+- Replaced linear complexity scoring with graduated thresholds (10/15/20/30/50+)
+- Enhanced duplication scoring with more nuanced industry standards
+- Improved maintainability calculation with dual metrics (size + functions)
+- All scoring now uses shared functions for perfect consistency
+- Updated project self-analysis: B (82/100) full, C (72/100) production-only
+
+### Fixed
+- Reporter complexity calculation now matches analyzer perfectly
+- Eliminated 0% complexity display bug for high-complexity projects
+- Consistent scoring between terminal and JSON output modes
+
+### Technical
+- Added 90-line scoring.ts module with comprehensive test coverage
+- Updated analyzer.ts to use shared scoring functions
+- Enhanced reporter.ts with consistent complexity calculation
+- Improved test coverage for new scoring algorithms
+
+## [0.1.1] - 2025-06-27
 
 ### Added
 - `--exclude-utility` flag to analyze only production code

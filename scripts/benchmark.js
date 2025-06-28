@@ -154,7 +154,7 @@ function generateMarkdownReport(results) {
 
 ## Methodology
 - **Date**: ${date}
-- **InsightCode Version**: 0.2.0
+- **InsightCode Version**: 0.3.0
 - **Analysis Type**: ${analysisType}${analysisFlag}
 - **Total Projects Analyzed**: ${results.length}
 - **Analysis Method**: Fresh clone, default settings, no modifications

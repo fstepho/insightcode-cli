@@ -33,7 +33,9 @@ const UTILITY_PATTERNS = [
   '**/*.spec.*',
   '**/*.bench.*',
   '**/benchmark/**',
-  '**/benchmarks/**'
+  '**/benchmarks/**',
+  '**/coverage/**',
+  "**/vendor/**",
 ];
 
 // Default thresholds by file type
@@ -186,6 +188,31 @@ function countLinesOfCode(content: string): number {
 }
 
 /**
+ * Count functions in a TypeScript file
+ */
+function countFunctions(sourceFile: ts.SourceFile): number {
+  let functionCount = 0;
+
+  function visit(node: ts.Node) {
+    switch (node.kind) {
+      case ts.SyntaxKind.FunctionDeclaration:
+      case ts.SyntaxKind.MethodDeclaration:
+      case ts.SyntaxKind.ArrowFunction:
+      case ts.SyntaxKind.FunctionExpression:
+      case ts.SyntaxKind.Constructor:
+      case ts.SyntaxKind.GetAccessor:
+      case ts.SyntaxKind.SetAccessor:
+        functionCount++;
+        break;
+    }
+    ts.forEachChild(node, visit);
+  }
+  
+  visit(sourceFile);
+  return functionCount;
+}
+
+/**
  * Parse a single file and extract metrics
  */
 export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAULT_THRESHOLDS): FileMetrics {
@@ -198,6 +225,7 @@ export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAUL
   );
   
   const complexity = calculateComplexity(sourceFile);
+  const functionCount = countFunctions(sourceFile);
   const loc = countLinesOfCode(content);
   const fileType = classifyFileType(filePath) || 'production';
   const issues: Issue[] = [];
@@ -240,6 +268,7 @@ export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAUL
     path: path.relative(process.cwd(), filePath),
     complexity,
     duplication: 0, // Will be calculated in analyzer
+    functionCount,
     loc,
     issues,
     fileType

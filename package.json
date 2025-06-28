@@ -1,6 +1,6 @@
 {
   "name": "insightcode-cli",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "TypeScript code quality analyzer that runs 100% locally",
   "main": "dist/cli.js",
   "bin": {
@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "tsx watch src/cli.ts",
+    "start": "tsx src/cli.ts",
     "build": "tsc",
     "test": "vitest",
     "prepublishOnly": "npm run build",

@@ -4,6 +4,20 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
+## 2025-06-28: Graduated complexity scoring instead of linear
+**Decision**: Replace linear complexity penalty (100 - complexity * 5) with graduated thresholds
+**Reason**: Linear scoring too harsh for medium complexity (15-25), not nuanced enough for quality levels
+**Impact**: More realistic scores, better differentiation between code quality levels, fairer assessment
+
+---
+
+## 2025-06-28: Fix reporter complexity calculation to match analyzer
+**Decision**: Move complexity scoring logic from analyzer to reporter, ensure identical calculation
+**Reason**: Reporter showed 0% complexity for high complexity projects (22.4 → 0%), misleading users
+**Impact**: Perfect consistency between terminal and JSON outputs, improved user trust
+
+---
+
 ## 2025-06-27: Separate benchmark reports for full vs production-only
 **Decision**: Generate different report files with suffix (-production-only)
 **Reason**: Need to compare full analysis vs production-only to showcase feature value

@@ -1,5 +1,7 @@
 import chalk from 'chalk';
 import { AnalysisResult } from './types';
+import { calculateComplexityScore, calculateDuplicationScore } from './scoring';
+
 
 /**
  * Create ASCII progress bar
@@ -45,13 +47,13 @@ export function reportToTerminal(results: AnalysisResult): void {
   console.log(chalk.bold('Metrics:'));
   
   // Complexity score (inverted - lower is better)
-  const complexityScore = Math.max(0, 100 - summary.avgComplexity * 5);
+  const complexityScore = calculateComplexityScore(summary.avgComplexity);
   const complexityColor = complexityScore >= 80 ? chalk.green : 
                          complexityScore >= 60 ? chalk.yellow : chalk.red;
   console.log(`  Complexity      ${progressBar(complexityScore)} ${complexityColor(complexityScore + '%')}`);
   
-  // Duplication score (inverted - lower is better)
-  const duplicationScore = Math.max(0, 100 - summary.avgDuplication * 2);
+  // Duplication score (using shared calculation)
+  const duplicationScore = calculateDuplicationScore(summary.avgDuplication);
   const duplicationColor = duplicationScore >= 80 ? chalk.green :
                           duplicationScore >= 60 ? chalk.yellow : chalk.red;
   console.log(`  Duplication     ${progressBar(duplicationScore)} ${duplicationColor(duplicationScore + '%')}`);

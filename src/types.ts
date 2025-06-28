@@ -4,6 +4,7 @@ export interface FileMetrics {
   path: string;
   complexity: number;
   duplication: number;
+  functionCount: number; 
   loc: number; // Lines of code
   issues: Issue[];
   fileType?: 'production' | 'test' | 'example' | 'utility' | 'config';
@@ -23,6 +24,8 @@ export interface AnalysisResult {
     totalLines: number;
     avgComplexity: number;
     avgDuplication: number;
+    avgFunctions: number;
+    avgLoc: number;
   };
   score: number;
   grade: 'A' | 'B' | 'C' | 'D' | 'F';

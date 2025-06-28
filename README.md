@@ -103,8 +103,9 @@ When we benchmarked popular projects with `--exclude-utility`:
 
 | Project | Full Analysis | Production Only | Impact |
 |---------|---------------|-----------------|--------|
-| **Chalk** | C (76) - 15 files | F (58) - 7 files | More accurate quality view |
-| **TypeScript** | D (64) - 36k files | F (27) - 601 files | Reveals core complexity |
+| **Chalk** | A (93) - 15 files | C (76) - 7 files | Focus on core complexity |
+| **TypeScript** | C (74) - 36k files | F (34) - 601 files | Reveals production issues |
+| **Commander** | B (89) - 165 files | F (39) - 11 files | Core needs attention |
 
 The production-only analysis shows the true complexity of the core codebase.
 
@@ -147,11 +148,33 @@ function validate(user) {              // Base: 1
 - **Accuracy**: ~85% (conservative to avoid false positives)
 - **Production Analysis**: Higher precision with `--exclude-utility` by filtering out legitimate test/example patterns
 
-### Maintainability Score
-Calculated from three factors:
-- **40%** - Complexity score (inverted: lower complexity = higher score)
-- **30%** - Duplication score (inverted: less duplication = higher score)
-- **30%** - File size score (smaller files = higher score)
+### Enhanced Scoring System (v0.2.0+)
+
+InsightCode now uses **industry-aligned graduated thresholds** for all metrics:
+
+#### Complexity Scoring
+- **≤10**: 100% (Excellent - simple, clear functions)
+- **≤15**: 85% (Good - manageable complexity)
+- **≤20**: 65% (Acceptable - review recommended)
+- **≤30**: 40% (Needs attention - refactoring advised)
+- **≤50**: 20% (High - requires immediate attention)
+- **>50**: Gradual decrease (Critical - major refactoring needed)
+
+#### Duplication Scoring
+- **≤3%**: 100% (Excellent - industry leader level)
+- **≤8%**: 85% (Good - industry standard)
+- **≤15%**: 65% (Acceptable - pragmatic threshold)
+- **≤30%**: 40% (Needs attention)
+- **≤50%**: 20% (High)
+- **>50%**: Critical level
+
+#### Advanced Maintainability
+Now considers **both file size and function count**:
+- **File size thresholds**: ≤200 lines (100%), ≤300 (85%), ≤400 (70%), ≤500 (50%)
+- **Function density**: ≤10 functions/file (100%), ≤15 (85%), ≤20 (70%), ≤30 (50%)
+- **Extreme file penalty**: Additional penalty for files >1000 lines
+
+**Overall Score**: 40% complexity + 30% duplication + 30% maintainability
 
 ## 📐 How Scores Work
 
@@ -177,12 +200,13 @@ This prevents false positives from test setup code or example patterns.
 
 ### Real-World Context
 Based on our [analysis of 19 popular projects](./docs/benchmarks/):
-- Only **11%** achieved B grade (Prettier, UUID)
-- **47%** got C grade (including axios, express, nest)
-- **21%** got F grade (including ESLint!)
-- **No project got an A**
+- **16%** achieved A grade (dotenv, chalk, prettier)
+- **42%** achieved B grade (classnames, uuid, axios, commander, date-fns, nest, express, webpack)
+- **21%** got C grade (ms, is-promise, debounce, typescript)
+- **11%** got D grade (yargs, zod)
+- **11%** got F grade (joi, eslint)
 
-Your C is actually respectable - you're in good company!
+Your C is actually respectable - you're in good company with TypeScript itself!
 
 ## 🔧 CLI Options
 
@@ -202,22 +226,27 @@ insightcode --help
 
 ## 🗺️ Roadmap
 
-### v0.2.0 (Current)
+### v0.2.0 (Published)
 - ✅ TypeScript/JavaScript analysis
 - ✅ 3 core metrics with smart thresholds
-- ✅ Terminal reporter with colors
-- ✅ JSON export
 - ✅ Exclude patterns
 - ✅ Production code analysis (`--exclude-utility`)
 - ✅ File type classification (production, test, example, utility, config)
 - ✅ Configurable thresholds per file type
 
-### v0.3.0 (Next)
+### v0.3.0 (Current)
+- ✅ 3 core metrics with smart thresholds
+- ✅ Exclude patterns
+- ✅ Production code analysis (`--exclude-utility`)
+- ✅ File type classification (production, test, example, utility, config)
+- ✅ Configurable thresholds per file type
+
+### v0.4.0 (Next)
 - 📅 Configuration file support (.insightcoderc)
 - 📅 More file types (.jsx, .tsx)
 - 📅 Improved duplication detection
 
-### v0.4.0 (Future)
+### v0.5.0 (Future)
 - 📅 HTML reports
 - 📅 Historical tracking
 - 📅 GitHub Actions integration
@@ -234,8 +263,11 @@ git clone https://github.com/fstepho/insightcode-cli.git
 # Install dependencies
 npm install
 
-# Run in dev mode
+# Run in dev mode with tsx watch
 npm run dev -- analyze
+
+# Run locally
+npm run start -- analyze
 
 # Run tests
 npm test
@@ -265,6 +297,11 @@ Built with:
 - [Commander.js](https://github.com/tj/commander.js/) - CLI framework
 - [Chalk](https://github.com/chalk/chalk) - Terminal colors
 - [Fast-glob](https://github.com/mrmlnc/fast-glob) - File discovery
+
+**Architecture**:
+- `scoring.ts` - Shared scoring calculations for perfect consistency between analyzer and reporter
+- Graduated thresholds for realistic quality assessment
+- Industry-aligned duplication detection standards
 
 ## 📝 License
 

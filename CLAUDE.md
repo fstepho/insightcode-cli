@@ -4,14 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-InsightCode CLI is a TypeScript code quality analyzer that runs 100% locally. It's a published NPM package (`insightcode-cli` v0.1.0) designed for zero-config analysis of TypeScript/JavaScript codebases.
+InsightCode CLI is a TypeScript code quality analyzer that runs 100% locally. It's a published NPM package (`insightcode-cli` v0.3.0) designed for zero-config analysis of TypeScript/JavaScript codebases.
 
 ## Development Commands
 
 ```bash
 # Development
 npm run dev          # Start development server with tsx watch
-npm run dev -- analyze  # Test CLI in development mode
+npm run start -- analyze  # Test CLI in development mode
 
 # Testing  
 npm test            # Run Vitest test suite (27 tests)
@@ -22,7 +22,8 @@ npm run build       # Compile TypeScript to dist/
 npm run prepublishOnly  # Auto-run before npm publish
 
 # Validation & Benchmarking
-npm run benchmark   # Analyze 19 popular open-source projects
+npm run benchmark   # Analyze 19 popular open-source projects (full codebase)
+npm run benchmark:production  # Production-only analysis with --exclude-utility
 node scripts/validate.js  # Verify calculation accuracy (100% validated)
 
 # Local Installation Testing
@@ -39,19 +40,23 @@ insightcode analyze  # Test the installed CLI
 - **100% local analysis** - never sends code to cloud
 - **Stateless architecture** - no database, no persistent cache
 
-### Codebase Structure (1,300 lines total)
+### Codebase Structure (1,671 lines total)
 ```
-src/                    # 431 lines - all core logic
-├── cli.ts (45 lines)   # Commander.js CLI entry point  
-├── parser.ts (127 lines)  # TypeScript AST parsing with ts.createSourceFile()
-├── analyzer.ts (108 lines)  # Calculate 3 core metrics
-├── reporter.ts (103 lines)  # Terminal output with chalk colors & ASCII bars
-└── types.ts (48 lines)     # TypeScript interfaces
+src/                    # ~450 lines - all core logic
+├── cli.ts              # Commander.js CLI entry point  
+├── parser.ts           # TypeScript AST parsing with ts.createSourceFile()
+├── analyzer.ts         # Calculate 3 core metrics with file type classification
+├── reporter.ts         # Terminal output with chalk colors & ASCII bars
+└── types.ts            # TypeScript interfaces
 
 tests/                  # ~900 lines
 ├── parser.test.ts      # Parser unit tests
 ├── analyzer.test.ts    # Analyzer unit tests  
 └── integration.test.ts # End-to-end CLI tests
+
+scripts/                # Validation & benchmarking
+├── benchmark.js        # Analyze popular projects with --exclude-utility support
+└── validate.js         # Prove 100% calculation accuracy
 ```
 
 ### Dependencies (Minimalist Stack)
@@ -119,11 +124,13 @@ Uses **Vitest** with Node.js environment:
 
 ## Current Status
 
-- **Version**: 0.1.0 published on NPM
-- **Self-analysis score**: C (73/100) - stable and consistent
-- **Performance**: 35k+ lines/second analysis speed
-- **Project grade among peers**: Only 11% of popular projects achieve B grade
+- **Version**: 0.2.0 published on NPM
+- **Self-analysis score**: C (80/100) - stable after complexity display fix
+- **Performance**: 62,761 lines/second analysis speed (latest full benchmark)
+- **Production analysis**: 18,490 lines/second with `--exclude-utility` flag
+- **Project grade among peers**: 16% achieve A grade, 42% achieve B grade among popular projects
 - **Zero critical bugs** reported since publication
+- **Recent fix**: Reporter complexity calculation now matches analyzer logic (2025-06-28)
 
 ## CLI Usage
 
@@ -134,6 +141,9 @@ insightcode analyze [path]
 # JSON output for CI/CD
 insightcode analyze --json
 
+# Production-only analysis (exclude tests, examples, configs)
+insightcode analyze --exclude-utility
+
 # Exclude patterns  
 insightcode analyze --exclude "**/*.spec.ts" --exclude "**/vendor/**"
 ```
@@ -143,7 +153,7 @@ insightcode analyze --exclude "**/*.spec.ts" --exclude "**/vendor/**"
 1. **Run tests first**: `npm test` 
 2. **Validate with benchmarks**: `npm run benchmark`
 3. **Test CLI locally**: `npm link && insightcode analyze`
-4. **Check self-analysis score**: Should remain stable at C (73/100)
+4. **Check self-analysis score**: Should remain stable at C (80/100)
 5. **Build before commit**: `npm run build`
 
 ## 📚 Extended Documentation
