@@ -63,7 +63,6 @@ Format: **Date | Decision | Reason | Impact**
 ## 2025-06-27: Benchmark 19 popular projects
 **Decision**: Create automated script to analyze axios, eslint, prettier, etc.
 **Reason**: Validate our scoring, build credibility, find marketing insights
-**Impact**: Discovered 0% got A, even ESLint got F - perfect marketing angle
 
 ---
 
