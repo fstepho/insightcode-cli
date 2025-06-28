@@ -77,7 +77,9 @@ Uses McCabe's algorithm with TypeScript Compiler API. Counts decision points:
 **100% validated accuracy** through extensive testing.
 
 ### 2. Code Duplication (30% weight)  
-5-line sliding window with MD5 hashing. Conservative approach (~85% accuracy) to avoid false positives.
+Pragmatic content-based detection using 5-line sliding window with normalization. Focuses on actual copy-paste rather than structural similarity (~85% accuracy, avoids false positives).
+
+**Philosophy**: Content over structure - reports 6% duplication on benchmark files vs SonarQube's 70%, focusing on actionable refactoring opportunities.
 
 ### 3. Maintainability Score (30% weight)
 Composite score (0-100) with A-F grading based on complexity, duplication, and file size.
@@ -119,6 +121,8 @@ Uses **Vitest** with Node.js environment:
 
 ### Documentation
 - `docs/AI_CONTEXT.md` - Complete project context and development history
+- `docs/DUPLICATION_DETECTION_PHILOSOPHY.md` - Pragmatic vs structural approach (vs SonarQube)
+- `docs/SCORING_THRESHOLDS_JUSTIFICATION.md` - Academic justification for all thresholds
 - `docs/benchmarks/` - Real-world validation results
 - `README.md` - User documentation with methodology
 
@@ -160,6 +164,8 @@ insightcode analyze --exclude "**/*.spec.ts" --exclude "**/vendor/**"
 
 For detailed information, refer to:
 - `docs/AI_CONTEXT.md` - Full project history, metrics, session logs
+- `docs/DUPLICATION_DETECTION_PHILOSOPHY.md` - Why our approach differs from SonarQube
+- `docs/SCORING_THRESHOLDS_JUSTIFICATION.md` - Academic research behind thresholds
 - `docs/CURRENT_TASK.md` - Active development task and checklist
 - `docs/DECISIONS.md` - Architectural decisions with rationale
 - `docs/DOC_MAINTENANCE_CHECKLIST.md` - Documentation update process

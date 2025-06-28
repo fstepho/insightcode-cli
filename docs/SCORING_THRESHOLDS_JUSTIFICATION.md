@@ -91,6 +91,8 @@ Code duplication research has consistently shown strong correlations between dup
 - **Accuracy**: ~85% precision validated against manual inspection
 - **Conservative Approach**: Biased toward false negatives to avoid false positives
 
+> **Philosophy Note**: Our approach differs from structural similarity tools like SonarQube. We focus on **content-based duplication** (actual copy-paste) rather than structural patterns. This results in more actionable insights. For example, on lodash/perf.js, we report 6% duplication vs SonarQube's 70% because benchmark suites naturally have repetitive structure that can't be refactored. See [DUPLICATION_DETECTION_PHILOSOPHY.md](./DUPLICATION_DETECTION_PHILOSOPHY.md) for detailed comparison.
+
 #### Empirical Data from Popular Projects
 
 ```
