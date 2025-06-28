@@ -139,6 +139,7 @@ dist
 
 # Benchmark results (generated)
 benchmark-results/
+benchmark-workspace/
 temp-analysis/
 
 # Private work documents
@@ -146,5 +147,4 @@ docs/AI_CONTEXT.md
 docs/CURRENT_TASK.md
 docs/AI_PROMPTS.md
 docs/TECHNICAL_ANALYSIS.md
-
-benchmark-workspace/
+docs-archive
