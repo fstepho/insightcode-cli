@@ -136,7 +136,16 @@ function classifyFileType(filePath: string): FileMetrics['fileType'] {
 }
 
 /**
- * Calculate cyclomatic complexity for a TypeScript source file
+ * Calculates the cyclomatic complexity of a TypeScript source file.
+ *
+ * Cyclomatic complexity is a software metric introduced by Thomas McCabe 
+ * that measures the number of linearly independent paths through a program's source code.
+ * This function increases the complexity count for each control flow structure
+ * such as if-statements, loops, switch cases, catch clauses, and conditional expressions,
+ * as well as for each logical AND (&&) and OR (||) operator within binary expressions.
+ *
+ * @param sourceFile - The TypeScript source file to analyze.
+ * @returns The calculated cyclomatic complexity as a number.
  */
 function calculateComplexity(sourceFile: ts.SourceFile): number {
   let complexity = 1; // Base complexity
@@ -158,8 +167,7 @@ function calculateComplexity(sourceFile: ts.SourceFile): number {
       case ts.SyntaxKind.BinaryExpression:
         const op = (node as ts.BinaryExpression).operatorToken.kind;
         if (op === ts.SyntaxKind.AmpersandAmpersandToken || 
-            op === ts.SyntaxKind.BarBarToken ||
-            op === ts.SyntaxKind.QuestionQuestionToken) {
+            op === ts.SyntaxKind.BarBarToken) {
           complexity++;
         }
         break;
@@ -170,6 +178,7 @@ function calculateComplexity(sourceFile: ts.SourceFile): number {
   visit(sourceFile);
   return complexity;
 }
+
 
 /**
  * Count lines of code (excluding comments and blank lines)
