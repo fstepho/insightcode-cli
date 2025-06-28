@@ -136,16 +136,19 @@ function classifyFileType(filePath: string): FileMetrics['fileType'] {
 }
 
 /**
- * Calculates the cyclomatic complexity of a TypeScript source file.
+ * Calculates the extended cyclomatic complexity of a TypeScript source file.
  *
- * Cyclomatic complexity is a software metric introduced by Thomas McCabe 
- * that measures the number of linearly independent paths through a program's source code.
- * This function increases the complexity count for each control flow structure
- * such as if-statements, loops, switch cases, catch clauses, and conditional expressions,
- * as well as for each logical AND (&&) and OR (||) operator within binary expressions.
+ * This implementation follows the "extended" definition of cyclomatic complexity,
+ * as commonly used by modern static analysis tools (e.g., ESLint, SonarQube).
+ * In addition to classical control flow structures (if, for, while, case, catch),
+ * it also increments complexity for each logical AND (&&) and OR (||) operator
+ * and for each ternary conditional expression (?:) encountered in the code.
+ *
+ * Note: This is more comprehensive than the original 1976 McCabe definition,
+ * as it better reflects the complexity of modern JavaScript/TypeScript code.
  *
  * @param sourceFile - The TypeScript source file to analyze.
- * @returns The calculated cyclomatic complexity as a number.
+ * @returns The calculated extended cyclomatic complexity as a number.
  */
 function calculateComplexity(sourceFile: ts.SourceFile): number {
   let complexity = 1; // Base complexity

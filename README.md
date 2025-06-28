@@ -77,9 +77,9 @@ Metrics:
 ### What We Measure
 
 #### 1. Cyclomatic Complexity (40% weight)
-Counts decision points in your code. Based on McCabe's complexity metric:
+Counts decision points in your code. Based on McCabe's complexity metric (extended to include logical operators):
 - **Base complexity**: Every file starts at 1
-- **+1 for each**: `if`, `else if`, `for`, `while`, `switch case`, `catch`, `&&`, `||`, `??`, `? :`
+- **+1 for each**: `if`, `else if`, `for`, `while`, `switch case`, `catch`, `&&`, `||`, `? :`
 - **Target**: ≤ 10 excellent, ≤ 15 good
 
 ```javascript

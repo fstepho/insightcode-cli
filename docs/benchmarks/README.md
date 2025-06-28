@@ -56,7 +56,7 @@ InsightCode uses graduated thresholds aligned with industry standards:
   - `for`, `while`, `do-while`, `for-in`, `for-of`
   - `case` in switch (but NOT `default`)
   - `catch` in try-catch
-  - `&&`, `||`, `??` (logical operators as decision points)*
+  - `&&`, `||` (logical operators as decision points)*
   - `? :` (ternary operator)
 - **Calculation**: Sum of all decision points in the entire file
 

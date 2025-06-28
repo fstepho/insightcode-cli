@@ -68,9 +68,9 @@ scripts/                # Validation & benchmarking
 ## Core Algorithms
 
 ### 1. Cyclomatic Complexity (40% weight)
-Uses McCabe's algorithm with TypeScript Compiler API. Counts decision points:
+Uses extended McCabe's algorithm (including && and || operators) with TypeScript Compiler API. Counts decision points:
 - Control flow: `if`, `for`, `while`, `switch case`
-- Logical operators: `&&`, `||`, `??`
+- Logical operators: `&&`, `||`
 - Ternary operators: `? :`
 - Exception handling: `catch`
 
