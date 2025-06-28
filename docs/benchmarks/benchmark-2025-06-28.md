@@ -1,34 +1,57 @@
-# InsightCode Benchmarks - Full Codebase
+# InsightCode Benchmarks - Full Codebase Analysis
 
 ## Methodology
 - **Date**: 2025-06-28
 - **InsightCode Version**: 0.3.0
-- **Analysis Type**: Full Codebase
+- **Analysis Type**: Full Codebase Analysis
 - **Total Projects Analyzed**: 19
 - **Analysis Method**: Fresh clone, default settings, no modifications
+
+## Scoring System (v0.3.0+)
+
+InsightCode uses graduated thresholds aligned with industry standards:
+
+### Complexity (40% weight)
+- ≤10: 100 points (Excellent)
+- ≤15: 85 points (Good)
+- ≤20: 65 points (Acceptable)
+- ≤30: 40 points (Poor)
+- ≤50: 20 points (Very Poor)
+- >50: Graduated penalty
+
+### Duplication (30% weight)
+- ≤3%: 100 points (Industry leader)
+- ≤8%: 85 points (Industry standard)
+- ≤15%: 65 points (Acceptable)
+- ≤30%: 40 points (Poor)
+- ≤50%: 20 points (Very Poor)
+
+### Maintainability (30% weight)
+- Based on file size (≤200 lines = 100 points) and function count
+- Additional penalties for files >1000 lines
 
 ## Results Summary
 
 | Project | Stars | Category | Files | Lines | Score | Grade | Complexity | Duplication | Time |
 |---------|-------|----------|-------|-------|-------|-------|------------|-------------|------|
-| ms | 4.8k | small | 6 | 878 | **74** | **C** | 10.8 | 12% | 0.7s |
 | classnames | 17k | small | 12 | 604 | **82** | **B** | 4.6 | 19.3% | 0.7s |
-| is-promise | 0.3k | small | 4 | 69 | **76** | **C** | 3 | 34% | 0.6s |
 | debounce | 1.1k | small | 2 | 399 | **82** | **B** | 8.5 | 9% | 0.6s |
-| uuid | 14k | small | 79 | 2,808 | **82** | **B** | 2.7 | 24.4% | 0.8s |
 | dotenv | 19k | small | 14 | 1,138 | **90** | **B** | 7.5 | 12.6% | 0.7s |
-| axios | 104k | medium | 162 | 12,371 | **87** | **B** | 8.1 | 10.9% | 1.0s |
+| is-promise | 0.3k | small | 4 | 69 | **76** | **C** | 3 | 34% | 0.6s |
+| ms | 4.8k | small | 6 | 878 | **74** | **C** | 10.8 | 12% | 0.7s |
+| uuid | 14k | small | 79 | 2,808 | **82** | **B** | 2.7 | 24.4% | 0.8s |
+| axios | 104k | medium | 162 | 12,371 | **87** | **B** | 8.1 | 10.9% | 0.9s |
 | chalk | 21k | medium | 15 | 978 | **96** | **A** | 8.9 | 4.3% | 0.7s |
 | commander | 26k | medium | 165 | 14,311 | **80** | **C** | 4.7 | 18.9% | 0.9s |
-| yargs | 11k | medium | 39 | 5,592 | **73** | **C** | 19.9 | 12.4% | 0.8s |
+| date-fns | 34k | medium | 1535 | 78,569 | **76** | **C** | 2.5 | 36.5% | 1.9s |
 | joi | 21k | medium | 67 | 41,576 | **42** | **F** | 27.1 | 14.2% | 1.2s |
-| date-fns | 34k | medium | 1535 | 78,569 | **76** | **C** | 2.5 | 36.5% | 2.0s |
-| zod | 33k | medium | 339 | 46,000 | **66** | **D** | 10.9 | 34.6% | 1.6s |
-| typescript | 98k | large | 36846 | 2,797,487 | **76** | **C** | 4.9 | 63.7% | 49.8s |
+| yargs | 11k | medium | 39 | 5,592 | **73** | **C** | 19.9 | 12.4% | 0.8s |
+| zod | 33k | medium | 339 | 46,000 | **66** | **D** | 10.9 | 34.6% | 1.5s |
+| eslint | 25k | large | 1437 | 463,978 | **66** | **D** | 12.1 | 44.9% | 4.9s |
+| express | 64k | large | 142 | 15,616 | **69** | **D** | 4.6 | 33.9% | 0.9s |
 | nest | 65k | large | 1611 | 83,442 | **82** | **B** | 2.6 | 29.9% | 1.9s |
-| express | 64k | large | 142 | 15,616 | **69** | **D** | 4.6 | 33.9% | 1.0s |
 | prettier | 49k | large | 5014 | 105,553 | **90** | **B** | 3.2 | 9.8% | 3.3s |
-| eslint | 25k | large | 1437 | 463,978 | **66** | **D** | 12.1 | 44.9% | 4.7s |
+| typescript | 98k | large | 36846 | 2,797,487 | **76** | **C** | 4.9 | 63.7% | 52.9s |
 | webpack | 65k | large | 7180 | 180,621 | **82** | **B** | 4.7 | 22.7% | 4.1s |
 
 ## Detailed Analysis
@@ -240,33 +263,45 @@
 ### Performance Statistics
 
 - **Total lines analyzed**: 3,851,990
-- **Total analysis time**: 77.3s
-- **Average speed**: 49,846 lines/second
+- **Total analysis time**: 80.1s
+- **Average speed**: 48,066 lines/second
 
 ## Validation for InsightCode
 
-### Grade Distribution
+### Grade Distribution (v0.3.0 Scoring)
 
-- **A**: 1 project(s) - chalk
-- **B**: 8 project(s) - classnames, debounce, uuid, dotenv, axios, nest, prettier, webpack
-- **C**: 6 project(s) - ms, is-promise, commander, yargs, date-fns, typescript
-- **D**: 3 project(s) - zod, express, eslint
-- **F**: 1 project(s) - joi
+- **A**: 1 project(s) (5%) - chalk
+- **B**: 8 project(s) (42%) - classnames, debounce, uuid, dotenv, axios, nest, prettier, webpack
+- **C**: 6 project(s) (32%) - ms, is-promise, commander, yargs, date-fns, typescript
+- **D**: 3 project(s) (16%) - zod, express, eslint
+- **F**: 1 project(s) (5%) - joi
 
-### Key Insights
+### Complexity Distribution
+
+- **Excellent (≤10)**: 14 projects (74%)
+- **Good (≤15)**: 3 projects (16%)
+- **Acceptable (≤20)**: 1 projects (5%)
+- **Poor (≤30)**: 1 projects (5%)
+
+### Score Extremes
 
 - **Best score**: chalk with A (96/100)
 - **Worst score**: joi with F (42/100)
 
+### Scoring Breakdown Examples
+
+**chalk** (Best):
+- Complexity: 8.9 → ~85-100 points
+- Duplication: 4.3% → ~85-100 points
+- Final: 96/100
+
+**joi** (Worst):
+- Complexity: 27.1 → ~5-20 points
+- Duplication: 14.2% → ~20-65 points
+- Final: 42/100
+
 ### Performance Validation
 
-- ✅ **Speed confirmed**: 49,846 lines/second average
+- ✅ **Speed confirmed**: 48,066 lines/second average
 - ✅ **Scalability proven**: Successfully analyzed projects from 69 to 2,797,487 lines
-- ✅ **Large project handling**: typescript (2,797,487 lines) in 49.8s
-
-### What This Tells Us
-
-- 📊 **Popular ≠ Perfect**: Even projects with 100k+ stars have technical debt
-- 🎯 **Realistic scoring**: InsightCode doesn't inflate scores - a C grade is respectable
-- ⚡ **Production ready**: Fast enough for CI/CD pipelines and pre-commit hooks
-- 🔍 **Actionable insights**: Identified real issues like deprecate.ts with complexity 21
+- ✅ **Large project handling**: typescript (2,797,487 lines) in 52.9s

@@ -22,7 +22,7 @@ npm run build       # Compile TypeScript to dist/
 npm run prepublishOnly  # Auto-run before npm publish
 
 # Validation & Benchmarking
-npm run benchmark   # Analyze 19 popular open-source projects (full codebase)
+npm run benchmark   # Analyze 19 popular open-source projects (enhanced reporting with v0.3.0+ scoring)
 npm run benchmark:production  # Production-only analysis with --exclude-utility
 node scripts/validate.js  # Verify calculation accuracy (100% validated)
 
@@ -116,7 +116,7 @@ Uses **Vitest** with Node.js environment:
 - `src/reporter.ts:103` - Terminal output formatting
 
 ### Important Scripts
-- `scripts/benchmark.js` - Validates against 19 popular projects
+- `scripts/benchmark.js` - Enhanced validation against 19 popular projects with v0.3.0+ scoring
 - `scripts/validate.js` - Proves 100% calculation accuracy
 
 ### Documentation

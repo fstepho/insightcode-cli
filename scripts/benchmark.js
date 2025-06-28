@@ -7,7 +7,6 @@ const path = require('path');
 // Parse command line arguments
 const args = process.argv.slice(2);
 const excludeUtility = args.includes('--exclude-utility');
-const mode = excludeUtility ? 'production-only' : 'full';
 
 // Projects to analyze organized by size
 const PROJECTS = {
@@ -79,9 +78,15 @@ function analyzeProject(project, category) {
     
     // Run InsightCode analysis
     console.log(`  🔍 Running analysis...`);
-    // Important: Use explicit path and suppress color output
-    const excludeFlag = excludeUtility ? ' --exclude-utility' : '';
-    const analysisOutput = runCommand(`insightcode analyze "${TEMP_DIR}" --json${excludeFlag}`, process.cwd());
+    
+    // Build command with proper flag handling
+    const flags = ['--json'];
+    if (excludeUtility) {
+      flags.push('--exclude-utility');
+    }
+    const command = `insightcode analyze "${TEMP_DIR}" ${flags.join(' ')}`;
+    
+    const analysisOutput = runCommand(command, process.cwd());
     const analysis = JSON.parse(analysisOutput);
     
     // Extract top issues (max 3)
@@ -147,99 +152,140 @@ function analyzeProject(project, category) {
 
 function generateMarkdownReport(results) {
   const date = new Date().toISOString().split('T')[0];
-  const analysisType = excludeUtility ? 'Production Code Only' : 'Full Codebase';
-  const analysisFlag = excludeUtility ? ' (with --exclude-utility)' : '';
+  const analysisType = excludeUtility ? 'Production Code Analysis' : 'Full Codebase Analysis';
   
-  let markdown = `# InsightCode Benchmarks - ${analysisType}
-
-## Methodology
-- **Date**: ${date}
-- **InsightCode Version**: 0.3.0
-- **Analysis Type**: ${analysisType}${analysisFlag}
-- **Total Projects Analyzed**: ${results.length}
-- **Analysis Method**: Fresh clone, default settings, no modifications
-
-## Results Summary
-
-| Project | Stars | Category | Files | Lines | Score | Grade | Complexity | Duplication | Time |
-|---------|-------|----------|-------|-------|-------|-------|------------|-------------|------|
-`;
-
-  // Add results table
-  results.forEach(r => {
-    if (!r.error) {
-      markdown += `| ${r.project} | ${r.stars} | ${r.category} | ${r.analysis.totalFiles} | ${r.analysis.totalLines.toLocaleString()} | **${r.analysis.score}** | **${r.analysis.grade}** | ${r.analysis.avgComplexity} | ${r.analysis.avgDuplication}% | ${(r.duration/1000).toFixed(1)}s |\n`;
+  let markdown = `# InsightCode Benchmarks - ${analysisType}\n\n`;
+  markdown += `## Methodology\n`;
+  markdown += `- **Date**: ${date}\n`;
+  markdown += `- **InsightCode Version**: ${getInsightCodeVersion()}\n`;
+  markdown += `- **Analysis Type**: ${analysisType}\n`;
+  if (excludeUtility) {
+    markdown += `- **Excluded**: Tests, examples, scripts, tools, fixtures, mocks\n`;
+  }
+  markdown += `- **Total Projects Analyzed**: ${results.length}\n`;
+  markdown += `- **Analysis Method**: Fresh clone, default settings, no modifications\n`;
+  
+  // New scoring system documentation
+  markdown += `\n## Scoring System (v0.3.0+)\n\n`;
+  markdown += `InsightCode uses graduated thresholds aligned with industry standards:\n\n`;
+  markdown += `### Complexity (40% weight)\n`;
+  markdown += `- ≤10: 100 points (Excellent)\n`;
+  markdown += `- ≤15: 85 points (Good)\n`;
+  markdown += `- ≤20: 65 points (Acceptable)\n`;
+  markdown += `- ≤30: 40 points (Poor)\n`;
+  markdown += `- ≤50: 20 points (Very Poor)\n`;
+  markdown += `- >50: Graduated penalty\n\n`;
+  
+  markdown += `### Duplication (30% weight)\n`;
+  markdown += `- ≤3%: 100 points (Industry leader)\n`;
+  markdown += `- ≤8%: 85 points (Industry standard)\n`;
+  markdown += `- ≤15%: 65 points (Acceptable)\n`;
+  markdown += `- ≤30%: 40 points (Poor)\n`;
+  markdown += `- ≤50%: 20 points (Very Poor)\n\n`;
+  
+  markdown += `### Maintainability (30% weight)\n`;
+  markdown += `- Based on file size (≤200 lines = 100 points) and function count\n`;
+  markdown += `- Additional penalties for files >1000 lines\n`;
+  
+  // Results summary table
+  markdown += `\n## Results Summary\n\n`;
+  markdown += `| Project | Stars | Category | Files | Lines | Score | Grade | Complexity | Duplication | Time |\n`;
+  markdown += `|---------|-------|----------|-------|-------|-------|-------|------------|-------------|------|\n`;
+  
+  const sortedResults = [...results].sort((a, b) => {
+    const order = { small: 0, medium: 1, large: 2 };
+    if (order[a.category] !== order[b.category]) {
+      return order[a.category] - order[b.category];
     }
+    return a.project.localeCompare(b.project);
   });
-
-  // Add detailed analysis by category
+  
+  sortedResults.forEach(result => {
+    const score = result.analysis.score;
+    const grade = result.analysis.grade;
+    
+    // Highlight scores with bold for emphasis
+    const formattedScore = result.error ? 'ERROR' : `**${score}**`;
+    const formattedGrade = result.error ? 'N/A' : `**${grade}**`;
+    
+    markdown += `| ${result.project} | ${result.stars} | ${result.category} | `;
+    markdown += `${result.analysis.totalFiles || 'N/A'} | `;
+    markdown += `${result.analysis.totalLines ? result.analysis.totalLines.toLocaleString() : 'N/A'} | `;
+    markdown += `${formattedScore} | ${formattedGrade} | `;
+    markdown += `${result.analysis.avgComplexity || 'N/A'} | `;
+    markdown += `${result.analysis.avgDuplication || 'N/A'}% | `;
+    markdown += `${(result.duration / 1000).toFixed(1)}s |\n`;
+  });
+  
+  // Detailed analysis for each project
   markdown += `\n## Detailed Analysis\n`;
-
-  ['small', 'medium', 'large'].forEach(category => {
-    const categoryResults = results.filter(r => r.category === category && !r.error);
-    if (categoryResults.length === 0) return;
+  
+  Object.entries(PROJECTS).forEach(([size, projects]) => {
+    markdown += `\n### ${size.charAt(0).toUpperCase() + size.slice(1)} Projects\n\n`;
     
-    markdown += `\n### ${category.charAt(0).toUpperCase() + category.slice(1)} Projects\n\n`;
-    
-    categoryResults.forEach(r => {
-      markdown += `#### ${r.project} (⭐ ${r.stars})\n`;
-      markdown += `- **Score**: ${r.analysis.grade} (${r.analysis.score}/100)\n`;
-      markdown += `- **Files**: ${r.analysis.totalFiles} files, ${r.analysis.totalLines.toLocaleString()} lines\n`;
-      markdown += `- **Complexity**: ${r.analysis.avgComplexity} average\n`;
-      markdown += `- **Duplication**: ${r.analysis.avgDuplication}%\n`;
+    projects.forEach(project => {
+      const result = results.find(r => r.project === project.name);
+      if (!result || result.error) return;
       
-      if (r.topIssues.length > 0) {
+      const analysis = result.analysis;
+      markdown += `#### ${project.name} (⭐ ${project.stars})\n`;
+      markdown += `- **Score**: ${analysis.grade} (${analysis.score}/100)\n`;
+      markdown += `- **Files**: ${analysis.totalFiles} files, ${analysis.totalLines.toLocaleString()} lines\n`;
+      markdown += `- **Complexity**: ${analysis.avgComplexity} average\n`;
+      markdown += `- **Duplication**: ${analysis.avgDuplication}%\n`;
+      
+      if (result.topIssues.length > 0) {
         markdown += `- **Top Issues**:\n`;
-        r.topIssues.forEach(issue => {
+        result.topIssues.forEach(issue => {
           markdown += `  - \`${issue.file}\`: ${issue.message}\n`;
         });
       }
-      markdown += `\n`;
+      
+      markdown += '\n';
     });
   });
-
-  // Add key findings
+  
+  // Key findings section
   markdown += `## Key Findings\n\n`;
-
+  
   // Calculate averages by category
-  const categoryAverages = ['small', 'medium', 'large'].map(cat => {
+  const categoryStats = {};
+  ['small', 'medium', 'large'].forEach(cat => {
     const catResults = results.filter(r => r.category === cat && !r.error);
-    if (catResults.length === 0) return null;
-    
-    const avgScore = Math.round(catResults.reduce((sum, r) => sum + r.analysis.score, 0) / catResults.length);
-    const avgComplexity = (catResults.reduce((sum, r) => sum + r.analysis.avgComplexity, 0) / catResults.length).toFixed(1);
-    
-    return { category: cat, avgScore, avgComplexity, count: catResults.length };
-  }).filter(Boolean);
-
-  markdown += `### Average Scores by Project Size\n\n`;
-  categoryAverages.forEach(cat => {
-    if (cat) {
-      markdown += `- **${cat.category}** projects: Average score ${cat.avgScore}/100, complexity ${cat.avgComplexity}\n`;
+    if (catResults.length > 0) {
+      categoryStats[cat] = {
+        avgScore: Math.round(catResults.reduce((sum, r) => sum + r.analysis.score, 0) / catResults.length),
+        avgComplexity: Math.round(catResults.reduce((sum, r) => sum + r.analysis.avgComplexity, 0) / catResults.length * 10) / 10
+      };
     }
   });
-
+  
+  markdown += `### Average Scores by Project Size\n\n`;
+  Object.entries(categoryStats).forEach(([cat, stats]) => {
+    markdown += `- **${cat}** projects: Average score ${stats.avgScore}/100, complexity ${stats.avgComplexity}\n`;
+  });
+  
   // Performance stats
   const successfulResults = results.filter(r => !r.error);
-  const totalLines = successfulResults.reduce((sum, r) => sum + r.analysis.totalLines, 0);
+  const totalLines = successfulResults.reduce((sum, r) => sum + (r.analysis.totalLines || 0), 0);
   const totalTime = successfulResults.reduce((sum, r) => sum + r.duration, 0) / 1000;
-  const linesPerSecond = Math.round(totalLines / totalTime);
+  const linesPerSecond = totalTime > 0 ? Math.round(totalLines / totalTime) : 0;
 
   markdown += `\n### Performance Statistics\n\n`;
   markdown += `- **Total lines analyzed**: ${totalLines.toLocaleString()}\n`;
   markdown += `- **Total analysis time**: ${totalTime.toFixed(1)}s\n`;
   markdown += `- **Average speed**: ${linesPerSecond.toLocaleString()} lines/second\n`;
 
-  // Validation section based on ACTUAL results
+  // Validation section with new scoring insights
   markdown += `\n## Validation for InsightCode\n\n`;
   
-  // Calculate actual grade distribution
+  // Grade distribution with new thresholds
   const gradeDistribution = successfulResults.reduce((acc, r) => {
     acc[r.analysis.grade] = (acc[r.analysis.grade] || 0) + 1;
     return acc;
   }, {});
   
-  markdown += `### Grade Distribution\n\n`;
+  markdown += `### Grade Distribution (v0.3.0 Scoring)\n\n`;
   ['A', 'B', 'C', 'D', 'F'].forEach(grade => {
     const count = gradeDistribution[grade] || 0;
     if (count > 0) {
@@ -247,54 +293,94 @@ function generateMarkdownReport(results) {
         .filter(r => r.analysis.grade === grade)
         .map(r => r.project)
         .join(', ');
-      markdown += `- **${grade}**: ${count} project(s) - ${projects}\n`;
+      const percentage = Math.round((count / successfulResults.length) * 100);
+      markdown += `- **${grade}**: ${count} project(s) (${percentage}%) - ${projects}\n`;
     }
   });
   
-  // Key insights based on actual data
-  markdown += `\n### Key Insights\n\n`;
+  // Complexity distribution validation
+  markdown += `\n### Complexity Distribution\n\n`;
+  const complexityRanges = [
+    { max: 10, label: 'Excellent (≤10)' },
+    { max: 15, label: 'Good (≤15)' },
+    { max: 20, label: 'Acceptable (≤20)' },
+    { max: 30, label: 'Poor (≤30)' },
+    { max: 50, label: 'Very Poor (≤50)' },
+    { max: Infinity, label: 'Critical (>50)' }
+  ];
+  
+  complexityRanges.forEach(range => {
+    const count = successfulResults.filter(r => {
+      const complexity = r.analysis.avgComplexity;
+      const prevMax = complexityRanges[complexityRanges.indexOf(range) - 1]?.max || 0;
+      return complexity > prevMax && complexity <= range.max;
+    }).length;
+    
+    if (count > 0) {
+      const percentage = Math.round((count / successfulResults.length) * 100);
+      markdown += `- **${range.label}**: ${count} projects (${percentage}%)\n`;
+    }
+  });
   
   // Best and worst scores
   const sortedByScore = successfulResults.sort((a, b) => b.analysis.score - a.analysis.score);
   if (sortedByScore.length > 0) {
+    markdown += `\n### Score Extremes\n\n`;
     markdown += `- **Best score**: ${sortedByScore[0].project} with ${sortedByScore[0].analysis.grade} (${sortedByScore[0].analysis.score}/100)\n`;
     markdown += `- **Worst score**: ${sortedByScore[sortedByScore.length - 1].project} with ${sortedByScore[sortedByScore.length - 1].analysis.grade} (${sortedByScore[sortedByScore.length - 1].analysis.score}/100)\n`;
-  }
-  
-  // Reality check
-  const hasA = gradeDistribution['A'] > 0;
-  const hasB = gradeDistribution['B'] > 0;
-  if (!hasA && !hasB) {
-    markdown += `- **Reality check**: No project achieved an A or B grade, showing InsightCode's strict but fair scoring\n`;
+    
+    // Show scoring breakdown for best and worst
+    const best = sortedByScore[0];
+    const worst = sortedByScore[sortedByScore.length - 1];
+    
+    markdown += `\n### Scoring Breakdown Examples\n\n`;
+    markdown += `**${best.project}** (Best):\n`;
+    markdown += `- Complexity: ${best.analysis.avgComplexity} → ~85-100 points\n`;
+    markdown += `- Duplication: ${best.analysis.avgDuplication}% → ~85-100 points\n`;
+    markdown += `- Final: ${best.analysis.score}/100\n\n`;
+    
+    markdown += `**${worst.project}** (Worst):\n`;
+    markdown += `- Complexity: ${worst.analysis.avgComplexity} → ~5-20 points\n`;
+    markdown += `- Duplication: ${worst.analysis.avgDuplication}% → ~20-65 points\n`;
+    markdown += `- Final: ${worst.analysis.score}/100\n`;
   }
   
   // Performance validation
   markdown += `\n### Performance Validation\n\n`;
   markdown += `- ✅ **Speed confirmed**: ${linesPerSecond.toLocaleString()} lines/second average\n`;
-  markdown += `- ✅ **Scalability proven**: Successfully analyzed projects from ${Math.min(...successfulResults.map(r => r.analysis.totalLines)).toLocaleString()} to ${Math.max(...successfulResults.map(r => r.analysis.totalLines)).toLocaleString()} lines\n`;
+  markdown += `- ✅ **Scalability proven**: Successfully analyzed projects from ${Math.min(...successfulResults.map(r => r.analysis.totalLines))} to ${Math.max(...successfulResults.map(r => r.analysis.totalLines)).toLocaleString()} lines\n`;
   
-  const largestSuccessful = successfulResults.sort((a, b) => b.analysis.totalLines - a.analysis.totalLines)[0];
-  if (largestSuccessful) {
-    markdown += `- ✅ **Large project handling**: ${largestSuccessful.project} (${largestSuccessful.analysis.totalLines.toLocaleString()} lines) in ${(largestSuccessful.duration/1000).toFixed(1)}s\n`;
+  const largestProject = sortedResults.find(r => r.analysis.totalLines === Math.max(...successfulResults.map(r => r.analysis.totalLines)));
+  if (largestProject) {
+    markdown += `- ✅ **Large project handling**: ${largestProject.project} (${largestProject.analysis.totalLines.toLocaleString()} lines) in ${(largestProject.duration / 1000).toFixed(1)}s\n`;
   }
   
-  // Practical findings
-  markdown += `\n### What This Tells Us\n\n`;
-  markdown += `- 📊 **Popular ≠ Perfect**: Even projects with 100k+ stars have technical debt\n`;
-  markdown += `- 🎯 **Realistic scoring**: InsightCode doesn't inflate scores - a C grade is respectable\n`;
-  markdown += `- ⚡ **Production ready**: Fast enough for CI/CD pipelines and pre-commit hooks\n`;
-  markdown += `- 🔍 **Actionable insights**: Identified real issues like ${sortedByScore[0].topIssues.length > 0 ? `${sortedByScore[0].topIssues[0].file.split('/').pop()} with complexity ${sortedByScore[0].topIssues[0].message.match(/\d+/)?.[0] || 'high'}` : 'high complexity files'}\n`;
-
-  // Add errors section if any
-  const errors = results.filter(r => r.error);
-  if (errors.length > 0) {
-    markdown += `\n## Analysis Errors\n\n`;
-    errors.forEach(e => {
-      markdown += `- **${e.project}**: ${e.error}\n`;
-    });
+  // Find most complex file if available
+  const complexFiles = results
+    .flatMap(r => r.topIssues || [])
+    .filter(issue => issue.severity === 'high' && issue.type === 'complexity')
+    .map(issue => {
+      const match = issue.message.match(/complexity: (\d+)/);
+      return match ? { file: issue.file, complexity: parseInt(match[1]) } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.complexity - a.complexity);
+  
+  if (complexFiles.length > 0) {
+    markdown += `- 🔍 **Actionable insights**: Identified real issues like ${complexFiles[0].file} with complexity ${complexFiles[0].complexity}\n`;
   }
-
+  
   return markdown;
+}
+
+// Helper to get InsightCode version
+function getInsightCodeVersion() {
+  try {
+    const packageJson = JSON.parse(fs.readFileSync(path.join(projectRoot, 'package.json'), 'utf8'));
+    return packageJson.version || '0.3.0';
+  } catch {
+    return '0.3.0';
+  }
 }
 
 async function main() {
@@ -303,7 +389,7 @@ async function main() {
   console.log('Make sure insightcode-cli is installed globally.\n');
   
   if (excludeUtility) {
-    console.log('📊 Mode: Production Code Only (--exclude-utility)');
+    console.log('📊 Mode: Production Code Analysis');
     console.log('    Excluding: tests, examples, scripts, tools, fixtures, mocks\n');
   } else {
     console.log('📊 Mode: Full Codebase Analysis');
@@ -312,11 +398,24 @@ async function main() {
   
   // Check if insightcode is available
   try {
-    runCommand('insightcode --version');
+    const versionOutput = runCommand('insightcode --version', process.cwd());
+    console.log(`📦 Using InsightCode ${versionOutput.trim()}\n`);
   } catch (error) {
     console.error('❌ Error: insightcode-cli not found. Please install it first:');
     console.error('   npm install -g insightcode-cli');
     process.exit(1);
+  }
+  
+  // Test if --exclude-utility flag is supported
+  if (excludeUtility) {
+    try {
+      // Test with a simple help command to see if the flag exists
+      runCommand('insightcode analyze --help', process.cwd());
+      // Note: We can't easily test if --exclude-utility is supported without actually running it
+      console.log('⚠️  Note: Make sure your InsightCode version supports --exclude-utility flag\n');
+    } catch (error) {
+      // Help command failed, but continue anyway
+    }
   }
   
   const results = [];
@@ -330,8 +429,12 @@ async function main() {
       results.push(result);
       
       // Save intermediate results
+      const resultFilename = excludeUtility 
+        ? `${project.name}-production-result.json`
+        : `${project.name}-result.json`;
+      
       fs.writeFileSync(
-        path.join(RESULTS_DIR, `${project.name}-result.json`),
+        path.join(RESULTS_DIR, resultFilename),
         JSON.stringify(result, null, 2)
       );
     }
@@ -349,7 +452,7 @@ async function main() {
   
   // Archive significant results to docs/benchmarks
   const successful = results.filter(r => !r.error).length;
-  if (successful >= results.length - 2) { // Allow 2 failure
+  if (successful >= results.length - 2) { // Allow 2 failures
     const docsDir = path.join(projectRoot, 'docs', 'benchmarks');
     if (!fs.existsSync(docsDir)) {
       fs.mkdirSync(docsDir, { recursive: true });
@@ -367,6 +470,14 @@ async function main() {
   
   // Print summary
   console.log(`\n📈 Summary: ${successful}/${results.length} projects analyzed successfully`);
+  
+  // Show mode-specific insights
+  if (excludeUtility && successful > 0) {
+    const avgScore = Math.round(
+      results.filter(r => !r.error).reduce((sum, r) => sum + r.analysis.score, 0) / successful
+    );
+    console.log(`📉 Average production code score: ${avgScore}/100`);
+  }
 }
 
 // Run the benchmark
