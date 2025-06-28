@@ -76,7 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Smart scoring system (0-100) with letter grades (A-F)
 - Colored output adapted to score quality
 - File pattern exclusion support
-- Fast performance - analyze 100k lines in under 30 seconds
+- Fast performance - analyze 100k lines in under 2 seconds (62,761 lines/second benchmarked)
 
 ### Technical Details
 - Built with TypeScript

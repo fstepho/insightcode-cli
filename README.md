@@ -1,6 +1,6 @@
 # InsightCode CLI
 
-> TypeScript code quality analyzer that runs 100% locally. Get actionable metrics in under 30 seconds without sending any code to the cloud.
+> TypeScript code quality analyzer that runs 100% locally. Get actionable metrics in seconds without sending any code to the cloud.
 
 [![npm version](https://img.shields.io/npm/v/insightcode-cli.svg)](https://www.npmjs.com/package/insightcode-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -9,7 +9,7 @@
 ## ✨ Features
 
 - **🔒 100% Local** - Your code never leaves your machine
-- **⚡ Fast** - Analyze 100k lines in under 30 seconds  
+- **⚡ Fast** - Analyze 100k lines in under 2 seconds (62,761 lines/second!)
 - **📊 Simple Metrics** - Focus on what matters: complexity, duplication, maintainability
 - **🎯 Zero Config** - Works out of the box with sensible defaults
 - **🎨 Beautiful Output** - Clear, colorful terminal reports
