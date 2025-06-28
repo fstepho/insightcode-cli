@@ -143,8 +143,7 @@ benchmark-workspace/
 temp-analysis/
 
 # Private work documents
-docs/AI_CONTEXT.md
-docs/CURRENT_TASK.md
-docs/AI_PROMPTS.md
-docs/TECHNICAL_ANALYSIS.md
+.ai
+
+# archive of documentation
 docs-archive
