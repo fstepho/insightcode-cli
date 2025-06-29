@@ -127,7 +127,7 @@ Uses **Vitest** with Node.js environment:
 
 ## Current Status
 
-- **Version**: 0.2.0 published on NPM
+- **Version**: 0.3.0 published on NPM
 - **Self-analysis score**: C (80/100) - stable after complexity display fix
 - **Performance**: 62,761 lines/second analysis speed (latest full benchmark)
 - **Production analysis**: 18,490 lines/second with `--exclude-utility` flag

@@ -435,7 +435,7 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 
 ## 🗺️ Roadmap
 
-### v0.3.0 ✅ Current
+### v0.3.0 ✅ Released
 - File criticality scoring with weighted algorithm
 - Top 5 critical files in JSON output
 - Criticality-based file ranking in reporter
@@ -444,7 +444,7 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 - Production-only analysis (`--exclude-utility`)
 - Industry-aligned metrics
 
-### v0.4.0 📅 Next
+### v0.4.0 🔮 Future Development
 - Configuration file support (.insightcoderc)
 - JSX/TSX support
 - Improved duplication detection algorithm

@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This document provides comprehensive justification for the scoring thresholds used in InsightCode v0.2.0, based on empirical research, industry standards, and academic literature. All thresholds have been validated against real-world data from 18 popular open-source projects representing 4.8M+ lines of code.
+This document provides comprehensive justification for the scoring thresholds used in InsightCode, based on empirical research, industry standards, and academic literature. All thresholds have been validated against real-world data from 18 popular open-source projects representing 4.8M+ lines of code.
 
 ## Methodology Overview
 
@@ -318,7 +318,7 @@ ESLint     | 20 (default)        | No limit        | ✗ More permissive
 Version | Complexity | Duplication | File Size | Rationale
 v0.1.0  | Static     | Static      | Static    | Initial implementation
 v0.2.0  | Validated  | Validated   | Validated | Empirical research integration
-v0.3.0  | TBD        | TBD         | TBD       | Community feedback integration
+v0.3.0  | Validated  | Validated   | Validated | Enhanced scoring with file criticality
 ```
 
 ## References
@@ -357,4 +357,4 @@ v0.3.0  | TBD        | TBD         | TBD       | Community feedback integration
 
 ---
 
-*This document represents version 0.2.0 of InsightCode's threshold justification. Last updated: 2025-06-28*
+*This document represents version 0.3.0 of InsightCode's threshold justification. Last updated: 2025-06-29*
