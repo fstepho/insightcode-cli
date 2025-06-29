@@ -42,34 +42,41 @@ insightcode analyze --json > report.json
 
 ```
 📊 InsightCode Analysis Report
-
-Overall Score: B (82/100)
+Overall Score: F (31/100)
 
 Summary:
-  Files analyzed: 23
-  Total lines: 3,456
-  Avg complexity: 8.2
-  Code duplication: 7%
+  Files analyzed: 628
+  Total lines: 313,487
+  Avg complexity: 92.7 (Very High)
+  Avg duplication: 16.1%
 
 Metrics:
-  Complexity      ████████████████░░░░ 82%
-  Duplication     ██████████████████░░ 93%
-  Maintainability ███████████████░░░░░ 78%
+  Complexity      ████░░░░░░░░░░░░░░░░ 20%
+  Duplication     ███████░░░░░░░░░░░░░ 35%
+  Maintainability ██████░░░░░░░░░░░░░░ 31%
 
-⚠️ Top Issues:
+⚠️  Top 5 Most Critical Files:
 
-❌ src/utils/validator.ts
-   High complexity: 34 (recommended: < 20)
+1. src/compiler/checker.ts
+   • Extreme complexity: 16,260 (813x limit)
+   • Massive file: 43,669 lines (146x limit)
 
-⚠️ src/services/user.service.ts
-   Medium duplication: 15% of code is duplicated
+2. src/compiler/utilities.ts
+   • Extreme complexity: 2,951 (148x limit)
+   • Very large file: 9,226 lines (31x limit)
 
-💡 Tips to improve:
-  • Break down complex functions into smaller ones
-  • Extract common code into shared utilities
+3. src/compiler/parser.ts
+   • Extreme complexity: 2,145 (107x limit)
+   • Very large file: 8,256 lines (28x limit)
+💡 Quick wins to improve score:
 
-──────────────────────────────────────────────────
+  • Split top 3 complex files into modules (potential +6 points)
+  • Break down 3 large files (potential +5 points)
+  • Address duplication in 3 files (potential +3 points)
+
+  ──────────────────────────────────────────────────
 ✅ Analysis complete! Run regularly to track progress.
+
 ```
 
 ## 📐 How It Works
@@ -184,6 +191,7 @@ insightcode --help
 ## 🗺️ Roadmap
 
 ### v0.3.0 ✅ Current
+- Criticality-based file ranking in reporter
 - Enhanced scoring with graduated thresholds
 - Smart file type classification
 - Production-only analysis (`--exclude-utility`)

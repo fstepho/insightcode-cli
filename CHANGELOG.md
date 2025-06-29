@@ -7,11 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Enhanced reporter with criticality-based file ranking system
+- File scoring algorithm that prioritizes by total impact (complexity + size + duplication)
+- Ratio display for better context (e.g., "813x limit" instead of just "16260")
+- Severity labels based on ratios ("Extreme", "Very High", "High", "Medium")
+- Actionable improvement suggestions with potential score gains
+- Number formatting with thousand separators for better readability
+
+### Changed
+- Top Issues now displays the 5 most critical files instead of first 5 issues found
+- Issues are grouped by file for better clarity
+- Reporter uses scoring functions from `scoring.ts` for consistency
+- Improved visual hierarchy in terminal output
+
+### Fixed
+- Critical files like `checker.ts` (Typescript project) with extreme complexity (16,260) now properly appear in Top Issues
+- Consistent complexity scoring between analyzer and reporter
+
 ### Planned
 - Configuration file support (.insightcoderc)
 - More file types (.jsx, .tsx)
 - Framework-specific analysis (React, Angular)
-
 
 ## [0.3.0] - 2025-06-28
 

@@ -2,6 +2,11 @@
 
 Format: **Date | Decision | Reason | Impact**
 
+## 2025-06-29: Enhanced Reporter with Criticality-Based Ranking
+**Decision**: Implement a file scoring algorithm that ranks files by total impact rather than order of discovery.
+**Reason**: Users reported that the "Top Issues" section was not showing the most critical problems. Files with extreme complexity (16,000+) were not appearing while minor issues (complexity 21) were shown first.
+**Impact**: The reporter now accurately identifies the most problematic files in any codebase, making it immediately actionable for developers.
+
 ---
 
 ## 2025-06-28: Graduated complexity scoring instead of linear
