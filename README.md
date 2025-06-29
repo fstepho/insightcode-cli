@@ -391,6 +391,27 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
   ]
 }
 ```
+
+## 📚 Best Practices
+
+### Using InsightCode Effectively
+
+1. **Start with production code**: Use `--exclude-utility` to focus on what matters
+2. **Track trends**: Run regularly and monitor score changes over time
+3. **Focus on top issues**: The tool shows the 5 most critical files - start there
+4. **Consider context**: High complexity might be justified (algorithms, parsers)
+
+📖 **[Complete Guide: How to Use Code Quality Scores Wisely](./docs/CODE_QUALITY_GUIDE.md)**
+
+### Common Patterns
+
+| Your Score | What It Means | Action |
+|------------|---------------|---------|
+| A (90-100) | Excellent code quality | Maintain standards |
+| B (80-89) | Good, production-ready | Monitor complexity growth |
+| C (70-79) | Typical active project | Review top 5 issues |
+| D-F (0-69) | Needs attention | Check if justified or refactor |
+
 ## 🗺️ Roadmap
 
 ### v0.3.0 ✅ Current

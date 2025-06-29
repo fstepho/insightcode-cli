@@ -24,7 +24,7 @@ This overall score translates to a grade:
 | Analyze production code only | Avoid test/config noise | `insightcode analyze --exclude-utility` |
 | Track trends over time | See if quality improves | Integrate in CI/CD with history |
 | Combine with human review | Context matters! | Score ≠ whole story |
-| Justify outliers | Not all complexity is bad | See our [explained benchmarks](./docs/benchmarks/) |
+| Justify outliers | Not all complexity is bad | See our [explained benchmarks](./benchmarks/) |
 
 ## 🔴 What to Avoid
 
@@ -70,8 +70,8 @@ insightcode analyze --exclude "**/*.spec.ts,**/vendor/**"
 
 ## 📊 Our Thresholds and Their Justification
 
-- **Cyclomatic Complexity**: >10 = warning, >20 = error ([academic justification](./docs/SCORING_THRESHOLDS_JUSTIFICATION.md))
-- **Duplication**: Focus on actual copy-paste, not patterns ([philosophy](./docs/DUPLICATION_DETECTION_PHILOSOPHY.md))
+- **Cyclomatic Complexity**: >10 = warning, >20 = error ([academic justification](./SCORING_THRESHOLDS_JUSTIFICATION.md))
+- **Duplication**: Focus on actual copy-paste, not patterns ([philosophy](./DUPLICATION_DETECTION_PHILOSOPHY.md))
 - **Grade A**: Only 16% of popular projects achieve it!
 
 ## 💡 Real Example: lodash
@@ -85,7 +85,7 @@ lodash: Grade F (16/100)
          → Assumed trade-off: UX > Maintainability
 ```
 
-**Lesson**: An F score doesn't always mean bad code. Check our [detailed analyses](./docs/benchmarks/) to understand the context.
+**Lesson**: An F score doesn't always mean bad code. Check our [detailed analyses](./benchmarks/) to understand the context.
 
 ## 🎯 When to Take Action
 
@@ -116,6 +116,6 @@ lodash: Grade F (16/100)
 ---
 
 📚 **Learn More**: 
-- [Benchmarks of 19 Popular Projects](./docs/benchmarks/benchmark-2025-06-28.md)
-- [Duplication Detection Philosophy](./docs/DUPLICATION_DETECTION_PHILOSOPHY.md)
-- [Academic Threshold Justification](./docs/SCORING_THRESHOLDS_JUSTIFICATION.md)
+- [Benchmarks of 19 Popular Projects](./benchmarks/benchmark-2025-06-28.md)
+- [Duplication Detection Philosophy](./DUPLICATION_DETECTION_PHILOSOPHY.md)
+- [Academic Threshold Justification](./SCORING_THRESHOLDS_JUSTIFICATION.md)
