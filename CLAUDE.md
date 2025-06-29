@@ -122,8 +122,8 @@ Uses **Vitest** with Node.js environment:
 - `docs/AI_CONTEXT.md` - Complete project context and development history
 - `docs/DUPLICATION_DETECTION_PHILOSOPHY.md` - Pragmatic vs structural approach (vs SonarQube)
 - `docs/SCORING_THRESHOLDS_JUSTIFICATION.md` - Academic justification for all thresholds
-- `docs/benchmarks/` - Real-world validation results
 - `README.md` - User documentation with methodology
+- `benchmarks/` - Real-world validation results
 
 ## Current Status
 

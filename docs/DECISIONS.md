@@ -106,9 +106,9 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
-## 2025-06-27: Archive benchmarks in docs/benchmarks/
-**Decision**: Store benchmark results in docs, not scripts folder
-**Reason**: Documentation belongs in docs/, scripts/ for executable code
+## 2025-06-27: Archive benchmarks in benchmarks/
+**Decision**: Store benchmark results in dedicated folder, not scripts folder
+**Reason**: Documentation belongs in docs/ or benchmarks/, scripts/ for executable code
 **Impact**: Better organization, easier to find
 
 ---

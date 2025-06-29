@@ -6,6 +6,27 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm downloads](https://img.shields.io/npm/dm/insightcode-cli.svg)](https://www.npmjs.com/package/insightcode-cli)
 
+## 📑 Table of Contents
+
+- [✨ Features](#-features)
+- [🚀 Quick Start](#-quick-start)
+- [📋 Requirements](#-requirements)
+- [📊 Example Output](#-example-output)
+- [📐 How It Works](#-how-it-works)
+  - [What We Measure](#what-we-measure)
+  - [Scoring System](#scoring-system)
+  - [Smart Thresholds](#smart-thresholds)
+- [🎯 Production Code Analysis](#-production-code-analysis)
+- [🔧 CLI Options](#-cli-options)
+  - [JSON Output Format](#json-output-format)
+- [📚 Best Practices](#-best-practices)
+- [🗺️ Roadmap](#️-roadmap)
+- [🤝 Contributing](#-contributing)
+- [📈 Why InsightCode?](#-why-insightcode)
+- [🙏 Acknowledgments](#-acknowledgments)
+- [📝 License](#-license)
+- [🔗 Links](#-links)
+
 ## ✨ Features
 
 - **🔒 100% Local** - Your code never leaves your machine
@@ -123,7 +144,7 @@ InsightCode uses graduated thresholds aligned with industry standards:
 | **D** | 60-69   | Poor, needs attention                  |
 | **F** | 0-59    | Critical, major refactoring needed     |
 
-**Real-World Context**: Based on our [analysis of 19 popular projects](./docs/benchmarks/):
+**Real-World Context**: Based on our [analysis of 19 popular projects](./benchmarks/):
 - 16% achieved A (dotenv, chalk, prettier)
 - 42% achieved B (axios, commander, express)  
 - 21% got C (typescript, ms, debounce)

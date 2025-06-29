@@ -64,7 +64,7 @@ const projectRoot = path.resolve(scriptDir, '..');
 const TEMP_DIR = path.join(projectRoot, 'temp-analysis');
 const RESULTS_DIR = path.join(projectRoot, 'benchmark-results');
 const CACHE_DIR = path.join(RESULTS_DIR, '.claude-cache');
-const DOCS_BENCHMARKS_DIR = path.join(projectRoot, 'docs', 'benchmarks');
+const DOCS_BENCHMARKS_DIR = path.join(projectRoot, 'benchmarks');
 
 // Create directories
 [RESULTS_DIR, CACHE_DIR, DOCS_BENCHMARKS_DIR].forEach(dir => {
@@ -1353,7 +1353,7 @@ async function main() {
     console.log('\n✅ Comparison analysis complete!');
     console.log(`📄 Report saved to: ${reportPath}`);
     console.log(`📊 Full results saved to: ${jsonPath}`);
-    console.log(`📁 Archived to: docs/benchmarks/benchmark-explanations-comparison-${date}.md`);
+    console.log(`📁 Archived to: benchmarks/benchmark-explanations-comparison-${date}.md`);
     
     const successful = allResults.filter(r => !r.error).length;
     const totalExplanations = allResults.reduce((sum, r) => sum + (r.explanations?.length || 0), 0);
@@ -1396,12 +1396,12 @@ async function main() {
     fs.writeFileSync(reportPath, report);
     fs.writeFileSync(jsonPath, JSON.stringify(results, null, 2));
     
-    // Archive to docs/benchmarks (permanent documentation)
+    // Archive to benchmarks (permanent documentation)
     const successful = results.filter(r => !r.error).length;
     if (successful >= results.length - 2) { // Allow 2 failures
       const archivePath = path.join(DOCS_BENCHMARKS_DIR, `benchmark-explanations-${date}${suffix}${specificSuffix}.md`);
       fs.writeFileSync(archivePath, report);
-      console.log(`📁 Archived to: docs/benchmarks/benchmark-explanations-${date}${suffix}${specificSuffix}.md`);
+      console.log(`📁 Archived to: benchmarks/benchmark-explanations-${date}${suffix}${specificSuffix}.md`);
     }
     
     console.log('\n✅ Analysis complete!');

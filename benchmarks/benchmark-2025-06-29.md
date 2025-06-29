@@ -6,14 +6,8 @@
 - **Analysis Type**: Full Codebase Analysis
 - **Total Projects Analyzed**: 19
 - **Analysis Method**: Fresh clone, default settings, no modifications
-
-> ⚠️ **Important Limitation**  
+> ⚠️ **Important Limitation**
 > The overall score given by InsightCode does not distinguish between avoidable structural complexity (due to poor code organization) and justified complexity (required by the project’s algorithmic, performance, or compatibility needs). This lack of context can unfairly downgrade mature or critical projects and may encourage inappropriate refactoring. To make this benchmark truly reliable and recommendable, it is essential to integrate differentiation or weighting for legitimate complexity, in order to provide a relevant and actionable assessment of code quality.
-
-## Scoring System (v0.3.0+)
-
-InsightCode uses graduated thresholds aligned with industry standards:
-...
 
 
 ## Scoring System (v0.3.0+)
@@ -44,9 +38,9 @@ InsightCode uses graduated thresholds aligned with industry standards:
 | Project | Stars | Category | Files | Lines | Score | Grade | Complexity | Duplication | Time |
 |---------|-------|----------|-------|-------|-------|-------|------------|-------------|------|
 | classnames | 17k | small | 12 | 604 | **82** | **B** | 4.6 | 19.3% | 0.7s |
-| debounce | 1.1k | small | 2 | 399 | **82** | **B** | 8.5 | 9% | 0.7s |
+| debounce | 1.1k | small | 2 | 399 | **82** | **B** | 8.5 | 9% | 0.6s |
 | dotenv | 19k | small | 14 | 1,138 | **90** | **B** | 7.5 | 12.6% | 0.7s |
-| is-promise | 0.3k | small | 4 | 69 | **76** | **C** | 3 | 34% | 0.6s |
+| is-promise | 0.3k | small | 4 | 69 | **76** | **C** | 3 | 34% | 0.7s |
 | ms | 4.8k | small | 6 | 878 | **74** | **C** | 10.8 | 12% | 0.8s |
 | uuid | 14k | small | 77 | 2,686 | **82** | **B** | 2.6 | 22.2% | 0.8s |
 | axios | 104k | medium | 162 | 12,371 | **87** | **B** | 8.1 | 10.9% | 0.9s |
@@ -54,13 +48,13 @@ InsightCode uses graduated thresholds aligned with industry standards:
 | commander | 26k | medium | 165 | 14,311 | **80** | **C** | 4.5 | 18.9% | 0.9s |
 | date-fns | 34k | medium | 1535 | 78,569 | **76** | **C** | 2.4 | 36.5% | 1.9s |
 | joi | 21k | medium | 67 | 41,576 | **42** | **F** | 27.1 | 14.2% | 1.2s |
-| yargs | 11k | medium | 39 | 5,592 | **73** | **C** | 19.7 | 12.4% | 0.9s |
-| zod | 33k | medium | 339 | 46,000 | **72** | **C** | 10 | 34.6% | 1.7s |
-| eslint | 25k | large | 1437 | 463,978 | **66** | **D** | 12 | 44.9% | 4.7s |
+| yargs | 11k | medium | 39 | 5,592 | **73** | **C** | 19.7 | 12.4% | 0.8s |
+| zod | 33k | medium | 339 | 46,000 | **72** | **C** | 10 | 34.6% | 1.5s |
+| eslint | 25k | large | 1437 | 463,978 | **66** | **D** | 12 | 44.9% | 4.8s |
 | express | 64k | large | 142 | 15,616 | **69** | **D** | 4.6 | 33.9% | 0.9s |
 | nest | 65k | large | 1611 | 83,442 | **82** | **B** | 2.6 | 29.9% | 1.9s |
-| prettier | 49k | large | 5014 | 105,553 | **90** | **B** | 3.1 | 9.8% | 3.5s |
-| typescript | 98k | large | 36846 | 2,797,487 | **76** | **C** | 4.9 | 63.7% | 51.9s |
+| prettier | 49k | large | 5014 | 105,553 | **90** | **B** | 3.1 | 9.8% | 3.4s |
+| typescript | 98k | large | 36846 | 2,797,487 | **76** | **C** | 4.9 | 63.7% | 50.3s |
 | webpack | 65k | large | 7180 | 180,621 | **82** | **B** | 4.7 | 22.7% | 4.0s |
 
 ## Detailed Analysis
@@ -110,9 +104,9 @@ InsightCode uses graduated thresholds aligned with industry standards:
 - **Complexity**: 2.6 average
 - **Duplication**: 22.2%
 - **Top Issues**:
-  - `examples/browser-rollup/example-all.js`: High duplication: 100% of code is duplicated
-  - `examples/browser-rollup/example-v1.js`: High duplication: 100% of code is duplicated
-  - `examples/browser-rollup/example-v4.js`: High duplication: 100% of code is duplicated
+  - `examples/browser-webpack/example-all.js`: High duplication: 100% of code is duplicated
+  - `examples/browser-webpack/example-v1.js`: High duplication: 100% of code is duplicated
+  - `examples/browser-webpack/example-v4.js`: High duplication: 100% of code is duplicated
 
 #### dotenv (⭐ 19k)
 - **Score**: B (90/100)
@@ -270,8 +264,8 @@ InsightCode uses graduated thresholds aligned with industry standards:
 ### Performance Statistics
 
 - **Total lines analyzed**: 3,851,868
-- **Total analysis time**: 79.5s
-- **Average speed**: 48,469 lines/second
+- **Total analysis time**: 77.5s
+- **Average speed**: 49,689 lines/second
 
 ## Validation for InsightCode
 
@@ -309,7 +303,7 @@ InsightCode uses graduated thresholds aligned with industry standards:
 
 ### Performance Validation
 
-- ✅ **Speed confirmed**: 48,469 lines/second average
+- ✅ **Speed confirmed**: 49,689 lines/second average
 - ✅ **Scalability proven**: Successfully analyzed projects from 69 to 2,797,487 lines
-- ✅ **Large project handling**: typescript (2,797,487 lines) in 51.9s
+- ✅ **Large project handling**: typescript (2,797,487 lines) in 50.3s
 - 🔍 **Actionable insights**: Identified real issues like tests/bench/large.js with complexity 2080

@@ -7,9 +7,9 @@
 - **Excluded**: Tests, examples, scripts, tools, fixtures, mocks
 - **Total Projects Analyzed**: 19
 - **Analysis Method**: Fresh clone, default settings, no modifications
-
-> ⚠️ **Important Limitation**  
+> ⚠️ **Important Limitation**
 > The overall score given by InsightCode does not distinguish between avoidable structural complexity (due to poor code organization) and justified complexity (required by the project’s algorithmic, performance, or compatibility needs). This lack of context can unfairly downgrade mature or critical projects and may encourage inappropriate refactoring. To make this benchmark truly reliable and recommendable, it is essential to integrate differentiation or weighting for legitimate complexity, in order to provide a relevant and actionable assessment of code quality.
+
 
 ## Scoring System (v0.3.0+)
 
@@ -41,21 +41,21 @@ InsightCode uses graduated thresholds aligned with industry standards:
 | classnames | 17k | small | 3 | 129 | **76** | **C** | 14.7 | 27.3% | 0.6s |
 | debounce | 1.1k | small | 2 | 399 | **82** | **B** | 8.5 | 9% | 0.6s |
 | dotenv | 19k | small | 4 | 327 | **86** | **B** | 20 | 0.8% | 0.7s |
-| is-promise | 0.3k | small | 4 | 69 | **76** | **C** | 3 | 34% | 0.7s |
-| ms | 4.8k | small | 1 | 178 | **68** | **D** | 55 | 2% | 0.8s |
-| uuid | 14k | small | 29 | 978 | **82** | **B** | 4.2 | 15.6% | 0.8s |
-| axios | 104k | medium | 82 | 4,326 | **94** | **A** | 12 | 1.6% | 1.0s |
+| is-promise | 0.3k | small | 4 | 69 | **76** | **C** | 3 | 34% | 0.6s |
+| ms | 4.8k | small | 1 | 178 | **68** | **D** | 55 | 2% | 0.7s |
+| uuid | 14k | small | 29 | 978 | **82** | **B** | 4.2 | 15.6% | 0.7s |
+| axios | 104k | medium | 82 | 4,326 | **94** | **A** | 12 | 1.6% | 0.9s |
 | chalk | 21k | medium | 4 | 386 | **100** | **A** | 8.3 | 2% | 0.7s |
 | commander | 26k | medium | 11 | 3,004 | **54** | **F** | 41.9 | 4.2% | 0.8s |
 | date-fns | 34k | medium | 1480 | 77,040 | **76** | **C** | 2.4 | 36.4% | 1.9s |
 | joi | 21k | medium | 36 | 7,812 | **57** | **F** | 45.3 | 7.3% | 0.9s |
 | yargs | 11k | medium | 15 | 5,047 | **52** | **F** | 45.2 | 6.2% | 0.8s |
-| zod | 33k | medium | 158 | 22,108 | **60** | **F** | 16.7 | 36.6% | 1.3s |
+| zod | 33k | medium | 158 | 22,108 | **60** | **F** | 16.7 | 36.6% | 1.5s |
 | eslint | 25k | large | 414 | 63,692 | **58** | **F** | 23.2 | 27.8% | 2.3s |
-| express | 64k | large | 7 | 1,130 | **46** | **F** | 32.1 | 17.9% | 0.8s |
+| express | 64k | large | 7 | 1,130 | **46** | **F** | 32.1 | 17.9% | 0.7s |
 | nest | 65k | large | 1199 | 39,866 | **76** | **C** | 2.9 | 30.1% | 1.6s |
 | prettier | 49k | large | 312 | 30,648 | **66** | **D** | 22.3 | 10.4% | 2.4s |
-| typescript | 98k | large | 601 | 303,933 | **28** | **F** | 93.5 | 16.4% | 16.9s |
+| typescript | 98k | large | 601 | 303,933 | **28** | **F** | 93.5 | 16.4% | 17.2s |
 | webpack | 65k | large | 620 | 96,189 | **48** | **F** | 38.6 | 23.4% | 3.2s |
 
 ## Detailed Analysis
@@ -261,8 +261,8 @@ InsightCode uses graduated thresholds aligned with industry standards:
 ### Performance Statistics
 
 - **Total lines analyzed**: 657,261
-- **Total analysis time**: 38.6s
-- **Average speed**: 17,035 lines/second
+- **Total analysis time**: 38.9s
+- **Average speed**: 16,902 lines/second
 
 ## Validation for InsightCode
 
@@ -302,7 +302,7 @@ InsightCode uses graduated thresholds aligned with industry standards:
 
 ### Performance Validation
 
-- ✅ **Speed confirmed**: 17,035 lines/second average
+- ✅ **Speed confirmed**: 16,902 lines/second average
 - ✅ **Scalability proven**: Successfully analyzed projects from 69 to 303,933 lines
-- ✅ **Large project handling**: typescript (303,933 lines) in 16.9s
+- ✅ **Large project handling**: typescript (303,933 lines) in 17.2s
 - 🔍 **Actionable insights**: Identified real issues like src/compiler/checker.ts with complexity 16260

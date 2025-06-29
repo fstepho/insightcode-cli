@@ -454,10 +454,10 @@ async function main() {
   const jsonPath = path.join(RESULTS_DIR, `all-results${suffix}.json`);
   fs.writeFileSync(jsonPath, JSON.stringify(results, null, 2));
   
-  // Archive significant results to docs/benchmarks
+  // Archive significant results to benchmarks
   const successful = results.filter(r => !r.error).length;
   if (successful >= results.length - 2) { // Allow 2 failures
-    const docsDir = path.join(projectRoot, 'docs', 'benchmarks');
+    const docsDir = path.join(projectRoot, 'benchmarks');
     if (!fs.existsSync(docsDir)) {
       fs.mkdirSync(docsDir, { recursive: true });
     }

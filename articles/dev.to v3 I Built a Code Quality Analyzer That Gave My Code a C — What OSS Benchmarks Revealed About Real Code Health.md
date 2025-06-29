@@ -99,7 +99,7 @@ A concrete example is the TypeScript compiler’s `src/compiler/binder.ts` file:
 A single huge, deeply complex file can tank your entire production score. That’s by design—these files *are* your maintenance bottlenecks and deserve attention.
 
 Want to dive deeper?  
-[See the full TypeScript analysis and breakdown](https://github.com/fstepho/insightcode-cli/blob/main/docs/benchmarks/benchmark-2025-06-28-production-only.md)
+[See the full TypeScript analysis and breakdown](https://github.com/fstepho/insightcode-cli/blob/main/benchmarks/archives/benchmark-2025-06-28-production-only.md)
 
 #### *But sometimes the opposite happens!*
 
@@ -111,7 +111,7 @@ Want to dive deeper?
 > *Tests/examples can make your codebase look healthier than it is.
 > When you focus on production, the true architectural hotspots become obvious.*
 
-[See the full benchmarks and explanations](https://github.com/fstepho/insightcode-cli/blob/main/docs/benchmarks/benchmark-2025-06-28-production-only.md)
+[See the full benchmarks and explanations](https://github.com/fstepho/insightcode-cli/blob/main/benchmarks/archives/benchmark-2025-06-28-production-only.md)
 
 ---
 
@@ -171,7 +171,7 @@ If your production code gets a D or F—don’t panic, and don’t blame your te
 * Copy-pasting logic with tiny tweaks ("almost the same" code in different places).
 * Relying on gigantic utility or manager files.
 
-[See more: Concrete patterns & anti-patterns from OSS benchmarks](https://github.com/fstepho/insightcode-cli/tree/main/docs/benchmarks)
+[See more: Concrete patterns & anti-patterns from OSS benchmarks](https://github.com/fstepho/insightcode-cli/tree/main/benchmarks)
 
 ---
 
@@ -224,7 +224,7 @@ insightcode analyze --json > report.json
 * [Maintainability Index: Halstead, 1977](https://en.wikipedia.org/wiki/Halstead_complexity_measures)
 * [Duplication Philosophy](https://github.com/fstepho/insightcode-cli/blob/main/docs/DUPLICATION_DETECTION_PHILOSOPHY.md)
 * [Scoring Thresholds: Justification & Research](https://github.com/fstepho/insightcode-cli/blob/main/docs/SCORING_THRESHOLDS_JUSTIFICATION.md)
-* [Benchmarks & architectural explanations](https://github.com/fstepho/insightcode-cli/tree/main/docs/benchmarks)
+* [Benchmarks & architectural explanations](https://github.com/fstepho/insightcode-cli/tree/main/benchmarks)
 
 ---
 
@@ -236,4 +236,4 @@ insightcode analyze --json > report.json
 
 ---
 
-**All scores, data, and scoring logic are open—see the [benchmarks](https://github.com/fstepho/insightcode-cli/tree/main/docs/benchmarks) for every project and metric.**
+**All scores, data, and scoring logic are open—see the [benchmarks](https://github.com/fstepho/insightcode-cli/tree/main/benchmarks) for every project and metric.**
