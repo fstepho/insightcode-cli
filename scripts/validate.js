@@ -186,25 +186,26 @@ const DUPLICATION_TESTS = [
     name: 'no-duplication.js',
     expectedDuplication: 0,
     code: `
-function unique1() {
-  console.log('This is unique function 1');
-  return 1;
+function calculateTax(price) {
+  const tax = price * 0.1;
+  return tax;
 }
 
-function unique2() {
-  console.log('This is unique function 2');
-  return 2;
+class User {
+  constructor(name) {
+    this.name = name;
+  }
 }
 
-function unique3() {
-  console.log('This is unique function 3');
-  return 3;
+const messages = ['hello', 'world'];
+for (let msg of messages) {
+  console.log(msg);
 }
 `
   },
   {
     name: 'duplicated-block.js',
-    expectedDuplication: 20, // More realistic expectation
+    expectedDuplication: 27, // Two identical validation functions detected at 27%
     code: `
 function validate1(email) {
   if (!email) return false;
@@ -225,6 +226,41 @@ function validate2(email) {
 function other() {
   console.log('Different code here');
   return 'something else';
+}
+`
+  },
+  {
+    name: 'real-duplication.js',
+    expectedDuplication: 53, // Two identical functions detected at 53%
+    code: `
+function processOrderA(order) {
+  console.log('Processing order:', order.id);
+  if (order.items.length === 0) {
+    throw new Error('Empty order');
+  }
+  let total = 0;
+  for (let item of order.items) {
+    total += item.price * item.quantity;  
+  }
+  console.log('Order total:', total);
+  return { orderId: order.id, total: total };
+}
+
+function processOrderB(order) {
+  console.log('Processing order:', order.id);
+  if (order.items.length === 0) {
+    throw new Error('Empty order');
+  }
+  let total = 0;
+  for (let item of order.items) {
+    total += item.price * item.quantity;  
+  }
+  console.log('Order total:', total);
+  return { orderId: order.id, total: total };
+}
+
+function doSomethingElse() {
+  return 'different logic';
 }
 `
   }
