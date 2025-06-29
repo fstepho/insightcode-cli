@@ -2,6 +2,13 @@
 
 Format: **Date | Decision | Reason | Impact**
 
+## 2025-06-29: File Scoring Algorithm with Weighted Criticality
+**Decision**: Create dedicated `topIssues.ts` module with weighted file scoring (complexity-heavy).
+**Reason**: Need prioritized list of files to fix; users want to know which files need attention first.
+**Impact**: Terminal shows top 5 critical files with severity labels; JSON export includes `topFiles` array; developers can immediately focus on highest-impact improvements.
+
+---
+
 ## 2025-06-29: Enhanced Reporter with Criticality-Based Ranking
 **Decision**: Implement a file scoring algorithm that ranks files by total impact rather than order of discovery.
 **Reason**: Users reported that the "Top Issues" section was not showing the most critical problems. Files with extreme complexity (16,000+) were not appearing while minor issues (complexity 21) were shown first.

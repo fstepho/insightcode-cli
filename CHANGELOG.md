@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- File criticality scoring system with new `topIssues.ts` module
+- Weighted scoring algorithm prioritizing complexity (heaviest), size (medium), and duplication (lightest)
+- JSON output now includes `topFiles` array with top 5 critical files
 - Enhanced reporter with criticality-based file ranking system
 - File scoring algorithm that prioritizes by total impact (complexity + size + duplication)
 - Ratio display for better context (e.g., "813x limit" instead of just "16260")
@@ -20,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Issues are grouped by file for better clarity
 - Reporter uses scoring functions from `scoring.ts` for consistency
 - Improved visual hierarchy in terminal output
+- Benchmark scripts now use pre-calculated `topFiles` from analysis results
+- Better separation of concerns with dedicated scoring module
 
 ### Fixed
 - Critical files like `checker.ts` (Typescript project) with extreme complexity (16,260) now properly appear in Top Issues

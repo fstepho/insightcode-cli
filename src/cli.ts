@@ -6,6 +6,7 @@ import { CliOptions } from './types';
 import { parseDirectory } from './parser';
 import { analyze } from './analyzer';
 import { reportToTerminal } from './reporter';
+import { calculateFileScores } from './topIssues';
 
 const program = new Command();
 
@@ -38,7 +39,9 @@ program
       const results = analyze(files);
       
       if (options.json) {
-        console.log(JSON.stringify(results, null, 2));
+        const fileScores = calculateFileScores(results);
+        const jsonExport = { ...results, topFiles: fileScores.slice(0, 5) };
+        console.log(JSON.stringify(jsonExport, null, 2));
       } else {
         // Use the new reporter
         reportToTerminal(results);

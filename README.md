@@ -188,9 +188,214 @@ insightcode analyze --json
 insightcode --help
 ```
 
+### JSON Output Format
+
+The `--json` flag outputs comprehensive analysis results in a structured format:
+
+```json
+{
+  "summary": {
+    "totalFiles": 7,
+    "totalLines": 738,
+    "avgComplexity": 24.9,
+    "avgDuplication": 7.4,
+    "avgFunctions": 6.7,
+    "avgLoc": 105
+  },
+  "score": 72,
+  "grade": "C",
+  "files": [
+    {
+      "path": "src/analyzer.ts",
+      "complexity": 22,
+      "duplication": 3,
+      "functionCount": 11,
+      "loc": 117,
+      "issues": [
+        {
+          "type": "complexity",
+          "severity": "high",
+          "message": "High complexity: 22 (recommended: < 20)"
+        }
+      ],
+      "fileType": "production"
+    },
+    {
+      "path": "src/cli.ts",
+      "complexity": 6,
+      "duplication": 0,
+      "functionCount": 1,
+      "loc": 43,
+      "issues": [],
+      "fileType": "production"
+    },
+    {
+      "path": "src/parser.ts",
+      "complexity": 61,
+      "duplication": 10,
+      "functionCount": 10,
+      "loc": 250,
+      "issues": [
+        {
+          "type": "complexity",
+          "severity": "high",
+          "message": "High complexity: 61 (recommended: < 20)"
+        },
+        {
+          "type": "size",
+          "severity": "medium",
+          "message": "File getting large: 250 lines"
+        }
+      ],
+      "fileType": "production"
+    },
+    {
+      "path": "src/reporter.ts",
+      "complexity": 44,
+      "duplication": 9,
+      "functionCount": 10,
+      "loc": 126,
+      "issues": [
+        {
+          "type": "complexity",
+          "severity": "high",
+          "message": "High complexity: 44 (recommended: < 20)"
+        }
+      ],
+      "fileType": "production"
+    },
+    {
+      "path": "src/scoring.ts",
+      "complexity": 26,
+      "duplication": 0,
+      "functionCount": 5,
+      "loc": 57,
+      "issues": [
+        {
+          "type": "complexity",
+          "severity": "high",
+          "message": "High complexity: 26 (recommended: < 20)"
+        }
+      ],
+      "fileType": "production"
+    },
+    {
+      "path": "src/topIssues.ts",
+      "complexity": 14,
+      "duplication": 11,
+      "functionCount": 10,
+      "loc": 88,
+      "issues": [
+        {
+          "type": "complexity",
+          "severity": "medium",
+          "message": "Medium complexity: 14 (recommended: < 10)"
+        }
+      ],
+      "fileType": "production"
+    },
+    {
+      "path": "src/types.ts",
+      "complexity": 1,
+      "duplication": 19,
+      "functionCount": 0,
+      "loc": 57,
+      "issues": [
+        {
+          "type": "duplication",
+          "severity": "medium",
+          "message": "Medium duplication: 19% of code is duplicated"
+        }
+      ],
+      "fileType": "production"
+    }
+  ],
+  "topFiles": [
+    {
+      "path": "src/parser.ts",
+      "totalScore": 347,
+      "complexityRatio": 3.05,
+      "sizeRatio": 0.83,
+      "issues": [
+        {
+          "type": "complexity",
+          "severity": "medium",
+          "message": "High complexity: 61 (recommended: < 20)",
+          "value": 61,
+          "ratio": 3.05
+        },
+        {
+          "type": "size",
+          "severity": "medium",
+          "message": "File getting large: 250 lines",
+          "value": 250,
+          "ratio": 0.8
+        }
+      ]
+    },
+    {
+      "path": "src/reporter.ts",
+      "totalScore": 220,
+      "complexityRatio": 2.2,
+      "issues": [
+        {
+          "type": "complexity",
+          "severity": "low",
+          "message": "High complexity: 44 (recommended: < 20)",
+          "value": 44,
+          "ratio": 2.2
+        }
+      ]
+    },
+    {
+      "path": "src/scoring.ts",
+      "totalScore": 130,
+      "complexityRatio": 1.3,
+      "issues": [
+        {
+          "type": "complexity",
+          "severity": "low",
+          "message": "High complexity: 26 (recommended: < 20)",
+          "value": 26,
+          "ratio": 1.3
+        }
+      ]
+    },
+    {
+      "path": "src/analyzer.ts",
+      "totalScore": 110,
+      "complexityRatio": 1.1,
+      "issues": [
+        {
+          "type": "complexity",
+          "severity": "low",
+          "message": "High complexity: 22 (recommended: < 20)",
+          "value": 22,
+          "ratio": 1.1
+        }
+      ]
+    },
+    {
+      "path": "src/types.ts",
+      "totalScore": 38,
+      "duplicationValue": 19,
+      "issues": [
+        {
+          "type": "duplication",
+          "severity": "medium",
+          "message": "Medium duplication: 19% of code is duplicated",
+          "value": 19
+        }
+      ]
+    }
+  ]
+}
+```
 ## 🗺️ Roadmap
 
 ### v0.3.0 ✅ Current
+- File criticality scoring with weighted algorithm
+- Top 5 critical files in JSON output
 - Criticality-based file ranking in reporter
 - Enhanced scoring with graduated thresholds
 - Smart file type classification

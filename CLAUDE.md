@@ -10,9 +10,8 @@ InsightCode CLI is a TypeScript code quality analyzer that runs 100% locally. It
 
 ```bash
 # Development
-npm run dev          # Start development server with tsx watch
-npm run start -- analyze  # Test CLI in development mode
-
+npm run dev          # Start development server with tsx watch, do not use in claude code prompts because it requires a terminal to watch files 
+npm run start -- analyze  # Run CLI on current directory (equivalent to `insightcode analyze .`)
 # Testing  
 npm test            # Run Vitest test suite (27 tests)
 npm test -- --coverage  # Run tests with coverage report
@@ -42,7 +41,7 @@ insightcode analyze  # Test the installed CLI
 
 ### Codebase Structure (1,671 lines total)
 ```
-src/                    # ~450 lines - all core logic
+src/                    # ~738 lines - all core logic
 ├── cli.ts              # Commander.js CLI entry point  
 ├── parser.ts           # TypeScript AST parsing with ts.createSourceFile()
 ├── analyzer.ts         # Calculate 3 core metrics with file type classification
