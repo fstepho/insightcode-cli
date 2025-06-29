@@ -170,6 +170,9 @@ But the monolithic build remains for the millions of projects depending on it.
 
 When analyzing code quality, consider the historical context and business constraints that shaped these decisions.
 
+> **Important Limitation**  
+> The overall score given by InsightCode does not distinguish between avoidable structural complexity (due to poor code organization) and justified complexity (required by the project’s algorithmic, performance, or compatibility needs). This lack of context can unfairly downgrade mature or critical projects and may encourage inappropriate refactoring. To make this benchmark truly reliable and recommendable, it is essential to integrate differentiation or weighting for legitimate complexity, in order to provide a relevant and actionable assessment of code quality.
+
 ## 📁 Historical Benchmarks
 
 Significant benchmark results are archived with dates:

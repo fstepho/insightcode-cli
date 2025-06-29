@@ -165,7 +165,10 @@ function generateMarkdownReport(results) {
   }
   markdown += `- **Total Projects Analyzed**: ${results.length}\n`;
   markdown += `- **Analysis Method**: Fresh clone, default settings, no modifications\n`;
-  
+
+  markdown += `> ⚠️ **Important Limitation**\n`;
+  markdown += `> The overall score given by InsightCode does not distinguish between avoidable structural complexity (due to poor code organization) and justified complexity (required by the project’s algorithmic, performance, or compatibility needs). This lack of context can unfairly downgrade mature or critical projects and may encourage inappropriate refactoring. To make this benchmark truly reliable and recommendable, it is essential to integrate differentiation or weighting for legitimate complexity, in order to provide a relevant and actionable assessment of code quality.\n\n`;
+
   // New scoring system documentation
   markdown += `\n## Scoring System (v0.3.0+)\n\n`;
   markdown += `InsightCode uses graduated thresholds aligned with industry standards:\n\n`;
