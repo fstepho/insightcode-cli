@@ -90,18 +90,19 @@ function analyzeProject(project, category) {
     const analysis = JSON.parse(analysisOutput);
     
     // Extract top issues (max 3)
-    const topIssues = analysis.files
-      .flatMap(file => 
-        file.issues.map(issue => ({
+    const topFiles = Array.isArray(analysis.topFiles) ? analysis.topFiles : [];
+    const topIssues = [];
+
+    for (const file of topFiles) {
+      if (topIssues.length >= 3) break;
+      for (const issue of file.issues) {
+        if (topIssues.length >= 3) break;
+        topIssues.push({
           file: file.path.replace(/^temp-analysis\//, ''), // Remove temp-analysis prefix
           ...issue
-        }))
-      )
-      .sort((a, b) => {
-        const severityOrder = { high: 0, medium: 1, low: 2 };
-        return severityOrder[a.severity] - severityOrder[b.severity];
-      })
-      .slice(0, 3);
+        });
+      }
+    }
     
     const duration = Date.now() - startTime;
     console.log(`  ✅ Completed in ${(duration / 1000).toFixed(1)}s`);

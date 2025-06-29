@@ -36,7 +36,7 @@ if (!CLAUDE_API_KEY) {
 const args = process.argv.slice(2);
 const excludeUtility = args.includes('--exclude-utility');
 const projectName = args.find(arg => !arg.startsWith('--'));
-const compareMode = args.includes('--compare-modes'); // New flag for dual analysis
+const compareMode = args.includes('--compare'); // New flag for dual analysis
 const clearCache = args.includes('--clear-cache'); // Force fresh analysis
 
 // Projects to analyze
@@ -156,6 +156,12 @@ async function callClaudeWithRetry(requestBody, filePath, maxRetries = 3) {
   
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
+      console.log(`    🌐 Calling Claude API for ${filePath}...`);
+      console.log(`    🔍 Request size: ${JSON.stringify(requestBody).length} chars`);
+      // Rate limiting - wait 2.5 seconds between API calls to stay within 50 requests/minute
+      // Add a sleight delay to avoid hitting API rate limits
+      console.log(`    ⏳ Waiting before next API call...`);
+      await new Promise(resolve => setTimeout(resolve, 2500)); // 2.5 seconds delay
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -261,7 +267,7 @@ Summary:
 Maximum 400 words. Be definitive, not diplomatic.`;
 
   try {
-    console.log(`    🌐 Calling Claude API for ${filePath}...`);
+  
     
     const requestBody = {
       model: 'claude-sonnet-4-0',
@@ -272,9 +278,8 @@ Maximum 400 words. Be definitive, not diplomatic.`;
       }]
     };
     
-    console.log(`    🔍 Request size: ${JSON.stringify(requestBody).length} chars`);
-    
     const data = await callClaudeWithRetry(requestBody, filePath);
+
     let explanation = data.content[0].text;
     
     // Appliquer la vérification de cohérence
@@ -591,26 +596,24 @@ async function analyzeProjectWithExplanations(project, category, excludeMode = f
     });
     
     // Garder les top issues pour le contexte
-    issueStats.topIssues = analysis.files
-      .flatMap(file => file.issues.map(issue => ({
-        ...issue,
-        file: file.path
-      })))
-      .filter(issue => issue.severity === 'high')
-      .slice(0, 5);
-      
-    // Find high complexity files
-    const complexFiles = analysis.files
-      .filter(file => file.issues.some(issue => 
-        issue.type === 'complexity' && 
-        issue.severity === 'high' &&
-        parseInt(issue.message.match(/\d+/)[0]) >= COMPLEXITY_THRESHOLD
-      ))
+    issueStats.topIssues = [];
+    for (const file of (analysis.topFiles || [])) {
+      for (const issue of file.issues) {
+        if (issueStats.topIssues.length < 5) {
+          issueStats.topIssues.push({ ...issue, file: file.path.replace(/^temp-analysis\//, '') });
+        }
+      }
+    }
+    
+    // High complexity files from topIssues
+    const topIssues = issueStats.topIssues || [];
+    const complexFiles = topIssues
+      .filter(issue => issue.type === 'complexity' && issue.value >= COMPLEXITY_THRESHOLD)
       .slice(0, MAX_FILES_TO_EXPLAIN)
-      .map(file => ({
-        path: file.path.replace(/^temp-analysis\//, ''),
-        complexity: parseInt(file.issues.find(i => i.type === 'complexity').message.match(/\d+/)[0]),
-        fullPath: file.path
+      .map(issue => ({
+        path: issue.file.replace(/^temp-analysis\//, ''),
+        complexity: issue.value, // ou extrais la valeur réelle si tu l’exportes
+        fullPath: path.join(TEMP_DIR, issue.file)
       }));
 
     console.log(`  🧠 Found ${complexFiles.length} complex files to explain...`);
@@ -659,10 +662,6 @@ async function analyzeProjectWithExplanations(project, category, excludeMode = f
           fileSize: lines.length,
           fromCache: result.fromCache
         });
-        
-        // Rate limiting - wait 2.5 seconds between API calls to stay within 50 requests/minute
-        await new Promise(resolve => setTimeout(resolve, 2500));
-        
       } catch (error) {
         console.error(`    ❌ Error reading ${file.path}: ${error.message}`);
         explanations.push({
@@ -1250,7 +1249,7 @@ async function main() {
   }
   
   if (compareMode) {
-    console.log('📊 Mode: Full vs Production Comparison (--compare-modes)');
+    console.log('📊 Mode: Full vs Production Comparison (--compare)');
   } else if (excludeUtility) {
     console.log('📊 Mode: Production Code Only (--exclude-utility)');
   } else {
@@ -1383,7 +1382,7 @@ async function main() {
     }
   
     // Generate and save report
-    const report = generateExplanationReport(results);
+    const report = await generateExplanationReport(results);
     const suffix = excludeUtility ? '-production-only' : '';
     const specificSuffix = projectName ? `-${projectName}` : '';
     const date = new Date().toISOString().split('T')[0];
