@@ -3,8 +3,8 @@
 ## Methodology
 - **Date**: 2025-06-28
 - **InsightCode Version**: 0.2.0
-- **Analysis Type**: Full vs Production Comparison
-- **Total Projects Analyzed**: 18
+- **Analysis Type**: Full Codebase vs Production Comparison
+- **Total Projects Analyzed**: 7
 - **Complexity Threshold**: 15+ (for explanations)
 - **Analysis Method**: Automated complexity analysis with detailed explanations
 - **Repository Method**: Fresh clone, default settings, no modifications
@@ -82,9 +82,9 @@ Maintainability = (Size Score + Function Score) / 2 - Extreme File Penalty
 - **D**: 60-69 (Poor, significant refactoring recommended)
 - **F**: 0-59 (Critical, major architectural issues)
 
-## Full vs Production Only Analysis Comparison
+## Full Codebase vs Production Only Analysis Comparison
 
-| Project | Stars | Full Analysis | Production Only | Delta | Insight |
+| Project | Stars | Full Codebase Analysis | Production Only | Delta | Insight |
 |---------|-------|---------------|-----------------|-------|----------------|
 | lodash | 59k | **F** (29) | **F** (27) | -2 | 🟡 Balanced: Production code concentrates core utility logic while non-production files contain simpler test cases and documentation, creating minimal but expected complexity shift. |
 | chalk | 21k | **A** (96) | **B** (82) | -14 | 🔴 Architecture: Test files mask core API complexity - production code concentrates intricate terminal styling logic while tests use simplified interface patterns, revealing underlying implementation density. |
@@ -103,15 +103,15 @@ The -16 point delta reveals that React's test files, examples, and utilities are
 
 | Project | Stars | Category | Mode | Files | Lines | Score | Grade | Complexity | Duplication | InsightCode Analysis | Explained |
 |---------|-------|----------|------|-------|-------|-------|-------|------------|-------------|---------------------|-----------|
-| lodash | 59k | small | full | 47 | 64,669 | **29** | **F** | 170.9 | 11.1% | 0.9s (70,754 l/s) | 3 files |
-| chalk | 21k | small | full | 15 | 978 | **96** | **A** | 8.9 | 4.3% | 0.2s (5,821 l/s) | 2 files |
-| uuid | 14k | small | full | 79 | 2,808 | **82** | **B** | 2.7 | 24.4% | 0.2s (14,474 l/s) | 1 files |
-| express | 65k | medium | full | 142 | 15,616 | **69** | **D** | 4.6 | 33.9% | 0.3s (50,866 l/s) | 3 files |
-| vue | 46k | medium | full | 504 | 122,336 | **58** | **F** | 18.5 | 15.1% | 1.2s (101,524 l/s) | 3 files |
-| jest | 44k | medium | full | 1781 | 118,178 | **76** | **C** | 4.6 | 47% | 1.3s (89,869 l/s) | 3 files |
-| react | 227k | large | full | 4144 | 535,486 | **68** | **D** | 11.2 | 41.6% | 4.7s (113,691 l/s) | 3 files |
-| typescript | 98k | large | full | 36846 | 2,797,487 | **76** | **C** | 4.9 | 63.7% | 37.6s (74,461 l/s) | 3 files |
-| eslint | 25k | large | full | 1437 | 463,978 | **66** | **D** | 12.1 | 44.9% | 3.3s (138,584 l/s) | 3 files |
+| lodash | 59k | small | full codebase | 47 | 64,669 | **29** | **F** | 170.9 | 11.1% | 0.9s (70,754 l/s) | 3 files |
+| chalk | 21k | small | full codebase | 15 | 978 | **96** | **A** | 8.9 | 4.3% | 0.2s (5,821 l/s) | 2 files |
+| uuid | 14k | small | full codebase | 79 | 2,808 | **82** | **B** | 2.7 | 24.4% | 0.2s (14,474 l/s) | 1 files |
+| express | 65k | medium | full codebase | 142 | 15,616 | **69** | **D** | 4.6 | 33.9% | 0.3s (50,866 l/s) | 3 files |
+| vue | 46k | medium | full codebase | 504 | 122,336 | **58** | **F** | 18.5 | 15.1% | 1.2s (101,524 l/s) | 3 files |
+| jest | 44k | medium | full codebase | 1781 | 118,178 | **76** | **C** | 4.6 | 47% | 1.3s (89,869 l/s) | 3 files |
+| react | 227k | large | full codebase | 4144 | 535,486 | **68** | **D** | 11.2 | 41.6% | 4.7s (113,691 l/s) | 3 files |
+| typescript | 98k | large | full codebase | 36846 | 2,797,487 | **76** | **C** | 4.9 | 63.7% | 37.6s (74,461 l/s) | 3 files |
+| eslint | 25k | large | full codebase | 1437 | 463,978 | **66** | **D** | 12.1 | 44.9% | 3.3s (138,584 l/s) | 3 files |
 | lodash | 59k | small | production-only | 25 | 34,025 | **27** | **F** | 259.2 | 14% | 0.6s (55,962 l/s) | 3 files |
 | chalk | 21k | small | production-only | 7 | 729 | **82** | **B** | 15.6 | 3.1% | 0.2s (4,556 l/s) | 2 files |
 | uuid | 14k | small | production-only | 29 | 978 | **82** | **B** | 4.5 | 15.6% | 0.2s (5,686 l/s) | 1 files |
@@ -332,10 +332,10 @@ This explains why production-focused analysis can reveal a "cleaner" codebase ev
 ## Detailed Complexity Explanations
 
 ### 📊 lodash (⭐ 59k)
-**Full Analysis**: F (29/100) - 170.9 avg complexity
+**Full Codebase Analysis**: F (29/100) - 170.9 avg complexity
 **Production Only**: F (27/100) - 259.2 avg complexity
 
-#### `lodash.js` (Complexity: 1659) - Full Analysis
+#### `lodash.js` (Complexity: 1659) - Full Codebase Analysis
 
 ## Cyclomatic Complexity Analysis: lodash.js
 
@@ -409,7 +409,7 @@ Key patterns observed:
 
 ---
 
-#### `fp/_baseConvert.js` (Complexity: 86) - Full Analysis
+#### `fp/_baseConvert.js` (Complexity: 86) - Full Codebase Analysis
 
 ## Analysis of lodash fp/_baseConvert.js
 
@@ -480,7 +480,7 @@ This code converts standard lodash functions into functional programming variant
 
 ---
 
-#### `perf/perf.js` (Complexity: 55) - Full Analysis
+#### `perf/perf.js` (Complexity: 55) - Full Codebase Analysis
 
 ## Cyclomatic Complexity Analysis
 
@@ -555,10 +555,10 @@ Additional refactoring:
 ---
 
 ### 📊 chalk (⭐ 21k)
-**Full Analysis**: A (96/100) - 8.9 avg complexity
+**Full Codebase Analysis**: A (96/100) - 8.9 avg complexity
 **Production Only**: B (82/100) - 15.6 avg complexity
 
-#### `source/index.js` (Complexity: 23) - Full Analysis
+#### `source/index.js` (Complexity: 23) - Full Codebase Analysis
 
 ## Primary complexity driver
 The `applyStyle` function (lines 159-187) with its nested conditional logic and while loop, combined with multiple factory methods (`chalkFactory`, `createBuilder`, `createStyler`) that each contain branching logic for ANSI escape sequence handling.
@@ -636,7 +636,7 @@ Standard design patterns can resolve this architectural mixing.
 
 ---
 
-#### `source/vendor/supports-color/index.js` (Complexity: 55) - Full Analysis
+#### `source/vendor/supports-color/index.js` (Complexity: 55) - Full Codebase Analysis
 
 ## Analysis of supports-color/index.js Cyclomatic Complexity
 
@@ -716,10 +716,10 @@ These patterns would reduce the function to a coordinator that delegates to spec
 ---
 
 ### 📊 uuid (⭐ 14k)
-**Full Analysis**: B (82/100) - 2.7 avg complexity
+**Full Codebase Analysis**: B (82/100) - 2.7 avg complexity
 **Production Only**: B (82/100) - 4.5 avg complexity
 
-#### `src/v1.ts` (Complexity: 21) - Full Analysis
+#### `src/v1.ts` (Complexity: 21) - Full Codebase Analysis
 
 ## Analysis of v1.ts Cyclomatic Complexity
 
@@ -792,10 +792,10 @@ The branching directly maps to UUID specification requirements rather than poor 
 ---
 
 ### 📊 express (⭐ 65k)
-**Full Analysis**: D (69/100) - 4.6 avg complexity
+**Full Codebase Analysis**: D (69/100) - 4.6 avg complexity
 **Production Only**: F (46/100) - 32.1 avg complexity
 
-#### `lib/application.js` (Complexity: 41) - Full Analysis
+#### `lib/application.js` (Complexity: 41) - Full Codebase Analysis
 
 ## Analysis of lib/application.js Cyclomatic Complexity
 
@@ -873,7 +873,7 @@ This file implements Express.js application configuration and middleware managem
 
 ---
 
-#### `lib/request.js` (Complexity: 29) - Full Analysis
+#### `lib/request.js` (Complexity: 29) - Full Codebase Analysis
 
 ## Analysis of lib/request.js Cyclomatic Complexity
 
@@ -938,7 +938,7 @@ This is architectural complexity, not algorithmic necessity. The HTTP request pr
 
 ---
 
-#### `lib/response.js` (Complexity: 109) - Full Analysis
+#### `lib/response.js` (Complexity: 109) - Full Codebase Analysis
 
 ## Analysis of lib/response.js (Complexity: 109)
 
@@ -1004,10 +1004,10 @@ This file implements Express.js HTTP response methods, providing a unified API f
 ---
 
 ### 📊 vue (⭐ 46k)
-**Full Analysis**: F (58/100) - 18.5 avg complexity
+**Full Codebase Analysis**: F (58/100) - 18.5 avg complexity
 **Production Only**: D (66/100) - 29.5 avg complexity
 
-#### `rollup.config.js` (Complexity: 53) - Full Analysis
+#### `rollup.config.js` (Complexity: 53) - Full Codebase Analysis
 
 ## Analysis: Vue.js rollup.config.js Complexity
 
@@ -1074,7 +1074,7 @@ This Rollup configuration generates multiple build variants of Vue.js packages f
 
 ---
 
-#### `rollup.dts.config.js` (Complexity: 35) - Full Analysis
+#### `rollup.dts.config.js` (Complexity: 35) - Full Codebase Analysis
 
 ## Analysis of rollup.dts.config.js Cyclomatic Complexity
 
@@ -1141,7 +1141,7 @@ This code generates TypeScript declaration files for Vue.js packages by parsing 
 
 ---
 
-#### `scripts/build.js` (Complexity: 28) - Full Analysis
+#### `scripts/build.js` (Complexity: 28) - Full Codebase Analysis
 
 ## Cyclomatic Complexity Analysis
 
@@ -1183,7 +1183,7 @@ Key complexity sources:
 
 ---
 
-#### `packages/compiler-core/src/babelUtils.ts` (Complexity: 129) - Full Analysis
+#### `packages/compiler-core/src/babelUtils.ts` (Complexity: 129) - Full Codebase Analysis
 
 ## Primary complexity driver
 The `isReferenced` function (lines 336-506) contains a massive 47-case switch statement that handles every possible AST node type in JavaScript/TypeScript. This single function contributes ~36% of the total complexity through dense branching logic.
@@ -1226,10 +1226,10 @@ Since justified, focus on maintainability:
 ---
 
 ### 📊 jest (⭐ 44k)
-**Full Analysis**: C (76/100) - 4.6 avg complexity
+**Full Codebase Analysis**: C (76/100) - 4.6 avg complexity
 **Production Only**: C (76/100) - 9 avg complexity
 
-#### `e2e/Utils.ts` (Complexity: 31) - Full Analysis
+#### `e2e/Utils.ts` (Complexity: 31) - Full Codebase Analysis
 
 ## Analysis: Jest e2e/Utils.ts - Cyclomatic Complexity 31
 
@@ -1298,7 +1298,7 @@ Each function handles a distinct concern with its own branching logic, creating 
 
 ---
 
-#### `packages/babel-jest/src/index.ts` (Complexity: 21) - Full Analysis
+#### `packages/babel-jest/src/index.ts` (Complexity: 21) - Full Codebase Analysis
 
 ## Primary complexity driver
 The `createTransformer` function (lines 137-256) containing the main transformer factory with 4 nested methods (`getCacheKey`, `getCacheKeyAsync`, `process`, `processAsync`) and the complex `mergeBabelTransformOptions` function with multiple conditional property assignments using nullish coalescing operators.
@@ -1369,7 +1369,7 @@ The `mergeBabelTransformOptions` function contains 8 conditional assignments, wh
 
 ---
 
-#### `packages/babel-plugin-jest-hoist/src/index.ts` (Complexity: 50) - Full Analysis
+#### `packages/babel-plugin-jest-hoist/src/index.ts` (Complexity: 50) - Full Codebase Analysis
 
 ## Analysis of babel-plugin-jest-hoist/src/index.ts
 
@@ -1439,10 +1439,10 @@ The core issue is the monolithic `FUNCTIONS.mock` implementation that handles ar
 ---
 
 ### 📊 react (⭐ 227k)
-**Full Analysis**: D (68/100) - 11.2 avg complexity
+**Full Codebase Analysis**: D (68/100) - 11.2 avg complexity
 **Production Only**: F (52/100) - 22.3 avg complexity
 
-#### `dangerfile.js` (Complexity: 25) - Full Analysis
+#### `dangerfile.js` (Complexity: 25) - Full Codebase Analysis
 
 ## Primary complexity driver
 **Sequential conditional chains in lines 138-205**: Multiple nested for-loops with try-catch blocks, combined with complex conditional logic for artifact processing and result categorization (lines 206-240).
@@ -1523,7 +1523,7 @@ The file processes artifacts through multiple passes: discovery, comparison, cla
 
 ---
 
-#### `fixtures/legacy-jsx-runtimes/setupTests.js` (Complexity: 45) - Full Analysis
+#### `fixtures/legacy-jsx-runtimes/setupTests.js` (Complexity: 45) - Full Codebase Analysis
 
 ## Complexity Analysis
 
@@ -1566,7 +1566,7 @@ The algorithmic core (message matching) is simple - the complexity stems from ar
 
 ---
 
-#### `packages/dom-event-testing-library/domEventSequences.js` (Complexity: 30) - Full Analysis
+#### `packages/dom-event-testing-library/domEventSequences.js` (Complexity: 30) - Full Codebase Analysis
 
 ## Analysis of domEventSequences.js
 
@@ -1634,7 +1634,7 @@ The complexity stems from:
 
 ---
 
-#### `packages/dom-event-testing-library/domEvents.js` (Complexity: 30) - Full Analysis
+#### `packages/dom-event-testing-library/domEvents.js` (Complexity: 30) - Full Codebase Analysis
 
 ## Analysis of domEvents.js Cyclomatic Complexity
 
@@ -1671,10 +1671,10 @@ The complexity stems from:
 ---
 
 ### 📊 typescript (⭐ 98k)
-**Full Analysis**: C (76/100) - 4.9 avg complexity
+**Full Codebase Analysis**: C (76/100) - 4.9 avg complexity
 **Production Only**: F (28/100) - 94.1 avg complexity
 
-#### `src/deprecatedCompat/deprecate.ts` (Complexity: 21) - Full Analysis
+#### `src/deprecatedCompat/deprecate.ts` (Complexity: 21) - Full Codebase Analysis
 
 ## Primary complexity driver
 Lines 46-53 in `createDeprecation()` function: cascading conditional logic with multiple ternary operators and complex boolean expressions evaluating version comparisons, error conditions, and warning states.
@@ -1708,7 +1708,7 @@ The complexity stems from:
 
 ---
 
-#### `src/jsTyping/jsTyping.ts` (Complexity: 58) - Full Analysis
+#### `src/jsTyping/jsTyping.ts` (Complexity: 58) - Full Codebase Analysis
 
 ## Analysis of jsTyping.ts High Cyclomatic Complexity
 
@@ -1743,7 +1743,7 @@ The `getTypingNames` helper alone contains 4+ decision points with file system o
 
 ---
 
-#### `src/harness/client.ts` (Complexity: 59) - Full Analysis
+#### `src/harness/client.ts` (Complexity: 59) - Full Codebase Analysis
 
 ## Analysis of src/harness/client.ts (Complexity: 59)
 
@@ -1776,7 +1776,7 @@ The complexity is entirely architectural - each method independently implements 
 
 ---
 
-#### `src/compiler/binder.ts` (Complexity: 960) - Full Analysis
+#### `src/compiler/binder.ts` (Complexity: 960) - Full Codebase Analysis
 
 ## Complexity Analysis: TypeScript Binder
 
@@ -1815,7 +1815,7 @@ The 960 complexity score reflects the genuine complexity of implementing a produ
 
 ---
 
-#### `src/compiler/builder.ts` (Complexity: 389) - Full Analysis
+#### `src/compiler/builder.ts` (Complexity: 389) - Full Codebase Analysis
 
 ## Primary complexity driver
 The main complexity driver is the massive `createBuilderProgramState` function (lines 244-460), which contains deeply nested conditional logic with up to 6 levels of nesting and handles multiple orthogonal concerns: file change detection, diagnostic copying, emit signature management, and state transitions.
@@ -1848,7 +1848,7 @@ The complexity stems from several anti-patterns:
 
 ---
 
-#### `src/compiler/builderState.ts` (Complexity: 84) - Full Analysis
+#### `src/compiler/builderState.ts` (Complexity: 84) - Full Codebase Analysis
 
 ## Cyclomatic Complexity Analysis: builderState.ts
 
@@ -1886,10 +1886,10 @@ This file manages TypeScript compiler build state, tracking file dependencies, s
 ---
 
 ### 📊 eslint (⭐ 25k)
-**Full Analysis**: D (66/100) - 12.1 avg complexity
+**Full Codebase Analysis**: D (66/100) - 12.1 avg complexity
 **Production Only**: F (58/100) - 23.3 avg complexity
 
-#### `Makefile.js` (Complexity: 67) - Full Analysis
+#### `Makefile.js` (Complexity: 67) - Full Codebase Analysis
 
 ## Analysis of Makefile.js Cyclomatic Complexity
 
@@ -1974,7 +1974,7 @@ The complexity stems from structural issues, not algorithmic necessity. Build sy
 
 ---
 
-#### `docs/.eleventy.js` (Complexity: 25) - Full Analysis
+#### `docs/.eleventy.js` (Complexity: 25) - Full Codebase Analysis
 
 ## Analysis of .eleventy.js Cyclomatic Complexity
 
@@ -2011,7 +2011,7 @@ Each pattern adds 3-8 decision points, with the pathPrefix logic alone contribut
 
 ---
 
-#### `lib/cli.js` (Complexity: 110) - Full Analysis
+#### `lib/cli.js` (Complexity: 110) - Full Codebase Analysis
 
 ## Cyclomatic Complexity Analysis: ESLint CLI (110)
 
@@ -2093,7 +2093,7 @@ This is classic architectural complexity, not algorithmic necessity. The high cy
 
 ---
 
-#### `lib/cli-engine/cli-engine.js` (Complexity: 106) - Full Analysis
+#### `lib/cli-engine/cli-engine.js` (Complexity: 106) - Full Codebase Analysis
 
 ## Cyclomatic Complexity Analysis: CLIEngine (106)
 

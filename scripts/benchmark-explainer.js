@@ -53,8 +53,9 @@ const PROJECTS = {
   ],
   large: [
     { name: 'react', repo: 'https://github.com/facebook/react.git', stars: '227k' },
-    { name: 'typescript', repo: 'https://github.com/microsoft/TypeScript.git', stars: '98k' },
     { name: 'eslint', repo: 'https://github.com/eslint/eslint.git', stars: '25k' },
+    // xlarge !
+    { name: 'typescript', repo: 'https://github.com/microsoft/TypeScript.git', stars: '98k' },
   ]
 };
 
@@ -87,7 +88,7 @@ function runCommand(command, cwd) {
   }
 }
 
-function generateCacheKey(filePath, fileContent, complexity, projectContext, isTruncated, analysisContext = '') {
+function generateComplexityCacheKey(filePath, fileContent, complexity, projectContext, isTruncated, analysisContext = '') {
   // Create a unique key based on all parameters that affect the result
   const keyData = {
     filePath,
@@ -99,13 +100,13 @@ function generateCacheKey(filePath, fileContent, complexity, projectContext, isT
     language: projectContext.language,
     isTruncated,
     analysisContext,
-    promptVersion: '1.2' // Increment when prompt changes
+    promptVersion: '2.0' // Updated for architectural insights approach
   };
   
   return crypto.createHash('md5').update(JSON.stringify(keyData)).digest('hex');
 }
 
-function getCachedExplanation(cacheKey) {
+function getCachedComplexityExplanation(cacheKey) {
   const cacheFile = path.join(CACHE_DIR, `${cacheKey}.json`);
   
   try {
@@ -135,7 +136,7 @@ function getCachedExplanation(cacheKey) {
   return null;
 }
 
-function setCachedExplanation(cacheKey, explanation) {
+function setCachedComplexityExplanation(cacheKey, explanation) {
   const cacheFile = path.join(CACHE_DIR, `${cacheKey}.json`);
   
   try {
@@ -149,6 +150,127 @@ function setCachedExplanation(cacheKey, explanation) {
   } catch (error) {
     console.error(`⚠️  Failed to cache explanation: ${error.message}`);
   }
+}
+
+function generateInsightCacheKey(projectName, fullResult, prodResult, delta) {
+  // Create a unique key based on the comparison parameters
+  const keyData = {
+    projectName,
+    fullScore: fullResult.analysis.score,
+    fullGrade: fullResult.analysis.grade,
+    prodScore: prodResult.analysis.score,
+    prodGrade: prodResult.analysis.grade,
+    delta,
+    fullComplexity: fullResult.analysis.avgComplexity,
+    prodComplexity: prodResult.analysis.avgComplexity,
+    fullFiles: fullResult.analysis.totalFiles,
+    prodFiles: prodResult.analysis.totalFiles,
+    promptVersion: '2.0' // Updated for enhanced architectural insights prompt
+  };
+  
+  return 'insight_' + crypto.createHash('md5').update(JSON.stringify(keyData)).digest('hex');
+}
+
+function getCachedInsight(cacheKey) {
+  const cacheFile = path.join(CACHE_DIR, `${cacheKey}.json`);
+  
+  try {
+    if (fs.existsSync(cacheFile)) {
+      const cached = JSON.parse(fs.readFileSync(cacheFile, 'utf-8'));
+      
+      // Check if cache is still valid (max 30 days)
+      const cacheAge = Date.now() - cached.timestamp;
+      const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+      
+      if (cacheAge < maxAge) {
+        return cached.insight;
+      } else {
+        // Cache expired, delete it
+        fs.unlinkSync(cacheFile);
+      }
+    }
+  } catch (error) {
+    // If cache file is corrupted, delete it
+    try {
+      fs.unlinkSync(cacheFile);
+    } catch (e) {
+      // Ignore deletion errors
+    }
+  }
+  
+  return null;
+}
+
+function setCachedInsight(cacheKey, insight) {
+  const cacheFile = path.join(CACHE_DIR, `${cacheKey}.json`);
+  
+  try {
+    const cacheData = {
+      insight,
+      timestamp: Date.now(),
+      version: '1.0'
+    };
+    
+    fs.writeFileSync(cacheFile, JSON.stringify(cacheData, null, 2));
+  } catch (error) {
+    console.error(`⚠️  Failed to cache insight: ${error.message}`);
+  }
+}
+
+// Generic cache functions for API responses
+function getCachedDuplicationExplanationApiResponse(cacheKey) {
+  const cacheFile = path.join(CACHE_DIR, `${cacheKey}.json`);
+  
+  try {
+    if (fs.existsSync(cacheFile)) {
+      const cached = JSON.parse(fs.readFileSync(cacheFile, 'utf-8'));
+      
+      // Check if cache is still valid (max 30 days)
+      const cacheAge = Date.now() - cached.timestamp;
+      const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+      
+      if (cacheAge < maxAge) {
+        return cached.response;
+      } else {
+        // Cache expired, delete it
+        fs.unlinkSync(cacheFile);
+      }
+    }
+  } catch (error) {
+    // If cache file is corrupted, delete it
+    try {
+      fs.unlinkSync(cacheFile);
+    } catch (e) {
+      // Ignore deletion errors
+    }
+  }
+  
+  return null;
+}
+
+function setCachedDuplicationExplanationApiResponse(cacheKey, response) {
+  const cacheFile = path.join(CACHE_DIR, `${cacheKey}.json`);
+  
+  try {
+    const cacheData = {
+      response,
+      timestamp: Date.now(),
+      version: '1.0'
+    };
+    
+    fs.writeFileSync(cacheFile, JSON.stringify(cacheData, null, 2));
+  } catch (error) {
+    console.error(`⚠️  Failed to cache API response: ${error.message}`);
+  }
+}
+
+// Cache functions for scoring explanations
+function getCachedScoringExplanationApiResponse(cacheKey) {
+  return getCachedDuplicationExplanationApiResponse(cacheKey);
+}
+
+function setCachedScoringExplanationApiResponse(cacheKey, response) {
+  setCachedDuplicationExplanationApiResponse(cacheKey, response);
 }
 
 async function callClaudeWithRetry(requestBody, filePath, maxRetries = 3) {
@@ -176,13 +298,22 @@ async function callClaudeWithRetry(requestBody, filePath, maxRetries = 3) {
         return await response.json();
       }
 
-      // Handle rate limit (429) with exponential backoff
+      // Handle rate limit (429) with optimized backoff
       if (response.status === 429) {
         const retryAfter = response.headers.get('retry-after');
-        const baseDelay = retryAfter ? parseInt(retryAfter) * 1000 : 5000; // Use retry-after header or default to 5s
-        const backoffDelay = baseDelay * Math.pow(2, attempt - 1); // Exponential backoff
-        const jitter = Math.random() * 1000; // Add jitter to avoid thundering herd
-        const totalDelay = backoffDelay + jitter;
+        let delay;
+        
+        if (retryAfter) {
+          // Use retry-after header directly (it's already in seconds according to docs)
+          delay = parseInt(retryAfter) * 1000;
+        } else {
+          // Fallback: progressive delays 5s, 10s, 15s (much better than exponential)
+          delay = 5000 * attempt;
+        }
+        
+        // Small jitter to avoid thundering herd (max 2s)
+        const jitter = Math.random() * 2000;
+        const totalDelay = delay + jitter;
         
         console.log(`    ⏳ Rate limit hit for ${filePath}, retrying in ${(totalDelay/1000).toFixed(1)}s (attempt ${attempt}/${maxRetries})`);
         
@@ -200,9 +331,9 @@ async function callClaudeWithRetry(requestBody, filePath, maxRetries = 3) {
       
       // Only retry on rate limit errors
       if (error.message.includes('429') && attempt < maxRetries) {
-        const backoffDelay = 5000 * Math.pow(2, attempt - 1); // Exponential backoff starting at 5s
-        const jitter = Math.random() * 1000;
-        const totalDelay = backoffDelay + jitter;
+        const delay = 5000 * attempt; // Progressive delays: 5s, 10s, 15s
+        const jitter = Math.random() * 2000; // 0-2s jitter
+        const totalDelay = delay + jitter;
         
         console.log(`    ⏳ Rate limit error for ${filePath}, retrying in ${(totalDelay/1000).toFixed(1)}s (attempt ${attempt}/${maxRetries})`);
         await new Promise(resolve => setTimeout(resolve, totalDelay));
@@ -217,54 +348,59 @@ async function callClaudeWithRetry(requestBody, filePath, maxRetries = 3) {
   throw lastError;
 }
 
-async function explainComplexity(filePath, fileContent, complexity, projectContext, isTruncated, analysisContext = '') {
+async function explainFileComplexityArchitecture(filePath, fileContent, complexity, projectContext, isTruncated, analysisContext = '') {
   // Check cache first - include analysis context in cache key for comparison mode
-  const cacheKey = generateCacheKey(filePath, fileContent, complexity, projectContext, isTruncated, analysisContext);
-  const cachedExplanation = !clearCache ? getCachedExplanation(cacheKey) : null;
+  const cacheKey = generateComplexityCacheKey(filePath, fileContent, complexity, projectContext, isTruncated, analysisContext);
+  const cachedExplanation = !clearCache ? getCachedComplexityExplanation(cacheKey) : null;
   
   if (cachedExplanation) {
-    console.log(`    💾 Using cached explanation for ${filePath}`);
+    console.log(`    💾 Using cached complexity explanation for ${filePath}`);
     return { explanation: cachedExplanation, fromCache: true };
   }
   
   const truncationNote = isTruncated ? `\n\nIMPORTANT: This file has been truncated to ${MAX_FILE_SIZE} lines for analysis. Focus on the visible patterns and note if key logic might be missing.` : '';
   const contextNote = analysisContext ? `\n\nANALYSIS CONTEXT: ${analysisContext}` : '';
   
-  const prompt = `Analyze this ${projectContext.language} file and explain why it has high cyclomatic complexity (${complexity}).
+  const prompt = `Analyze this ${projectContext.language} file from **${projectContext.name}** (${projectContext.description}) and provide architectural insights about its complexity.
 
-Project: ${projectContext.name} (${projectContext.description})
-File: ${filePath}
-Complexity: ${complexity} (threshold: ${COMPLEXITY_THRESHOLD})${truncationNote}${contextNote}
+**Context**: ${projectContext.name} is an industry-leading open-source project used by millions of developers worldwide. This analysis should focus on what teams can learn from their architectural decisions.
 
-File content:
+**File Details:**
+- Path: ${filePath}
+- Complexity: ${complexity} (threshold: ${COMPLEXITY_THRESHOLD})
+- Project Type: ${getProjectType(projectContext.name.toLowerCase())}${truncationNote}${contextNote}
+
+**File content:**
 \`\`\`${projectContext.language}
 ${fileContent}
 \`\`\`
 
-ANALYSIS REQUIREMENTS:
-1. BE BINARY: Choose EITHER "Justified" OR "Not Justified" - no middle ground
-2. BE SPECIFIC: Name exact patterns, line numbers, and concrete refactoring steps
-3. BE TECHNICAL: Use precise terminology (strategy pattern, factory, state machine, etc.)
+**Analysis Framework:**
+Provide a constructive, educational analysis that explains the architectural patterns and design decisions behind this complexity.
 
-JUSTIFICATION CRITERIA (choose ONE - no middle ground):
-- **"Justified"**: Algorithmic necessity, performance constraints, or compatibility requirements that cannot be simplified
-- **"Not Justified"**: Structural/architectural issues that design patterns and refactoring can resolve
+**Required Sections:**
 
-Provide exactly these sections:
-1. **Primary complexity driver** (single most important cause with line references)
-2. **Business context** (what the code achieves in 1-2 sentences)
-3. **Technical assessment** (specific patterns: switch complexity, nested conditions, state management, etc.)
-4. **Complexity justification**:
-   - "Justified": Inherent algorithmic complexity or performance requirements
-   - "Not Justified": Structural/architectural issues that standard patterns can resolve
-5. **Specific improvements** (if not justified, provide 2-3 concrete technical solutions with pattern names)
+1. **Architectural Pattern** (What specific pattern or approach drives the complexity)
+2. **Business Purpose** (What this code achieves and why it's important to ${projectContext.name})
+3. **Complexity Analysis** (Specific technical patterns: switch logic, conditional flows, state management, parsing, etc.)
+4. **Design Trade-offs** (What this complexity enables vs alternatives):
+   - **Performance Benefits**: Speed, memory, compatibility gains
+   - **Functionality Requirements**: Features that necessitate this approach
+   - **Maintainability Considerations**: How the team manages this complexity
+5. **Architectural Lessons** (What teams can learn):
+   - When similar complexity is warranted in their projects
+   - How to structure complex code for maintainability
+   - Alternative approaches and their trade-offs
 
-Summary:
-- **Root cause**: [exact technical pattern, e.g. "180-case switch statement", "5-level nested conditionals"]
-- **Justified**: [Yes/No] - [algorithmic reason OR structural problem]
-- **Action**: [specific pattern/refactoring: "Replace with Strategy pattern", "Extract state machine", "Apply Command pattern" OR "None - inherent algorithmic complexity"]
+**Summary Format:**
+- **Pattern**: [Specific architectural pattern, e.g. "State machine with 50+ transitions", "Recursive descent parser", "Performance-optimized algorithm"]
+- **Purpose**: [Core functionality this enables]
+- **Complexity Level**: [Algorithmic/Performance/Compatibility/Structural] 
+- **Team Lesson**: [Specific actionable insight for development teams]
 
-Maximum 400 words. Be definitive, not diplomatic.`;
+**Tone**: Analytical and educational. Focus on learning from industry-proven architecture rather than judging complexity as "good" or "bad".
+
+Maximum 450 words. Emphasize architectural insights and practical lessons.`;
 
   try {
   
@@ -291,7 +427,7 @@ Maximum 400 words. Be definitive, not diplomatic.`;
     }
     
     // Cache l'explication cohérente
-    setCachedExplanation(cacheKey, explanation);
+    setCachedComplexityExplanation(cacheKey, explanation);
     
     return { explanation, fromCache: false };
   } catch (error) {
@@ -552,9 +688,25 @@ function getProjectContext(projectName) {
   return contexts[projectName] || { name: projectName, description: 'JavaScript/TypeScript project', language: 'javascript' };
 }
 
+function getProjectType(projectName) {
+  const types = {
+    'typescript': 'language compiler',
+    'eslint': 'code analysis tool',
+    'react': 'UI framework',
+    'vue': 'frontend framework', 
+    'express': 'backend framework',
+    'jest': 'testing framework',
+    'lodash': 'utility library',
+    'chalk': 'utility library',
+    'uuid': 'utility library'
+  };
+  
+  return types[projectName] || 'development tool';
+}
+
 async function analyzeProjectWithExplanations(project, category, excludeMode = false, comparisonContext = null) {
   const startTime = Date.now();
-  const modeLabel = excludeMode ? ' (Production Only)' : '';
+  const modeLabel = excludeMode ? ' (Production Only)' : ' (Full Codebase)';
   console.log(`\n📊 Analyzing ${project.name}${modeLabel} with explanations...`);
   
   try {
@@ -646,7 +798,7 @@ async function analyzeProjectWithExplanations(project, category, excludeMode = f
           }
         }
         
-        const result = await explainComplexity(
+        const result = await explainFileComplexityArchitecture(
           file.path, 
           truncatedContent, 
           file.complexity, 
@@ -718,8 +870,17 @@ async function analyzeProjectWithExplanations(project, category, excludeMode = f
   }
 }
 
-async function generateInsightWithClaude(projectName, fullResult, prodResult, delta) {
+async function generateProjectInsightWithClaude(projectName, fullResult, prodResult, delta) {
   const projectContext = getProjectContext(projectName);
+  
+  // Generate cache key for insights
+  const insightCacheKey = generateInsightCacheKey(projectName, fullResult, prodResult, delta);
+  const cachedInsight = !clearCache ? getCachedInsight(insightCacheKey) : null;
+  
+  if (cachedInsight) {
+    console.log(`    💾 Using cached insight for ${projectName}`);
+    return cachedInsight;
+  }
   
   // Get code snippets from highest complexity files for context
   let codeContext = '';
@@ -765,27 +926,37 @@ async function generateInsightWithClaude(projectName, fullResult, prodResult, de
     });
   }
   
-  const prompt = `Analyze this code quality comparison for ${projectName}:
+  const prompt = `Analyze the architectural implications of this code quality comparison for **${projectName}** (${projectContext.description}):
 
-Full Codebase Analysis: ${fullResult.analysis.grade} (${fullResult.analysis.score}/100)
-Production Code Only: ${prodResult.analysis.grade} (${prodResult.analysis.score}/100)  
-Score Delta: ${delta} points
+**Quality Impact Analysis:**
+- Full Codebase: ${fullResult.analysis.grade} (${fullResult.analysis.score}/100) - ${fullResult.analysis.totalFiles.toLocaleString()} files, ${fullResult.analysis.avgComplexity} avg complexity
+- Production Only: ${prodResult.analysis.grade} (${prodResult.analysis.score}/100) - ${prodResult.analysis.totalFiles.toLocaleString()} files, ${prodResult.analysis.avgComplexity} avg complexity
+- **Delta: ${delta > 0 ? '+' : ''}${delta} points** (${fullResult.analysis.totalFiles - prodResult.analysis.totalFiles} files excluded)
 
-Project: ${projectContext.name} - ${projectContext.description}
-Files analyzed: Full=${fullResult.analysis.totalFiles}, Production=${prodResult.analysis.totalFiles}
-Complexity: Full=${fullResult.analysis.avgComplexity}, Production=${prodResult.analysis.avgComplexity}${codeContext}
+**Project Context:** ${projectContext.name} is a foundational ${getProjectType(projectName)} serving millions of developers worldwide.${codeContext}
 
-Based on the actual complexity patterns found in the code above, generate a concise technical insight (20-30 words) explaining WHY this score difference occurred. Consider:
-- Architecture patterns that explain the difference
-- Whether the complexity revealed/hidden is justified
-- Specific technical factors (testing patterns, examples, utilities vs core logic)
+Generate a **specific architectural insight** (45-60 words) explaining what this comparison reveals about ${projectName}'s design decisions and what teams can learn from it.
 
-Format your response as: "🟢/🟡/🔴 Category: Technical explanation based on the actual code patterns"
+**Focus Areas by Project Type:**
+- **Language Infrastructure** (TypeScript, ESLint): Compiler architecture, parsing complexity, tooling design
+- **Frontend Frameworks** (React, Vue): Component architecture, state management, rendering optimization  
+- **Backend Frameworks** (Express): API design, middleware architecture, plugin systems
+- **Testing Tools** (Jest): Cross-platform compatibility, mock systems, assertion architecture
+- **Utility Libraries** (lodash, chalk): Performance optimization, API design, backwards compatibility
 
-Use:
-🟢 if delta >= +5 (production cleaner than tests/examples)
-🟡 if delta between -5 and +5 (balanced)  
-🔴 if delta <= -5 (production has hidden complexity issues)`;
+**Tone & Requirements:**
+- Constructive and analytical (not critical)
+- Focus on architectural lessons and design decisions
+- Explain WHY the delta exists in terms of project architecture
+- Reference specific technical patterns when possible
+- End with a concrete lesson for development teams
+
+**Format:** "🟢/🟡/🔴 [Architectural Theme]: [Specific analysis of ${projectName}'s architecture and design decisions]. **Lesson**: [Actionable insight for teams]."
+
+**Icons:**
+🟢 if delta >= +5 (production architecture is cleaner/more focused)
+🟡 if delta between -5 and +5 (balanced architecture across codebase)  
+🔴 if delta <= -5 (production code shows architectural complexity issues)`;
 
   try {
     console.log(`    🧠 Generating insight for ${projectName} (delta: ${delta})...`);
@@ -800,7 +971,12 @@ Use:
     };
     
     const data = await callClaudeWithRetry(requestBody, `insight-${projectName}`);
-    return data.content[0].text.trim();
+    const insight = data.content[0].text.trim();
+    
+    // Cache the insight
+    setCachedInsight(insightCacheKey, insight);
+    
+    return insight;
     
   } catch (error) {
     console.error(`❌ Failed to generate insight for ${projectName}: ${error.message}`);
@@ -816,9 +992,9 @@ Use:
 }
 
 async function generateComparisonTable(fullResults, productionResults) {
-  let markdown = `## Full vs Production Only Analysis Comparison
+  let markdown = `## Full Codebase vs Production Only Analysis Comparison
 
-| Project | Stars | Full Analysis | Production Only | Delta | Insight |
+| Project | Stars | Full Codebase Analysis | Production Only | Delta | Insight |
 |---------|-------|---------------|-----------------|-------|----------------|
 `;
 
@@ -833,7 +1009,7 @@ async function generateComparisonTable(fullResults, productionResults) {
       const deltaStr = delta > 0 ? `+${delta}` : `${delta}`;
       
       // Generate Claude-powered insight
-      const insight = await generateInsightWithClaude(projectName, fullResult, prodResult, delta);
+      const insight = await generateProjectInsightWithClaude(projectName, fullResult, prodResult, delta);
       
       const stars = fullResult.stars || prodResult.stars;
       markdown += `| ${projectName} | ${stars} | **${fullResult.analysis.grade}** (${fullResult.analysis.score}) | **${prodResult.analysis.grade}** (${prodResult.analysis.score}) | ${deltaStr} | ${insight} |\n`;
@@ -849,7 +1025,7 @@ async function generateComparisonTable(fullResults, productionResults) {
 async function generateExplanationReport(results, comparisonTable = '') {
   const date = new Date().toISOString().split('T')[0];
   const isComparison = comparisonTable !== '';
-  const analysisType = isComparison ? 'Full vs Production Comparison' : (excludeUtility ? 'Production Code Only' : 'Full Codebase');
+  const analysisType = isComparison ? 'Full codebase including tests/examples vs production code only' : (excludeUtility ? 'Production code only' : 'Full codebase including tests/examples');
   const analysisFlag = excludeUtility ? ' (with --exclude-utility)' : '';
   
   // For comparison mode, detect duplicate explanations
@@ -877,13 +1053,15 @@ async function generateExplanationReport(results, comparisonTable = '') {
     });
   }
   
-  let markdown = `# InsightCode Benchmark Explanations - ${analysisType}
+  // If this is a comparison, halve the project count for summary
+  const projectCount = comparisonTable !== '' ? Math.round(results.length / 2) : results.length;
 
+  let markdown = `# InsightCode Benchmark Explanations - ${analysisType}
 ## Methodology
 - **Date**: ${date}
-- **InsightCode Version**: 0.2.0
-- **Analysis Type**: ${analysisType}${analysisFlag}
-- **Total Projects Analyzed**: ${results.length}
+- **InsightCode Version**:  ${getInsightCodeVersion()}
+- **Analysis Context**: ${analysisType}${analysisFlag}
+- **Total Projects Analyzed**: ${projectCount} 
 - **Complexity Threshold**: ${COMPLEXITY_THRESHOLD}+ (for explanations)
 - **Analysis Method**: Automated complexity analysis with detailed explanations
 - **Repository Method**: Fresh clone, default settings, no modifications
@@ -991,29 +1169,69 @@ ${comparisonTable}
     
     markdown += `\n### ${category.charAt(0).toUpperCase() + category.slice(1)} Projects\n\n`;
     
-    categoryResults.forEach(r => {
-      markdown += `#### ${r.project} (⭐ ${r.stars})\n`;
-      markdown += `- **Score**: ${r.analysis.grade} (${r.analysis.score}/100)\n`;
-      markdown += `- **Files**: ${r.analysis.totalFiles} files, ${r.analysis.totalLines.toLocaleString()} lines\n`;
-      markdown += `- **Complexity**: ${r.analysis.avgComplexity} average\n`;
-      markdown += `- **Duplication**: ${r.analysis.avgDuplication ?? 'N/A'}%\n`;
-      markdown += `- **Complex files explained**: ${r.explanations.length}\n`;
-      markdown += `\n`;
-    });
+    // Group by mode if comparison mode (detected by having both full and production results), otherwise show all
+    const hasBothModes = categoryResults.some(r => r.mode === 'full') && categoryResults.some(r => r.mode === 'production-only');
+    
+    if (hasBothModes) {
+      const fullResults = categoryResults.filter(r => r.mode === 'full');
+      const prodResults = categoryResults.filter(r => r.mode === 'production-only');
+      
+      if (fullResults.length > 0) {
+        markdown += `#### Full Codebase Analysis\n\n`;
+        fullResults.forEach(r => {
+          markdown += `**${r.project}** (⭐ ${r.stars}): ${r.analysis.grade} (${r.analysis.score}/100) - ${r.analysis.totalFiles} files, ${r.analysis.totalLines.toLocaleString()} lines, ${r.analysis.avgComplexity} complexity, ${r.analysis.avgDuplication ?? 'N/A'}% duplication\n\n`;
+        });
+      }
+      
+      if (prodResults.length > 0) {
+        markdown += `#### Production Only Analysis\n\n`;
+        prodResults.forEach(r => {
+          markdown += `**${r.project}** (⭐ ${r.stars}): ${r.analysis.grade} (${r.analysis.score}/100) - ${r.analysis.totalFiles} files, ${r.analysis.totalLines.toLocaleString()} lines, ${r.analysis.avgComplexity} complexity, ${r.analysis.avgDuplication ?? 'N/A'}% duplication\n\n`;
+        });
+      }
+    } else {
+      // Original single-mode format
+      const modeLabel = categoryResults[0].mode === 'production-only' ? ' Production Only' : ' Full Codebase';
+      categoryResults.forEach(r => {
+        markdown += `#### ${r.project} (⭐ ${r.stars})\n`;
+        markdown += `- **Mode**: ${modeLabel}\n\n`;
+        markdown += `- **Score**: ${r.analysis.grade} (${r.analysis.score}/100)\n`;
+        markdown += `- **Files**: ${r.analysis.totalFiles} files, ${r.analysis.totalLines.toLocaleString()} lines\n`;
+        markdown += `- **Complexity**: ${r.analysis.avgComplexity} average\n`;
+        markdown += `- **Duplication**: ${r.analysis.avgDuplication ?? 'N/A'}%\n`;
+        markdown += `- **Complex files explained**: ${r.explanations.length}\n`;
+        markdown += `\n`;
+      });
+    }
   });
 
   // Key findings
   markdown += `## Key Findings\n\n`;
 
-  // Calculate averages by category
+  // Calculate averages by category - deduplicate if comparison mode
   const categoryAverages = ['small', 'medium', 'large'].map(cat => {
     const catResults = successfulResults.filter(r => r.category === cat);
     if (catResults.length === 0) return null;
     
-    const avgScore = Math.round(catResults.reduce((sum, r) => sum + r.analysis.score, 0) / catResults.length);
-    const avgComplexity = (catResults.reduce((sum, r) => sum + r.analysis.avgComplexity, 0) / catResults.length).toFixed(1);
+    // If comparison mode, deduplicate by project (prefer production-only for more focused stats)
+    const hasBothModes = catResults.some(r => r.mode === 'full') && catResults.some(r => r.mode === 'production-only');
+    let uniqueResults = catResults;
     
-    return { category: cat, avgScore, avgComplexity, count: catResults.length };
+    if (hasBothModes) {
+      const projectMap = new Map();
+      catResults.forEach(r => {
+        const key = r.project;
+        if (!projectMap.has(key) || r.mode === 'production-only') {
+          projectMap.set(key, r);
+        }
+      });
+      uniqueResults = Array.from(projectMap.values());
+    }
+    
+    const avgScore = Math.round(uniqueResults.reduce((sum, r) => sum + r.analysis.score, 0) / uniqueResults.length);
+    const avgComplexity = (uniqueResults.reduce((sum, r) => sum + r.analysis.avgComplexity, 0) / uniqueResults.length).toFixed(1);
+    
+    return { category: cat, avgScore, avgComplexity, count: uniqueResults.length };
   }).filter(Boolean);
 
   markdown += `### Average Scores by Project Size\n\n`;
@@ -1023,59 +1241,139 @@ ${comparisonTable}
     }
   });
 
-  // Performance stats - separate InsightCode from total times
-  const totalLines = successfulResults.reduce((sum, r) => sum + r.analysis.totalLines, 0);
-  const totalTime = successfulResults.reduce((sum, r) => sum + r.duration, 0) / 1000;
-  const insightcodeTime = successfulResults.reduce((sum, r) => sum + (r.insightcodeTime || 0), 0) / 1000;
-  const explanationTime = totalTime - insightcodeTime;
-  const insightcodeLinesPerSecond = insightcodeTime > 0 ? Math.round(totalLines / insightcodeTime) : 0;
-
-  markdown += `\n### Performance Statistics\n\n`;
-  markdown += `- **Total lines analyzed**: ${totalLines.toLocaleString()}\n`;
-  markdown += `- **InsightCode analysis time**: ${insightcodeTime.toFixed(1)}s (${insightcodeLinesPerSecond.toLocaleString()} lines/second)\n`;
-  markdown += `- **Explanation generation time**: ${explanationTime.toFixed(1)}s\n`;
-  markdown += `- **Total processing time**: ${totalTime.toFixed(1)}s\n\n`;
-  markdown += `**Note**: InsightCode's core analysis is very fast (${insightcodeLinesPerSecond.toLocaleString()} l/s average). Most processing time is spent on detailed explanations. For production use without explanations, expect ${insightcodeLinesPerSecond.toLocaleString()}+ lines/second performance.\n`;
-
-  // Grade distribution
-  const gradeDistribution = successfulResults.reduce((acc, r) => {
-    acc[r.analysis.grade] = (acc[r.analysis.grade] || 0) + 1;
-    return acc;
-  }, {});
+  // Performance stats - deduplicate if comparison mode  
+  const hasComparisonData = successfulResults.some(r => r.mode === 'full') && successfulResults.some(r => r.mode === 'production-only');
   
-  markdown += `\n### Grade Distribution\n\n`;
-  ['A', 'B', 'C', 'D', 'F'].forEach(grade => {
-    const count = gradeDistribution[grade] || 0;
-    if (count > 0) {
-      const projects = successfulResults
-        .filter(r => r.analysis.grade === grade)
-        .map(r => r.project)
-        .join(', ');
-      markdown += `- **${grade}**: ${count} project(s) - ${projects}\n`;
-    }
-  });
+  if (hasComparisonData) {
+    // For performance stats, include all data but note it's combined
+    const totalLines = successfulResults.reduce((sum, r) => sum + r.analysis.totalLines, 0);
+    const totalTime = successfulResults.reduce((sum, r) => sum + r.duration, 0) / 1000;
+    const insightcodeTime = successfulResults.reduce((sum, r) => sum + (r.insightcodeTime || 0), 0) / 1000;
+    const explanationTime = totalTime - insightcodeTime;
+    const insightcodeLinesPerSecond = insightcodeTime > 0 ? Math.round(totalLines / insightcodeTime) : 0;
 
-  // Best and worst scores
-  const sortedByScore = successfulResults.sort((a, b) => b.analysis.score - a.analysis.score);
-  if (sortedByScore.length > 0) {
-    markdown += `\n### Score Range\n\n`;
-    markdown += `- **Best score**: ${sortedByScore[0].project} with ${sortedByScore[0].analysis.grade} (${sortedByScore[0].analysis.score}/100)\n`;
-    markdown += `- **Worst score**: ${sortedByScore[sortedByScore.length - 1].project} with ${sortedByScore[sortedByScore.length - 1].analysis.grade} (${sortedByScore[sortedByScore.length - 1].analysis.score}/100)\n`;
+    markdown += `\n### Performance Statistics (Combined Full + Production Analysis)\n\n`;
+    markdown += `- **Total lines analyzed**: ${totalLines.toLocaleString()}\n`;
+    markdown += `- **InsightCode analysis time**: ${insightcodeTime.toFixed(1)}s (${insightcodeLinesPerSecond.toLocaleString()} lines/second)\n`;
+    markdown += `- **Explanation generation time**: ${explanationTime.toFixed(1)}s\n`;
+    markdown += `- **Total processing time**: ${totalTime.toFixed(1)}s\n\n`;
+    markdown += `**Note**: InsightCode's core analysis is very fast (${insightcodeLinesPerSecond.toLocaleString()} l/s average). Most processing time is spent on detailed explanations. For production use without explanations, expect ${insightcodeLinesPerSecond.toLocaleString()}+ lines/second performance.\n`;
+  } else {
+    // Original single-mode stats
+    const totalLines = successfulResults.reduce((sum, r) => sum + r.analysis.totalLines, 0);
+    const totalTime = successfulResults.reduce((sum, r) => sum + r.duration, 0) / 1000;
+    const insightcodeTime = successfulResults.reduce((sum, r) => sum + (r.insightcodeTime || 0), 0) / 1000;
+    const explanationTime = totalTime - insightcodeTime;
+    const insightcodeLinesPerSecond = insightcodeTime > 0 ? Math.round(totalLines / insightcodeTime) : 0;
+
+    markdown += `\n### Performance Statistics\n\n`;
+    markdown += `- **Total lines analyzed**: ${totalLines.toLocaleString()}\n`;
+    markdown += `- **InsightCode analysis time**: ${insightcodeTime.toFixed(1)}s (${insightcodeLinesPerSecond.toLocaleString()} lines/second)\n`;
+    markdown += `- **Explanation generation time**: ${explanationTime.toFixed(1)}s\n`;
+    markdown += `- **Total processing time**: ${totalTime.toFixed(1)}s\n\n`;
+    markdown += `**Note**: InsightCode's core analysis is very fast (${insightcodeLinesPerSecond.toLocaleString()} l/s average). Most processing time is spent on detailed explanations. For production use without explanations, expect ${insightcodeLinesPerSecond.toLocaleString()}+ lines/second performance.\n`;
+  }
+
+  // Grade distribution - show both modes if comparison
+  if (hasComparisonData) {
+    const fullResults = successfulResults.filter(r => r.mode === 'full');
+    const prodResults = successfulResults.filter(r => r.mode === 'production-only');
+    
+    markdown += `\n### Grade Distribution\n\n`;
+    markdown += `#### Full Codebase Analysis\n`;
+    const fullGradeDistribution = fullResults.reduce((acc, r) => {
+      acc[r.analysis.grade] = (acc[r.analysis.grade] || 0) + 1;
+      return acc;
+    }, {});
+    
+    ['A', 'B', 'C', 'D', 'F'].forEach(grade => {
+      const count = fullGradeDistribution[grade] || 0;
+      if (count > 0) {
+        const projects = fullResults
+          .filter(r => r.analysis.grade === grade)
+          .map(r => r.project)
+          .join(', ');
+        markdown += `- **${grade}**: ${count} project${count === 1 ? '' : 's'} - ${projects}\n`;
+      }
+    });
+    
+    markdown += `\n#### Production Only Analysis\n`;
+    const prodGradeDistribution = prodResults.reduce((acc, r) => {
+      acc[r.analysis.grade] = (acc[r.analysis.grade] || 0) + 1;
+      return acc;
+    }, {});
+    
+    ['A', 'B', 'C', 'D', 'F'].forEach(grade => {
+      const count = prodGradeDistribution[grade] || 0;
+      if (count > 0) {
+        const projects = prodResults
+          .filter(r => r.analysis.grade === grade)
+          .map(r => r.project)
+          .join(', ');
+        markdown += `- **${grade}**: ${count} project${count === 1 ? '' : 's'} - ${projects}\n`;
+      }
+    });
+  } else {
+    // Original single-mode grade distribution
+    const gradeDistribution = successfulResults.reduce((acc, r) => {
+      acc[r.analysis.grade] = (acc[r.analysis.grade] || 0) + 1;
+      return acc;
+    }, {});
+    
+    markdown += `\n### Grade Distribution\n\n`;
+    ['A', 'B', 'C', 'D', 'F'].forEach(grade => {
+      const count = gradeDistribution[grade] || 0;
+      if (count > 0) {
+        const projects = successfulResults
+          .filter(r => r.analysis.grade === grade)
+          .map(r => r.project)
+          .join(', ');
+        markdown += `- **${grade}**: ${count} project${count === 1 ? '' : 's'} - ${projects}\n`;
+      }
+    });
+  }
+
+  // Best and worst scores - deduplicate if comparison mode
+  if (hasComparisonData) {
+    const fullResults = successfulResults.filter(r => r.mode === 'full');
+    const prodResults = successfulResults.filter(r => r.mode === 'production-only');
+    
+    if (fullResults.length > 0) {
+      const fullSorted = fullResults.sort((a, b) => b.analysis.score - a.analysis.score);
+      markdown += `\n### Score Range - Full Codebase\n\n`;
+      markdown += `- **Best score**: ${fullSorted[0].project} with ${fullSorted[0].analysis.grade} (${fullSorted[0].analysis.score}/100)\n`;
+      markdown += `- **Worst score**: ${fullSorted[fullSorted.length - 1].project} with ${fullSorted[fullSorted.length - 1].analysis.grade} (${fullSorted[fullSorted.length - 1].analysis.score}/100)\n`;
+    }
+    
+    if (prodResults.length > 0) {
+      const prodSorted = prodResults.sort((a, b) => b.analysis.score - a.analysis.score);
+      markdown += `\n### Score Range - Production Only\n\n`;
+      markdown += `- **Best score**: ${prodSorted[0].project} with ${prodSorted[0].analysis.grade} (${prodSorted[0].analysis.score}/100)\n`;
+      markdown += `- **Worst score**: ${prodSorted[prodSorted.length - 1].project} with ${prodSorted[prodSorted.length - 1].analysis.grade} (${prodSorted[prodSorted.length - 1].analysis.score}/100)\n`;
+    }
+  } else {
+    // Original single-mode score range
+    const sortedByScore = successfulResults.sort((a, b) => b.analysis.score - a.analysis.score);
+    if (sortedByScore.length > 0) {
+      markdown += `\n### Score Range\n\n`;
+      markdown += `- **Best score**: ${sortedByScore[0].project} with ${sortedByScore[0].analysis.grade} (${sortedByScore[0].analysis.score}/100)\n`;
+      markdown += `- **Worst score**: ${sortedByScore[sortedByScore.length - 1].project} with ${sortedByScore[sortedByScore.length - 1].analysis.grade} (${sortedByScore[sortedByScore.length - 1].analysis.score}/100)\n`;
+    }
   }
 
   // Add scoring algorithm explanation for comparison mode
-  if (isComparison) {
+  if (hasComparisonData) {
     // Générer dynamiquement les explications
-    const scoringExplanation = await generateScoringAlgorithmExplanation(results);
+    const scoringExplanation = await explainProjectImprovedScoreWithHigherComplexity(results);
     markdown += scoringExplanation;
     
-    const duplicationAnalysis = await generateDuplicationAnalysis(results);
+    const duplicationAnalysis = await explainProjectDuplicationFromUtilityFiles(results);
     markdown += duplicationAnalysis;
   }
 
   markdown += `\n## Detailed Complexity Explanations\n\n`;
 
-  if (isComparison) {
+  if (hasComparisonData) {
     // Group results by project for comparison mode
     const projectGroups = new Map();
     results.forEach(result => {
@@ -1094,9 +1392,20 @@ ${comparisonTable}
     projectGroups.forEach(({ full, production }, projectName) => {
       if (!full || !production) return;
       
+      const scoreDelta = production.analysis.score - full.analysis.score;
+      const complexityDelta = production.analysis.avgComplexity - full.analysis.avgComplexity;
+      const deltaIndicator = scoreDelta > 0 ? '📈' : scoreDelta < 0 ? '📉' : '➡️';
+      const deltaText = scoreDelta > 0 ? `+${scoreDelta}` : `${scoreDelta}`;
+      
       markdown += `### 📊 ${projectName} (⭐ ${full.stars})
-**Full Analysis**: ${full.analysis.grade} (${full.analysis.score}/100) - ${full.analysis.avgComplexity} avg complexity
-**Production Only**: ${production.analysis.grade} (${production.analysis.score}/100) - ${production.analysis.avgComplexity} avg complexity
+
+| Analysis Mode | Grade | Score | Files | Lines | Avg Complexity | Duplication |
+|---------------|-------|-------|-------|-------|----------------|-------------|
+| **Full Codebase** | **${full.analysis.grade}** | ${full.analysis.score}/100 | ${full.analysis.totalFiles.toLocaleString()} | ${full.analysis.totalLines.toLocaleString()} | ${full.analysis.avgComplexity} | ${full.analysis.avgDuplication ?? 'N/A'}% |
+| **Production Only** | **${production.analysis.grade}** | ${production.analysis.score}/100 | ${production.analysis.totalFiles.toLocaleString()} | ${production.analysis.totalLines.toLocaleString()} | ${production.analysis.avgComplexity} | ${production.analysis.avgDuplication ?? 'N/A'}% |
+
+${deltaIndicator} **Score Impact**: ${deltaText} points (${full.analysis.score} → ${production.analysis.score})  
+📊 **Complexity Change**: ${complexityDelta > 0 ? '+' : ''}${complexityDelta.toFixed(1)} (${full.analysis.avgComplexity} → ${production.analysis.avgComplexity})
 
 `;
 
@@ -1112,7 +1421,7 @@ ${comparisonTable}
         explanationMap.get(key).push(exp);
       });
 
-      explanationMap.forEach((exps, key) => {
+      explanationMap.forEach((exps) => {
         const firstExp = exps[0];
         const isDuplicate = exps.length > 1 && exps.every(e => e.explanation === firstExp.explanation);
         
@@ -1127,7 +1436,7 @@ ${firstExp.explanation}
 `;
         } else {
           exps.forEach((exp, index) => {
-            const mode = index === 0 ? 'Full Analysis' : 'Production Only';
+            const mode = index === 0 ? 'Full Codebase' : 'Production Only';
             markdown += `#### \`${exp.file}\` (Complexity: ${exp.complexity}) - ${mode}
 
 ${exp.explanation}
@@ -1185,9 +1494,9 @@ ${explanation.explanation}
   - **Average complexity of explained files**: ${Math.round(allExplanations.reduce((sum, e) => sum + e.complexity, 0) / totalExplanations)}
 
   `;
-
+    console.log('\n🔍 === PHASE 4: Generating Global Key Findings with Claude API');
     // NOUVEAU : Générer les Key Findings dynamiquement
-    const keyFindings = await generateDataDrivenFindings(allExplanations, results);
+    const keyFindings = await generateBenchmarkInsights(allExplanations, results);
     markdown += keyFindings;
   }
 
@@ -1252,7 +1561,7 @@ async function main() {
   }
   
   if (compareMode) {
-    console.log('📊 Mode: Full vs Production Comparison (--compare)');
+    console.log('📊 Mode: Full Codebase vs Production Comparison (--compare)');
   } else if (excludeUtility) {
     console.log('📊 Mode: Production Code Only (--exclude-utility)');
   } else {
@@ -1289,16 +1598,16 @@ async function main() {
   }
   
   if (compareMode) {
-    console.log(`\n📋 Will analyze ${projectsToAnalyze.length} projects in BOTH modes for comparison\n`);
+    console.log(`\n📋 Will analyze ${projectsToAnalyze.length} projects (${projectsToAnalyze.length * 2} total analyses: full + production for each)\n`);
     
-    const fullResults = [];
-    const productionResults = [];
+    const fullCodebaseResults = [];
+    const productionCodeResults = [];
     
-    // Run full analysis first
+    // Run full codebaseanalysis first
     console.log('🔍 === PHASE 1: Full Codebase Analysis ===');
     for (const project of projectsToAnalyze) {
       const result = await analyzeProjectWithExplanations(project, project.category, false);
-      fullResults.push(result);
+      fullCodebaseResults.push(result);
       
       fs.writeFileSync(
         path.join(RESULTS_DIR, `${project.name}-full-explanations.json`),
@@ -1309,7 +1618,7 @@ async function main() {
     // Run production-only analysis second with comparison context
     console.log('\n🔍 === PHASE 2: Production-Only Analysis ===');
     for (const project of projectsToAnalyze) {
-      const fullResult = fullResults.find(r => r.project === project.name);
+      const fullResult = fullCodebaseResults.find(r => r.project === project.name);
       const comparisonContext = fullResult ? {
         fullGrade: fullResult.analysis.grade,
         fullScore: fullResult.analysis.score,
@@ -1325,7 +1634,7 @@ async function main() {
         comparisonContext.prodScore = result.analysis.score;
       }
       
-      productionResults.push(result);
+      productionCodeResults.push(result);
       
       fs.writeFileSync(
         path.join(RESULTS_DIR, `${project.name}-production-explanations.json`),
@@ -1335,8 +1644,8 @@ async function main() {
     
     // Generate comparison with Claude insights
     console.log('\n🧠 === PHASE 3: Generating Claude-Powered Insights ===');
-    const comparisonTable = await generateComparisonTable(fullResults, productionResults);
-    const allResults = [...fullResults, ...productionResults];
+    const comparisonTable = await generateComparisonTable(fullCodebaseResults, productionCodeResults);
+    const allResults = [...fullCodebaseResults, ...productionCodeResults];
     const report = await generateExplanationReport(allResults, comparisonTable);
     
     // Save comparison report
@@ -1344,7 +1653,7 @@ async function main() {
     const reportPath = path.join(RESULTS_DIR, `BENCHMARK-EXPLANATIONS-COMPARISON.md`);
     const jsonPath = path.join(RESULTS_DIR, `benchmark-explanations-comparison.json`);
     fs.writeFileSync(reportPath, report);
-    fs.writeFileSync(jsonPath, JSON.stringify({ full: fullResults, production: productionResults }, null, 2));
+    fs.writeFileSync(jsonPath, JSON.stringify({ full: fullCodebaseResults, production: productionCodeResults }, null, 2));
     
     // Archive to docs
     const archivePath = path.join(DOCS_BENCHMARKS_DIR, `benchmark-explanations-comparison-${date}.md`);
@@ -1362,7 +1671,8 @@ async function main() {
     }, 0);
     const apiCalls = totalExplanations - cacheHits;
     
-    console.log(`\n📈 Summary: ${successful}/${allResults.length} analyses completed, ${totalExplanations} files explained`);
+    const uniqueProjects = new Set(allResults.map(r => r.project)).size;
+    console.log(`\n📈 Summary: ${uniqueProjects} projects analyzed (${successful}/${allResults.length} analyses completed), ${totalExplanations} files explained`);
     if (totalExplanations > 0) {
       console.log(`💰 API efficiency: ${apiCalls} new calls, ${cacheHits} cache hits (${((cacheHits/totalExplanations)*100).toFixed(1)}% cache rate)`);
     }
@@ -1426,7 +1736,7 @@ async function main() {
 
 
 /* Générer l'explication de duplication dynamiquement */
-async function generateDuplicationAnalysis(results) {
+async function explainProjectDuplicationFromUtilityFiles(results) {
   // Analyser les patterns de duplication
   const duplicationPatterns = [];
 
@@ -1450,16 +1760,30 @@ async function generateDuplicationAnalysis(results) {
   if (duplicationPatterns.length === 0) {
     return '';
   }
+  
+  // Generate cache key for duplication analysis
+  const duplicationExplanationcacheKey = 'duplication_' + crypto.createHash('md5').update(JSON.stringify({
+    patterns: duplicationPatterns,
+    promptVersion: '1.0'
+  })).digest('hex');
+  
+  const cachedResponse = !clearCache ? getCachedDuplicationExplanationApiResponse(duplicationExplanationcacheKey) : null;
+  if (cachedResponse) {
+    console.log(`    💾 Using cached duplication analysis`);
+    return cachedResponse;
+  }
 
   const prompt = `Analyze these duplication patterns where production-only analysis shows different results:
 
 ${JSON.stringify(duplicationPatterns, null, 2)}
 
-Generate a brief technical explanation for why duplication metrics change when excluding test/example files. 
+Generate a brief technical explanation for why duplication metrics change when excluding utility files (tests, examples, docs, scripts, tools, mocks, fixtures, benchmarks). 
 Consider:
 - Test setup/teardown patterns
-- Example code repetition
+- Example/demo code repetition
 - Mock/fixture duplication
+- Script/tool boilerplate
+- Documentation code snippets
 
 Format as a markdown section. Keep it under 100 words.`;
 
@@ -1474,14 +1798,19 @@ Format as a markdown section. Keep it under 100 words.`;
     };
 
     const data = await callClaudeWithRetry(requestBody, 'duplication-analysis');
-    return `\n### Duplication Analysis\n\n${data.content[0].text}`;
+    const response = `\n### Duplication Analysis\n\n${data.content[0].text}`;
+    
+    // Cache the response
+    setCachedDuplicationExplanationApiResponse(duplicationExplanationcacheKey, response);
+    
+    return response;
 
   } catch (error) {
     console.error(`❌ Failed to generate duplication analysis: ${error.message}`);
     return '';
   }
 }
-async function generateScoringAlgorithmExplanation(results) {
+async function explainProjectImprovedScoreWithHigherComplexity(results) {
   // Identifier les cas de scores paradoxaux
   const paradoxicalCases = [];
 
@@ -1513,6 +1842,18 @@ async function generateScoringAlgorithmExplanation(results) {
   if (paradoxicalCases.length === 0) {
     return ''; // Pas besoin d'explication si pas de cas paradoxaux
   }
+  
+  // Generate cache key for scoring explanation
+  const cacheKey = 'scoring_' + crypto.createHash('md5').update(JSON.stringify({
+    cases: paradoxicalCases,
+    promptVersion: '1.0'
+  })).digest('hex');
+  
+  const cachedResponse = !clearCache ? getCachedScoringExplanationApiResponse(cacheKey) : null;
+  if (cachedResponse) {
+    console.log(`    💾 Using cached scoring algorithm explanation`);
+    return cachedResponse;
+  }
 
   const prompt = `Analyze these paradoxical scoring results where production-only scores improved despite higher complexity:
 
@@ -1538,7 +1879,12 @@ async function generateScoringAlgorithmExplanation(results) {
     };
 
     const data = await callClaudeWithRetry(requestBody, 'scoring-algorithm-explanation');
-    return `\n## Understanding the Scoring Algorithm\n\n${data.content[0].text}`;
+    const response = `\n## Understanding the Scoring Algorithm\n\n${data.content[0].text}`;
+    
+    // Cache the response
+    setCachedScoringExplanationApiResponse(cacheKey, response);
+    
+    return response;
 
   } catch (error) {
     console.error(`❌ Failed to generate scoring explanation: ${error.message}`);
@@ -1551,39 +1897,78 @@ async function generateScoringAlgorithmExplanation(results) {
 }
 
 
-async function generateDataDrivenFindings(allExplanations, results) {
+async function generateBenchmarkInsights(allExplanations, results) {
   // Analyser les vrais patterns dans les explications
   const patterns = analyzeExplanationPatterns(allExplanations);
   const justificationStats = analyzeJustificationDistribution(allExplanations);
   const projectStats = analyzeProjectDistribution(results);
   
-  const prompt = `Based on analysis of ${allExplanations.length} complex files across ${results.length} projects:
+  // Calculate actual project count (handle comparison mode where each project appears twice)
+  const uniqueProjects = new Set(results.map(r => r.project));
+  const projectCount = uniqueProjects.size;
+  
+  // Analyser les insights spécifiques au mode comparaison
+  const comparisonInsights = analyzeComparisonInsights(results);
+  const architecturalPatterns = analyzeArchitecturalPatterns(allExplanations);
+  const performanceImpacts = analyzePerformanceImpacts(results);
+  
+  // Generate cache key for findings
+  const cacheKey = 'findings_' + crypto.createHash('md5').update(JSON.stringify({
+    patterns,
+    justificationStats,
+    projectStats,
+    comparisonInsights,
+    architecturalPatterns,
+    performanceImpacts,
+    explanationCount: allExplanations.length,
+    projectCount,
+    promptVersion: '3.1' // Updated for enhanced insights + increased token limit
+  })).digest('hex');
+  
+  const cachedResponse = !clearCache ? getCachedDuplicationExplanationApiResponse(cacheKey) : null;
+  if (cachedResponse) {
+    console.log(`    💾 Using cached data-driven findings`);
+    return cachedResponse;
+  }
+  
+  const prompt = `Analyze this comprehensive codebase quality comparison across ${projectCount} **industry-leading open-source projects** with millions of users worldwide (${allExplanations.length} complex files analyzed).
 
-Pattern Analysis:
-${JSON.stringify(patterns, null, 2)}
+**Projects analyzed**: TypeScript (98k⭐), React (227k⭐), Vue (46k⭐), Express (65k⭐), Jest (44k⭐), ESLint (25k⭐), lodash (59k⭐), chalk (21k⭐), uuid (14k⭐)
 
-Justification Distribution:
-- Fully justified: ${justificationStats.justified}% 
-- Partly justified: ${justificationStats.partlyJustified}%
-- Not justified: ${justificationStats.notJustified}%
+## Analysis Data:
+**Core Patterns**: ${JSON.stringify(patterns, null, 2)}
+**Complexity Justification**: ${justificationStats.justified}% justified, ${justificationStats.notJustified}% structural issues
+**Production vs Full Impact**: ${JSON.stringify(comparisonInsights, null, 2)}
+**Architectural Patterns**: ${JSON.stringify(architecturalPatterns, null, 2)}
 
-Project Distribution:
-- Projects with F grade: ${projectStats.fGradeCount}
-- Average complexity in F projects: ${projectStats.avgComplexityF}
-- Most common issue type: ${projectStats.topIssueType}
+Generate exactly 5-6 insights following this format:
 
-Generate 4-5 key findings that are:
-1. Data-driven (use the actual numbers)
-2. Specific to what was found (not generic statements)
-3. Actionable for developers
-4. Honest about both justified and unjustified complexity
+**Format Requirements:**
+- Each bullet point focuses on ONE specific project
+- Each bullet analyzes ONE specific architectural pattern or design decision
+- Take a constructive, analytical tone (not critical)
+- Explain WHY the complexity exists and what it teaches us
+- Provide actionable lessons for teams
 
-Format as markdown bullet points starting with "### Key Findings"`;
+**Example structure:**
+• **[Project Name] + [Architectural Theme]**: [Specific observation about the project's complexity patterns]. [Explanation of why this complexity exists]. **Lesson for teams**: [Specific actionable recommendation].
+
+**Themes to explore:**
+- Compiler architecture patterns (TypeScript, ESLint)
+- Framework scalability decisions (React, Vue)
+- API design complexity trade-offs (Express)
+- Testing infrastructure architecture (Jest)
+- Utility library optimization strategies (lodash, chalk)
+- Performance vs maintainability trade-offs
+
+Focus on what teams can LEARN from these successful architectural decisions, not what's "wrong" with them.
+
+Format as "### Key Findings" with bullet points.`;
 
   try {
     const requestBody = {
       model: 'claude-sonnet-4-0',
-      max_tokens: 400,
+      max_tokens: 1000,
       messages: [{
         role: 'user',
         content: prompt
@@ -1591,10 +1976,16 @@ Format as markdown bullet points starting with "### Key Findings"`;
     };
     
     const data = await callClaudeWithRetry(requestBody, 'key-findings');
-    return data.content[0].text;
+    const response = data.content[0].text;
+    
+    // Cache the response
+    setCachedDuplicationExplanationApiResponse(cacheKey, response);
+    
+    return response;
     
   } catch (error) {
     // Fallback basé sur les données réelles
+    console.error(`❌ Failed to generate AI data-driven findings: ${error.message}`);
     return generateFallbackFindings(patterns, justificationStats, projectStats);
   }
 }
@@ -1650,7 +2041,19 @@ function analyzeJustificationDistribution(explanations) {
 
 function analyzeProjectDistribution(results) {
   const successful = results.filter(r => !r.error);
-  const fGradeProjects = successful.filter(r => r.analysis.grade === 'F');
+  
+  // Deduplicate projects when in comparison mode (full + production results)
+  const uniqueProjects = new Map();
+  successful.forEach(r => {
+    const key = r.project;
+    // In comparison mode, prefer production-only stats as they're more focused
+    if (!uniqueProjects.has(key) || r.mode === 'production-only') {
+      uniqueProjects.set(key, r);
+    }
+  });
+  
+  const uniqueSuccessful = Array.from(uniqueProjects.values());
+  const fGradeProjects = uniqueSuccessful.filter(r => r.analysis.grade === 'F');
   
   // Utiliser les vraies statistiques d'issues
   const aggregatedStats = {
@@ -1682,8 +2085,189 @@ function analyzeProjectDistribution(results) {
       complexity: Math.round((aggregatedStats.complexity / (aggregatedStats.complexity + aggregatedStats.duplication + aggregatedStats.size)) * 100),
       duplication: Math.round((aggregatedStats.duplication / (aggregatedStats.complexity + aggregatedStats.duplication + aggregatedStats.size)) * 100),
       size: Math.round((aggregatedStats.size / (aggregatedStats.complexity + aggregatedStats.duplication + aggregatedStats.size)) * 100)
-    }
+    },
+    uniqueProjectCount: uniqueProjects.size
   };
+}
+
+function analyzeComparisonInsights(results) {
+  const projectPairs = new Map();
+  
+  // Group results by project
+  results.forEach(result => {
+    if (!result.error) {
+      if (!projectPairs.has(result.project)) {
+        projectPairs.set(result.project, {});
+      }
+      projectPairs.get(result.project)[result.mode] = result;
+    }
+  });
+  
+  const insights = {
+    scoreImprovements: 0,
+    scoreDegradations: 0,
+    avgScoreDelta: 0,
+    biggestWinner: null,
+    biggestLoser: null,
+    complexityReductions: 0,
+    duplicationImpacts: [],
+    filesExcludedAvg: 0
+  };
+  
+  const deltas = [];
+  projectPairs.forEach((modes, projectName) => {
+    if (modes.full && modes['production-only']) {
+      const scoreDelta = modes['production-only'].analysis.score - modes.full.analysis.score;
+      const complexityDelta = modes['production-only'].analysis.avgComplexity - modes.full.analysis.avgComplexity;
+      const filesExcluded = modes.full.analysis.totalFiles - modes['production-only'].analysis.totalFiles;
+      
+      deltas.push(scoreDelta);
+      
+      if (scoreDelta > 0) insights.scoreImprovements++;
+      if (scoreDelta < 0) insights.scoreDegradations++;
+      if (complexityDelta < 0) insights.complexityReductions++;
+      
+      // Track biggest changes
+      if (!insights.biggestWinner || scoreDelta > insights.biggestWinner.delta) {
+        insights.biggestWinner = { project: projectName, delta: scoreDelta };
+      }
+      if (!insights.biggestLoser || scoreDelta < insights.biggestLoser.delta) {
+        insights.biggestLoser = { project: projectName, delta: scoreDelta };
+      }
+      
+      // Track duplication patterns
+      const fullDup = modes.full.analysis.avgDuplication || 0;
+      const prodDup = modes['production-only'].analysis.avgDuplication || 0;
+      if (Math.abs(fullDup - prodDup) > 5) { // Significant change
+        insights.duplicationImpacts.push({
+          project: projectName,
+          fullDup,
+          prodDup,
+          change: prodDup - fullDup
+        });
+      }
+      
+      insights.filesExcludedAvg += filesExcluded;
+    }
+  });
+  
+  insights.avgScoreDelta = deltas.length > 0 ? Math.round(deltas.reduce((sum, d) => sum + d, 0) / deltas.length) : 0;
+  insights.filesExcludedAvg = Math.round(insights.filesExcludedAvg / projectPairs.size);
+  
+  return insights;
+}
+
+function analyzeArchitecturalPatterns(explanations) {
+  const patterns = {
+    compilerInfrastructure: 0,
+    configurationParsing: 0,
+    apiFrameworks: 0,
+    testingFrameworks: 0,
+    utilityLibraries: 0,
+    stateManagement: 0,
+    performanceCritical: 0,
+    legacyCompatibility: 0
+  };
+  
+  explanations.forEach(exp => {
+    const text = exp.explanation.toLowerCase();
+    
+    // Compiler/Language Infrastructure
+    if (text.includes('compiler') || text.includes('parser') || text.includes('ast') || 
+        text.includes('lexer') || text.includes('tokenizer')) {
+      patterns.compilerInfrastructure++;
+    }
+    
+    // Configuration/Setup
+    if (text.includes('config') || text.includes('setup') || text.includes('initialization') ||
+        text.includes('bootstrap')) {
+      patterns.configurationParsing++;
+    }
+    
+    // API/Framework code
+    if (text.includes('api') || text.includes('route') || text.includes('middleware') ||
+        text.includes('handler')) {
+      patterns.apiFrameworks++;
+    }
+    
+    // Testing infrastructure
+    if (text.includes('test') || text.includes('mock') || text.includes('assertion') ||
+        text.includes('fixture')) {
+      patterns.testingFrameworks++;
+    }
+    
+    // Utility/Helper patterns
+    if (text.includes('utility') || text.includes('helper') || text.includes('common') ||
+        text.includes('shared')) {
+      patterns.utilityLibraries++;
+    }
+    
+    // State management
+    if (text.includes('state') || text.includes('store') || text.includes('reducer') ||
+        text.includes('observable')) {
+      patterns.stateManagement++;
+    }
+    
+    // Performance critical
+    if (text.includes('performance') || text.includes('optimization') || text.includes('cache') ||
+        text.includes('memory')) {
+      patterns.performanceCritical++;
+    }
+    
+    // Legacy/Compatibility
+    if (text.includes('legacy') || text.includes('compatibility') || text.includes('backward') ||
+        text.includes('deprecated')) {
+      patterns.legacyCompatibility++;
+    }
+  });
+  
+  return patterns;
+}
+
+function analyzePerformanceImpacts(results) {
+  const impacts = {
+    totalLinesAnalyzed: 0,
+    avgAnalysisSpeed: 0,
+    largestCodebases: [],
+    fastestAnalysis: null,
+    slowestAnalysis: null
+  };
+  
+  const successful = results.filter(r => !r.error);
+  
+  successful.forEach(result => {
+    impacts.totalLinesAnalyzed += result.analysis.totalLines;
+    
+    if (result.insightcodeTime > 0) {
+      const linesPerSecond = Math.round(result.analysis.totalLines / (result.insightcodeTime / 1000));
+      
+      if (!impacts.fastestAnalysis || linesPerSecond > impacts.fastestAnalysis.speed) {
+        impacts.fastestAnalysis = { project: result.project, speed: linesPerSecond, mode: result.mode };
+      }
+      
+      if (!impacts.slowestAnalysis || linesPerSecond < impacts.slowestAnalysis.speed) {
+        impacts.slowestAnalysis = { project: result.project, speed: linesPerSecond, mode: result.mode };
+      }
+    }
+    
+    // Track largest codebases
+    impacts.largestCodebases.push({
+      project: result.project,
+      mode: result.mode,
+      lines: result.analysis.totalLines,
+      files: result.analysis.totalFiles
+    });
+  });
+  
+  // Sort and keep top 3 largest
+  impacts.largestCodebases.sort((a, b) => b.lines - a.lines);
+  impacts.largestCodebases = impacts.largestCodebases.slice(0, 3);
+  
+  // Calculate average analysis speed
+  const totalTime = successful.reduce((sum, r) => sum + (r.insightcodeTime || 0), 0) / 1000;
+  impacts.avgAnalysisSpeed = totalTime > 0 ? Math.round(impacts.totalLinesAnalyzed / totalTime) : 0;
+  
+  return impacts;
 }
 
 function generateFallbackFindings(patterns, justificationStats, projectStats) {
@@ -1720,6 +2304,15 @@ function generateFallbackFindings(patterns, justificationStats, projectStats) {
   }
   
   return findings;
+}
+
+function getInsightCodeVersion() {
+  try {
+    const packageJson = JSON.parse(fs.readFileSync(path.join(projectRoot, 'package.json'), 'utf8'));
+    return packageJson.version || '0.3.0';
+  } catch {
+    return '0.3.0';
+  }
 }
 
 main().catch(console.error);

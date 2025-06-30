@@ -100,14 +100,14 @@ Based on analysis of 19 popular projects with new graduated scoring:
 - **6 projects** got an F grade (32%)
 
 ### Performance Statistics
-- **Full analysis**: 62,761 lines/second average
+- **Full codebase analysis**: 62,761 lines/second average
 - **Production only**: 18,490 lines/second average
 - **Largest analyzed**: TypeScript (2.8M lines) in 38.3 seconds
 - **Total lines analyzed**: 4.8M+ across all benchmarks
 
 ### Notable Insights
 
-1. **Chalk** achieves A grade (96/100) in full analysis - exceptional code quality
+1. **Chalk** achieves A grade (96/100) in full codebase analysis - exceptional code quality
 2. **Axios** jumps from B to A when analyzing production code only
 3. **Even popular projects struggle**: ESLint gets D, Joi gets F
 4. **Test code impacts scores**: Many projects improve when excluding tests
@@ -176,7 +176,7 @@ When analyzing code quality, consider the historical context and business constr
 ## 📁 Historical Benchmarks
 
 Significant benchmark results are archived with dates:
-- `benchmark-2025-06-28.md` - v0.3.0 full analysis with graduated scoring
+- `benchmark-2025-06-28.md` - v0.3.0 full codebase analysis with graduated scoring
 - `benchmark-2025-06-28-production-only.md` - Production code analysis
 - `benchmark-2025-06-27.md` - v0.1.0 initial benchmarks
 - `benchmark-explanations-comparison-2025-06-28.md` - Detailed complexity explanations
@@ -204,4 +204,4 @@ We believe this approach provides more actionable insights for refactoring decis
 
 ---
 
-*For detailed methodology and academic justification, see [SCORING_THRESHOLDS_JUSTIFICATION.md](../SCORING_THRESHOLDS_JUSTIFICATION.md)*
+*For detailed methodology and academic justification, see [SCORING_THRESHOLDS_JUSTIFICATION.md](../docs/SCORING_THRESHOLDS_JUSTIFICATION.md)*

@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This document provides comprehensive justification for the scoring thresholds used in InsightCode, based on empirical research, industry standards, and academic literature. All thresholds have been validated against real-world data from 18 popular open-source projects representing 4.8M+ lines of code.
+This document provides comprehensive justification for the scoring thresholds used in InsightCode, based on empirical research, industry standards, and academic literature. All thresholds have been validated against real-world data from 19 popular open-source projects representing 4.8M+ lines of code.
 
 ## Methodology Overview
 
@@ -27,7 +27,7 @@ The cyclomatic complexity metric was introduced by Thomas McCabe in 1976 [McCabe
 
 #### Empirical Validation from Our Dataset
 
-**Analysis of 18 Popular Projects (4.8M+ LOC):**
+**Analysis of 19 Popular Projects (4.8M+ LOC):**
 ```
 Complexity Range | Projects | Avg Grade | Defect Indicators
 ≤ 10            | 3        | A-B       | Low issue density
@@ -94,15 +94,14 @@ Code duplication research has consistently shown strong correlations between dup
 > **Philosophy Note**: Our approach differs from structural similarity tools like SonarQube. We focus on **content-based duplication** (actual copy-paste) rather than structural patterns. This results in more actionable insights. For example, on lodash/perf.js, we report 6% duplication vs SonarQube's 70% because benchmark suites naturally have repetitive structure that can't be refactored. See [DUPLICATION_DETECTION_PHILOSOPHY.md](./DUPLICATION_DETECTION_PHILOSOPHY.md) for detailed comparison.
 
 #### Empirical Data from Popular Projects
-
 ```
-Project      | Full Duplication | Production | Improvement
-TypeScript   | 63.7%           | 16.4%      | 74% reduction
-Jest         | 47%             | 41.8%      | 11% reduction  
-React        | 41.6%           | 43.7%      | -5% (tests cleaner)
-ESLint       | 44.9%           | 27.8%      | 38% reduction
-Express      | 33.9%           | 17.9%      | 47% reduction
-Vue          | 15.1%           | 10.1%      | 33% reduction
+Project      | Full Codebase Duplication | Production Duplication | Improvement
+TypeScript   | 63.7%                     | 16.4%                  | 74% reduction
+Jest         | 47%                       | 41.8%                  | 11% reduction
+React        | 41.6%                     | 43.7%                  | -5% (tests cleaner)
+ESLint       | 44.9%                     | 27.8%                  | 38% reduction
+Express      | 33.9%                     | 17.9%                  | 47% reduction
+Vue          | 15.1%                     | 10.1%                  | 33% reduction
 ```
 
 **Key Insight**: Production-only analysis reveals that test files often contain more duplication than core logic, supporting our threshold validation.
@@ -166,7 +165,7 @@ Function density research shows clear correlations with complexity and maintaina
 
 ### Empirical Validation from Our Dataset
 
-**File Size Analysis (18 Projects):**
+**File Size Analysis (19 Projects):**
 ```
 Size Range     | Projects | Avg Grade | Maintenance Issues
 ≤ 200 LOC     | 5        | A-B       | Minimal
@@ -265,7 +264,7 @@ F (0-59):   Critical, Major Architectural Issues
 
 ## 5. Validation Against Real-World Data
 
-### Statistical Validation from 18 Popular Projects
+### Statistical Validation from 19 Popular Projects
 
 **Projects Analyzed:**
 - **Small**: lodash (59k⭐), chalk (21k⭐), uuid (14k⭐)

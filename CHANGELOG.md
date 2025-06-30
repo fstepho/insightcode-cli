@@ -50,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced duplication scoring with more nuanced industry standards
 - Improved maintainability calculation with dual metrics (size + functions)
 - All scoring now uses shared functions for perfect consistency
-- Updated project self-analysis: B (82/100) full, C (72/100) production-only
+- Updated project self-analysis: B (82/100) full codebase, C (72/100) production-only
 
 ### Fixed
 - Reporter complexity calculation now matches analyzer perfectly

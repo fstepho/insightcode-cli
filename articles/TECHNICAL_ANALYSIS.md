@@ -124,7 +124,7 @@ No other tool does this automatically. SonarQube requires manual configuration. 
 ```
 
 **Impact Example:**
-| Project | Full Analysis | Production Only | Reality |
+| Project | Full Codebase Analysis | Production Only | Reality |
 |---------|--------------|-----------------|---------|
 | Chalk | C (76) | F (58) | Shows true product complexity |
 | Express | C (75) | F (35) | Reveals core issues |

@@ -11,29 +11,20 @@ const excludeUtility = args.includes('--exclude-utility');
 // Projects to analyze organized by size
 const PROJECTS = {
   small: [
-    { name: 'ms', repo: 'https://github.com/vercel/ms.git', stars: '4.8k' },
-    { name: 'classnames', repo: 'https://github.com/JedWatson/classnames.git', stars: '17k' },
-    { name: 'is-promise', repo: 'https://github.com/then/is-promise.git', stars: '0.3k' },
-    { name: 'debounce', repo: 'https://github.com/sindresorhus/debounce.git', stars: '1.1k' },
+    { name: 'lodash', repo: 'https://github.com/lodash/lodash.git', stars: '59k' },
+    { name: 'chalk', repo: 'https://github.com/chalk/chalk.git', stars: '21k' },
     { name: 'uuid', repo: 'https://github.com/uuidjs/uuid.git', stars: '14k' },
-    { name: 'dotenv', repo: 'https://github.com/motdotla/dotenv.git', stars: '19k' },
   ],
   medium: [
-    { name: 'axios', repo: 'https://github.com/axios/axios.git', stars: '104k' },
-    { name: 'chalk', repo: 'https://github.com/chalk/chalk.git', stars: '21k' },
-    { name: 'commander', repo: 'https://github.com/tj/commander.js.git', stars: '26k' },
-    { name: 'yargs', repo: 'https://github.com/yargs/yargs.git', stars: '11k' },
-    { name: 'joi', repo: 'https://github.com/hapijs/joi.git', stars: '21k' },
-    { name: 'date-fns', repo: 'https://github.com/date-fns/date-fns.git', stars: '34k' },
-    { name: 'zod', repo: 'https://github.com/colinhacks/zod.git', stars: '33k' },
+    { name: 'express', repo: 'https://github.com/expressjs/express.git', stars: '65k' },
+    { name: 'vue', repo: 'https://github.com/vuejs/core.git', stars: '46k' },
+    { name: 'jest', repo: 'https://github.com/jestjs/jest.git', stars: '44k' },
   ],
   large: [
-    { name: 'typescript', repo: 'https://github.com/microsoft/TypeScript.git', stars: '98k' },
-    { name: 'nest', repo: 'https://github.com/nestjs/nest.git', stars: '65k' },
-    { name: 'express', repo: 'https://github.com/expressjs/express.git', stars: '64k' },
-    { name: 'prettier', repo: 'https://github.com/prettier/prettier.git', stars: '49k' },
+    { name: 'react', repo: 'https://github.com/facebook/react.git', stars: '227k' },
     { name: 'eslint', repo: 'https://github.com/eslint/eslint.git', stars: '25k' },
-    { name: 'webpack', repo: 'https://github.com/webpack/webpack.git', stars: '65k' },
+    // xlarge !
+    { name: 'typescript', repo: 'https://github.com/microsoft/TypeScript.git', stars: '98k' },
   ]
 };
 
@@ -153,13 +144,13 @@ function analyzeProject(project, category) {
 
 function generateMarkdownReport(results) {
   const date = new Date().toISOString().split('T')[0];
-  const analysisType = excludeUtility ? 'Production Code Analysis' : 'Full Codebase Analysis';
+  const analysisType = excludeUtility ? 'Production code only' : 'Full codebase including tests/examples';
   
   let markdown = `# InsightCode Benchmarks - ${analysisType}\n\n`;
   markdown += `## Methodology\n`;
   markdown += `- **Date**: ${date}\n`;
   markdown += `- **InsightCode Version**: ${getInsightCodeVersion()}\n`;
-  markdown += `- **Analysis Type**: ${analysisType}\n`;
+  markdown += `- **Analysis Context**: ${analysisType}\n`;
   if (excludeUtility) {
     markdown += `- **Excluded**: Tests, examples, scripts, tools, fixtures, mocks\n`;
   }

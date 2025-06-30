@@ -32,7 +32,7 @@ Format: **Date | Decision | Reason | Impact**
 
 ## 2025-06-27: Separate benchmark reports for full vs production-only
 **Decision**: Generate different report files with suffix (-production-only)
-**Reason**: Need to compare full analysis vs production-only to showcase feature value
+**Reason**: Need to compare full codebase analysis vs production-only to showcase feature value
 **Impact**: Clear comparison data, separate archives, better feature demonstration
 
 ---

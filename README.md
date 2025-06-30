@@ -185,7 +185,7 @@ insightcode analyze --exclude-utility
 
 Test files and examples often have acceptable duplication and complexity that can mask real issues:
 
-| Project | Full Analysis | Production Only | Impact |
+| Project | Full Codebase Analysis | Production Only | Impact |
 |---------|---------------|-----------------|--------|
 | **Chalk** | A (96) | B (82) | Core is more complex than it appears |
 | **TypeScript** | C (76) | F (28) | Massive algorithmic complexity in compiler |
