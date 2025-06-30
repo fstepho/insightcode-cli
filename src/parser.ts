@@ -251,13 +251,15 @@ export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAUL
     issues.push({
       type: 'complexity',
       severity: 'high',
-      message: `High complexity: ${complexity} (recommended: < ${complexityThresholds.high})`
+      message: `High complexity: ${complexity} (recommended: < ${complexityThresholds.high})`,
+      value: complexity
     });
   } else if (complexity > complexityThresholds.medium) {
     issues.push({
       type: 'complexity',
       severity: 'medium',
-      message: `Medium complexity: ${complexity} (recommended: < ${complexityThresholds.medium})`
+      message: `Medium complexity: ${complexity} (recommended: < ${complexityThresholds.medium})`,
+      value: complexity
     });
   }
   
@@ -266,13 +268,15 @@ export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAUL
     issues.push({
       type: 'size',
       severity: 'high',
-      message: `Large file: ${loc} lines (recommended: < ${sizeThresholds.high})`
+      message: `Large file: ${loc} lines (recommended: < ${sizeThresholds.high})`,
+      value: loc
     });
   } else if (loc > sizeThresholds.medium) {
     issues.push({
       type: 'size',
       severity: 'medium',
-      message: `File getting large: ${loc} lines`
+      message: `File getting large: ${loc} lines`,
+      value: loc
     });
   }
   

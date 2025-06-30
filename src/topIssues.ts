@@ -1,33 +1,18 @@
 // src/topIssues.ts
 
-import { AnalysisResult } from './types';
+import { AnalysisResult, FileMetrics, FileScore } from './types';
 
 const DEFAULT_COMPLEXITY_THRESHOLD = 20;
 const DEFAULT_SIZE_THRESHOLD = 300;
-
-export interface FileScore {
-  path: string;
-  totalScore: number;
-  complexityRatio?: number;
-  sizeRatio?: number;
-  duplicationValue?: number;
-  issues: Array<{
-    type: 'complexity' | 'size' | 'duplication';
-    severity: 'low' | 'medium' | 'high';
-    message: string;
-    value: number;
-    ratio?: number;
-  }>;
-}
 
 
 /**
  * Calculate a criticality score for each file based on its issues
  */
-export function calculateFileScores(result: AnalysisResult): FileScore[] {
+export function calculateFileScores(files: FileMetrics[]): FileScore[] {
   const fileScores: FileScore[] = [];
   
-  for (const file of result.files) {
+  for (const file of files) {
     let totalScore = 0;
     const criticalIssues: FileScore['issues'] = [];
     

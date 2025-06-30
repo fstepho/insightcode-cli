@@ -4,21 +4,6 @@ import { AnalysisResult } from './types';
 import { calculateComplexityScore, calculateDuplicationScore } from './scoring';
 import { calculateFileScores } from './topIssues';
 
-interface FileScore {
-  path: string;
-  totalScore: number;
-  complexityRatio?: number;
-  sizeRatio?: number;
-  duplicationValue?: number;
-  issues: Array<{
-    type: 'complexity' | 'size' | 'duplication';
-    severity: 'low' | 'medium' | 'high';
-    message: string;
-    value: number;
-    ratio?: number;
-  }>;
-}
-
 function getSeverityLabel(ratio?: number): string {
   if (!ratio) return '';
   if (ratio >= 100) return 'Extreme';
@@ -102,8 +87,8 @@ export function reportToTerminal(result: AnalysisResult): void {
   console.log(`  Maintainability ${progressBar(maintainabilityScore)} ${maintainabilityColor(maintainabilityScore + '%')}\n`);
   
   // Top Critical Files
-  const fileScores = calculateFileScores(result);
-  const topFiles = fileScores.slice(0, 5);
+  const fileScores = calculateFileScores(result.files);
+  const topFiles = result.topFiles;
   
   if (topFiles.length > 0) {
     console.log(chalk.bold('⚠️  Top 5 Most Critical Files:\n'));

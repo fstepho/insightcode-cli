@@ -15,10 +15,13 @@ export interface Issue {
   severity: 'high' | 'medium' | 'low';
   message: string;
   line?: number;
+  value: number;
+  ratio?: number;
 }
 
 export interface AnalysisResult {
   files: FileMetrics[];
+  topFiles: FileScore[];
   summary: {
     totalFiles: number;
     totalLines: number;
@@ -60,4 +63,13 @@ export interface ThresholdConfig {
     example?: { medium: number; high: number };
     config?: { medium: number; high: number };
   };
+}
+
+export interface FileScore {
+  path: string;
+  totalScore: number;
+  complexityRatio?: number;
+  sizeRatio?: number;
+  duplicationValue?: number;
+  issues: Array<Issue>;
 }

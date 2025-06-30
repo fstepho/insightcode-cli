@@ -39,9 +39,7 @@ program
       const results = analyze(files);
       
       if (options.json) {
-        const fileScores = calculateFileScores(results);
-        const jsonExport = { ...results, topFiles: fileScores.slice(0, 5) };
-        console.log(JSON.stringify(jsonExport, null, 2));
+        console.log(JSON.stringify(results, null, 2));
       } else {
         // Use the new reporter
         reportToTerminal(results);

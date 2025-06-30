@@ -2,6 +2,7 @@ import * as crypto from 'crypto';
 import { FileMetrics, AnalysisResult, ThresholdConfig } from './types';
 import { DEFAULT_THRESHOLDS } from './parser';
 import { calculateScore, getGrade } from './scoring';
+import { calculateFileScores } from './topIssues';
 
 /**
  * Analyze code metrics and calculate scores
@@ -32,16 +33,18 @@ export function analyze(files: FileMetrics[], thresholds: ThresholdConfig = DEFA
   const score = calculateScore(avgComplexity, avgDuplication, avgLoc, avgFunctions);
   const finalScore = isNaN(score) ? 0 : Math.round(score);
   const grade = getGrade(score);
-  
+  const fileScores = calculateFileScores(files);
+
   return {
     files: filesWithDuplication,
+    topFiles: fileScores.slice(0, 5), // Top 5 critical files
     summary: {
       totalFiles,
       totalLines,
       avgComplexity: Math.round(avgComplexity * 10) / 10,
       avgDuplication: Math.round(avgDuplication * 10) / 10,
       avgFunctions: Math.round(avgFunctions * 10) / 10,
-      avgLoc: Math.round(avgLoc)
+      avgLoc: Math.round(avgLoc),
     },
     score: finalScore,
     grade
@@ -175,13 +178,17 @@ function detectDuplication(files: FileMetrics[], thresholds: ThresholdConfig = D
       issues.push({
         type: 'duplication',
         severity: 'high',
-        message: `High duplication: ${Math.round(duplicationPercentage)}% of code is duplicated`
+        message: `High duplication: ${Math.round(duplicationPercentage)}% of code is duplicated`,
+        line: 1, // General issue, not line-specific
+        value: Math.round(duplicationPercentage)
       });
     } else if (duplicationPercentage > duplicationThresholds.medium) {
       issues.push({
         type: 'duplication',
         severity: 'medium',
-        message: `Medium duplication: ${Math.round(duplicationPercentage)}% of code is duplicated`
+        message: `Medium duplication: ${Math.round(duplicationPercentage)}% of code is duplicated`,
+        line: 1, // General issue, not line-specific
+        value: Math.round(duplicationPercentage)
       });
     }
     
