@@ -1,6 +1,6 @@
 # InsightCode Benchmark Report (Production Code Analysis)
 
-> Generated on 2025-07-03T18:51:57.185Z
+> Generated on 2025-07-03T21:15:22.357Z
 
 ## Overall Summary
 
@@ -9,7 +9,7 @@
 | **Total Projects Analyzed** | 9 / 9 |
 | **Total Duration** | 15.0s |
 | **Total Lines of Code** | 674,479 |
-| **Analysis Speed** | 44,876 lines/sec |
+| **Analysis Speed** | 44,819 lines/sec |
 
 ## Benchmark Leaderboard
 
@@ -46,6 +46,7 @@ A high Standard Deviation (StdDev) indicates that complexity is heavily concentr
 
 - **Emblematic Files Validation**:
   - ✅ `source/index.js` (found in Top 5, expected as core)
+  - ✅ `source/utilities.js` (found in Top 5, expected as performanceCritical)
 
 ---
 ### eslint (⭐ 26k) - Grade: F (52/100)
@@ -57,10 +58,6 @@ A high Standard Deviation (StdDev) indicates that complexity is heavily concentr
 
 - **Emblematic Files Validation**:
   - ✅ `lib/linter/linter.js` (found in Top 5, expected as core)
-- **Architectural Risks (Silent Killers)**:
-  - `lib/eslint/eslint.js` (Impact: 4, Complexity: 101)
-  - `lib/config/config.js` (Impact: 5, Complexity: 73)
-  - `lib/eslint/eslint-helpers.js` (Impact: 3, Complexity: 103)
 
 ---
 ### express (⭐ 66.2k) - Grade: F (56/100)
@@ -72,12 +69,13 @@ A high Standard Deviation (StdDev) indicates that complexity is heavily concentr
 
 - **Emblematic Files Validation**:
   - ✅ `lib/application.js` (found in Top 5, expected as core)
+  - ✅ `lib/view.js` (found in Top 5, expected as architectural)
   - ✅ `lib/utils.js` (found in Top 5, expected as complexAlgorithm)
   - ✅ `lib/request.js` (found in Top 5, expected as complexAlgorithm)
   - ✅ `lib/response.js` (found in Top 5, expected as complexAlgorithm)
 
 ---
-### jest (⭐ 44.8k) - Grade: D (63/100)
+### jest (⭐ 44.8k) - Grade: D (62/100)
 
 - **Description**: JavaScript testing framework
 - **Files**: 719 files, 48,928 lines
@@ -86,10 +84,6 @@ A high Standard Deviation (StdDev) indicates that complexity is heavily concentr
 
 - **Emblematic Files Validation**:
   - ℹ️ No emblematic files were found in the Top 5 critical files list.
-- **Architectural Risks (Silent Killers)**:
-  - `packages/jest-haste-map/src/watchers/NodeWatcher.js` (Impact: 1, Complexity: 37)
-  - `packages/jest-haste-map/src/watchers/WatchmanWatcher.js` (Impact: 1, Complexity: 32)
-  - `packages/jest-haste-map/src/watchers/common.js` (Impact: 2, Complexity: 15)
 
 ---
 ### lodash (⭐ 60.6k) - Grade: F (36/100)
@@ -111,13 +105,11 @@ A high Standard Deviation (StdDev) indicates that complexity is heavily concentr
 - **Avg Duplication**: 44.2%
 
 - **Emblematic Files Validation**:
-  - ✅ `packages/react-reconciler/src/ReactFiberWorkLoop.js` (found in Top 5, expected as architectural)
-  - ✅ `packages/react-reconciler/src/ReactFiberBeginWork.js` (found in Top 5, expected as architectural)
   - ✅ `packages/react-reconciler/src/ReactFiberCommitWork.js` (found in Top 5, expected as performanceCritical)
 - **Architectural Risks (Silent Killers)**:
+  - `packages/react-reconciler/src/ReactFiberWorkLoop.js` (Impact: 23, Complexity: 621)
   - `packages/react-reconciler/src/ReactFiberLane.js` (Impact: 48, Complexity: 186)
   - `packages/react-reconciler/src/ReactFiberHooks.js` (Impact: 12, Complexity: 491)
-  - `packages/react-dom-bindings/src/server/ReactFizzConfigDOM.js` (Impact: 4, Complexity: 1063)
 
 ---
 ### typescript (⭐ 104k) - Grade: F (38/100)
@@ -129,8 +121,9 @@ A high Standard Deviation (StdDev) indicates that complexity is heavily concentr
 
 - **Emblematic Files Validation**:
   - ✅ `src/compiler/checker.ts` (found in Top 5, expected as core)
-  - ✅ `src/compiler/binder.ts` (found in Top 5, expected as core)
-  - ✅ `src/compiler/program.ts` (found in Top 5, expected as architectural)
+  - ✅ `src/compiler/parser.ts` (found in Top 5, expected as core)
+  - ✅ `src/compiler/emitter.ts` (found in Top 5, expected as performanceCritical)
+  - ✅ `src/compiler/utilities.ts` (found in Top 5, expected as complexAlgorithm)
 
 ---
 ### uuid (⭐ 15k) - Grade: B (88/100)

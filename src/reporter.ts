@@ -64,7 +64,6 @@ function formatNumber(num: number): string {
  */
 export function reportToTerminal(result: AnalysisResult): void {
   const { summary, score, grade, project, topFiles } = result;
-  const config = getConfig();
 
   // --- En-tête Principal ---
   console.log(chalk.cyanBright(`
@@ -87,8 +86,8 @@ export function reportToTerminal(result: AnalysisResult): void {
 
   // --- Score Global ---
   printSectionHeader('Overall Code Quality Score');
-  const gradeColor = score >= config.grades.A ? chalk.bgGreen.black :
-                     score >= config.grades.B ? chalk.bgYellow.black :
+  const gradeColor = score >= 90 ? chalk.bgGreen.black :
+                     score >= 80 ? chalk.bgYellow.black :
                      chalk.bgRed.white;
                      
   console.log(`\n  ${gradeColor.bold(`  ${grade}  `)} ${chalk.bold(score.toFixed(1))}${chalk.dim('/100')}\n`);

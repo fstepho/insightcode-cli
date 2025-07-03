@@ -1,10 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { parseDirectory } from '../src/parser';
+import { parseDirectory } from '../src/parser'; // Import default thresholds
 import { analyze } from '../src/analyzer';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import { execSync } from 'child_process';
+import { DEFAULT_THRESHOLDS } from '../src/config';
 
 describe('Integration Tests', () => {
   let tempDir: string;
@@ -32,7 +33,8 @@ export function subtract(a: number, b: number): number {
     
     // Run full analysis pipeline
     const files = await parseDirectory(tempDir);
-    const results = analyze(files);
+    // FIX: Pass all required arguments to analyze
+    const results = analyze(files, tempDir, DEFAULT_THRESHOLDS);
     
     expect(results.summary.totalFiles).toBe(1);
     expect(results.summary.avgComplexity).toBeLessThan(5);
@@ -80,7 +82,8 @@ function processData(data: any[]): any[] {
     fs.writeFileSync(path.join(tempDir, 'complex.ts'), complexCode);
     
     const files = await parseDirectory(tempDir);
-    const results = analyze(files);
+    // FIX: Pass all required arguments
+    const results = analyze(files, tempDir, DEFAULT_THRESHOLDS);
     
     expect(results.summary.avgComplexity).toBeGreaterThan(10);
     expect(results.score).toBeLessThan(95);
@@ -123,7 +126,8 @@ export function validateUser(user: any) {
     fs.writeFileSync(path.join(tempDir, 'user-validator.ts'), file2Content);
     
     const files = await parseDirectory(tempDir);
-    const results = analyze(files);
+    // FIX: Pass all required arguments
+    const results = analyze(files, tempDir, DEFAULT_THRESHOLDS);
     
     // Should detect some duplication
     expect(results.summary.avgDuplication).toBeGreaterThan(0);
@@ -176,7 +180,8 @@ export function process(items: any[]): any[] {
 }`);
     
     const files = await parseDirectory(tempDir);
-    const results = analyze(files);
+    // FIX: Pass all required arguments
+    const results = analyze(files, tempDir, DEFAULT_THRESHOLDS);
     
     expect(results.summary.totalFiles).toBe(3);
     expect(results.score).toBeGreaterThan(50);
@@ -191,8 +196,7 @@ export function process(items: any[]): any[] {
     // File with only comments
     fs.writeFileSync(path.join(tempDir, 'comments.ts'), `
 // This file contains only comments
-/* 
- * Multi-line comment
+/* * Multi-line comment
  * No actual code
  */
 // More comments`);
@@ -201,7 +205,8 @@ export function process(items: any[]): any[] {
     fs.writeFileSync(path.join(tempDir, 'minimal.ts'), 'export const x = 1;');
     
     const files = await parseDirectory(tempDir);
-    const results = analyze(files);
+    // FIX: Pass all required arguments
+    const results = analyze(files, tempDir, DEFAULT_THRESHOLDS);
     
     expect(results.summary.totalFiles).toBe(3);
     expect(results.summary.totalLines).toBeGreaterThanOrEqual(1);
@@ -234,8 +239,9 @@ process.exit(0);`);
     const allFiles = await parseDirectory(tempDir, [], false);
     const productionFiles = await parseDirectory(tempDir, [], true);
     
-    const allResults = analyze(allFiles);
-    const productionResults = analyze(productionFiles);
+    // FIX: Pass all required arguments
+    const allResults = analyze(allFiles, tempDir, DEFAULT_THRESHOLDS);
+    const productionResults = analyze(productionFiles, tempDir, DEFAULT_THRESHOLDS);
     
     expect(allResults.summary.totalFiles).toBe(3);
     expect(productionResults.summary.totalFiles).toBe(1);
@@ -277,7 +283,8 @@ describe('processOrder', () => {
 });`);
     
     const files = await parseDirectory(tempDir);
-    const results = analyze(files);
+    // FIX: Pass all required arguments
+    const results = analyze(files, tempDir, DEFAULT_THRESHOLDS);
     
     const prodFile = results.files.find(f => f.path.includes('service.ts'));
     const testFile = results.files.find(f => f.path.includes('service.test.ts'));
@@ -285,7 +292,6 @@ describe('processOrder', () => {
     expect(prodFile?.fileType).toBe('production');
     expect(testFile?.fileType).toBe('test');
     
-    // Both files have similar complexity but test file should be more tolerant
     expect(prodFile?.complexity).toBeGreaterThan(3);
     expect(testFile?.complexity).toBeGreaterThan(3);
   });
@@ -301,7 +307,8 @@ describe('processOrder', () => {
     fs.writeFileSync(path.join(tempDir, 'binary.ts'), Buffer.from([0x00, 0x01, 0x02]));
     
     const files = await parseDirectory(tempDir);
-    const results = analyze(files);
+    // FIX: Pass all required arguments
+    const results = analyze(files, tempDir, DEFAULT_THRESHOLDS);
     
     // Should still process valid files despite errors
     expect(results.summary.totalFiles).toBeGreaterThanOrEqual(1);

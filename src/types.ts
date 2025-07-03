@@ -1,5 +1,4 @@
 // File: src/types.ts
-// Types for InsightCode CLI
 
 /**
  * Représente toutes les métriques et scores calculés pour un seul fichier.
@@ -73,6 +72,11 @@ export interface CliOptions {
   exclude?: string[];
   excludeUtility?: boolean;
 }
+
+/**
+ * Définit les seuils (medium/high) pour la création d'Issues.
+ * C'est la seule partie de la logique qui est configurable par l'utilisateur.
+ */
 export interface ThresholdConfig {
   complexity: {
     production: { medium: number; high: number };
@@ -95,8 +99,4 @@ export interface ThresholdConfig {
     example?: { medium: number; high: number };
     config?: { medium: number; high: number };
   };
-}
-
-export interface IssueWithFile extends Issue {
-  file: string;
 }

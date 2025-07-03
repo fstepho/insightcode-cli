@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import glob from 'fast-glob';
 import { FileMetrics, Issue, ThresholdConfig } from './types';
+import { getConfig } from './config';
 
 // Default patterns to exclude
 const DEFAULT_EXCLUDE = [
@@ -41,31 +42,6 @@ const UTILITY_PATTERNS = [
   "**/temp-analysis/**"
 ];
 
-// Default thresholds by file type
-const DEFAULT_THRESHOLDS: ThresholdConfig = {
-  complexity: {
-    production: { medium: 10, high: 20 },
-    test: { medium: 15, high: 30 },      // More tolerant for tests
-    utility: { medium: 15, high: 25 },   // More tolerant for utilities
-    example: { medium: 20, high: 40 },   // Examples can be complex
-    config: { medium: 20, high: 35 }     // Config files may have complex logic
-  },
-  size: {
-    production: { medium: 200, high: 300 },
-    test: { medium: 300, high: 500 },    // Tests can be longer
-    utility: { medium: 250, high: 400 }, // Utilities can be longer
-    example: { medium: 150, high: 250 }, // Examples should be concise
-    config: { medium: 300, high: 500 }   // Config files can be large
-  },
-  duplication: {
-    production: { medium: 15, high: 30 },
-    test: { medium: 25, high: 50 },      // Tests often have setup duplication
-    utility: { medium: 20, high: 40 },   // Utilities may have patterns
-    example: { medium: 50, high: 80 },   // Examples often duplicate patterns
-    config: { medium: 30, high: 60 }     // Config may have repeated structures
-  }
-};
-
 /**
  * Find all TypeScript/JavaScript files in the given path
  */
@@ -73,7 +49,6 @@ export async function findFiles(targetPath: string, exclude: string[] = [], excl
   const patterns = ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'];
   let ignore = [...DEFAULT_EXCLUDE, ...exclude];
   
-  // Add utility patterns if requested
   if (excludeUtility) {
     ignore = [...ignore, ...UTILITY_PATTERNS];
   }
@@ -95,43 +70,16 @@ export async function findFiles(targetPath: string, exclude: string[] = [], excl
 function classifyFileType(filePath: string): FileMetrics['fileType'] {
   const relativePath = path.relative(process.cwd(), filePath).toLowerCase();
   
-  // Test files
-  if (relativePath.includes('/test/') || 
-      relativePath.includes('/tests/') || 
-      relativePath.includes('/__tests__/') || 
-      relativePath.includes('/spec/') ||
-      relativePath.includes('.test.') ||
-      relativePath.includes('.spec.') ||
-      relativePath.includes('.bench.')) {
+  if (relativePath.includes('/test/') || relativePath.includes('/tests/') || relativePath.includes('/__tests__/') || relativePath.includes('/spec/') || relativePath.includes('.test.') || relativePath.includes('.spec.') || relativePath.includes('.bench.')) {
     return 'test';
   }
-  
-  // Example/demo files
-  if (relativePath.includes('/example') || 
-      relativePath.includes('/demo') ||
-      relativePath.includes('/fixtures/') ||
-      relativePath.includes('/mocks/')) {
+  if (relativePath.includes('/example') || relativePath.includes('/demo') || relativePath.includes('/fixtures/') || relativePath.includes('/mocks/')) {
     return 'example';
   }
-  
-  // Utility/tooling files
-  if (relativePath.includes('/scripts/') || 
-      relativePath.includes('/tools/') ||
-      relativePath.includes('/utils/') ||
-      relativePath.includes('/benchmark') ||
-      relativePath.match(/^(gulpfile|webpack|rollup|vite|makefile)\./i) ||
-      relativePath.endsWith('.config.js') ||
-      relativePath.endsWith('.config.ts') ||
-      relativePath.endsWith('.config.mjs')) {
+  if (relativePath.includes('/scripts/') || relativePath.includes('/tools/') || relativePath.includes('/utils/') || relativePath.includes('/benchmark') || relativePath.match(/^(gulpfile|webpack|rollup|vite|makefile)\./i) || relativePath.endsWith('.config.js') || relativePath.endsWith('.config.ts') || relativePath.endsWith('.config.mjs')) {
     return 'utility';
   }
-  
-  // Config files
-  if (relativePath.match(/\.(config|rc)\.(js|ts|json)$/) ||
-      relativePath.includes('eslint.config') ||
-      relativePath.includes('prettier.config') ||
-      relativePath.includes('tsconfig') ||
-      relativePath.includes('package.json')) {
+  if (relativePath.match(/\.(config|rc)\.(js|ts|json)$/) || relativePath.includes('eslint.config') || relativePath.includes('prettier.config') || relativePath.includes('tsconfig') || relativePath.includes('package.json')) {
     return 'config';
   }
   
@@ -228,16 +176,14 @@ function countFunctions(sourceFile: ts.SourceFile): number {
 }
 
 /**
- * Parse a single file and extract metrics
+ * Parse a single file and extract metrics.
  */
-export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAULT_THRESHOLDS): FileMetrics {
+export function parseFile(filePath: string): FileMetrics {
+  // FIX: Get thresholds from the single source of truth.
+  const thresholds = getConfig();
+  
   const content = fs.readFileSync(filePath, 'utf-8');
-  const sourceFile = ts.createSourceFile(
-    filePath,
-    content,
-    ts.ScriptTarget.Latest,
-    true
-  );
+  const sourceFile = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true);
   
   const complexity = calculateComplexity(sourceFile);
   const functionCount = countFunctions(sourceFile);
@@ -245,11 +191,9 @@ export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAUL
   const fileType = classifyFileType(filePath) || 'production';
   const issues: Issue[] = [];
   
-  // Get appropriate thresholds for this file type
-  const complexityThresholds = thresholds.complexity[fileType as keyof typeof thresholds.complexity] || thresholds.complexity.production;
-  const sizeThresholds = thresholds.size[fileType as keyof typeof thresholds.size] || thresholds.size.production;
+  const complexityThresholds = thresholds.complexity[fileType] || thresholds.complexity.production;
+  const sizeThresholds = thresholds.size[fileType] || thresholds.size.production;
   
-  // Check for high complexity with file-type specific thresholds
   if (complexity > complexityThresholds.high) {
     issues.push({
       type: 'complexity',
@@ -266,7 +210,6 @@ export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAUL
     });
   }
   
-  // Check for large files with file-type specific thresholds
   if (loc > sizeThresholds.high) {
     issues.push({
       type: 'size',
@@ -286,36 +229,35 @@ export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAUL
   return {
     path: path.relative(process.cwd(), filePath),
     complexity,
-    duplication: 0, // Will be calculated in analyzer
+    duplication: 0,
     functionCount,
     loc,
     issues,
     fileType,
-    impact: 0, // Placeholder, will be calculated in analyzer
-    criticismScore: 0 // Placeholder, will be calculated in analyzer
+    impact: 0,
+    criticismScore: 0,
   };
 }
 
 /**
- * Parse all TypeScript files in a directory or a single file
+ * Parse all TypeScript files in a directory or a single file.
  */
 export async function parseDirectory(
   targetPath: string, 
   exclude: string[] = [], 
-  excludeUtility: boolean = false,
-  thresholds: ThresholdConfig = DEFAULT_THRESHOLDS
+  excludeUtility: boolean = false
 ): Promise<FileMetrics[]> {
+  // FIX: The `thresholds` parameter is removed as it's no longer needed.
+  // `parseFile` will get it from `getConfig()`.
+
   let filesToAnalyze: string[] = [];
   
-  // Check if targetPath is a file or directory
   const stats = fs.statSync(targetPath);
   
   if (stats.isFile()) {
-    // Single file analysis
     const absolutePath = path.isAbsolute(targetPath) ? targetPath : path.resolve(targetPath);
     filesToAnalyze = [absolutePath];
   } else if (stats.isDirectory()) {
-    // Directory analysis
     filesToAnalyze = await findFiles(targetPath, exclude, excludeUtility);
   } else {
     throw new Error(`Path is neither a file nor a directory: ${targetPath}`);
@@ -329,7 +271,7 @@ export async function parseDirectory(
   
   for (const file of filesToAnalyze) {
     try {
-      const metrics = parseFile(file, thresholds);
+      const metrics = parseFile(file); // No longer needs to pass thresholds
       results.push(metrics);
     } catch (error) {
       console.warn(`Warning: Could not parse ${file}:`, error);
@@ -338,5 +280,3 @@ export async function parseDirectory(
   
   return results;
 }
-
-export { DEFAULT_THRESHOLDS };

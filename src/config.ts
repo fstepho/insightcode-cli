@@ -1,104 +1,42 @@
 // File: src/config.ts
+
 import * as fs from 'fs';
 import * as path from 'path';
+import { ThresholdConfig } from './types';
+import { deepMerge } from './utils'; 
 
-export interface ConfigThresholds {
+// Les seuils par défaut pour la création d'Issues.
+export const DEFAULT_THRESHOLDS: ThresholdConfig = {
   complexity: {
-    excellent: number;
-    good: number;
-    acceptable: number;
-    poor: number;
-    veryPoor: number;
-  };
-  duplication: {
-    excellent: number;
-    good: number;
-    acceptable: number;
-    poor: number;
-    veryPoor: number;
-  };
-  fileSize: {
-    excellent: number;
-    good: number;
-    acceptable: number;
-    poor: number;
-    veryPoor: number;
-  };
-  functionCount: {
-    excellent: number;
-    good: number;
-    acceptable: number;
-    poor: number;
-  };
-  grades: {
-    A: number;
-    B: number;
-    C: number;
-    D: number;
-  };
-  maintainabilityLabels: {
-    good: number;
-    acceptable: number;
-    poor: number;
-  };
-  extremeFilePenalties: {
-    largeFileThreshold: number;
-    largeFilePenalty: number;
-    massiveFileThreshold: number;
-    massiveFilePenalty: number;
-  };
-}
-
-const DEFAULT_THRESHOLDS: ConfigThresholds = {
-  complexity: {
-    excellent: 10,
-    good: 15,
-    acceptable: 20,
-    poor: 30,
-    veryPoor: 50
+    production: { medium: 10, high: 20 },
+    test: { medium: 15, high: 30 },
+    utility: { medium: 15, high: 25 },
+    example: { medium: 20, high: 40 },
+    config: { medium: 20, high: 35 }
+  },
+  size: {
+    production: { medium: 200, high: 300 },
+    test: { medium: 300, high: 500 },
+    utility: { medium: 250, high: 400 },
+    example: { medium: 150, high: 250 },
+    config: { medium: 300, high: 500 }
   },
   duplication: {
-    excellent: 3,
-    good: 8,
-    acceptable: 15,
-    poor: 30,
-    veryPoor: 50
-  },
-  fileSize: {
-    excellent: 200,
-    good: 300,
-    acceptable: 400,
-    poor: 500,
-    veryPoor: 750
-  },
-  functionCount: {
-    excellent: 10,
-    good: 15,
-    acceptable: 20,
-    poor: 30
-  },
-  grades: {
-    A: 90,
-    B: 80,
-    C: 70,
-    D: 60
-  },
-  maintainabilityLabels: {
-    good: 80,
-    acceptable: 60,
-    poor: 40
-  },
-  extremeFilePenalties: {
-    largeFileThreshold: 1000,
-    largeFilePenalty: 10,
-    massiveFileThreshold: 2000,
-    massiveFilePenalty: 20
+    production: { medium: 15, high: 30 },
+    test: { medium: 25, high: 50 },
+    utility: { medium: 20, high: 40 },
+    example: { medium: 50, high: 80 },
+    config: { medium: 30, high: 60 }
   }
 };
 
-let config: ConfigThresholds | null = null;
+let config: ThresholdConfig | null = null;
 
-export function getConfig(): ConfigThresholds {
+/**
+ * Charge la configuration depuis insightcode.config.json, la fusionne avec les valeurs par défaut,
+ * et la met en cache.
+ */
+export function getConfig(): ThresholdConfig {
   if (config) return config;
 
   try {
@@ -106,22 +44,29 @@ export function getConfig(): ConfigThresholds {
     if (fs.existsSync(configPath)) {
       const content = fs.readFileSync(configPath, 'utf-8');
       const userConfig = JSON.parse(content);
-      config = { ...DEFAULT_THRESHOLDS, ...userConfig.thresholds };
+      // Fusionne en profondeur la configuration utilisateur avec celle par défaut
+      config = deepMerge(DEFAULT_THRESHOLDS, userConfig.thresholds || {});
     } else {
       config = DEFAULT_THRESHOLDS;
     }
   } catch (error) {
-    console.warn('Warning: Failed to load config, using defaults');
+    console.warn('Warning: Failed to load or parse insightcode.config.json. Using default thresholds.');
     config = DEFAULT_THRESHOLDS;
   }
 
   return config!;
 }
 
+/**
+ * Réinitialise la configuration en cache (principalement pour les tests).
+ */
 export function resetConfig(): void {
   config = null;
 }
 
-export function setConfigForTesting(testConfig: ConfigThresholds): void {
+/**
+ * Permet de forcer une configuration spécifique pour les tests.
+ */
+export function setConfigForTesting(testConfig: ThresholdConfig): void {
   config = testConfig;
 }

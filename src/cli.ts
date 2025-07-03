@@ -6,6 +6,7 @@ import { CliOptions } from './types';
 import { parseDirectory } from './parser';
 import { analyze } from './analyzer';
 import { reportToTerminal } from './reporter';
+import { getConfig } from './config';
 
 const program = new Command();
 
@@ -25,7 +26,7 @@ program
       if (!options.json) {
         console.log(chalk.blue('🔍 Analyzing code quality...'));
       }
-      
+      const thresholds = getConfig();
       // Parse files
       const files = await parseDirectory(path, options.exclude, options.excludeUtility);
       
@@ -35,7 +36,7 @@ program
       }
       
       // Analyze metrics
-      const results = analyze(files, path);
+      const results = analyze(files, path, thresholds);
       
       if (options.json) {
         console.log(JSON.stringify(results, null, 2));
