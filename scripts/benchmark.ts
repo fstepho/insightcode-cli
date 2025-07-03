@@ -139,7 +139,7 @@ const PROJECTS: Project[] = [
     description: 'Fast web framework for Node.js',
     type: 'web framework',
     stars: '66.2k',
-    stableVersion: '5.1.0',
+    stableVersion: 'v5.1.0',
     category: 'medium',
     embematicFiles: {
       coreFiles: [
