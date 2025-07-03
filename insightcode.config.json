@@ -1,0 +1,48 @@
+{
+  "thresholds": {
+    "complexity": {
+      "excellent": 10,
+      "good": 15,
+      "acceptable": 20,
+      "poor": 30,
+      "veryPoor": 50
+    },
+    "duplication": {
+      "excellent": 3,
+      "good": 8,
+      "acceptable": 15,
+      "poor": 30,
+      "veryPoor": 50
+    },
+    "fileSize": {
+      "excellent": 200,
+      "good": 300,
+      "acceptable": 400,
+      "poor": 500,
+      "veryPoor": 750
+    },
+    "functionCount": {
+      "excellent": 10,
+      "good": 15,
+      "acceptable": 20,
+      "poor": 30
+    },
+    "grades": {
+      "A": 90,
+      "B": 80,
+      "C": 70,
+      "D": 60
+    },
+    "maintainabilityLabels": {
+      "good": 80,
+      "acceptable": 60,
+      "poor": 40
+    },
+    "extremeFilePenalties": {
+      "largeFileThreshold": 1000,
+      "largeFilePenalty": 10,
+      "massiveFileThreshold": 2000,
+      "massiveFilePenalty": 20
+    }
+  }
+}

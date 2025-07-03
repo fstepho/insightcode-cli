@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { analyze } from '../src/analyzer';
-import { FileMetrics, ThresholdConfig, Issue } from '../src/types';
-import { DEFAULT_THRESHOLDS } from '../src/parser';
+import { FileMetrics, Issue } from '../src/types';
+import { resetConfig, setConfigForTesting, getConfig } from '../src/config';
+import { getComplexityLabel, getDuplicationLabel } from '../src/scoring';
 
 // Mock fs module
 vi.mock('fs', () => ({
@@ -38,8 +39,13 @@ function createIssue(overrides: Partial<Issue>): Issue {
 }
 
 describe('Analyzer', () => {
+  beforeEach(() => {
+    resetConfig();
+  });
+
   describe('analyze', () => {
     it('should calculate correct score for perfect code', () => {
+      const config = getConfig();
       const files: FileMetrics[] = [
         createFileMetrics({
           path: 'test1.ts',
@@ -65,30 +71,31 @@ describe('Analyzer', () => {
       expect(result.summary.avgDuplication).toBe(0);
       expect(result.summary.avgFunctions).toBe(2.5);
       expect(result.summary.avgLoc).toBe(40);
-      expect(result.score).toBeGreaterThanOrEqual(90);
+      expect(result.score).toBeGreaterThanOrEqual(config.grades.A);
       expect(result.grade).toBe('A');
     });
     
     it('should calculate correct score for poor quality code', () => {
+      const config = getConfig();
       const files: FileMetrics[] = [
         createFileMetrics({
           path: 'complex.ts',
-          complexity: 30,
+          complexity: config.complexity.poor,
           duplication: 0,
-          loc: 500,
-          functionCount: 25,
+          loc: config.fileSize.poor,
+          functionCount: config.functionCount.poor,
           issues: [
-            createIssue({ type: 'complexity', severity: 'high', message: 'High complexity', value: 30 })
+            createIssue({ type: 'complexity', severity: 'high', message: 'High complexity', value: config.complexity.poor })
           ]
         })
       ];
       
       const result = analyze(files);
       
-      expect(result.summary.avgComplexity).toBe(30);
-      expect(result.summary.avgFunctions).toBe(25);
-      expect(result.summary.avgLoc).toBe(500);
-      expect(result.score).toBeLessThan(65);
+      expect(result.summary.avgComplexity).toBe(config.complexity.poor);
+      expect(result.summary.avgFunctions).toBe(config.functionCount.poor);
+      expect(result.summary.avgLoc).toBe(config.fileSize.poor);
+      expect(result.score).toBeLessThan(config.grades.C);
       expect(result.grade).toBe('D');
     });
     
@@ -150,12 +157,13 @@ describe('Analyzer', () => {
         })];
         
         const result = analyze(files);
+        const config = getConfig();
         const gradeRanges = {
-          'A': [90, 100],
-          'B': [80, 89],
-          'C': [70, 79],
-          'D': [60, 69],
-          'F': [0, 59]
+          'A': [config.grades.A, 100],
+          'B': [config.grades.B, config.grades.A - 1],
+          'C': [config.grades.C, config.grades.B - 1],
+          'D': [config.grades.D, config.grades.C - 1],
+          'F': [0, config.grades.D - 1]
         };
         
         const [min, max] = gradeRanges[expectedGrade];
@@ -362,32 +370,67 @@ describe('Analyzer', () => {
   });
   
   describe('threshold configuration', () => {
-    it('should accept custom thresholds parameter', () => {
-      const customThresholds: ThresholdConfig = {
-        ...DEFAULT_THRESHOLDS,
-        duplication: {
-          production: { medium: 5, high: 10 },
-          test: { medium: 10, high: 20 },
-          utility: { medium: 15, high: 25 }
-        }
-      };
+    it('should use configurable thresholds and affect scoring', () => {
+      const testFile = createFileMetrics({
+        path: 'test.ts',
+        complexity: 12,
+        duplication: 0,
+        loc: 100,
+        functionCount: 5,
+        issues: []
+      });
+
+      // Test with default config first
+      resetConfig();
+      const defaultResult = analyze([testFile]);
+      const defaultGrade = defaultResult.grade;
+
+      // Now test with stricter config
+      setConfigForTesting({
+        complexity: { excellent: 5, good: 8, acceptable: 10, poor: 15, veryPoor: 20 },
+        duplication: { excellent: 2, good: 5, acceptable: 10, poor: 20, veryPoor: 30 },
+        fileSize: { excellent: 50, good: 75, acceptable: 100, poor: 150, veryPoor: 200 },
+        functionCount: { excellent: 3, good: 5, acceptable: 8, poor: 12 },
+        grades: { A: 95, B: 85, C: 75, D: 65 },
+        maintainabilityLabels: { good: 80, acceptable: 60, poor: 40 },
+        extremeFilePenalties: { largeFileThreshold: 1000, largeFilePenalty: 10, massiveFileThreshold: 2000, massiveFilePenalty: 20 }
+      });
+
+      const strictResult = analyze([testFile]);
+      const strictGrade = strictResult.grade;
+
+      // The same file should get a worse score with stricter thresholds
+      expect(strictResult.score).toBeLessThan(defaultResult.score);
       
-      const files: FileMetrics[] = [
-        createFileMetrics({
-          path: 'test.ts',
-          complexity: 5,
-          duplication: 0,
-          loc: 100,
-          functionCount: 5,
-          issues: []
-        })
-      ];
-      
-      // The test just verifies that custom thresholds don't break the analyzer
-      expect(() => analyze(files, customThresholds)).not.toThrow();
-      const result = analyze(files, customThresholds);
-      expect(result).toBeDefined();
-      expect(result.files).toHaveLength(1);
+      // Verify config is actually applied
+      const config = getConfig();
+      expect(config.complexity.excellent).toBe(5);
+      expect(config.grades.A).toBe(95);
+    });
+
+    it('should affect complexity and duplication labels based on config', () => {
+      // Test with default config
+      resetConfig();
+      const defaultComplexityLabel = getComplexityLabel(12);
+      const defaultDuplicationLabel = getDuplicationLabel(5);
+
+      // Test with custom config where thresholds are lower
+      setConfigForTesting({
+        complexity: { excellent: 5, good: 8, acceptable: 10, poor: 15, veryPoor: 20 },
+        duplication: { excellent: 2, good: 4, acceptable: 6, poor: 10, veryPoor: 15 },
+        fileSize: { excellent: 100, good: 200, acceptable: 300, poor: 400, veryPoor: 500 },
+        functionCount: { excellent: 5, good: 10, acceptable: 15, poor: 20 },
+        grades: { A: 90, B: 80, C: 70, D: 60 },
+        maintainabilityLabels: { good: 80, acceptable: 60, poor: 40 },
+        extremeFilePenalties: { largeFileThreshold: 1000, largeFilePenalty: 10, massiveFileThreshold: 2000, massiveFilePenalty: 20 }
+      });
+
+      const customComplexityLabel = getComplexityLabel(12);
+      const customDuplicationLabel = getDuplicationLabel(5);
+
+      // With lower thresholds, the same values should get worse labels
+      expect(customComplexityLabel).not.toBe(defaultComplexityLabel);
+      expect(customDuplicationLabel).not.toBe(defaultDuplicationLabel);
     });
     
     it('should handle different file types with thresholds', () => {

@@ -11,6 +11,7 @@ import {
   getMaintainabilityColorLevel,
   getSeverityColorLevel
 } from './scoring';
+import { getConfig } from './config';
 
 function getSeverityLabel(ratio?: number): string {
   if (!ratio) return '';
@@ -59,10 +60,11 @@ export function reportToTerminal(result: AnalysisResult): void {
   console.log(chalk.bold.cyan('\n📊 InsightCode Analysis Report\n'));
   
   // Overall Score
-  const gradeColor = score >= 90 ? chalk.green :
-                    score >= 80 ? chalk.greenBright :
-                    score >= 70 ? chalk.yellow :
-                    score >= 60 ? chalk.yellowBright :
+  const config = getConfig();
+  const gradeColor = score >= config.grades.A ? chalk.green :
+                    score >= config.grades.B ? chalk.greenBright :
+                    score >= config.grades.C ? chalk.yellow :
+                    score >= config.grades.D ? chalk.yellowBright :
                     chalk.red;
   
   console.log(`${chalk.bold('Overall Score:')} ${gradeColor(`${grade} (${score}/100)`)}\n`);
