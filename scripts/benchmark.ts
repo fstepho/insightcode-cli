@@ -59,7 +59,7 @@ const PROJECTS: Project[] = [
     repo: 'https://github.com/lodash/lodash.git',
     description: 'JavaScript utility library',
     type: 'utility library',
-    stars: '59k',
+    stars: '60.6k',
     stableVersion: '4.17.21',
     category: 'small',
     embematicFiles: {
@@ -88,8 +88,8 @@ const PROJECTS: Project[] = [
     repo: 'https://github.com/chalk/chalk.git',
     description: 'Terminal string styling library',
     type: 'utility library',
-    stars: '21k',
-    stableVersion: 'v5.3.0',
+    stars: '22.3k',
+    stableVersion: 'v5.4.1',
     category: 'small',
     embematicFiles: {
       coreFiles: [
@@ -112,8 +112,8 @@ const PROJECTS: Project[] = [
     repo: 'https://github.com/uuidjs/uuid.git',
     description: 'UUID generation library',
     type: 'utility library',
-    stars: '14k',
-    stableVersion: 'v9.0.1',
+    stars: '15k',
+    stableVersion: 'v11.1.0',
     category: 'small',
     embematicFiles: {
       coreFiles: [
@@ -138,8 +138,8 @@ const PROJECTS: Project[] = [
     repo: 'https://github.com/expressjs/express.git',
     description: 'Fast web framework for Node.js',
     type: 'web framework',
-    stars: '65k',
-    stableVersion: '4.19.2',
+    stars: '66.2k',
+    stableVersion: '5.1.0',
     category: 'medium',
     embematicFiles: {
       coreFiles: [
@@ -167,8 +167,8 @@ const PROJECTS: Project[] = [
     repo: 'https://github.com/vuejs/core.git',
     description: 'Progressive JavaScript framework',
     type: 'frontend framework',
-    stars: '46k',
-    stableVersion: 'v3.4.21',
+    stars: '50.7k',
+    stableVersion: 'v3.5.17',
     category: 'medium',
     embematicFiles: {
       coreFiles: [
@@ -195,8 +195,8 @@ const PROJECTS: Project[] = [
     repo: 'https://github.com/jestjs/jest.git',
     description: 'JavaScript testing framework',
     type: 'testing framework',
-    stars: '44k',
-    stableVersion: 'v29.7.0',
+    stars: '44.8k',
+    stableVersion: 'v30.0.4',
     category: 'medium',
     embematicFiles: {
       coreFiles: [
@@ -222,8 +222,8 @@ const PROJECTS: Project[] = [
     repo: 'https://github.com/facebook/react.git',
     description: 'JavaScript library for building UIs',
     type: 'UI framework',
-    stars: '227k',
-    stableVersion: 'v18.2.0',
+    stars: '235k',
+    stableVersion: 'v19.1.0',
     category: 'large',
     embematicFiles: {
       coreFiles: [
@@ -252,8 +252,8 @@ const PROJECTS: Project[] = [
     repo: 'https://github.com/eslint/eslint.git',
     description: 'JavaScript linter',
     type: 'code analysis tool',
-    stars: '25k',
-    stableVersion: 'v8.57.0',
+    stars: '26k',
+    stableVersion: 'v9.30.1',
     category: 'large',
     embematicFiles: {
       coreFiles: [
@@ -280,8 +280,8 @@ const PROJECTS: Project[] = [
     type: 'language compiler',
     repo: 'https://github.com/microsoft/TypeScript.git',
     description: 'TypeScript language compiler',
-    stars: '98k',
-    stableVersion: 'v5.4.5',
+    stars: '104k',
+    stableVersion: 'v5.8.3',
     category: 'large',
     embematicFiles: {
       coreFiles: [
