@@ -8,43 +8,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Academic best practices implementation for metric aggregation
-- Weighted average calculation for project-level scores using file size (LOC) as weighting factor
-- Mathematical consistency in scoring system following industry standards
-- Single source of truth for 40/30/30 philosophy in `scoring.ts`
-- File criticality scoring system with `fileScoring.ts` module (renamed from `topIssues.ts`)
-- Weighted scoring algorithm prioritizing complexity (heaviest), size (medium), and duplication (lightest)
-- JSON output now includes `topFiles` array with top 5 critical files
-- Enhanced reporter with criticality-based file ranking system
-- File scoring algorithm that prioritizes by total impact (complexity + size + duplication)
-- Ratio display for better context (e.g., "813x limit" instead of just "16260")
-- Severity labels based on ratios ("Extreme", "Very High", "High", "Medium")
-- Actionable improvement suggestions with potential score gains
-- Number formatting with thousand separators for better readability
+
+## [0.4.0] - 2025-07-03
+
+### Added
+- **Architectural Impact Analysis**: InsightCode now builds a dependency graph to calculate the `impact` of each file.
+- **Advanced Architectural Metrics**: The analysis now identifies "Silent Killers" (high-impact, low-complexity files) and calculates `complexityStdDev`.
+- **Enhanced Reporter**: The terminal output now displays the `Criticism Score`, `Impact`, and a new `Architectural Risks` section.
+- **Richer Issue Details**: Issues now include a `ratio` display for better context (e.g., "2.5x limit").
+- **Actionable Suggestions**: The reporter provides "Quick Wins" with potential score gains to guide refactoring.
+- **Improved Readability**: Numbers in the report now have thousand separators.
 
 ### Changed
-- Project scores now calculated as weighted averages of file scores instead of scoring project averages
-- All scoring logic centralized in `scoring.ts` to eliminate duplication
-- File size (LOC) used as weighting factor for project-level aggregation (industry standard)
-- Renamed `topIssues.ts` to `fileScoring.ts` for better clarity
-- Top Issues now displays the 5 most critical files instead of first 5 issues found
-- Issues are grouped by file for better clarity
-- Reporter uses scoring functions from `scoring.ts` for consistency
-- Improved visual hierarchy in terminal output
-- Benchmark scripts now use pre-calculated `topFiles` from analysis results
-- Better separation of concerns with dedicated scoring module
+- **BREAKING CHANGE: Complete Scoring System Overhaul.** The scoring model has been rewritten to use a **criticality-weighted model**. The final project score is now a weighted average based on each file's `Criticality Score` (a combination of its complexity and architectural impact), replacing the old fixed-weight model.
+- **Centralized Logic**: All analysis orchestration, scoring, and ranking logic is now unified in `analyzer.ts`.
+- **Top File Ranking**: The `Top 5` list is now correctly ranked by `criticismScore`, ensuring the most important files always appear first.
+- **Scoring Purity**: The `scoring.ts` module now contains pure, non-configurable functions with research-based thresholds.
+- **Configuration Focus**: The `config.ts` module now *only* handles user-configurable thresholds for issue generation (`medium`/`high`).
+
+### Removed
+- **Deleted `fileScoring.ts` module**: This module's redundant logic has been removed and replaced by the unified system in `analyzer.ts`.
+- **Deleted obsolete types**: The unused `ConfigThresholds` interface was removed from `types.ts`.
 
 ### Fixed
-- Empty file list edge case now returns perfect score (100) instead of 0
-- Mathematical consistency in metric aggregation following academic research
-- Eliminated duplicate scoring implementations across multiple files
-- Critical files like `checker.ts` (Typescript project) with extreme complexity (16,260) now properly appear in Top Issues
-- Consistent complexity scoring between analyzer and reporter
-
-### Planned
-- Configuration file support (.insightcoderc)
-- More file types (.jsx, .tsx)
-- Framework-specific analysis (React, Angular)
+- **Architectural Inconsistency**: Eliminated the critical flaw of having multiple, competing scoring systems. The tool now has a single, coherent logic for evaluating code quality.
+- **Empty Project Bug**: An empty project now correctly returns a perfect score of 100 instead of 0.
+- **Test Suite**: All tests have been rewritten to align with the new, unified architecture, ensuring all core logic is validated.
 
 ## [0.3.0] - 2025-06-28
 
