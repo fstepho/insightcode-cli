@@ -3,7 +3,6 @@
 import chalk from 'chalk';
 import * as process from 'process';
 import { AnalysisResult } from './types';
-import { getTopCriticalFiles } from './fileScoring';
 import { 
   getComplexityLabel, 
   getDuplicationLabel, 
@@ -15,17 +14,18 @@ import {
 } from './scoring';
 import { getConfig } from './config';
 
-function getSeverityLabel(ratio?: number): string {
-  if (!ratio) return '';
-  if (ratio >= 100) return 'Extreme';
-  if (ratio >= 50) return 'Very High';
-  if (ratio >= 10) return 'High';
-  if (ratio >= 2.5) return 'Medium';
-  return 'Low';
+// --- Fonctions d'aide pour l'UI ---
+
+/**
+ * Crée un en-tête de section stylisé.
+ * @param title Le titre de la section.
+ */
+function printSectionHeader(title: string): void {
+  console.log(chalk.gray(`\n╭─ ${chalk.bold.cyan(title)} ` + '─'.repeat(Math.max(0, 50 - title.length))));
 }
 
 /**
- * Convert color level to chalk function
+ * Convertit un niveau de couleur en fonction chalk.
  */
 function getChalkColor(colorLevel: 'green' | 'yellow' | 'red' | 'redBold') {
   switch (colorLevel) {
@@ -37,154 +37,149 @@ function getChalkColor(colorLevel: 'green' | 'yellow' | 'red' | 'redBold') {
 }
 
 /**
- * Progress bar generator
+ * Générateur de barre de progression avec des couleurs dynamiques.
+ * @param percentage Le pourcentage à afficher.
+ * @param width La largeur de la barre.
+ * @param colorLevel Le niveau de couleur pour la barre.
  */
-function progressBar(percentage: number, width: number = 20): string {
-  const filled = Math.round((percentage / 100) * width);
-  const empty = width - filled;
-  return `${'█'.repeat(filled)}${'░'.repeat(empty)}`;
+function progressBar(percentage: number, width: number = 20, colorLevel: 'green' | 'yellow' | 'red' | 'redBold'): string {
+  const filledCount = Math.round((percentage / 100) * width);
+  const emptyCount = width - filledCount;
+  const filledBar = '█'.repeat(filledCount);
+  const emptyBar = chalk.gray('░'.repeat(emptyCount));
+  
+  const colorFunc = getChalkColor(colorLevel);
+  return `${colorFunc(filledBar)}${emptyBar}`;
 }
 
 /**
- * Format large numbers with commas
+ * Formate les grands nombres avec des séparateurs de milliers.
  */
 function formatNumber(num: number): string {
   return num.toLocaleString('en-US');
 }
 
 /**
- * Display analysis results in the terminal
+ * Affiche les résultats de l'analyse dans le terminal avec un design professionnel.
  */
 export function reportToTerminal(result: AnalysisResult): void {
-  const { summary, score, grade, project } = result;
-  
-  // Header
-  console.log(chalk.bold.cyan('\n📊 InsightCode Analysis Report\n'));
-  
-  // Project Info
-  console.log(chalk.bold('📁 Project:'));
-  console.log(`  Name: ${chalk.cyan(project.name)}`);
-  if (project.packageJson?.version) {
-    console.log(`  Version: ${chalk.cyan(project.packageJson.version)}`);
-  }
-  if (project.packageJson?.description) {
-    console.log(`  Description: ${chalk.gray(project.packageJson.description)}`);
-  }
-  console.log(`  Path: ${chalk.gray(project.path)}\n`);
-  
-  // Overall Score
+  const { summary, score, grade, project, topFiles } = result;
   const config = getConfig();
-  const gradeColor = score >= config.grades.A ? chalk.green :
-                    score >= config.grades.B ? chalk.greenBright :
-                    score >= config.grades.C ? chalk.yellow :
-                    score >= config.grades.D ? chalk.yellowBright :
-                    chalk.red;
+
+  // --- En-tête Principal ---
+  console.log(chalk.cyanBright(`
+  ┌──────────────────────────────────────────┐
+  │                                          │
+  │   📊   ${chalk.bold('InsightCode Analysis Report')}   📊  │
+  │                                          │
+  └──────────────────────────────────────────┘
+  `));
+
+  // --- Infos du Projet ---
+  printSectionHeader('Project Overview');
+  console.log(`  ${chalk.bold('Project:')}     ${chalk.cyan(project.name)}`);
+  if (project.packageJson?.version) {
+    console.log(`  ${chalk.bold('Version:')}     ${chalk.cyan(project.packageJson.version)}`);
+  }
+  console.log(`  ${chalk.bold('Path:')}        ${chalk.dim(project.path)}`);
+  console.log(`  ${chalk.bold('Files:')}       ${chalk.cyan(summary.totalFiles)}`);
+  console.log(`  ${chalk.bold('Total Lines:')} ${chalk.cyan(formatNumber(summary.totalLines))}`);
+
+  // --- Score Global ---
+  printSectionHeader('Overall Code Quality Score');
+  const gradeColor = score >= config.grades.A ? chalk.bgGreen.black :
+                     score >= config.grades.B ? chalk.bgYellow.black :
+                     chalk.bgRed.white;
+                     
+  console.log(`\n  ${gradeColor.bold(`  ${grade}  `)} ${chalk.bold(score.toFixed(1))}${chalk.dim('/100')}\n`);
+
+
+  // --- Métriques Détaillées ---
+  printSectionHeader('Core Metrics');
   
-  console.log(`${chalk.bold('Overall Score:')} ${gradeColor(`${grade} (${score}/100)`)}\n`);
-  
-  // Summary
-  console.log(chalk.bold('Summary:'));
-  console.log(`  Files analyzed: ${chalk.cyan(summary.totalFiles)}`);
-  console.log(`  Total lines: ${chalk.cyan(formatNumber(summary.totalLines))}\n`);
-  
-  // Metrics with actual values (industry standard presentation)
-  console.log(chalk.bold('Metrics:'));
-  
-  // Complexity - show actual value with intensity bar  
-  const complexityIntensity = Math.min(100, Math.max(0, (summary.avgComplexity / config.complexity.veryPoor) * 100)); // Scale to veryPoor threshold
-  const complexityMetricLabel = getComplexityLabel(summary.avgComplexity);
-  const complexityMetricColor = getChalkColor(getComplexityColorLevel(summary.avgComplexity));
-  console.log(`  Complexity      ${progressBar(complexityIntensity)} ${complexityMetricColor(summary.avgComplexity + ' (' + complexityMetricLabel + ')')}`);
-  
-  // Duplication - show actual percentage with intensity bar
-  const duplicationIntensity = Math.min(100, summary.avgDuplication); // Show actual percentage
-  const duplicationMetricLabel = getDuplicationLabel(summary.avgDuplication);
-  const duplicationMetricColor = getChalkColor(getDuplicationColorLevel(summary.avgDuplication));
-  console.log(`  Duplication     ${progressBar(duplicationIntensity)} ${duplicationMetricColor(summary.avgDuplication + '% (' + duplicationMetricLabel + ')')}`);
-  
-  // Maintainability - show quality score (this one is actually a quality metric)
-  const maintainabilityScore = Math.round(result.scores.maintainability);
-  const maintainabilityMetricLabel = getMaintainabilityLabel(maintainabilityScore);
-  const maintainabilityMetricColor = getChalkColor(getMaintainabilityColorLevel(maintainabilityScore));
-  console.log(`  Maintainability ${progressBar(maintainabilityScore)} ${maintainabilityMetricColor(maintainabilityScore + '/100 (' + maintainabilityMetricLabel + ')')}\n`);
-  
-  // Top Critical Files
-  const topFiles = result.topFiles;
-  
+  // Complexité
+  const complexityScore = result.scores.complexity;
+  const complexityColor = getComplexityColorLevel(summary.avgComplexity);
+  console.log(
+    `  ${chalk.bold('Complexity:')}      ${progressBar(complexityScore, 20, complexityColor)}  ${getChalkColor(complexityColor)(`${summary.avgComplexity.toFixed(1)} (${getComplexityLabel(summary.avgComplexity)})`)}`
+  );
+
+  // Duplication
+  const duplicationScore = result.scores.duplication;
+  const duplicationColor = getDuplicationColorLevel(summary.avgDuplication);
+  console.log(
+    `  ${chalk.bold('Duplication:')}     ${progressBar(duplicationScore, 20, duplicationColor)}  ${getChalkColor(duplicationColor)(`${summary.avgDuplication.toFixed(1)}% (${getDuplicationLabel(summary.avgDuplication)})`)}`
+  );
+
+  // Maintenabilité
+  const maintainabilityScore = result.scores.maintainability;
+  const maintainabilityColor = getMaintainabilityColorLevel(maintainabilityScore);
+  console.log(
+    `  ${chalk.bold('Maintainability:')} ${progressBar(maintainabilityScore, 20, maintainabilityColor)}  ${getChalkColor(maintainabilityColor)(`${maintainabilityScore.toFixed(0)}/100 (${getMaintainabilityLabel(maintainabilityScore)})`)}`
+  );
+
+
+  // --- Fichiers Critiques ---
   if (topFiles.length > 0) {
-    console.log(chalk.bold('⚠️  Top 5 Most Critical Files:\n'));
+    printSectionHeader('⚠️ Top 5 Critical Files to Address');
     
     topFiles.forEach((file, index) => {
-      // Clean file path for display
       const cleanPath = file.path.replace(process.cwd() + '/', '');
+      console.log(`\n  ${chalk.bold(`${index + 1}.`)} ${chalk.underline.white(cleanPath)}`);
       
-      console.log(`${chalk.bold(`${index + 1}.`)} ${chalk.underline(cleanPath)}`);
-      
-      // Display each issue with proper formatting
       file.issues.forEach(issue => {
-        const icon = issue.severity === 'high' ? '   •' : '   •';
+        let icon: string;
+        let colorFunc: chalk.Chalk;
         
         if (issue.type === 'complexity' && issue.ratio) {
-          const severityLabel = getSeverityLabel(issue.ratio);
-          const severityColor = getChalkColor(getSeverityColorLevel(issue.ratio));
-          console.log(severityColor(`${icon} ${severityLabel} complexity: ${formatNumber(issue.value)} (${issue.ratio.toFixed(0)}x limit)`));
+            const color = getSeverityColorLevel(issue.ratio);
+            colorFunc = getChalkColor(color);
+            icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
+            console.log(`    ${icon} ${colorFunc(`High Complexity: ${formatNumber(issue.value)} (${issue.ratio.toFixed(0)}x above limit)`)}`);
         } else if (issue.type === 'size' && issue.ratio) {
-          const sizeLabel = issue.value > 5000 ? 'Massive' :
-                           issue.value > 1000 ? 'Very large' :
-                           issue.value > 300 ? 'Large' :
-                           'Getting large';
-          const severityColor = getChalkColor(getSeverityColorLevel(issue.ratio));
-          console.log(severityColor(`${icon} ${sizeLabel} file: ${formatNumber(issue.value)} lines (${issue.ratio.toFixed(0)}x limit)`));
+            const color = getSeverityColorLevel(issue.ratio);
+            colorFunc = getChalkColor(color);
+            icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
+            console.log(`    ${icon} ${colorFunc(`Very Large File: ${formatNumber(issue.value)} lines (${issue.ratio.toFixed(0)}x above limit)`)}`);
         } else if (issue.type === 'duplication') {
-          const dupLabel = issue.value > 40 ? 'Very high' :
-                          issue.value > 20 ? 'High' :
-                          'Medium';
-          const duplicationColor = getChalkColor(getDuplicationColorLevel(issue.value));
-          console.log(duplicationColor(`${icon} ${dupLabel} duplication: ${issue.value}%`));
+            const color = getDuplicationColorLevel(issue.value);
+            colorFunc = getChalkColor(color);
+            icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
+            console.log(`    ${icon} ${colorFunc(`High Duplication: ${issue.value.toFixed(1)}% detected`)}`);
         }
       });
-      
-      console.log(); // Empty line between files
     });
   }
-  
-  // Quick wins to improve score
+
+  // --- Plans d'action ---
   if (score < 90 && topFiles.length > 0) {
-    console.log(chalk.bold('💡 Quick wins to improve score:\n'));
+    printSectionHeader('💡 Quick Wins to Improve Score');
     
-    // Calculate potential improvements
     const improvements: string[] = [];
-    
-    // Check for extreme complexity files
-    const extremeComplexityFiles = result.files.filter(f => f.complexityRatio && f.complexityRatio > 50);
+    const extremeComplexityFiles = result.files.filter(f => f.complexityRatio && f.complexityRatio >= 50);
+    const veryLargeFiles = result.files.filter(f => f.sizeRatio && f.sizeRatio >= 10);
+    const highDuplicationFiles = result.files.filter(f => f.duplication && f.duplication >= 25);
+
     if (extremeComplexityFiles.length > 0) {
-      const potentialGain = Math.min(8, Math.round(extremeComplexityFiles.length * 2));
-      improvements.push(`Split top ${Math.min(3, extremeComplexityFiles.length)} complex files into modules (potential +${potentialGain} points)`);
+      const gain = Math.min(10, Math.round(extremeComplexityFiles.length * 2.5));
+      improvements.push(`Refactor the ${Math.min(3, extremeComplexityFiles.length)} most complex file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
     }
-    
-    // Check for very large files
-    const veryLargeFiles = result.files.filter(f => f.sizeRatio && f.sizeRatio > 10);
     if (veryLargeFiles.length > 0) {
-      const potentialGain = Math.min(5, Math.round(veryLargeFiles.length * 1.5));
-      improvements.push(`Break down ${Math.min(5, veryLargeFiles.length)} large files (potential +${potentialGain} points)`);
+      const gain = Math.min(8, Math.round(veryLargeFiles.length * 1.5));
+      improvements.push(`Split the ${Math.min(3, veryLargeFiles.length)} largest file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
     }
-    
-    // Check for high duplication
-    const highDuplicationFiles = result.files.filter(f => f.duplication && f.duplication > 30);
     if (highDuplicationFiles.length > 0) {
-      const potentialGain = Math.min(4, Math.round(highDuplicationFiles.length));
-      improvements.push(`Address duplication in ${highDuplicationFiles.length} files (potential +${potentialGain} points)`);
+      const gain = Math.min(6, highDuplicationFiles.length);
+      improvements.push(`Abstract repeated code in ${highDuplicationFiles.length} file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
     }
-    
-    // Show top 3 improvements
+
     improvements.slice(0, 3).forEach(improvement => {
-      console.log(chalk.gray(`  • ${improvement}`));
+      console.log(`  ${chalk.cyan('›')} ${chalk.gray(improvement)}`);
     });
-    
-    console.log();
   }
-  
-  // Footer
-  console.log(chalk.gray('─'.repeat(50)));
-  console.log(`✅ ${chalk.bold('Analysis complete!')} Run regularly to track progress.\n`);
+
+  // --- Pied de page ---
+  console.log(chalk.gray('\n\n' + '─'.repeat(58)));
+  console.log(`  ✅ ${chalk.bold('Analysis complete!')} Run regularly to maintain code quality.`);
+  console.log(chalk.dim(`     Report generated on ${new Date().toLocaleString()}\n`));
 }
