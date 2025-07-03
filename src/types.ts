@@ -1,3 +1,4 @@
+// File: src/types.ts
 // Types for InsightCode CLI
 
 export interface FileMetrics {

@@ -1,3 +1,5 @@
+// File: src/scoring.ts
+
 /**
  * Shared scoring calculations for consistency between analyzer and reporter
  */

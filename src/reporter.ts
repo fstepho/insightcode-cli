@@ -1,3 +1,5 @@
+// File: src/reporter.ts
+
 import chalk from 'chalk';
 import * as process from 'process';
 import { AnalysisResult } from './types';

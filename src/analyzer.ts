@@ -1,3 +1,4 @@
+// File: src/analyzer.ts
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';

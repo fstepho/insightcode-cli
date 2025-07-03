@@ -1,4 +1,4 @@
-// src/fileScoring.ts
+// File: src/fileScoring.ts
 
 import { FileMetrics, Issue } from './types';
 import { DEFAULT_THRESHOLDS } from './parser';

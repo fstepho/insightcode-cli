@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+// File: src/cli.ts
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { CliOptions } from './types';
