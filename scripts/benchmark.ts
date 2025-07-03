@@ -360,6 +360,18 @@ function analyzeProject(project: Project): BenchmarkResult {
     const analysisOutput = runCommand(command, process.cwd());
     const analysis: AnalysisResult = JSON.parse(analysisOutput);
 
+    // Remove temp-analysis prefix from file paths
+    if (analysis.files) {
+      analysis.files.forEach(file => {
+        file.path = file.path.replace(/^temp-analysis\//, '');
+      });
+    }
+    if (analysis.topFiles) {
+      analysis.topFiles.forEach(file => {
+        file.path = file.path.replace(/^temp-analysis\//, '');
+      });
+    }
+
     const duration = Date.now() - startTime;
     console.log(`  ✅ Completed in ${(duration / 1000).toFixed(1)}s`);
 

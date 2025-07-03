@@ -5,13 +5,15 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['tests/**/*.test.ts'],
+    exclude: ['temp-analysis/**/*.test.*'],
     coverage: {
       reporter: ['text', 'html'],
       exclude: [
         'node_modules/',
         'tests/',
         'dist/',
-        '*.config.ts'
+        '*.config.ts',
+        'temp-analysis/',
       ]
     }
   }

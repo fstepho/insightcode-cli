@@ -1,7 +1,16 @@
 import chalk from 'chalk';
 import * as process from 'process';
 import { AnalysisResult } from './types';
-import { calculateFileScores } from './fileScoring';
+import { getTopCriticalFiles } from './fileScoring';
+import { 
+  getComplexityLabel, 
+  getDuplicationLabel, 
+  getMaintainabilityLabel,
+  getComplexityColorLevel,
+  getDuplicationColorLevel,
+  getMaintainabilityColorLevel,
+  getSeverityColorLevel
+} from './scoring';
 
 function getSeverityLabel(ratio?: number): string {
   if (!ratio) return '';
@@ -10,6 +19,18 @@ function getSeverityLabel(ratio?: number): string {
   if (ratio >= 10) return 'High';
   if (ratio >= 2.5) return 'Medium';
   return 'Low';
+}
+
+/**
+ * Convert color level to chalk function
+ */
+function getChalkColor(colorLevel: 'green' | 'yellow' | 'red' | 'redBold') {
+  switch (colorLevel) {
+    case 'green': return chalk.green;
+    case 'yellow': return chalk.yellow;
+    case 'red': return chalk.red;
+    case 'redBold': return chalk.red.bold;
+  }
 }
 
 /**
@@ -51,42 +72,33 @@ export function reportToTerminal(result: AnalysisResult): void {
   console.log(`  Files analyzed: ${chalk.cyan(summary.totalFiles)}`);
   console.log(`  Total lines: ${chalk.cyan(formatNumber(summary.totalLines))}`);
   
-  const complexityColor = summary.avgComplexity <= 10 ? chalk.green :
-                         summary.avgComplexity <= 20 ? chalk.yellow :
-                         chalk.red;
-  const complexityLabel = summary.avgComplexity <= 10 ? 'Low' :
-                         summary.avgComplexity <= 20 ? 'Medium' :
-                         summary.avgComplexity <= 50 ? 'High' :
-                         summary.avgComplexity <= 200 ? 'Very High' :
-                         'Extreme';
+  const complexityLabel = getComplexityLabel(summary.avgComplexity);
+  const complexityColor = getChalkColor(getComplexityColorLevel(summary.avgComplexity));
   console.log(`  Avg complexity: ${complexityColor(`${summary.avgComplexity} (${complexityLabel})`)}`);
   console.log(`  Avg duplication: ${chalk.cyan(summary.avgDuplication + '%')} ${chalk.gray('(project average)')}\n`);
   
-  // Metrics with correct scores
+  // Metrics with actual values (industry standard presentation)
   console.log(chalk.bold('Metrics:'));
   
-  // Use already calculated scores from analyzer
-  const complexityScore = Math.round(result.scores.complexity);
-  const duplicationScore = Math.round(result.scores.duplication);
+  // Complexity - show actual value with intensity bar
+  const complexityIntensity = Math.min(100, Math.max(0, summary.avgComplexity * 2)); // Scale for display
+  const complexityMetricLabel = getComplexityLabel(summary.avgComplexity);
+  const complexityMetricColor = getChalkColor(getComplexityColorLevel(summary.avgComplexity));
+  console.log(`  Complexity      ${progressBar(complexityIntensity)} ${complexityMetricColor(summary.avgComplexity + ' (' + complexityMetricLabel + ')')}`);
+  
+  // Duplication - show actual percentage with intensity bar
+  const duplicationIntensity = Math.min(100, summary.avgDuplication * 2); // Scale for display
+  const duplicationMetricLabel = getDuplicationLabel(summary.avgDuplication);
+  const duplicationMetricColor = getChalkColor(getDuplicationColorLevel(summary.avgDuplication));
+  console.log(`  Duplication     ${progressBar(duplicationIntensity)} ${duplicationMetricColor(summary.avgDuplication + '% (' + duplicationMetricLabel + ')')}`);
+  
+  // Maintainability - show quality score (this one is actually a quality metric)
   const maintainabilityScore = Math.round(result.scores.maintainability);
-  
-  // Complexity (40% weight)
-  const complexityScoreColor = complexityScore >= 80 ? chalk.green :
-                              complexityScore >= 60 ? chalk.yellow : chalk.red;
-  console.log(`  Complexity      ${progressBar(complexityScore)} ${complexityScoreColor(complexityScore + '%')}`);
-  
-  // Duplication (30% weight)
-  const duplicationColor = duplicationScore >= 80 ? chalk.green :
-                          duplicationScore >= 60 ? chalk.yellow : chalk.red;
-  console.log(`  Duplication     ${progressBar(duplicationScore)} ${duplicationColor(duplicationScore + '%')}`);
-  
-  // File Size & Structure (30% weight)
-  const maintainabilityColor = maintainabilityScore >= 80 ? chalk.green :
-                              maintainabilityScore >= 60 ? chalk.yellow : chalk.red;
-  console.log(`  Maintainability ${progressBar(maintainabilityScore)} ${maintainabilityColor(maintainabilityScore + '%')}\n`);
+  const maintainabilityMetricLabel = getMaintainabilityLabel(maintainabilityScore);
+  const maintainabilityMetricColor = getChalkColor(getMaintainabilityColorLevel(maintainabilityScore));
+  console.log(`  Maintainability ${progressBar(maintainabilityScore)} ${maintainabilityMetricColor(maintainabilityScore + '/100 (' + maintainabilityMetricLabel + ')')}\n`);
   
   // Top Critical Files
-  const fileScores = calculateFileScores(result.files);
   const topFiles = result.topFiles;
   
   if (topFiles.length > 0) {
@@ -101,23 +113,24 @@ export function reportToTerminal(result: AnalysisResult): void {
       // Display each issue with proper formatting
       file.issues.forEach(issue => {
         const icon = issue.severity === 'high' ? '   •' : '   •';
-        const color = issue.severity === 'high' ? chalk.red :
-                     issue.severity === 'medium' ? chalk.yellow : chalk.gray;
         
         if (issue.type === 'complexity' && issue.ratio) {
           const severityLabel = getSeverityLabel(issue.ratio);
-          console.log(color(`${icon} ${severityLabel} complexity: ${formatNumber(issue.value)} (${issue.ratio.toFixed(0)}x limit)`));
+          const severityColor = getChalkColor(getSeverityColorLevel(issue.ratio));
+          console.log(severityColor(`${icon} ${severityLabel} complexity: ${formatNumber(issue.value)} (${issue.ratio.toFixed(0)}x limit)`));
         } else if (issue.type === 'size' && issue.ratio) {
           const sizeLabel = issue.value > 5000 ? 'Massive' :
                            issue.value > 1000 ? 'Very large' :
                            issue.value > 300 ? 'Large' :
                            'Getting large';
-          console.log(color(`${icon} ${sizeLabel} file: ${formatNumber(issue.value)} lines (${issue.ratio.toFixed(0)}x limit)`));
+          const severityColor = getChalkColor(getSeverityColorLevel(issue.ratio));
+          console.log(severityColor(`${icon} ${sizeLabel} file: ${formatNumber(issue.value)} lines (${issue.ratio.toFixed(0)}x limit)`));
         } else if (issue.type === 'duplication') {
           const dupLabel = issue.value > 40 ? 'Very high' :
                           issue.value > 20 ? 'High' :
                           'Medium';
-          console.log(color(`${icon} ${dupLabel} duplication: ${issue.value}%`));
+          const duplicationColor = getChalkColor(getDuplicationColorLevel(issue.value));
+          console.log(duplicationColor(`${icon} ${dupLabel} duplication: ${issue.value}%`));
         }
       });
       
@@ -133,21 +146,21 @@ export function reportToTerminal(result: AnalysisResult): void {
     const improvements: string[] = [];
     
     // Check for extreme complexity files
-    const extremeComplexityFiles = fileScores.filter(f => f.complexityRatio && f.complexityRatio > 50);
+    const extremeComplexityFiles = result.files.filter(f => f.complexityRatio && f.complexityRatio > 50);
     if (extremeComplexityFiles.length > 0) {
       const potentialGain = Math.min(8, Math.round(extremeComplexityFiles.length * 2));
       improvements.push(`Split top ${Math.min(3, extremeComplexityFiles.length)} complex files into modules (potential +${potentialGain} points)`);
     }
     
     // Check for very large files
-    const veryLargeFiles = fileScores.filter(f => f.sizeRatio && f.sizeRatio > 10);
+    const veryLargeFiles = result.files.filter(f => f.sizeRatio && f.sizeRatio > 10);
     if (veryLargeFiles.length > 0) {
       const potentialGain = Math.min(5, Math.round(veryLargeFiles.length * 1.5));
       improvements.push(`Break down ${Math.min(5, veryLargeFiles.length)} large files (potential +${potentialGain} points)`);
     }
     
     // Check for high duplication
-    const highDuplicationFiles = fileScores.filter(f => f.duplication && f.duplication > 30);
+    const highDuplicationFiles = result.files.filter(f => f.duplication && f.duplication > 30);
     if (highDuplicationFiles.length > 0) {
       const potentialGain = Math.min(4, Math.round(highDuplicationFiles.length));
       improvements.push(`Address duplication in ${highDuplicationFiles.length} files (potential +${potentialGain} points)`);

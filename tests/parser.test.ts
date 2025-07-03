@@ -58,6 +58,20 @@ describe('Parser', () => {
       expect(files).toHaveLength(1);
       expect(files[0].endsWith('app.ts')).toBe(true);
     });
+    
+    it('should exclude utility files when excludeUtility is true', async () => {
+      fs.writeFileSync(path.join(tempDir, 'app.ts'), 'const app = 1;');
+      fs.writeFileSync(path.join(tempDir, 'app.test.ts'), 'test("", () => {});');
+      fs.mkdirSync(path.join(tempDir, 'scripts'));
+      fs.writeFileSync(path.join(tempDir, 'scripts', 'build.ts'), 'console.log("build");');
+      
+      const filesWithUtility = await findFiles(tempDir, [], false);
+      const filesWithoutUtility = await findFiles(tempDir, [], true);
+      
+      expect(filesWithUtility).toHaveLength(3);
+      expect(filesWithoutUtility).toHaveLength(1);
+      expect(filesWithoutUtility[0].endsWith('app.ts')).toBe(true);
+    });
   });
   
   describe('parseFile', () => {
@@ -180,6 +194,48 @@ function mediumComplex(x: number): number {
         severity: 'high',
         message: expect.stringContaining('Large file')
       });
+    });
+    
+    it('should count functions correctly', () => {
+      const testFile = path.join(tempDir, 'functions.ts');
+      const code = `
+function regularFunction() {}
+const arrowFunction = () => {};
+class TestClass {
+  method() {}
+  get accessor() { return 1; }
+  set accessor(val: number) {}
+  constructor() {}
+}
+const anonymousFunction = function() {};
+`;
+      
+      fs.writeFileSync(testFile, code);
+      const metrics = parseFile(testFile);
+      
+      expect(metrics.functionCount).toBe(7);
+    });
+    
+    it('should handle logical operators in complexity calculation', () => {
+      const testFile = path.join(tempDir, 'logical-ops.ts');
+      const code = `
+function testLogical(a: boolean, b: boolean, c: boolean): boolean {
+  if (a && b) {          // +1 for if, +1 for &&
+    return true;
+  }
+  
+  if (a || b || c) {     // +1 for if, +1 for ||, +1 for ||
+    return false;
+  }
+  
+  return a ? b : c;      // +1 for ternary
+}`;
+      
+      fs.writeFileSync(testFile, code);
+      const metrics = parseFile(testFile);
+      
+      // Base 1 + if(2) + if(3) + ternary(1) = 7
+      expect(metrics.complexity).toBe(7);
     });
   });
   

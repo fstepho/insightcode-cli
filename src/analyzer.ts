@@ -2,7 +2,7 @@ import * as crypto from 'crypto';
 import { FileMetrics, AnalysisResult, ThresholdConfig } from './types';
 import { DEFAULT_THRESHOLDS } from './parser';
 import { getGrade, calculateComplexityScore, calculateDuplicationScore, calculateMaintainabilityScore } from './scoring';
-import { calculateFileScores } from './fileScoring';
+import { calculateFileScores, getTopCriticalFiles } from './fileScoring';
 
 /**
  * Analyze code metrics and calculate scores
@@ -31,7 +31,7 @@ export function analyze(files: FileMetrics[], thresholds: ThresholdConfig = DEFA
 
   // Calculate scores for all files first (source of truth)
   const filesWithScores = calculateFileScores(filesWithDuplication);
-  const topFiles = filesWithScores.slice(0, 5); // Top 5 critical files
+  const topFiles = getTopCriticalFiles(filesWithDuplication, 5); // Top 5 critical files
   
   // Calculate project-level scores as weighted average of file scores (rules of art)
   const totalLoc = filesWithScores.reduce((sum, f) => sum + f.loc, 0);

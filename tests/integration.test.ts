@@ -4,6 +4,7 @@ import { analyze } from '../src/analyzer';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+import { execSync } from 'child_process';
 
 describe('Integration Tests', () => {
   let tempDir: string;
@@ -206,5 +207,141 @@ export function process(items: any[]): any[] {
     expect(results.summary.totalLines).toBeGreaterThanOrEqual(1);
     expect(results.score).toBeGreaterThan(0);
     expect(results.grade).toBeTruthy();
+  });
+  
+  it('should exclude utility files when requested', async () => {
+    // Production file
+    fs.writeFileSync(path.join(tempDir, 'app.ts'), `
+export function main() {
+  console.log('Hello World');
+}`);
+    
+    // Test file
+    fs.writeFileSync(path.join(tempDir, 'app.test.ts'), `
+import { main } from './app';
+describe('app', () => {
+  it('should work', () => {
+    expect(main).toBeDefined();
+  });
+});`);
+    
+    // Script file
+    fs.mkdirSync(path.join(tempDir, 'scripts'));
+    fs.writeFileSync(path.join(tempDir, 'scripts', 'build.ts'), `
+console.log('Building...');
+process.exit(0);`);
+    
+    const allFiles = await parseDirectory(tempDir, [], false);
+    const productionFiles = await parseDirectory(tempDir, [], true);
+    
+    const allResults = analyze(allFiles);
+    const productionResults = analyze(productionFiles);
+    
+    expect(allResults.summary.totalFiles).toBe(3);
+    expect(productionResults.summary.totalFiles).toBe(1);
+    expect(productionResults.files[0].path).toContain('app.ts');
+  });
+  
+  it('should handle different file types with appropriate thresholds', async () => {
+    // Production file with medium complexity
+    fs.writeFileSync(path.join(tempDir, 'service.ts'), `
+export function processOrder(order: any) {
+  if (order.status === 'pending') {
+    if (order.amount > 1000) {
+      return { ...order, priority: 'high' };
+    } else if (order.amount > 500) {
+      return { ...order, priority: 'medium' };
+    } else {
+      return { ...order, priority: 'low' };
+    }
+  }
+  return order;
+}`);
+    
+    // Test file with same complexity (should be more tolerant)
+    fs.writeFileSync(path.join(tempDir, 'service.test.ts'), `
+import { processOrder } from './service';
+describe('processOrder', () => {
+  it('should handle pending orders', () => {
+    const order = { status: 'pending', amount: 1500 };
+    if (order.status === 'pending') {
+      if (order.amount > 1000) {
+        expect(processOrder(order).priority).toBe('high');
+      } else if (order.amount > 500) {
+        expect(processOrder(order).priority).toBe('medium');
+      } else {
+        expect(processOrder(order).priority).toBe('low');
+      }
+    }
+  });
+});`);
+    
+    const files = await parseDirectory(tempDir);
+    const results = analyze(files);
+    
+    const prodFile = results.files.find(f => f.path.includes('service.ts'));
+    const testFile = results.files.find(f => f.path.includes('service.test.ts'));
+    
+    expect(prodFile?.fileType).toBe('production');
+    expect(testFile?.fileType).toBe('test');
+    
+    // Both files have similar complexity but test file should be more tolerant
+    expect(prodFile?.complexity).toBeGreaterThan(3);
+    expect(testFile?.complexity).toBeGreaterThan(3);
+  });
+  
+  it('should handle parsing errors gracefully', async () => {
+    // Valid file
+    fs.writeFileSync(path.join(tempDir, 'valid.ts'), 'export const x = 1;');
+    
+    // Invalid syntax file
+    fs.writeFileSync(path.join(tempDir, 'invalid.ts'), 'const x = { invalid syntax');
+    
+    // File with encoding issues (simulate by creating binary content)
+    fs.writeFileSync(path.join(tempDir, 'binary.ts'), Buffer.from([0x00, 0x01, 0x02]));
+    
+    const files = await parseDirectory(tempDir);
+    const results = analyze(files);
+    
+    // Should still process valid files despite errors
+    expect(results.summary.totalFiles).toBeGreaterThanOrEqual(1);
+    expect(results.files.some(f => f.path.includes('valid.ts'))).toBe(true);
+    expect(results.score).toBeGreaterThan(0);
+  });
+  
+  it('should output valid JSON when --json flag is used', async () => {
+    // Create a simple test file
+    fs.writeFileSync(path.join(tempDir, 'test.ts'), `
+export function add(a: number, b: number): number {
+  return a + b;
+}`);
+    
+    // Execute CLI with --json flag
+    const cliPath = path.join(process.cwd(), 'dist', 'cli.js');
+    const command = `node "${cliPath}" analyze "${tempDir}" --json`;
+    
+    let output: string;
+    try {
+      output = execSync(command, { encoding: 'utf8' });
+    } catch (error) {
+      // If dist doesn't exist, build first
+      execSync('npm run build', { cwd: process.cwd() });
+      output = execSync(command, { encoding: 'utf8' });
+    }
+    
+    // Parse JSON output
+    const jsonResult = JSON.parse(output);
+    
+    // Verify JSON structure
+    expect(jsonResult).toHaveProperty('summary');
+    expect(jsonResult).toHaveProperty('files');
+    expect(jsonResult).toHaveProperty('score');
+    expect(jsonResult).toHaveProperty('grade');
+    expect(jsonResult.summary).toHaveProperty('totalFiles', 1);
+    expect(jsonResult.files).toHaveLength(1);
+    expect(jsonResult.files[0]).toHaveProperty('path');
+    expect(jsonResult.files[0]).toHaveProperty('complexity');
+    expect(jsonResult.files[0]).toHaveProperty('duplication');
+    expect(jsonResult.files[0]).toHaveProperty('loc');
   });
 });

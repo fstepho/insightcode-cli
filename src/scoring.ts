@@ -3,6 +3,37 @@
  */
 
 /**
+ * Get human-readable label for complexity values
+ */
+export function getComplexityLabel(complexity: number): string {
+  if (complexity <= 10) return 'Low';
+  if (complexity <= 20) return 'Medium';
+  if (complexity <= 50) return 'High';
+  if (complexity <= 200) return 'Very High';
+  return 'Extreme';
+}
+
+/**
+ * Get human-readable label for duplication values
+ */
+export function getDuplicationLabel(duplication: number): string {
+  if (duplication <= 3) return 'Low';
+  if (duplication <= 8) return 'Medium';
+  if (duplication <= 15) return 'High';
+  return 'Very High';
+}
+
+/**
+ * Get human-readable label for maintainability scores
+ */
+export function getMaintainabilityLabel(score: number): string {
+  if (score >= 80) return 'Good';
+  if (score >= 60) return 'Acceptable';
+  if (score >= 40) return 'Poor';
+  return 'Very Poor';
+}
+
+/**
  * Calculate complexity score with graduated penalties
  */
 export function calculateComplexityScore(complexity: number): number {
@@ -100,4 +131,46 @@ export function getGrade(score: number): 'A' | 'B' | 'C' | 'D' | 'F' {
   if (score >= 70) return 'C';
   if (score >= 60) return 'D';
   return 'F';
+}
+
+/**
+ * Get color level for complexity values (for consistent coloring)
+ * Aligned with getSeverityLabel ratios in reporter
+ */
+export function getComplexityColorLevel(complexity: number): 'green' | 'yellow' | 'red' | 'redBold' {
+  if (complexity <= 10) return 'green';   // Low = Green
+  if (complexity <= 20) return 'yellow';  // Medium = Yellow
+  if (complexity <= 50) return 'red';     // High = Red
+  return 'redBold';                       // Very High/Extreme = Red Bold
+}
+
+/**
+ * Get color level for duplication values (for consistent coloring)
+ */
+export function getDuplicationColorLevel(duplication: number): 'green' | 'yellow' | 'red' | 'redBold' {
+  if (duplication <= 3) return 'green';
+  if (duplication <= 8) return 'yellow';
+  if (duplication <= 15) return 'red';
+  return 'redBold';
+}
+
+/**
+ * Get color level for maintainability scores (for consistent coloring)
+ */
+export function getMaintainabilityColorLevel(score: number): 'green' | 'yellow' | 'red' | 'redBold' {
+  if (score >= 80) return 'green';
+  if (score >= 60) return 'yellow';
+  if (score >= 40) return 'red';
+  return 'redBold';
+}
+
+/**
+ * Get color level for severity ratios (for issue display)
+ */
+export function getSeverityColorLevel(ratio: number): 'green' | 'yellow' | 'red' | 'redBold' {
+  if (ratio >= 100) return 'redBold';  // Extreme
+  if (ratio >= 50) return 'redBold';   // Very High  
+  if (ratio >= 10) return 'red';       // High
+  if (ratio >= 2.5) return 'yellow';   // Medium
+  return 'green';                      // Low
 }
