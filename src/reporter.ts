@@ -83,24 +83,19 @@ export function reportToTerminal(result: AnalysisResult): void {
   // Summary
   console.log(chalk.bold('Summary:'));
   console.log(`  Files analyzed: ${chalk.cyan(summary.totalFiles)}`);
-  console.log(`  Total lines: ${chalk.cyan(formatNumber(summary.totalLines))}`);
-  
-  const complexityLabel = getComplexityLabel(summary.avgComplexity);
-  const complexityColor = getChalkColor(getComplexityColorLevel(summary.avgComplexity));
-  console.log(`  Avg complexity: ${complexityColor(`${summary.avgComplexity} (${complexityLabel})`)}`);
-  console.log(`  Avg duplication: ${chalk.cyan(summary.avgDuplication + '%')} ${chalk.gray('(project average)')}\n`);
+  console.log(`  Total lines: ${chalk.cyan(formatNumber(summary.totalLines))}\n`);
   
   // Metrics with actual values (industry standard presentation)
   console.log(chalk.bold('Metrics:'));
   
-  // Complexity - show actual value with intensity bar
-  const complexityIntensity = Math.min(100, Math.max(0, summary.avgComplexity * 2)); // Scale for display
+  // Complexity - show actual value with intensity bar  
+  const complexityIntensity = Math.min(100, Math.max(0, (summary.avgComplexity / config.complexity.veryPoor) * 100)); // Scale to veryPoor threshold
   const complexityMetricLabel = getComplexityLabel(summary.avgComplexity);
   const complexityMetricColor = getChalkColor(getComplexityColorLevel(summary.avgComplexity));
   console.log(`  Complexity      ${progressBar(complexityIntensity)} ${complexityMetricColor(summary.avgComplexity + ' (' + complexityMetricLabel + ')')}`);
   
   // Duplication - show actual percentage with intensity bar
-  const duplicationIntensity = Math.min(100, summary.avgDuplication * 2); // Scale for display
+  const duplicationIntensity = Math.min(100, summary.avgDuplication); // Show actual percentage
   const duplicationMetricLabel = getDuplicationLabel(summary.avgDuplication);
   const duplicationMetricColor = getChalkColor(getDuplicationColorLevel(summary.avgDuplication));
   console.log(`  Duplication     ${progressBar(duplicationIntensity)} ${duplicationMetricColor(summary.avgDuplication + '% (' + duplicationMetricLabel + ')')}`);
