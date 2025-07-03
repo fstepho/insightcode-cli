@@ -1,8 +1,7 @@
 import chalk from 'chalk';
 import * as process from 'process';
 import { AnalysisResult } from './types';
-import { calculateComplexityScore, calculateDuplicationScore } from './scoring';
-import { calculateFileScores } from './topIssues';
+import { calculateFileScores } from './fileScoring';
 
 function getSeverityLabel(ratio?: number): string {
   if (!ratio) return '';
@@ -66,22 +65,22 @@ export function reportToTerminal(result: AnalysisResult): void {
   // Metrics with correct scores
   console.log(chalk.bold('Metrics:'));
   
-  // Use the scoring functions to ensure consistency
-  const complexityScore = Math.round(calculateComplexityScore(summary.avgComplexity));
-  const duplicationScore = Math.round(calculateDuplicationScore(summary.avgDuplication));
+  // Use already calculated scores from analyzer
+  const complexityScore = Math.round(result.scores.complexity);
+  const duplicationScore = Math.round(result.scores.duplication);
+  const maintainabilityScore = Math.round(result.scores.maintainability);
   
-  // Complexity
+  // Complexity (40% weight)
   const complexityScoreColor = complexityScore >= 80 ? chalk.green :
                               complexityScore >= 60 ? chalk.yellow : chalk.red;
   console.log(`  Complexity      ${progressBar(complexityScore)} ${complexityScoreColor(complexityScore + '%')}`);
   
-  // Duplication
+  // Duplication (30% weight)
   const duplicationColor = duplicationScore >= 80 ? chalk.green :
                           duplicationScore >= 60 ? chalk.yellow : chalk.red;
   console.log(`  Duplication     ${progressBar(duplicationScore)} ${duplicationColor(duplicationScore + '%')}`);
   
-  // Maintainability (composite)
-  const maintainabilityScore = Math.round((complexityScore + duplicationScore) / 2);
+  // File Size & Structure (30% weight)
   const maintainabilityColor = maintainabilityScore >= 80 ? chalk.green :
                               maintainabilityScore >= 60 ? chalk.yellow : chalk.red;
   console.log(`  Maintainability ${progressBar(maintainabilityScore)} ${maintainabilityColor(maintainabilityScore + '%')}\n`);
@@ -148,7 +147,7 @@ export function reportToTerminal(result: AnalysisResult): void {
     }
     
     // Check for high duplication
-    const highDuplicationFiles = fileScores.filter(f => f.duplicationValue && f.duplicationValue > 30);
+    const highDuplicationFiles = fileScores.filter(f => f.duplication && f.duplication > 30);
     if (highDuplicationFiles.length > 0) {
       const potentialGain = Math.min(4, Math.round(highDuplicationFiles.length));
       improvements.push(`Address duplication in ${highDuplicationFiles.length} files (potential +${potentialGain} points)`);

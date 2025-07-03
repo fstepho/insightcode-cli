@@ -13,7 +13,7 @@ InsightCode CLI is a TypeScript code quality analyzer that runs 100% locally. It
 npm run dev          # Start development server with tsx watch, do not use in claude code prompts because it requires a terminal to watch files 
 npm run start -- analyze  # Run CLI on current directory (equivalent to `insightcode analyze .`)
 # Testing  
-npm test            # Run Vitest test suite (27 tests)
+npm test            # Run Vitest test suite (31 tests)
 npm test -- --coverage  # Run tests with coverage report
 
 # Building
@@ -39,22 +39,26 @@ insightcode analyze  # Test the installed CLI
 - **100% local analysis** - never sends code to cloud
 - **Stateless architecture** - no database, no persistent cache
 
-### Codebase Structure (1,671 lines total)
+### Codebase Structure (2,802 lines total)
 ```
-src/                    # ~738 lines - all core logic
-├── cli.ts              # Commander.js CLI entry point  
-├── parser.ts           # TypeScript AST parsing with ts.createSourceFile()
-├── analyzer.ts         # Calculate 3 core metrics with file type classification
-├── reporter.ts         # Terminal output with chalk colors & ASCII bars
-└── types.ts            # TypeScript interfaces
+src/                    # ~1,035 lines - all core logic (7 files)
+├── cli.ts              # Commander.js CLI entry point (40 lines)
+├── parser.ts           # TypeScript AST parsing with ts.createSourceFile() (257 lines)
+├── analyzer.ts         # Calculate 3 core metrics with weighted scoring (154 lines)
+├── reporter.ts         # Terminal output with chalk colors & ASCII bars (112 lines)
+├── scoring.ts          # Centralized scoring functions (64 lines)
+├── fileScoring.ts      # File-level scoring logic (24 lines)
+└── types.ts            # TypeScript interfaces (72 lines)
 
-tests/                  # ~900 lines
+tests/                  # ~577 lines (3 files)
 ├── parser.test.ts      # Parser unit tests
 ├── analyzer.test.ts    # Analyzer unit tests  
 └── integration.test.ts # End-to-end CLI tests
 
 scripts/                # Validation & benchmarking
-├── benchmark.js        # Analyze popular projects with --exclude-utility support
+├── benchmark.js        # Legacy benchmark script
+├── benchmark.ts        # Enhanced TypeScript benchmark with stable version cloning
+├── discover-rules.js   # Rule discovery utility
 └── validate.js         # Prove 100% calculation accuracy
 ```
 
@@ -80,13 +84,16 @@ Pragmatic content-based detection using 5-line sliding window with normalization
 
 **Philosophy**: Content over structure - reports 6% duplication on benchmark files vs SonarQube's 70%, focusing on actionable refactoring opportunities.
 
-### 3. Maintainability Score (30% weight)
-Composite score (0-100) with A-F grading based on complexity, duplication, and file size.
+### 3. Maintainability (Size & Structure) (30% weight)
+Evaluates file maintainability based on lines of code, function count, and structural complexity. Considers file type context (production vs test vs utility).
+
+## Overall Score Calculation
+Composite score (0-100) with A-F grading calculated from the weighted combination of all three metrics above using academic best practices for metric aggregation.
 
 ## Test Framework
 
 Uses **Vitest** with Node.js environment:
-- 27 tests total, 100% passing
+- 31 tests total, 100% passing
 - Test files in `tests/` directory  
 - Coverage reporting available
 - Integration tests validate full CLI workflow
@@ -115,11 +122,12 @@ Uses **Vitest** with Node.js environment:
 - `src/reporter.ts:103` - Terminal output formatting
 
 ### Important Scripts
-- `scripts/benchmark.js` - Enhanced validation against 19 popular projects with v0.3.0+ scoring
+- `scripts/benchmark.ts` - Enhanced TypeScript benchmark with stable version cloning (19 projects)
+- `scripts/benchmark.js` - Legacy benchmark script (maintained for compatibility)
 - `scripts/validate.js` - Proves 100% calculation accuracy
 
 ### Documentation
-- `docs/AI_CONTEXT.md` - Complete project context and development history
+- `.ai/AI_CONTEXT.md` - Complete project context and development history
 - `docs/DUPLICATION_DETECTION_PHILOSOPHY.md` - Pragmatic vs structural approach (vs SonarQube)
 - `docs/SCORING_THRESHOLDS_JUSTIFICATION.md` - Academic justification for all thresholds
 - `README.md` - User documentation with methodology
@@ -128,7 +136,7 @@ Uses **Vitest** with Node.js environment:
 ## Current Status
 
 - **Version**: 0.3.0 published on NPM
-- **Self-analysis score**: C (80/100) - stable after complexity display fix
+- **Self-analysis score**: C (73/100) - stable after scoring system improvements
 - **Performance**: 62,761 lines/second analysis speed (latest full benchmark)
 - **Production analysis**: 18,490 lines/second with `--exclude-utility` flag
 - **Project grade among peers**: 16% achieve A grade, 42% achieve B grade among popular projects
@@ -162,19 +170,19 @@ insightcode analyze --exclude "**/*.spec.ts" --exclude "**/vendor/**"
 ## 📚 Extended Documentation
 
 For detailed information, refer to:
-- `docs/AI_CONTEXT.md` - Full project history, metrics, session logs
+- `.ai/AI_CONTEXT.md` - Full project history, metrics, session logs
 - `docs/DUPLICATION_DETECTION_PHILOSOPHY.md` - Why our approach differs from SonarQube
 - `docs/SCORING_THRESHOLDS_JUSTIFICATION.md` - Academic research behind thresholds
-- `docs/CURRENT_TASK.md` - Active development task and checklist
-- `docs/DECISIONS.md` - Architectural decisions with rationale
-- `docs/DOC_MAINTENANCE_CHECKLIST.md` - Documentation update process
-- `docs/AI_PROMPTS.md` - Reusable AI prompts
+- `.ai/CURRENT_TASK.md` - Active development task and checklist
+- `.ai/DECISIONS.md` - Architectural decisions with rationale
+- `.ai/DOC_MAINTENANCE_CHECKLIST.md` - Documentation update process
+- `.ai/AI_PROMPTS.md` - Reusable AI prompts
 
 ## 🎯 Quick Task Reference
 
 Before starting work:
-1. Check `docs/CURRENT_TASK.md` for active tasks
-2. Review recent decisions in `docs/DECISIONS.md`
-3. Update progress in `docs/AI_CONTEXT.md` after sessions
+1. Check `.ai/CURRENT_TASK.md` for active tasks
+2. Review recent decisions in `.ai/DECISIONS.md`
+3. Update progress in `.ai/AI_CONTEXT.md` after sessions
 
 The project prioritizes simplicity, accuracy, and user experience over complex features.

@@ -6,7 +6,6 @@ import { CliOptions } from './types';
 import { parseDirectory } from './parser';
 import { analyze } from './analyzer';
 import { reportToTerminal } from './reporter';
-import { calculateFileScores } from './topIssues';
 
 const program = new Command();
 

@@ -12,8 +12,8 @@
     "build": "tsc",
     "test": "vitest",
     "prepublishOnly": "npm run build",
-    "benchmark": "node scripts/benchmark.js",
-    "benchmark:production": "node scripts/benchmark.js --exclude-utility"
+    "benchmark": "tsx scripts/benchmark.ts",
+    "benchmark:production": "tsx scripts/benchmark.ts --exclude-utility"
   },
   "keywords": [
     "typescript",

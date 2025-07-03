@@ -1,8 +1,8 @@
 import * as crypto from 'crypto';
 import { FileMetrics, AnalysisResult, ThresholdConfig } from './types';
 import { DEFAULT_THRESHOLDS } from './parser';
-import { calculateScore, getGrade } from './scoring';
-import { calculateFileScores } from './topIssues';
+import { getGrade, calculateComplexityScore, calculateDuplicationScore, calculateMaintainabilityScore } from './scoring';
+import { calculateFileScores } from './fileScoring';
 
 /**
  * Analyze code metrics and calculate scores
@@ -29,15 +29,47 @@ export function analyze(files: FileMetrics[], thresholds: ThresholdConfig = DEFA
   // Calculate average lines of code (LOC)
   const avgLoc = totalFiles > 0 ? totalLines / totalFiles : 0;
 
-  // Calculate score (0-100)
-  const score = calculateScore(avgComplexity, avgDuplication, avgLoc, avgFunctions);
-  const finalScore = isNaN(score) ? 0 : Math.round(score);
-  const grade = getGrade(score);
-  const fileScores = calculateFileScores(files);
+  // Calculate scores for all files first (source of truth)
+  const filesWithScores = calculateFileScores(filesWithDuplication);
+  const topFiles = filesWithScores.slice(0, 5); // Top 5 critical files
+  
+  // Calculate project-level scores as weighted average of file scores (rules of art)
+  const totalLoc = filesWithScores.reduce((sum, f) => sum + f.loc, 0);
+  
+  let complexityScore = 100; // Default for empty projects
+  let duplicationScore = 100;
+  let maintainabilityScore = 100;
+  let finalScore = 100;
+  
+  if (filesWithScores.length > 0 && totalLoc > 0) {
+    let weightedComplexitySum = 0;
+    let weightedDuplicationSum = 0; 
+    let weightedMaintainabilitySum = 0;
+    let weightedTotalSum = 0;
+    
+    for (const file of filesWithScores) {
+      const weight = file.loc / totalLoc; // Weight by file size (industry standard)
+      const fileComplexityScore = calculateComplexityScore(file.complexity);
+      const fileDuplicationScore = calculateDuplicationScore(file.duplication);
+      const fileMaintainabilityScore = calculateMaintainabilityScore(file.loc, file.functionCount);
+      
+      weightedComplexitySum += fileComplexityScore * weight;
+      weightedDuplicationSum += fileDuplicationScore * weight;
+      weightedMaintainabilitySum += fileMaintainabilityScore * weight;
+      weightedTotalSum += file.totalScore * weight;
+    }
+    
+    // Round project-level scores
+    complexityScore = Math.round(weightedComplexitySum);
+    duplicationScore = Math.round(weightedDuplicationSum);
+    maintainabilityScore = Math.round(weightedMaintainabilitySum);
+    finalScore = Math.round(weightedTotalSum);
+  }
+  const grade = getGrade(finalScore);
 
   return {
-    files: filesWithDuplication,
-    topFiles: fileScores.slice(0, 5), // Top 5 critical files
+    files: filesWithScores, // All files now have scores
+    topFiles,
     summary: {
       totalFiles,
       totalLines,
@@ -46,7 +78,13 @@ export function analyze(files: FileMetrics[], thresholds: ThresholdConfig = DEFA
       avgFunctions: Math.round(avgFunctions * 10) / 10,
       avgLoc: Math.round(avgLoc),
     },
-    score: finalScore,
+    scores: {
+      complexity: complexityScore,
+      duplication: duplicationScore,
+      maintainability: maintainabilityScore,
+      overall: finalScore
+    },
+    score: finalScore, // Kept for backward compatibility
     grade
   };
 }

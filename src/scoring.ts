@@ -60,6 +60,19 @@ export function calculateMaintainabilityScore(
 }
 
 /**
+ * Calculate weighted score from individual component scores
+ * Single source of truth for 40/30/30 philosophy
+ */
+export function calculateWeightedScore(
+  complexityScore: number,
+  duplicationScore: number, 
+  maintainabilityScore: number
+): number {
+  // Weighted average (40% complexity, 30% duplication, 30% maintainability)
+  return complexityScore * 0.4 + duplicationScore * 0.3 + maintainabilityScore * 0.3;
+}
+
+/**
  * Calculate overall score based on metrics (0-100, higher is better)
  * Now with proper avgFunctions parameter
  */
@@ -74,8 +87,8 @@ export function calculateScore(
   const duplicationScore = calculateDuplicationScore(duplication);
   const maintainabilityScore = calculateMaintainabilityScore(avgLoc, avgFunctions);
   
-  // Weighted average (40% complexity, 30% duplication, 30% maintainability)
-  return complexityScore * 0.4 + duplicationScore * 0.3 + maintainabilityScore * 0.3;
+  // Use centralized weighting function
+  return calculateWeightedScore(complexityScore, duplicationScore, maintainabilityScore);
 }
 
 /**

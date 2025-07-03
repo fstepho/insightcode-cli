@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- File criticality scoring system with new `topIssues.ts` module
+- Academic best practices implementation for metric aggregation
+- Weighted average calculation for project-level scores using file size (LOC) as weighting factor
+- Mathematical consistency in scoring system following industry standards
+- Single source of truth for 40/30/30 philosophy in `scoring.ts`
+- File criticality scoring system with `fileScoring.ts` module (renamed from `topIssues.ts`)
 - Weighted scoring algorithm prioritizing complexity (heaviest), size (medium), and duplication (lightest)
 - JSON output now includes `topFiles` array with top 5 critical files
 - Enhanced reporter with criticality-based file ranking system
@@ -19,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Number formatting with thousand separators for better readability
 
 ### Changed
+- Project scores now calculated as weighted averages of file scores instead of scoring project averages
+- All scoring logic centralized in `scoring.ts` to eliminate duplication
+- File size (LOC) used as weighting factor for project-level aggregation (industry standard)
+- Renamed `topIssues.ts` to `fileScoring.ts` for better clarity
 - Top Issues now displays the 5 most critical files instead of first 5 issues found
 - Issues are grouped by file for better clarity
 - Reporter uses scoring functions from `scoring.ts` for consistency
@@ -27,6 +35,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Better separation of concerns with dedicated scoring module
 
 ### Fixed
+- Empty file list edge case now returns perfect score (100) instead of 0
+- Mathematical consistency in metric aggregation following academic research
+- Eliminated duplicate scoring implementations across multiple files
 - Critical files like `checker.ts` (Typescript project) with extreme complexity (16,260) now properly appear in Top Issues
 - Consistent complexity scoring between analyzer and reporter
 

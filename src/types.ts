@@ -8,6 +8,10 @@ export interface FileMetrics {
   loc: number; // Lines of code
   issues: Issue[];
   fileType?: 'production' | 'test' | 'example' | 'utility' | 'config';
+  // Scoring fields
+  totalScore: number;
+  complexityRatio: number;
+  sizeRatio: number;
 }
 
 export interface Issue {
@@ -21,7 +25,7 @@ export interface Issue {
 
 export interface AnalysisResult {
   files: FileMetrics[];
-  topFiles: FileScore[];
+  topFiles: FileMetrics[];
   summary: {
     totalFiles: number;
     totalLines: number;
@@ -30,7 +34,13 @@ export interface AnalysisResult {
     avgFunctions: number;
     avgLoc: number;
   };
-  score: number;
+  scores: {
+    complexity: number;      // Individual complexity score (0-100)
+    duplication: number;     // Individual duplication score (0-100)  
+    maintainability: number; // Individual maintainability score (0-100)
+    overall: number;         // Weighted total (0-100)
+  };
+  score: number; // Kept for backward compatibility
   grade: 'A' | 'B' | 'C' | 'D' | 'F';
 }
 
@@ -65,11 +75,6 @@ export interface ThresholdConfig {
   };
 }
 
-export interface FileScore {
-  path: string;
-  totalScore: number;
-  complexityRatio?: number;
-  sizeRatio?: number;
-  duplicationValue?: number;
-  issues: Array<Issue>;
+export interface IssueWithFile extends Issue {
+  file: string;
 }

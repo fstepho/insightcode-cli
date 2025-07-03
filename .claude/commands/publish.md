@@ -6,4 +6,4 @@ Execute NPM publication workflow for version $ARGUMENTS:
 5. Build the project
 6. Create git tag
 7. Publish to NPM (dry-run first)
-8. Update docs/AI_CONTEXT.md with new version
+8. Update .ai/AI_CONTEXT.md with new version

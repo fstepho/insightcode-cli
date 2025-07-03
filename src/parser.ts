@@ -287,7 +287,10 @@ export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAUL
     functionCount,
     loc,
     issues,
-    fileType
+    fileType,
+    totalScore: 0, // Placeholder, will be calculated later
+    complexityRatio: 0, // Placeholder, will be calculated later
+    sizeRatio: 0 // Placeholder, will be calculated later
   };
 }
 

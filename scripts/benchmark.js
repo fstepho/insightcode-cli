@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { type } from 'os';
+
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
@@ -11,22 +13,255 @@ const excludeUtility = args.includes('--exclude-utility');
 // Projects to analyze organized by size
 const PROJECTS = {
   small: [
-    { name: 'lodash', repo: 'https://github.com/lodash/lodash.git', stars: '59k' },
-    { name: 'chalk', repo: 'https://github.com/chalk/chalk.git', stars: '21k' },
-    { name: 'uuid', repo: 'https://github.com/uuidjs/uuid.git', stars: '14k' },
+    {
+      name: 'lodash',
+      repo: 'https://github.com/lodash/lodash.git',
+      description: 'JavaScript utility library',
+      type: 'utility library',
+      stars: '59k',
+      stableVersion: '4.17.21',
+      embematicFiles: {
+        coreFiles: [
+          'lodash.js',
+          'index.js'
+        ],
+        architecturalFiles: [
+          'fp.js',
+          'core.js'
+        ],
+        performanceCriticalFiles: [
+          'isEqual.js',
+          'cloneDeep.js',
+          'debounce.js'
+        ],
+        complexAlgorithmFiles: [
+          'get.js',
+          'set.js',
+          'merge.js'
+        ]
+      }
+    },
+    {
+      name: 'chalk',
+      repo: 'https://github.com/chalk/chalk.git',
+      description: 'Terminal string styling library',
+      type: 'utility library',
+      stars: '21k',
+      stableVersion: 'v5.3.0',
+      embematicFiles: {
+        coreFiles: [
+          'source/index.js',
+          'index.js'
+        ],
+        architecturalFiles: [
+          'source/templates.js'
+        ],
+        performanceCriticalFiles: [
+          'source/utilities.js'
+        ],
+        complexAlgorithmFiles: [
+          'source/vendor/ansi-styles/index.js'
+        ]
+      }
+    },
+    {
+      name: 'uuid',
+      repo: 'https://github.com/uuidjs/uuid.git',
+      description: 'UUID generation library',
+      type: 'utility library',
+      stars: '14k',
+      stableVersion: 'v9.0.1',
+      embematicFiles: {
+        coreFiles: [
+          'dist/index.js',
+          'src/index.js'
+        ],
+        architecturalFiles: [
+          'src/v1.js',
+          'src/v4.js'
+        ],
+        performanceCriticalFiles: [
+          'src/rng.js'
+        ],
+        complexAlgorithmFiles: [
+          'src/v3.js',
+          'src/v5.js'
+        ]
+      }
+    },
   ],
   medium: [
-    { name: 'express', repo: 'https://github.com/expressjs/express.git', stars: '65k' },
-    { name: 'vue', repo: 'https://github.com/vuejs/core.git', stars: '46k' },
-    { name: 'jest', repo: 'https://github.com/jestjs/jest.git', stars: '44k' },
+    {
+      name: 'express',
+      repo: 'https://github.com/expressjs/express.git',
+      description: 'Fast web framework for Node.js',
+      type: 'web framework',
+      stars: '65k',
+      stableVersion: '4.19.2',
+      embematicFiles: {
+        coreFiles: [
+          'lib/application.js',
+          'lib/express.js',
+          'lib/router/index.js'
+        ],
+        architecturalFiles: [
+          'lib/middleware/init.js',
+          'lib/view.js'
+        ],
+        performanceCriticalFiles: [
+          'lib/router/layer.js',
+          'lib/router/route.js'
+        ],
+        complexAlgorithmFiles: [
+          'lib/utils.js',
+          'lib/request.js',
+          'lib/response.js'
+        ]
+      }
+    },
+    {
+      name: 'vue',
+      repo: 'https://github.com/vuejs/core.git',
+      description: 'Progressive JavaScript framework',
+      type: 'frontend framework',
+      stars: '46k',
+      stableVersion: 'v3.4.21',
+      embematicFiles: {
+        coreFiles: [
+          'packages/runtime-core/src/component.ts',
+          'packages/runtime-core/src/renderer.ts',
+          'packages/reactivity/src/reactive.ts'
+        ],
+        architecturalFiles: [
+          'packages/compiler-core/src/compile.ts',
+          'packages/runtime-core/src/apiCreateApp.ts'
+        ],
+        performanceCriticalFiles: [
+          'packages/runtime-core/src/scheduler.ts',
+          'packages/reactivity/src/effect.ts'
+        ],
+        complexAlgorithmFiles: [
+          'packages/compiler-core/src/transform.ts',
+          'packages/runtime-core/src/componentRenderContext.ts'
+        ]
+      }
+    },
+    {
+      name: 'jest',
+      repo: 'https://github.com/jestjs/jest.git',
+      description: 'JavaScript testing framework',
+      type: 'testing framework',
+      stars: '44k',
+      stableVersion: 'v29.7.0',
+      embematicFiles: {
+        coreFiles: [
+          'packages/jest-core/src/index.ts',
+          'packages/jest-cli/src/index.ts'
+        ],
+        architecturalFiles: [
+          'packages/jest-core/src/config.ts',
+          'packages/jest-cli/src/cli.ts'
+        ],
+        performanceCriticalFiles: [
+          'packages/jest-core/src/test_runner.ts',
+          'packages/jest-cli/src/reporters.ts'
+        ],
+        complexAlgorithmFiles: [
+          'packages/jest-core/src/transform.ts',
+          'packages/jest-cli/src/utils.ts'
+        ]
+      }
+    }
   ],
   large: [
-    { name: 'react', repo: 'https://github.com/facebook/react.git', stars: '227k' },
-    { name: 'eslint', repo: 'https://github.com/eslint/eslint.git', stars: '25k' },
-    // xlarge !
-    { name: 'typescript', repo: 'https://github.com/microsoft/TypeScript.git', stars: '98k' },
+    {
+      name: 'react',
+      repo: 'https://github.com/facebook/react.git',
+      description: 'JavaScript library for building UIs',
+      type: 'UI framework',
+      stars: '227k',
+      stableVersion: 'v18.2.0',
+      embematicFiles: {
+        coreFiles: [
+          'packages/react/src/React.js',
+          'packages/react-dom/src/ReactDOM.js',
+          'packages/react-reconciler/src/ReactFiberReconciler.js'
+        ],
+        architecturalFiles: [
+          'packages/react-reconciler/src/ReactFiberWorkLoop.js',
+          'packages/react-reconciler/src/ReactFiberBeginWork.js',
+          'packages/react-reconciler/src/ReactFiberCompleteWork.js'
+        ],
+        performanceCriticalFiles: [
+          'packages/react-reconciler/src/ReactFiberCommitWork.js',
+          'packages/react-reconciler/src/ReactFiberHooks.js',
+          'packages/scheduler/src/Scheduler.js'
+        ],
+        complexAlgorithmFiles: [
+          'packages/react-reconciler/src/ReactChildFiber.js',
+          'packages/react-reconciler/src/ReactFiberLane.js'
+        ]
+      }
+    },
+    {
+      name: 'eslint',
+      repo: 'https://github.com/eslint/eslint.git',
+      description: 'JavaScript linter',
+      type: 'code analysis tool',
+      stars: '25k',
+      stableVersion: 'v8.57.0',
+      embematicFiles: {
+        coreFiles: [
+          'lib/linter/linter.js',
+          'lib/eslint/eslint.js',
+          'lib/cli-engine/cli-engine.js'
+        ],
+        architecturalFiles: [
+          'lib/config/config-array-factory.js',
+          'lib/rule-tester/rule-tester.js'
+        ],
+        performanceCriticalFiles: [
+          'lib/source-code/source-code.js',
+          'lib/linter/node-event-generator.js'
+        ],
+        complexAlgorithmFiles: [
+          'lib/linter/code-path-analysis/code-path-analyzer.js',
+          'lib/config/flat-config-array.js'
+        ]
+      }
+    },
+    {
+      name: 'typescript',
+      type: 'language compiler',
+      repo: 'https://github.com/microsoft/TypeScript.git',
+      description: 'TypeScript language compiler',
+      stars: '98k',
+      stableVersion: 'v5.4.5',
+      embematicFiles: {
+        coreFiles: [
+          'src/compiler/checker.ts',
+          'src/compiler/parser.ts',
+          'src/compiler/binder.ts'
+        ],
+        architecturalFiles: [
+          'src/compiler/program.ts',
+          'src/compiler/builder.ts',
+          'src/services/services.ts'
+        ],
+        performanceCriticalFiles: [
+          'src/compiler/transformers/ts.ts',
+          'src/compiler/emitter.ts',
+          'src/compiler/scanner.ts'
+        ],
+        complexAlgorithmFiles: [
+          'src/compiler/types.ts',
+          'src/compiler/utilities.ts'
+        ]
+      }
+    },
   ]
 };
+
 
 // Ensure we're in the right directory
 const scriptDir = __dirname;
@@ -53,7 +288,7 @@ function runCommand(command, cwd) {
   }
 }
 
-function analyzeProject(project, category) {
+function analyzeProject(project) {
   const startTime = Date.now();
   console.log(`\n📊 Analyzing ${project.name}...`);
   
@@ -63,9 +298,9 @@ function analyzeProject(project, category) {
       fs.rmSync(TEMP_DIR, { recursive: true, force: true });
     }
     
-    // Clone the repository (shallow clone for speed)
-    console.log(`  📥 Cloning repository...`);
-    runCommand(`git clone --depth 1 ${project.repo} "${TEMP_DIR}"`);
+    // Clone the repository at specific version tag (shallow clone for speed)
+    console.log(`  📥 Cloning repository (${project.stableVersion})...`);
+    runCommand(`git clone --depth 1 --branch ${project.stableVersion} ${project.repo} "${TEMP_DIR}"`);
     
     // Run InsightCode analysis
     console.log(`  🔍 Running analysis...`);
@@ -224,6 +459,9 @@ function generateMarkdownReport(results) {
       
       const analysis = result.analysis;
       markdown += `#### ${project.name} (⭐ ${project.stars})\n`;
+      markdown += `- **Category**: ${result.category}\n`;
+      markdown += `- **Repo**: [${project.repo}](${project.repo})\n`;
+      markdown += `- **Version**: ${project.stableVersion}\n`;
       markdown += `- **Score**: ${analysis.grade} (${analysis.score}/100)\n`;
       markdown += `- **Files**: ${analysis.totalFiles} files, ${analysis.totalLines.toLocaleString()} lines\n`;
       markdown += `- **Complexity**: ${analysis.avgComplexity} average\n`;
@@ -416,11 +654,9 @@ async function main() {
   const results = [];
   
   // Analyze all projects
-  for (const [category, projects] of Object.entries(PROJECTS)) {
-    console.log(`\n📁 Analyzing ${category.toUpperCase()} projects...`);
-    
+  for (const [projects] of Object.entries(PROJECTS)) {
     for (const project of projects) {
-      const result = analyzeProject(project, category);
+      const result = analyzeProject(project);
       results.push(result);
       
       // Save intermediate results

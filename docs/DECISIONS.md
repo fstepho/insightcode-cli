@@ -309,6 +309,34 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
+## 2025-07-03: Academic Best Practices for Metric Aggregation
+**Decision**: Refactor analyzer.ts to calculate project scores as weighted averages of file scores instead of applying scoring functions to project averages.
+**Reason**: Follow academic research and industry standards for proper metric aggregation. The previous approach calculated complexity/duplication averages first, then scored them, which doesn't properly weight the impact of individual files.
+**Impact**: Mathematically correct scoring system where larger files have appropriate influence on project scores. Uses file size (LOC) as weighting factor, which is the industry standard. Maintains backward compatibility while ensuring academic rigor.
+
+---
+
+## 2025-07-03: Single Source of Truth for Scoring Logic
+**Decision**: Centralize all 40/30/30 weighting logic in scoring.ts and eliminate duplicate implementations across analyzer.ts, reporter.ts, and fileScoring.ts.
+**Reason**: Multiple scoring implementations created maintenance burden and potential inconsistencies. Found duplicate logic in three different files.
+**Impact**: All scoring calculations now use identical logic from shared functions. Easier maintenance, guaranteed consistency, and cleaner architecture.
+
+---
+
+## 2025-07-03: Weighted Average Project Scoring with LOC Weighting
+**Decision**: Use file size (lines of code) as weighting factor when aggregating file scores to project scores.
+**Reason**: Industry standard approach - larger files should have more influence on overall project health. A 1000-line file with issues is more impactful than a 10-line file with the same issues.
+**Impact**: More accurate project-level scores that reflect real-world maintenance burden. Follows academic literature on software metric aggregation.
+
+---
+
+## 2025-07-03: Rename topIssues.ts to fileScoring.ts
+**Decision**: Rename the module from topIssues.ts to fileScoring.ts for clarity.
+**Reason**: The module does more than just identify top issues - it handles all file-level scoring logic using the same functions as project scoring.
+**Impact**: Better code organization and clearer module responsibility. Name reflects actual functionality.
+
+---
+
 ## Coming: [Template for future decisions]
 **Decision**:  
 **Reason**:  
