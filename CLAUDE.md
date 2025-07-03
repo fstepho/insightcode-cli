@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-InsightCode CLI is a TypeScript code quality analyzer that runs 100% locally. It's a published NPM package (`insightcode-cli` v0.3.0) designed for zero-config analysis of TypeScript/JavaScript codebases.
+InsightCode CLI is a TypeScript code quality analyzer that runs 100% locally. It's a published NPM package (`insightcode-cli` v0.4.0) designed for zero-config analysis of TypeScript/JavaScript codebases.
 
 ## Development Commands
 
@@ -41,22 +41,23 @@ insightcode analyze  # Test the installed CLI
 
 ### Codebase Structure (2,802 lines total)
 ```
-src/                    # ~1,035 lines - all core logic (7 files)
+src/                    # ~1,200 lines - all core logic (8 files)
 ├── cli.ts              # Commander.js CLI entry point (40 lines)
 ├── parser.ts           # TypeScript AST parsing with ts.createSourceFile() (257 lines)
-├── analyzer.ts         # Calculate 3 core metrics with weighted scoring (154 lines)
-├── reporter.ts         # Terminal output with chalk colors & ASCII bars (112 lines)
-├── scoring.ts          # Centralized scoring functions (64 lines)
-├── fileScoring.ts      # File-level scoring logic (24 lines)
-└── types.ts            # TypeScript interfaces (72 lines)
+├── analyzer.ts         # Calculate 3 core metrics with weighted scoring (190 lines)
+├── reporter.ts         # Terminal output with chalk colors & ASCII bars (140 lines)
+├── scoring.ts          # Centralized scoring functions (140 lines)
+├── fileScoring.ts      # File-level scoring logic with criticality (100 lines)
+├── config.ts           # Configuration management with customizable thresholds (126 lines)
+└── types.ts            # TypeScript interfaces (80 lines)
 
-tests/                  # ~577 lines (3 files)
+tests/                  # ~900 lines (4 files)
 ├── parser.test.ts      # Parser unit tests
-├── analyzer.test.ts    # Analyzer unit tests  
-└── integration.test.ts # End-to-end CLI tests
+├── analyzer.test.ts    # Analyzer unit tests (significantly expanded)
+├── integration.test.ts # End-to-end CLI tests
+└── config.test.ts      # Configuration system tests
 
 scripts/                # Validation & benchmarking
-├── benchmark.js        # Legacy benchmark script
 ├── benchmark.ts        # Enhanced TypeScript benchmark with stable version cloning
 ├── discover-rules.js   # Rule discovery utility
 └── validate.js         # Prove 100% calculation accuracy
@@ -93,10 +94,11 @@ Composite score (0-100) with A-F grading calculated from the weighted combinatio
 ## Test Framework
 
 Uses **Vitest** with Node.js environment:
-- 31 tests total, 100% passing
-- Test files in `tests/` directory  
-- Coverage reporting available
+- Comprehensive test suite with 100% passing rate
+- Test files in `tests/` directory with expanded coverage
+- Coverage reporting available via `npm test -- --coverage`
 - Integration tests validate full CLI workflow
+- Configuration system tests validate customizable thresholds
 
 ## Development Guidelines
 
@@ -123,7 +125,6 @@ Uses **Vitest** with Node.js environment:
 
 ### Important Scripts
 - `scripts/benchmark.ts` - Enhanced TypeScript benchmark with stable version cloning (19 projects)
-- `scripts/benchmark.js` - Legacy benchmark script (maintained for compatibility)
 - `scripts/validate.js` - Proves 100% calculation accuracy
 
 ### Documentation
@@ -132,16 +133,25 @@ Uses **Vitest** with Node.js environment:
 - `docs/SCORING_THRESHOLDS_JUSTIFICATION.md` - Academic justification for all thresholds
 - `README.md` - User documentation with methodology
 - `benchmarks/` - Real-world validation results
+- `insightcode.config.json` - Example configuration file with customizable thresholds
 
 ## Current Status
 
-- **Version**: 0.3.0 published on NPM
+- **Version**: 0.4.0 ready for NPM publication
 - **Self-analysis score**: C (73/100) - stable after scoring system improvements
 - **Performance**: 62,761 lines/second analysis speed (latest full benchmark)
 - **Production analysis**: 18,490 lines/second with `--exclude-utility` flag
 - **Project grade among peers**: 16% achieve A grade, 42% achieve B grade among popular projects
 - **Zero critical bugs** reported since publication
-- **Recent fix**: Reporter complexity calculation now matches analyzer logic (2025-06-28)
+
+## Recent Enhancements (July 2025)
+
+- **Configurable thresholds**: Added `insightcode.config.json` support for customizable complexity, duplication, file size, and function count thresholds
+- **Enhanced file scoring**: Implemented criticality scoring and issue ratios for better prioritization
+- **Improved reporting**: Enhanced terminal output with better metrics display and project information
+- **Expanded test coverage**: Significantly increased test coverage with comprehensive analyzer tests
+- **Configuration management**: Added robust configuration system with validation and defaults
+- **Project metadata**: Added project information retrieval and display in analysis reports
 
 ## CLI Usage
 
@@ -157,6 +167,9 @@ insightcode analyze --exclude-utility
 
 # Exclude patterns  
 insightcode analyze --exclude "**/*.spec.ts" --exclude "**/vendor/**"
+
+# Custom configuration
+insightcode analyze --config ./custom-config.json
 ```
 
 ## When Making Changes
@@ -174,7 +187,7 @@ For detailed information, refer to:
 - `docs/DUPLICATION_DETECTION_PHILOSOPHY.md` - Why our approach differs from SonarQube
 - `docs/SCORING_THRESHOLDS_JUSTIFICATION.md` - Academic research behind thresholds
 - `.ai/CURRENT_TASK.md` - Active development task and checklist
-- `.ai/DECISIONS.md` - Architectural decisions with rationale
+- `docs/DECISIONS.md` - Architectural decisions with rationale
 - `.ai/DOC_MAINTENANCE_CHECKLIST.md` - Documentation update process
 - `.ai/AI_PROMPTS.md` - Reusable AI prompts
 
@@ -182,7 +195,7 @@ For detailed information, refer to:
 
 Before starting work:
 1. Check `.ai/CURRENT_TASK.md` for active tasks
-2. Review recent decisions in `.ai/DECISIONS.md`
+2. Review recent decisions in `docs/DECISIONS.md`
 3. Update progress in `.ai/AI_CONTEXT.md` after sessions
 
 The project prioritizes simplicity, accuracy, and user experience over complex features.

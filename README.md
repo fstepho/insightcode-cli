@@ -61,41 +61,59 @@ insightcode analyze --json > report.json
 
 ## 📊 Example Output
 
+Real analysis of the TypeScript project using `insightcode analyze --exclude-utility TypeScript`:
+
 ```
+🔍 Analyzing code quality...
+
 📊 InsightCode Analysis Report
-Overall Score: F (31/100)
+
+📁 Project:
+  Name: typescript
+  Version: 5.9.0
+  Description: TypeScript is a language for application scale JavaScript development
+  Path: TypeScript
+
+Overall Score: F (45/100)
 
 Summary:
-  Files analyzed: 628
-  Total lines: 313,487
-  Avg complexity: 92.7 (Very High)
-  Avg duplication: 16.1%
+  Files analyzed: 601
+  Total lines: 302,986
 
 Metrics:
-  Complexity      ████░░░░░░░░░░░░░░░░ 20%
-  Duplication     ███████░░░░░░░░░░░░░ 35%
-  Maintainability ██████░░░░░░░░░░░░░░ 31%
+  Complexity      ████████████████████ 93.2 (Very High)
+  Duplication     ███░░░░░░░░░░░░░░░░░ 16.4% (Very High)
+  Maintainability █████░░░░░░░░░░░░░░░ 27/100 (Very Poor)
 
 ⚠️  Top 5 Most Critical Files:
 
-1. src/compiler/checker.ts
-   • Extreme complexity: 16,260 (813x limit)
-   • Massive file: 43,669 lines (146x limit)
+1. TypeScript/src/compiler/binder.ts
+   • High complexity: 959 (48x limit)
+   • Very large file: 3,255 lines (11x limit)
 
-2. src/compiler/utilities.ts
-   • Extreme complexity: 2,951 (148x limit)
-   • Very large file: 9,226 lines (31x limit)
+2. TypeScript/src/compiler/checker.ts
+   • Extreme complexity: 16,110 (806x limit)
+   • Massive file: 43,108 lines (144x limit)
 
-3. src/compiler/parser.ts
-   • Extreme complexity: 2,145 (107x limit)
-   • Very large file: 8,256 lines (28x limit)
+3. TypeScript/src/compiler/program.ts
+   • High complexity: 959 (48x limit)
+   • Very large file: 4,234 lines (14x limit)
+
+4. TypeScript/src/harness/fourslashImpl.ts
+   • High complexity: 887 (44x limit)
+   • Very large file: 4,426 lines (15x limit)
+
+5. TypeScript/src/server/editorServices.ts
+   • High complexity: 792 (40x limit)
+   • Very large file: 4,383 lines (15x limit)
+
 💡 Quick wins to improve score:
 
-  • Split top 3 complex files into modules (potential +6 points)
-  • Break down 3 large files (potential +5 points)
-  • Address duplication in 3 files (potential +3 points)
+  • Split top 3 complex files into modules (potential +8 points)
+  • Break down 5 large files (potential +5 points)
+  • Address duplication in 117 files (potential +4 points)
 
-  ──────────────────────────────────────────────────
+──────────────────────────────────────────────────
 ✅ Analysis complete! Run regularly to track progress.
 
 ```
@@ -215,60 +233,81 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 
 ```json
 {
-  "summary": {
-    "totalFiles": 7,
-    "totalLines": 738,
-    "avgComplexity": 24.9,
-    "avgDuplication": 7.4,
-    "avgFunctions": 6.7,
-    "avgLoc": 105
+  "projectInfo": {
+    "name": "insightcode-cli",
+    "version": "0.3.0",
+    "description": "TypeScript code quality analyzer that runs 100% locally",
+    "path": "src"
   },
-  "score": 72,
-  "grade": "C",
+  "summary": {
+    "totalFiles": 8,
+    "totalLines": 1375,
+    "avgComplexity": 14.1,
+    "avgDuplication": 1.6,
+    "avgFunctions": 6.1,
+    "avgLoc": 171.9
+  },
+  "score": 69,
+  "grade": "D",
   "files": [
     {
       "path": "src/analyzer.ts",
-      "complexity": 22,
-      "duplication": 3,
+      "complexity": 24,
+      "duplication": 0,
       "functionCount": 11,
-      "loc": 117,
+      "loc": 289,
       "issues": [
         {
           "type": "complexity",
           "severity": "high",
-          "message": "High complexity: 22 (recommended: < 20)"
+          "message": "High complexity: 24 (recommended: < 20)",
+          "value": 24,
+          "ratio": 1.2
         }
       ],
-      "fileType": "production"
+      "fileType": "production",
+      "totalScore": 120,
+      "complexityRatio": 1.2,
+      "sizeRatio": 0.96
     },
     {
       "path": "src/cli.ts",
       "complexity": 6,
-      "duplication": 0,
+      "duplication": 3,
       "functionCount": 1,
-      "loc": 43,
+      "loc": 51,
       "issues": [],
-      "fileType": "production"
+      "fileType": "production",
+      "totalScore": 100,
+      "complexityRatio": 0.3,
+      "sizeRatio": 0.17
     },
     {
       "path": "src/parser.ts",
-      "complexity": 61,
-      "duplication": 10,
-      "functionCount": 10,
-      "loc": 250,
+      "complexity": 33,
+      "duplication": 0,
+      "functionCount": 14,
+      "loc": 340,
       "issues": [
         {
           "type": "complexity",
           "severity": "high",
-          "message": "High complexity: 61 (recommended: < 20)"
+          "message": "High complexity: 33 (recommended: < 20)",
+          "value": 33,
+          "ratio": 1.65
         },
         {
           "type": "size",
           "severity": "medium",
-          "message": "File getting large: 250 lines"
+          "message": "File getting large: 340 lines",
+          "value": 340,
+          "ratio": 1.13
         }
       ],
-      "fileType": "production"
+      "fileType": "production",
+      "totalScore": 233,
+      "complexityRatio": 1.65,
+      "sizeRatio": 1.13
     },
     {
       "path": "src/reporter.ts",
@@ -334,23 +373,23 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
   "topFiles": [
     {
       "path": "src/parser.ts",
-      "totalScore": 347,
-      "complexityRatio": 3.05,
-      "sizeRatio": 0.83,
+      "totalScore": 233,
+      "complexityRatio": 1.65,
+      "sizeRatio": 1.13,
       "issues": [
         {
           "type": "complexity",
-          "severity": "medium",
-          "message": "High complexity: 61 (recommended: < 20)",
-          "value": 61,
-          "ratio": 3.05
+          "severity": "high",
+          "message": "High complexity: 33 (recommended: < 20)",
+          "value": 33,
+          "ratio": 1.65
         },
         {
           "type": "size",
           "severity": "medium",
-          "message": "File getting large: 250 lines",
-          "value": 250,
-          "ratio": 0.8
+          "message": "File getting large: 340 lines",
+          "value": 340,
+          "ratio": 1.13
         }
       ]
     },
@@ -444,16 +483,27 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 - Production-only analysis (`--exclude-utility`)
 - Industry-aligned metrics
 
-### v0.4.0 🔮 Future Development
-- Configuration file support (.insightcoderc)
+### v0.4.0 🚀 Ready for Release
+- Configurable thresholds with `insightcode.config.json`
+- Enhanced file scoring with issue ratios and criticality scoring
+- Project metadata display in analysis reports  
+- Academic best practices for metric aggregation
+- Improved reporting with better metrics display
+- Expanded test coverage (55 tests with comprehensive scenarios)
+- Robust configuration management with validation and defaults
+- Enhanced JSON output format with project information
+
+### v0.5.0 🔮 Future Development
 - JSX/TSX support
 - Improved duplication detection algorithm
-
-### v0.5.0 🔮 Future
 - HTML reports with charts
-- Historical tracking
+- Historical tracking capabilities
+
+### v0.6.0 🔮 Future
 - GitHub Actions integration
 - Test coverage metrics
+- Multi-language support (Python, Java)
+- Performance optimization features
 
 ## 🤝 Contributing
 
@@ -505,4 +555,4 @@ MIT - Use it, fork it, improve it!
 
 ---
 
-**Latest**: v0.3.0 | **Downloads**: [![npm](https://img.shields.io/npm/dm/insightcode-cli.svg)](https://www.npmjs.com/package/insightcode-cli) | **Stars**: ⭐ the repo if you find it useful!
+**Latest**: v0.4.0 | **Downloads**: [![npm](https://img.shields.io/npm/dm/insightcode-cli.svg)](https://www.npmjs.com/package/insightcode-cli) | **Stars**: ⭐ the repo if you find it useful!
