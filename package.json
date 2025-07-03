@@ -13,9 +13,7 @@
     "test": "vitest",
     "prepublishOnly": "npm run build",
     "benchmark": "node scripts/benchmark.js",
-    "benchmark:production": "node scripts/benchmark.js --exclude-utility",
-    "benchmark:explain": "node scripts/benchmark-explainer.js --compare",
-    "benchmark:explain:production": "node scripts/benchmark-explainer.js --exclude-utility"
+    "benchmark:production": "node scripts/benchmark.js --exclude-utility"
   },
   "keywords": [
     "typescript",
