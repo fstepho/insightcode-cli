@@ -1,13 +1,47 @@
 import * as crypto from 'crypto';
+import * as fs from 'fs';
+import * as path from 'path';
 import { FileMetrics, AnalysisResult, ThresholdConfig } from './types';
 import { DEFAULT_THRESHOLDS } from './parser';
 import { getGrade, calculateComplexityScore, calculateDuplicationScore, calculateMaintainabilityScore } from './scoring';
 import { calculateFileScores, getTopCriticalFiles } from './fileScoring';
 
 /**
+ * Get project information from directory
+ */
+function getProjectInfo(projectPath: string) {
+  const absolutePath = path.resolve(projectPath);
+  const projectName = path.basename(absolutePath);
+  
+  // Make path relative to current working directory
+  const relativePath = path.relative(process.cwd(), absolutePath) || '.';
+  
+  let packageJson;
+  try {
+    const packagePath = path.join(absolutePath, 'package.json');
+    if (fs.existsSync(packagePath)) {
+      const packageContent = fs.readFileSync(packagePath, 'utf-8');
+      packageJson = JSON.parse(packageContent);
+    }
+  } catch (error) {
+    // Ignore package.json parsing errors
+  }
+
+  return {
+    name: packageJson?.name || projectName,
+    path: relativePath,
+    packageJson: packageJson ? {
+      name: packageJson.name,
+      version: packageJson.version,
+      description: packageJson.description
+    } : undefined
+  };
+}
+
+/**
  * Analyze code metrics and calculate scores
  */
-export function analyze(files: FileMetrics[], thresholds: ThresholdConfig = DEFAULT_THRESHOLDS): AnalysisResult {
+export function analyze(files: FileMetrics[], projectPath: string = '.', thresholds: ThresholdConfig = DEFAULT_THRESHOLDS): AnalysisResult {
   // Calculate duplication for all files
   const filesWithDuplication = detectDuplication(files, thresholds);
   
@@ -70,6 +104,7 @@ export function analyze(files: FileMetrics[], thresholds: ThresholdConfig = DEFA
   return {
     files: filesWithScores, // All files now have scores
     topFiles,
+    project: getProjectInfo(projectPath),
     summary: {
       totalFiles,
       totalLines,

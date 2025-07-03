@@ -26,6 +26,15 @@ export interface Issue {
 export interface AnalysisResult {
   files: FileMetrics[];
   topFiles: FileMetrics[];
+  project: {
+    name: string;
+    path: string;
+    packageJson?: {
+      name?: string;
+      version?: string;
+      description?: string;
+    };
+  };
   summary: {
     totalFiles: number;
     totalLines: number;

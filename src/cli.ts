@@ -35,7 +35,7 @@ program
       }
       
       // Analyze metrics
-      const results = analyze(files);
+      const results = analyze(files, path);
       
       if (options.json) {
         console.log(JSON.stringify(results, null, 2));

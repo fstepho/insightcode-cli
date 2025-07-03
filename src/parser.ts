@@ -36,6 +36,7 @@ const UTILITY_PATTERNS = [
   '**/benchmarks/**',
   '**/coverage/**',
   "**/vendor/**",
+  "**/temp-analysis/**"
 ];
 
 // Default thresholds by file type

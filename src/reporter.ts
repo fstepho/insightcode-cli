@@ -54,10 +54,21 @@ function formatNumber(num: number): string {
  * Display analysis results in the terminal
  */
 export function reportToTerminal(result: AnalysisResult): void {
-  const { summary, score, grade } = result;
+  const { summary, score, grade, project } = result;
   
   // Header
   console.log(chalk.bold.cyan('\n📊 InsightCode Analysis Report\n'));
+  
+  // Project Info
+  console.log(chalk.bold('📁 Project:'));
+  console.log(`  Name: ${chalk.cyan(project.name)}`);
+  if (project.packageJson?.version) {
+    console.log(`  Version: ${chalk.cyan(project.packageJson.version)}`);
+  }
+  if (project.packageJson?.description) {
+    console.log(`  Description: ${chalk.gray(project.packageJson.description)}`);
+  }
+  console.log(`  Path: ${chalk.gray(project.path)}\n`);
   
   // Overall Score
   const config = getConfig();
