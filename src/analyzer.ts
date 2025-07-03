@@ -6,6 +6,7 @@ import { FileMetrics, AnalysisResult, ThresholdConfig } from './types';
 import { DEFAULT_THRESHOLDS } from './parser';
 import { getGrade, calculateComplexityScore, calculateDuplicationScore, calculateMaintainabilityScore } from './scoring';
 import { calculateFileScores, getTopCriticalFiles } from './fileScoring';
+import { analyzeDependencies } from './dependencyAnalyzer';
 
 /**
  * Get project information from directory
@@ -40,11 +41,48 @@ function getProjectInfo(projectPath: string) {
 }
 
 /**
- * Analyze code metrics and calculate scores
+ * Calcule un score de criticité pour un fichier.
+ * Ce score remplace le poids par lignes de code (LOC).
+ * @param file - Le fichier à évaluer.
+ */
+function calculateCriticismScore(file: FileMetrics): number {
+  // Facteurs de criticité (ajustez ces poids selon votre philosophie)
+  const complexityWeight = 1.0;
+  const impactWeight = 2.0;     // L'impact est souvent le facteur le plus important
+  const issueWeight = 0.5;
+
+  // Plus un fichier est importé, plus il est critique
+  const impactFactor = file.impact * impactWeight;
+
+  // Plus un fichier est complexe, plus il est critique
+  const complexityFactor = file.complexity * complexityWeight;
+  
+  // Plus un fichier a de problèmes, plus il est critique
+  const issuesFactor = file.issues.length * issueWeight;
+
+  // Le score de criticité est la somme des facteurs. +1 pour éviter les poids nuls.
+  return impactFactor + complexityFactor + issuesFactor + 1;
+}
+
+/**
+ * Analyse le code, calcule les métriques et les scores basés sur la CRITICITÉ.
  */
 export function analyze(files: FileMetrics[], projectPath: string = '.', thresholds: ThresholdConfig = DEFAULT_THRESHOLDS): AnalysisResult {
-  // Calculate duplication for all files
-  const filesWithDuplication = detectDuplication(files, thresholds);
+  // 1. Analyse des dépendances pour obtenir l'impact de chaque fichier
+  const impactScores = analyzeDependencies(files);
+
+  // 2. Enrichir chaque fichier avec son impact et son score de criticité
+  let totalCriticismScore = 0;
+  const filesWithCriticism = files.map(file => {
+    const enrichedFile = { ...file, impact: impactScores.get(file.path) ?? 0, criticismScore: 0 };
+    enrichedFile.criticismScore = calculateCriticismScore(enrichedFile);
+    totalCriticismScore += enrichedFile.criticismScore;
+    return enrichedFile;
+  });
+
+  // 3. Poursuivre avec la logique existante (duplication, etc.)
+  const filesWithDuplication = detectDuplication(filesWithCriticism, thresholds);
+  
   
   // Calculate aggregate metrics
   const totalFiles = filesWithDuplication.length;
@@ -66,31 +104,23 @@ export function analyze(files: FileMetrics[], projectPath: string = '.', thresho
 
   // Calculate scores for all files first (source of truth)
   const filesWithScores = calculateFileScores(filesWithDuplication);
-  const topFiles = getTopCriticalFiles(filesWithDuplication, 5); // Top 5 critical files
+  const topFiles = getTopCriticalFiles(filesWithScores, 5);
   
-  // Calculate project-level scores as weighted average of file scores (rules of art)
-  const totalLoc = filesWithScores.reduce((sum, f) => sum + f.loc, 0);
+  let complexityScore = 100, duplicationScore = 100, maintainabilityScore = 100, finalScore = 100;
   
-  let complexityScore = 100; // Default for empty projects
-  let duplicationScore = 100;
-  let maintainabilityScore = 100;
-  let finalScore = 100;
-  
-  if (filesWithScores.length > 0 && totalLoc > 0) {
+  if (filesWithScores.length > 0 && totalCriticismScore > 0) {
     let weightedComplexitySum = 0;
     let weightedDuplicationSum = 0; 
     let weightedMaintainabilitySum = 0;
     let weightedTotalSum = 0;
     
+    // 4. Pondérer le score final par CRITICITÉ au lieu de LOC
     for (const file of filesWithScores) {
-      const weight = file.loc / totalLoc; // Weight by file size (industry standard)
-      const fileComplexityScore = calculateComplexityScore(file.complexity);
-      const fileDuplicationScore = calculateDuplicationScore(file.duplication);
-      const fileMaintainabilityScore = calculateMaintainabilityScore(file.loc, file.functionCount);
+      const weight = file.criticismScore / totalCriticismScore; // <-- LA MODIFICATION CENTRALE
       
-      weightedComplexitySum += fileComplexityScore * weight;
-      weightedDuplicationSum += fileDuplicationScore * weight;
-      weightedMaintainabilitySum += fileMaintainabilityScore * weight;
+      weightedComplexitySum += calculateComplexityScore(file.complexity) * weight;
+      weightedDuplicationSum += calculateDuplicationScore(file.duplication) * weight;
+      weightedMaintainabilitySum += calculateMaintainabilityScore(file.loc, file.functionCount) * weight;
       weightedTotalSum += file.totalScore * weight;
     }
     

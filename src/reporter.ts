@@ -127,6 +127,10 @@ export function reportToTerminal(result: AnalysisResult): void {
       const cleanPath = file.path.replace(process.cwd() + '/', '');
       console.log(`\n  ${chalk.bold(`${index + 1}.`)} ${chalk.underline.white(cleanPath)}`);
       
+      // -- AJOUT : AFFICHER LA RAISON DE LA CRITICITÉ --
+      const criticismInfo = `    ${chalk.magenta('Criticity Score:')} ${chalk.bold(file.criticismScore.toFixed(0))}  ${chalk.dim('|')}  ${chalk.blue('Impact:')} ${file.impact} dependents`;
+      console.log(criticismInfo);
+      
       file.issues.forEach(issue => {
         let icon: string;
         let colorFunc: chalk.Chalk;
@@ -135,17 +139,18 @@ export function reportToTerminal(result: AnalysisResult): void {
             const color = getSeverityColorLevel(issue.ratio);
             colorFunc = getChalkColor(color);
             icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
-            console.log(`    ${icon} ${colorFunc(`High Complexity: ${formatNumber(issue.value)} (${issue.ratio.toFixed(0)}x above limit)`)}`);
+            // Indentation ajustée pour l'alignement
+            console.log(`      ${icon} ${colorFunc(`High Complexity: ${formatNumber(issue.value)} (${issue.ratio.toFixed(0)}x above limit)`)}`);
         } else if (issue.type === 'size' && issue.ratio) {
             const color = getSeverityColorLevel(issue.ratio);
             colorFunc = getChalkColor(color);
             icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
-            console.log(`    ${icon} ${colorFunc(`Very Large File: ${formatNumber(issue.value)} lines (${issue.ratio.toFixed(0)}x above limit)`)}`);
+            console.log(`      ${icon} ${colorFunc(`Very Large File: ${formatNumber(issue.value)} lines (${issue.ratio.toFixed(0)}x above limit)`)}`);
         } else if (issue.type === 'duplication') {
             const color = getDuplicationColorLevel(issue.value);
             colorFunc = getChalkColor(color);
             icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
-            console.log(`    ${icon} ${colorFunc(`High Duplication: ${issue.value.toFixed(1)}% detected`)}`);
+            console.log(`      ${icon} ${colorFunc(`High Duplication: ${issue.value.toFixed(1)}% detected`)}`);
         }
       });
     });

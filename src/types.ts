@@ -9,6 +9,8 @@ export interface FileMetrics {
   loc: number; // Lines of code
   issues: Issue[];
   fileType?: 'production' | 'test' | 'example' | 'utility' | 'config';
+  impact: number;           // Nombre de fichiers qui importent celui-ci
+  criticismScore: number;   // Score de criticité calculé
   // Scoring fields
   totalScore: number;
   complexityRatio: number;
