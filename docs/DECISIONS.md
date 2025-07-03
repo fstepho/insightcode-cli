@@ -2,6 +2,24 @@
 
 Format: **Date | Decision | Reason | Impact**
 
+## 2025-07-03: **Final Shift to Criticality-Weighted Scoring (Impact + Complexity)**
+
+**Decision**: The final project score is now weighted by a `criticismScore` calculated for each file. This score is a combination of the file's intrinsic **complexity** and its architectural **Impact** (number of other files that import it). This decision **supersedes all previous decisions regarding LOC-based weighting**.
+**Reason**: Weighting by lines of code (LOC) was a flawed intermediate step. It incorrectly favored large, simple files over small, critical ones. The new model based on impact and complexity provides a much more accurate measure of a file's true importance and risk to the project.
+**Impact**: The scoring system is now fully aligned with our "criticality-first" philosophy. The final grade accurately reflects the maintenance burden posed by the most interconnected and complex parts of the codebase.
+
+## 2025-07-03: **Unification of Scoring and Ranking Logic in `analyzer.ts`**
+
+**Decision**: All file ranking and scoring logic is now centralized in `analyzer.ts`. The `fileScoring.ts` module has been **deleted**. The `criticismScore` is now the single source of truth for both weighting the final project score and for ranking the `topFiles`.
+**Reason**: The existence of `fileScoring.ts` created a competing and inconsistent definition of "criticality". This led to a confusing architecture with multiple sources of truth.
+**Impact**: The codebase is simpler, more maintainable, and logically coherent. There is now one clear, justifiable method for determining which files are the most important.
+
+## 2025-07-03: **Introduction of Advanced Architectural Metrics**
+
+**Decision**: The core analysis (`analyzer.ts`) now calculates and exposes two new advanced metrics: `complexityStdDev` (Standard Deviation) and `silentKillers` (architecturally risky files).
+**Reason**: To provide deeper architectural insights beyond a simple quality score. `complexityStdDev` identifies "monolith" files, while `silentKillers` highlights high-impact files that might otherwise go unnoticed.
+**Impact**: The CLI provides significantly more value, offering users not just a grade, but a true profile of their project's architecture and hidden risks.
+
 ## 2025-06-29: File Scoring Algorithm with Weighted Criticality
 **Decision**: Create dedicated `topIssues.ts` module with weighted file scoring (complexity-heavy).
 **Reason**: Need prioritized list of files to fix; users want to know which files need attention first.

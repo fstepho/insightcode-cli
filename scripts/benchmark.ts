@@ -3,8 +3,9 @@
 import { execSync } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import { AnalysisResult } from '../src/types';
+import { AnalysisResult, FileMetrics } from '../src/types';
 
+// --- INTERFACES (inchangées) ---
 interface EmblematicFiles {
   coreFiles: string[];
   architecturalFiles: string[];
@@ -20,7 +21,7 @@ interface Project {
   category: 'small' | 'medium' | 'large';
   stars: string;
   stableVersion: string;
-  embematicFiles: EmblematicFiles;
+  emblematicFiles: EmblematicFiles;
 }
 
 interface BenchmarkResult {
@@ -31,6 +32,7 @@ interface BenchmarkResult {
   stableVersion: string;
   description: string;
   category: 'small' | 'medium' | 'large';
+  emblematicFiles: EmblematicFiles;
   analysis: AnalysisResult;
   duration: number;
   error?: string;
@@ -48,10 +50,6 @@ interface Summary {
   modeCategory: 'production' | 'full';
 }
 
-// Parse command line arguments
-const args = process.argv.slice(2);
-const excludeUtility = args.includes('--exclude-utility');
-
 // Projects to analyze organized by size
 const PROJECTS: Project[] = [
   {
@@ -62,7 +60,7 @@ const PROJECTS: Project[] = [
     stars: '60.6k',
     stableVersion: '4.17.21',
     category: 'small',
-    embematicFiles: {
+    emblematicFiles: {
       coreFiles: [
         'lodash.js',
         'index.js'
@@ -91,7 +89,7 @@ const PROJECTS: Project[] = [
     stars: '22.3k',
     stableVersion: 'v5.4.1',
     category: 'small',
-    embematicFiles: {
+    emblematicFiles: {
       coreFiles: [
         'source/index.js',
         'index.js'
@@ -115,7 +113,7 @@ const PROJECTS: Project[] = [
     stars: '15k',
     stableVersion: 'v11.1.0',
     category: 'small',
-    embematicFiles: {
+    emblematicFiles: {
       coreFiles: [
         'dist/index.js',
         'src/index.js'
@@ -141,7 +139,7 @@ const PROJECTS: Project[] = [
     stars: '66.2k',
     stableVersion: 'v5.1.0',
     category: 'medium',
-    embematicFiles: {
+    emblematicFiles: {
       coreFiles: [
         'lib/application.js',
         'lib/express.js',
@@ -170,7 +168,7 @@ const PROJECTS: Project[] = [
     stars: '50.7k',
     stableVersion: 'v3.5.17',
     category: 'medium',
-    embematicFiles: {
+    emblematicFiles: {
       coreFiles: [
         'packages/runtime-core/src/component.ts',
         'packages/runtime-core/src/renderer.ts',
@@ -198,7 +196,7 @@ const PROJECTS: Project[] = [
     stars: '44.8k',
     stableVersion: 'v30.0.4',
     category: 'medium',
-    embematicFiles: {
+    emblematicFiles: {
       coreFiles: [
         'packages/jest-core/src/index.ts',
         'packages/jest-cli/src/index.ts'
@@ -225,7 +223,7 @@ const PROJECTS: Project[] = [
     stars: '235k',
     stableVersion: 'v19.1.0',
     category: 'large',
-    embematicFiles: {
+    emblematicFiles: {
       coreFiles: [
         'packages/react/src/React.js',
         'packages/react-dom/src/ReactDOM.js',
@@ -255,7 +253,7 @@ const PROJECTS: Project[] = [
     stars: '26k',
     stableVersion: 'v9.30.1',
     category: 'large',
-    embematicFiles: {
+    emblematicFiles: {
       coreFiles: [
         'lib/linter/linter.js',
         'lib/eslint/eslint.js',
@@ -283,7 +281,7 @@ const PROJECTS: Project[] = [
     stars: '104k',
     stableVersion: 'v5.8.3',
     category: 'large',
-    embematicFiles: {
+    emblematicFiles: {
       coreFiles: [
         'src/compiler/checker.ts',
         'src/compiler/parser.ts',
@@ -308,12 +306,17 @@ const PROJECTS: Project[] = [
 ]
 
 // Ensure we're in the right directory
+
 const scriptDir = __dirname;
-const projectRoot = path.resolve(scriptDir, '..');  // Go up from scripts/ to project root
+const projectRoot = path.resolve(scriptDir, '..');
 const TEMP_DIR = path.join(projectRoot, 'temp-analysis');
 const RESULTS_DIR = path.join(projectRoot, 'benchmark-results');
 
-// Create results directory
+// Parse command line arguments
+const args = process.argv.slice(2);
+const excludeUtility = args.includes('--exclude-utility');
+// --- FONCTIONS UTILITAIRES ---
+
 if (!fs.existsSync(RESULTS_DIR)) {
   fs.mkdirSync(RESULTS_DIR, { recursive: true });
 }
@@ -332,163 +335,177 @@ function runCommand(command: string, cwd?: string): string {
     throw new Error(`Command failed: ${command}\n${errorMessage}`);
   }
 }
-
-function analyzeProject(project: Project): BenchmarkResult {
-  const startTime = Date.now();
-  console.log(`\n📊 Analyzing ${project.name}...`);
-
-  try {
-    // Clean up any existing temp directory
-    if (fs.existsSync(TEMP_DIR)) {
-      fs.rmSync(TEMP_DIR, { recursive: true, force: true });
-    }
-
-    // Clone the repository at specific version tag (shallow clone for speed)
-    console.log(`  📥 Cloning repository (${project.stableVersion})...`);
-    runCommand(`git clone --depth 1 --branch ${project.stableVersion} ${project.repo} "${TEMP_DIR}"`);
-
-    // Run InsightCode analysis
-    console.log(`  🔍 Running analysis...`);
-
-    // Build command with proper flag handling
-    const flags = ['--json'];
-    if (excludeUtility) {
-      flags.push('--exclude-utility');
-    }
-    const command = `insightcode analyze "${TEMP_DIR}" ${flags.join(' ')}`;
-
-    const analysisOutput = runCommand(command, process.cwd());
-    const analysis: AnalysisResult = JSON.parse(analysisOutput);
-
-    // Remove temp-analysis prefix from file paths
-    if (analysis.files) {
-      analysis.files.forEach(file => {
-        file.path = file.path.replace(/^temp-analysis\//, '');
-      });
-    }
-    if (analysis.topFiles) {
-      analysis.topFiles.forEach(file => {
-        file.path = file.path.replace(/^temp-analysis\//, '');
-      });
-    }
-
-    const duration = Date.now() - startTime;
-    console.log(`  ✅ Completed in ${(duration / 1000).toFixed(1)}s`);
-
-    return {
-      project: project.name,
-      repo: project.repo,
-      type: project.type,
-      stars: project.stars,
-      stableVersion: project.stableVersion,
-      description: project.description,
-      category: project.category,
-      analysis,
-      duration
-    };
-  } catch (error) {
-    const duration = Date.now() - startTime;
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`  ❌ Failed: ${errorMessage}`);
-
-    return {
-      project: project.name,
-      repo: project.repo,
-      type: project.type,
-      stars: project.stars,
-      stableVersion: project.stableVersion,
-      description: project.description,
-      category: project.category,
-      analysis: {} as AnalysisResult,
-      duration,
-      error: errorMessage
-    };
-  } finally {
-    // Clean up
-    if (fs.existsSync(TEMP_DIR)) {
-      fs.rmSync(TEMP_DIR, { recursive: true, force: true });
-    }
-  }
-}
-
+/**
+ * Formate un nombre pour l'affichage avec des virgules.
+ * @param num Le nombre à formater.
+ * @returns Le nombre formaté en chaîne de caractères.
+ */
 function formatNumber(num: number): string {
   return num.toLocaleString();
 }
 
-function generateMarkdownReport(results: BenchmarkResult[], summary: Summary): string {
-  const timestamp = new Date().toISOString();
-  const mode = excludeUtility ? 'Production' : 'Full';
+/**
+ * Analyse un projet de manière asynchrone.
+ * Gère le cache, le clonage, l'analyse et le nettoyage.
+ */
+async function analyzeProject(project: Project, index: number, total: number): Promise<BenchmarkResult> {
+  const startTime = Date.now();
+  const projectTempDir = path.join(TEMP_DIR, project.name);
+  console.log(`\n📊 [${index}/${total}] Analyzing ${project.name}...`);
 
-  let markdown = `# InsightCode Benchmark Report (${mode} Analysis)\n\n`;
-  markdown += `> Generated on ${timestamp}\n\n`;
-
-  markdown += `## Summary\n\n`;
-  markdown += `- **Total Projects**: ${summary.totalProjects}\n`;
-  markdown += `- **Successful**: ${summary.successfulAnalyses}\n`;
-  markdown += `- **Failed**: ${summary.failedAnalyses}\n`;
-  markdown += `- **Total Duration**: ${(summary.totalDuration / 1000).toFixed(1)}s\n`;
-  markdown += `- **Total Lines Analyzed**: ${formatNumber(summary.totalLines)}\n`;
-  markdown += `- **Analysis Speed**: ${formatNumber(Math.round(summary.totalLines / (summary.totalDuration / 1000)))} lines/second\n`;
-  markdown += `- **Average Complexity**: ${summary.avgComplexity.toFixed(1)}\n`;
-  markdown += `- **Average Duplication**: ${summary.avgDuplication.toFixed(1)}%\n\n`;
-
-  markdown += `### Grade Distribution\n\n`;
-  markdown += `| Grade | Count | Percentage |\n`;
-  markdown += `|-------|-------|------------|\n`;
-
-  const grades = ['A', 'B', 'C', 'D', 'F'];
-  for (const grade of grades) {
-    const count = summary.gradeDistribution[grade] || 0;
-    const percentage = ((count / summary.successfulAnalyses) * 100).toFixed(0);
-    markdown += `| ${grade} | ${count} | ${percentage}% |\n`;
-  }
-
-  markdown += `\n## Individual Results\n`;
-
-  for (const project of PROJECTS) {
-
-    const result = results.find(r => r.project === project.name);
-    if (!result || result.error) continue;
-
-    const analysis = result.analysis;
-    markdown += `#### ${project.name} (⭐ ${project.stars})\n`;
-    markdown += `- **Description**: ${project.description}\n`;
-    markdown += `- **Type**: ${project.type}\n`;
-    markdown += `- **Category**: ${result.category}\n`;
-    markdown += `- **Repo**: [${project.repo}](${project.repo})\n`;
-    markdown += `- **Version**: ${project.stableVersion}\n`;
-    markdown += `- **Score**: ${analysis.grade} (${analysis.score}/100)\n`;
-    markdown += `- **Files**: ${analysis.summary.totalFiles.toLocaleString()} files, ${analysis.summary.totalLines.toLocaleString()} lines\n`;
-    markdown += `- **Complexity**: ${analysis.summary.avgComplexity.toFixed(1)} average\n`;
-    markdown += `- **Duplication**: ${analysis.summary.avgDuplication.toFixed(1)}%\n`;
-
-    // Extract top 3 issues from topFiles
-    const topIssues: Array<{ file: string, message: string }> = [];
-    for (const file of analysis.topFiles || []) {
-      for (const issue of file.issues) {
-        if (topIssues.length >= 3) break;
-        topIssues.push({
-          file: file.path.replace(/^temp-analysis\//, ''),
-          message: issue.message
-        });
-      }
-      if (topIssues.length >= 3) break;
+  try {
+    // **AMÉLIORATION : GESTION DU CACHE**
+    if (fs.existsSync(projectTempDir)) {
+      console.log(`  🔄 Repository cache found. Fetching latest changes...`);
+      runCommand(`git fetch`, projectTempDir);
+    } else {
+      console.log(`  📥 Cloning repository (${project.stableVersion})...`);
+      runCommand(`git clone --depth 1 --branch ${project.stableVersion} ${project.repo} "${projectTempDir}"`);
     }
+    // Pas besoin de `git checkout` ici si on clone directement la bonne branche/tag
 
-    if (topIssues.length > 0) {
-      markdown += `- **Top Issues**:\n`;
-      topIssues.forEach(issue => {
-        markdown += `  - \`${issue.file}\`: ${issue.message}\n`;
-      });
+    console.log(`  🔍 Running analysis...`);
+    const flags = ['--json'];
+    if (excludeUtility) {
+      flags.push('--exclude-utility');
     }
+    const command = `node ${path.join(projectRoot, 'dist/cli.js')} analyze "${projectTempDir}" ${flags.join(' ')}`;
+    const analysisOutput = runCommand(command, projectRoot);
+    const analysis: AnalysisResult = JSON.parse(analysisOutput);
 
-    markdown += `\n`;
+    // On calcule le chemin relatif du dossier temporaire par rapport à la racine du projet.
+    // Cela nous donne le préfixe exact à enlever (ex: "temp-analysis/react").
+    const prefixToRemove = path.relative(projectRoot, projectTempDir);
+
+    const cleanPath = (p: string) => {
+        // On s'assure d'échapper les séparateurs de chemin pour la regex
+        const escapedPrefix = prefixToRemove.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return p.replace(new RegExp(`^${escapedPrefix}[\\\/]`), '');
+    };
+    analysis.files.forEach(file => (file.path = cleanPath(file.path)));
+    analysis.topFiles.forEach(file => (file.path = cleanPath(file.path)));
+    analysis.silentKillers.forEach(file => (file.path = cleanPath(file.path)));
+    
+    const duration = Date.now() - startTime;
+    console.log(`  ✅ [${index}/${total}] ${project.name} completed in ${(duration / 1000).toFixed(1)}s`);
+
+    return {
+      project: project.name,
+      repo: project.repo,
+      type: project.type,
+      stars: project.stars,
+      stableVersion: project.stableVersion,
+      description: project.description,
+      category: project.category,
+      emblematicFiles: project.emblematicFiles,
+      analysis,
+      duration,
+    };
+  } catch (error) {
+    const duration = Date.now() - startTime;
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`  ❌ [${index}/${total}] ${project.name} failed: ${errorMessage.substring(0, 300)}...`);
+
+    return {
+      project: project.name,
+      repo: project.repo,
+      type: project.type,
+      stars: project.stars,
+      stableVersion: project.stableVersion,
+      description: project.description,
+      category: project.category,
+      emblematicFiles: project.emblematicFiles,
+      analysis: {} as AnalysisResult,
+      duration,
+      error: errorMessage,
+    };
   }
-
-  return markdown;
 }
 
-function main(): void {
+/**
+ * Generates the full Markdown report with all advanced sections.
+ * @param results - The array of successful benchmark results.
+ * @param summary - The calculated summary object.
+ * @returns A string containing the full Markdown report.
+ */
+function generateMarkdownReport(results: BenchmarkResult[], summary: Summary): string {
+    const timestamp = new Date().toISOString();
+    const mode = excludeUtility ? 'Production Code' : 'Full Project';
+
+    let markdown = `# InsightCode Benchmark Report (${mode} Analysis)\n\n`;
+    markdown += `> Generated on ${timestamp}\n\n`;
+
+    // --- 1. Summary Section ---
+    markdown += `## Overall Summary\n\n`;
+    markdown += `| Metric | Value |\n|---|---|\n`;
+    markdown += `| **Total Projects Analyzed** | ${summary.successfulAnalyses} / ${summary.totalProjects} |\n`;
+    markdown += `| **Total Duration** | ${(summary.totalDuration / 1000).toFixed(1)}s |\n`;
+    markdown += `| **Total Lines of Code** | ${formatNumber(summary.totalLines)} |\n`;
+    markdown += `| **Analysis Speed** | ${formatNumber(Math.round(summary.totalLines / (summary.totalDuration / 1000)))} lines/sec |\n`;
+
+    // --- 2. Leaderboard Section ---
+    markdown += `\n## Benchmark Leaderboard\n\n`;
+    markdown += `| Category | Champion 🏆 | Challenger ⚠️ | Metric |\n|---|---|---|---|\n`;
+    const sortedByScore = [...results].sort((a, b) => b.analysis.score - a.analysis.score);
+    const sortedByComplexity = [...results].sort((a, b) => a.analysis.summary.avgComplexity - b.analysis.summary.avgComplexity);
+    const sortedByDuplication = [...results].sort((a, b) => a.analysis.summary.avgDuplication - b.analysis.summary.avgDuplication);
+    markdown += `| **Best Score** | \`${sortedByScore[0].project}\` (${sortedByScore[0].analysis.score}/100) | \`${sortedByScore[sortedByScore.length - 1].project}\` (${sortedByScore[sortedByScore.length - 1].analysis.score}/100) | Overall Score |\n`;
+    markdown += `| **Lowest Complexity** | \`${sortedByComplexity[0].project}\` (${sortedByComplexity[0].analysis.summary.avgComplexity.toFixed(1)}) | \`${sortedByComplexity[sortedByComplexity.length - 1].project}\` (${sortedByComplexity[sortedByComplexity.length - 1].analysis.summary.avgComplexity.toFixed(1)}) | Avg. Complexity |\n`;
+    markdown += `| **Lowest Duplication** | \`${sortedByDuplication[0].project}\` (${sortedByDuplication[0].analysis.summary.avgDuplication.toFixed(1)}%) | \`${sortedByDuplication[sortedByDuplication.length - 1].project}\` (${sortedByDuplication[sortedByDuplication.length - 1].analysis.summary.avgDuplication.toFixed(1)}%) | Avg. Duplication |\n`;
+
+    // --- 3. Complexity Distribution Section ---
+    markdown += `\n## Complexity Distribution: The "Monolith" Indicator\n\n`;
+    markdown += `A high Standard Deviation (StdDev) indicates that complexity is heavily concentrated in a few "monolith" files.\n\n`;
+    markdown += `| Project | Avg Complexity | StdDev | Profile |\n|---|---|---|---|\n`;
+    results.sort((a, b) => b.analysis.complexityStdDev - a.analysis.complexityStdDev).forEach(r => {
+        const profile = r.analysis.complexityStdDev > r.analysis.summary.avgComplexity * 2 ? 'Concentrated 🌋' : 'Evenly Distributed';
+        markdown += `| \`${r.project}\` | ${r.analysis.summary.avgComplexity.toFixed(1)} | **${r.analysis.complexityStdDev.toFixed(1)}** | ${profile} |\n`;
+    });
+
+    // --- 4. Individual Project Analysis Section ---
+    markdown += `\n## Individual Project Analysis\n\n`;
+    for (const result of results.sort((a, b) => a.project.localeCompare(b.project))) {
+        if (result.error) continue;
+        const analysis = result.analysis;
+        
+        markdown += `### ${result.project} (⭐ ${result.stars}) - Grade: ${analysis.grade} (${analysis.score}/100)\n\n`;
+        markdown += `- **Description**: ${result.description}\n`;
+        markdown += `- **Files**: ${formatNumber(analysis.summary.totalFiles)} files, ${formatNumber(analysis.summary.totalLines)} lines\n`;
+        markdown += `- **Avg Complexity**: ${analysis.summary.avgComplexity.toFixed(1)} (StdDev: ${analysis.complexityStdDev.toFixed(1)})\n`;
+        markdown += `- **Avg Duplication**: ${analysis.summary.avgDuplication.toFixed(1)}%\n\n`;
+
+        // --- 4a. Emblematic Files Validation ---
+        if (result.emblematicFiles) {
+            markdown += `- **Emblematic Files Validation**:\n`;
+            const topFilePaths = new Set(analysis.topFiles.map(f => f.path));
+            let foundCount = 0;
+            for (const [category, files] of Object.entries(result.emblematicFiles)) {
+                for (const emblematicFile of files) {
+                    if (topFilePaths.has(emblematicFile)) {
+                        const categoryName = category.replace('Files', '');
+                        markdown += `  - ✅ \`${emblematicFile}\` (found in Top 5, expected as ${categoryName})\n`;
+                        foundCount++;
+                    }
+                }
+            }
+            if (foundCount === 0) {
+                markdown += `  - ℹ️ No emblematic files were found in the Top 5 critical files list.\n`;
+            }
+        }
+
+        // --- 4b. Silent Killers Section ---
+        if (analysis.silentKillers.length > 0) {
+            markdown += `- **Architectural Risks (Silent Killers)**:\n`;
+            analysis.silentKillers.forEach(file => {
+                markdown += `  - \`${file.path}\` (Impact: ${file.impact}, Complexity: ${file.complexity})\n`;
+            });
+        }
+        markdown += `\n---\n`;
+    }
+    return markdown;
+}
+
+async function main(): Promise<void> {
   console.log(`\n🚀 InsightCode Benchmark Tool`);
   console.log(`📊 Analyzing ${Object.values(PROJECTS).flat().length} popular JavaScript/TypeScript projects`);
 
@@ -500,32 +517,29 @@ function main(): void {
 
   console.log(`📁 Results will be saved to: ${RESULTS_DIR}\n`);
 
-  // Check if insightcode is installed
-  try {
-    runCommand('insightcode --version');
-  } catch {
-    console.error('❌ Error: insightcode is not installed or not in PATH');
-    console.error('Please run: npm install -g insightcode-cli');
-    process.exit(1);
-  }
+  // **AMÉLIORATION : Exécution en parallèle**
+  const analysisPromises = PROJECTS.map((project, index) => analyzeProject(project, index + 1, PROJECTS.length));
 
-  const results: BenchmarkResult[] = [];
+  // Utiliser Promise.allSettled pour continuer même si une analyse échoue
+  const settledResults = await Promise.allSettled(analysisPromises);
 
-  // Analyze all projects
-  for (const project of Object.values(PROJECTS).flat()) {
-    const result = analyzeProject(project);
-    results.push(result);
+  const results: BenchmarkResult[] = settledResults.map(res => {
+    if (res.status === 'fulfilled') {
+      return res.value;
+    }
+    // Si la promesse a été rejetée, on log l'erreur et on retourne un objet d'erreur
+    console.error(`❌ A critical error occurred during analysis:`, res.reason);
+    // On doit reconstruire un objet BenchmarkResult partiel pour le rapport
+    return { project: 'Unknown', error: 'Critical failure in promise',} as BenchmarkResult;
+  });
 
-    // Save intermediate results
-    const resultFilename = excludeUtility
-      ? `${project.name}-production-result.json`
-      : `${project.name}-result.json`;
+  // Sauvegarder les résultats individuels
+  results.forEach(result => {
+    if(!result.project || result.project === 'Unknown') return;
+    const resultFilename = `${result.project}-${excludeUtility ? 'prod' : 'full'}.json`;
+    fs.writeFileSync(path.join(RESULTS_DIR, resultFilename), JSON.stringify(result, null, 2));
+  });
 
-    fs.writeFileSync(
-      path.join(RESULTS_DIR, resultFilename),
-      JSON.stringify(result, null, 2)
-    );
-  }
 
   // Calculate summary
   const successfulResults = results.filter(r => !r.error);

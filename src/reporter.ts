@@ -157,32 +157,44 @@ export function reportToTerminal(result: AnalysisResult): void {
   }
 
   // --- Plans d'action ---
-  if (score < 90 && topFiles.length > 0) {
+ if (score < 90 && topFiles.length > 0) {
     printSectionHeader('💡 Quick Wins to Improve Score');
     
     const improvements: string[] = [];
-    const extremeComplexityFiles = result.files.filter(f => f.complexityRatio && f.complexityRatio >= 50);
-    const veryLargeFiles = result.files.filter(f => f.sizeRatio && f.sizeRatio >= 10);
-    const highDuplicationFiles = result.files.filter(f => f.duplication && f.duplication >= 25);
+
+    // CORRECTION : On cherche le ratio dans le tableau `issues` de chaque fichier.
+    const extremeComplexityFiles = result.files.filter(f => 
+        f.issues.some(issue => issue.type === 'complexity' && issue.ratio && issue.ratio >= 2.5) // Seuil plus réaliste
+    );
+    const veryLargeFiles = result.files.filter(f => 
+        f.issues.some(issue => issue.type === 'size' && issue.ratio && issue.ratio >= 2.0)
+    );
+    const highDuplicationFiles = result.files.filter(f => 
+        f.issues.some(issue => issue.type === 'duplication' && issue.value >= 25)
+    );
 
     if (extremeComplexityFiles.length > 0) {
-      const gain = Math.min(10, Math.round(extremeComplexityFiles.length * 2.5));
-      improvements.push(`Refactor the ${Math.min(3, extremeComplexityFiles.length)} most complex file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
+      const gain = Math.min(10, Math.round(extremeComplexityFiles.length * 1.5));
+      improvements.push(`Refactor the ${extremeComplexityFiles.length} most complex file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
     }
     if (veryLargeFiles.length > 0) {
-      const gain = Math.min(8, Math.round(veryLargeFiles.length * 1.5));
-      improvements.push(`Split the ${Math.min(3, veryLargeFiles.length)} largest file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
+      const gain = Math.min(8, Math.round(veryLargeFiles.length * 1.0));
+      improvements.push(`Split the ${veryLargeFiles.length} largest file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
     }
     if (highDuplicationFiles.length > 0) {
       const gain = Math.min(6, highDuplicationFiles.length);
       improvements.push(`Abstract repeated code in ${highDuplicationFiles.length} file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
     }
 
-    improvements.slice(0, 3).forEach(improvement => {
-      console.log(`  ${chalk.cyan('›')} ${chalk.gray(improvement)}`);
-    });
+    if (improvements.length > 0) {
+        improvements.slice(0, 3).forEach(improvement => {
+          console.log(`  ${chalk.cyan('›')} ${chalk.gray(improvement)}`);
+        });
+    } else {
+        console.log(chalk.gray('  › No obvious quick wins found. Focus on the critical files above.'));
+    }
   }
-
+  
   // --- Pied de page ---
   console.log(chalk.gray('\n\n' + '─'.repeat(58)));
   console.log(`  ✅ ${chalk.bold('Analysis complete!')} Run regularly to maintain code quality.`);

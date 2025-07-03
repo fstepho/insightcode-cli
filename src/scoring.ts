@@ -69,33 +69,33 @@ export function calculateDuplicationScore(duplication: number): number {
  * Calculate maintainability score based on file size and structure
  */
 export function calculateMaintainabilityScore(
-  avgLoc: number, 
-  avgFunctions: number,
-  maxLoc: number = 0  // Optional: worst file penalty
+  fileLoc: number, 
+  fileFunctionCount: number,
+  maxLocInProject: number = 0  // Optional: worst file penalty
 ): number {
   const config = getConfig();
   
   // Score based on average file size
   let sizeScore: number;
-  if (avgLoc <= config.fileSize.excellent) sizeScore = 100;
-  else if (avgLoc <= config.fileSize.good) sizeScore = 85;
-  else if (avgLoc <= config.fileSize.acceptable) sizeScore = 70;
-  else if (avgLoc <= config.fileSize.poor) sizeScore = 50;
-  else if (avgLoc <= config.fileSize.veryPoor) sizeScore = 30;
-  else sizeScore = Math.max(10, 30 - (avgLoc - config.fileSize.veryPoor) / 50);
+  if (fileLoc <= config.fileSize.excellent) sizeScore = 100;
+  else if (fileLoc <= config.fileSize.good) sizeScore = 85;
+  else if (fileLoc <= config.fileSize.acceptable) sizeScore = 70;
+  else if (fileLoc <= config.fileSize.poor) sizeScore = 50;
+  else if (fileLoc <= config.fileSize.veryPoor) sizeScore = 30;
+  else sizeScore = Math.max(10, 30 - (fileLoc - config.fileSize.veryPoor) / 50);
   
   // Score based on functions per file
   let functionScore: number;
-  if (avgFunctions <= config.functionCount.excellent) functionScore = 100;
-  else if (avgFunctions <= config.functionCount.good) functionScore = 85;
-  else if (avgFunctions <= config.functionCount.acceptable) functionScore = 70;
-  else if (avgFunctions <= config.functionCount.poor) functionScore = 50;
-  else functionScore = Math.max(10, 50 - (avgFunctions - config.functionCount.poor) * 2);
+  if (fileFunctionCount <= config.functionCount.excellent) functionScore = 100;
+  else if (fileFunctionCount <= config.functionCount.good) functionScore = 85;
+  else if (fileFunctionCount <= config.functionCount.acceptable) functionScore = 70;
+  else if (fileFunctionCount <= config.functionCount.poor) functionScore = 50;
+  else functionScore = Math.max(10, 50 - (fileFunctionCount - config.functionCount.poor) * 2);
   
   // Penalty for extreme files (optional)
   let extremePenalty = 0;
-  if (maxLoc > config.extremeFilePenalties.massiveFileThreshold) extremePenalty = config.extremeFilePenalties.massiveFilePenalty;
-  else if (maxLoc > config.extremeFilePenalties.largeFileThreshold) extremePenalty = config.extremeFilePenalties.largeFilePenalty;
+  if (maxLocInProject > config.extremeFilePenalties.massiveFileThreshold) extremePenalty = config.extremeFilePenalties.massiveFilePenalty;
+  else if (maxLocInProject > config.extremeFilePenalties.largeFileThreshold) extremePenalty = config.extremeFilePenalties.largeFilePenalty;
   
   return Math.max(0, (sizeScore + functionScore) / 2 - extremePenalty);
 }
@@ -111,25 +111,6 @@ export function calculateWeightedScore(
 ): number {
   // Weighted average (40% complexity, 30% duplication, 30% maintainability)
   return complexityScore * 0.4 + duplicationScore * 0.3 + maintainabilityScore * 0.3;
-}
-
-/**
- * Calculate overall score based on metrics (0-100, higher is better)
- * Now with proper avgFunctions parameter
- */
-export function calculateScore(
-  complexity: number, 
-  duplication: number, 
-  avgLoc: number,
-  avgFunctions: number
-): number {
-  // Calculate component scores with graduated thresholds
-  const complexityScore = calculateComplexityScore(complexity);
-  const duplicationScore = calculateDuplicationScore(duplication);
-  const maintainabilityScore = calculateMaintainabilityScore(avgLoc, avgFunctions);
-  
-  // Use centralized weighting function
-  return calculateWeightedScore(complexityScore, duplicationScore, maintainabilityScore);
 }
 
 /**

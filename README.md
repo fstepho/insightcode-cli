@@ -30,10 +30,10 @@
 ## ✨ Features
 
 - **🔒 100% Local** - Your code never leaves your machine
-- **⚡ Fast** - Analyze 100k lines in under 2 seconds (62,761 lines/second!)
-- **📊 Simple Metrics** - Focus on what matters: complexity, duplication, maintainability
-- **🎯 Zero Config** - Works out of the box with sensible defaults
-- **🎨 Beautiful Output** - Clear, colorful terminal reports
+- **⚡ Fast** - Proven on large codebases (analyzes over 40,000 lines/sec)
+- **🧠 Criticality-Aware Scoring** - Prioritizes issues based on file complexity and its architectural impact.
+- **🎯 Actionable Metrics** - Focus on what matters: complexity, duplication, and maintainability.
+- **🎨 Beautiful Output** - Clear, colorful terminal reports.
 
 ## 🚀 Quick Start
 
@@ -61,68 +61,79 @@ insightcode analyze --json > report.json
 
 ## 📊 Example Output
 
-Real analysis of the TypeScript project using `insightcode analyze --exclude-utility TypeScript`:
+Real analysis of the **React** project using `insightcode analyze --exclude-utility react`:
 
 ```
 🔍 Analyzing code quality...
 
-📊 InsightCode Analysis Report
+  ┌──────────────────────────────────────────┐
+  │                                          │
+  │   📊   InsightCode Analysis Report   📊  │
+  │                                          │
+  └──────────────────────────────────────────┘
+  
 
-📁 Project:
-  Name: typescript
-  Version: 5.9.0
-  Description: TypeScript is a language for application scale JavaScript development
-  Path: TypeScript
+╭─ Project Overview ──────────────────────────────────
+  Project:     react
+  Files:       1381
+  Total Lines: 197,953
 
-Overall Score: F (45/100)
+╭─ Overall Code Quality Score ────────────────────────
 
-Summary:
-  Files analyzed: 601
-  Total lines: 302,986
+    F   47.0/100
 
-Metrics:
-  Complexity      ████████████████████ 93.2 (Very High)
-  Duplication     ███░░░░░░░░░░░░░░░░░ 16.4% (Very High)
-  Maintainability █████░░░░░░░░░░░░░░░ 27/100 (Very Poor)
 
-⚠️  Top 5 Most Critical Files:
+╭─ Core Metrics ──────────────────────────────────────
+  Complexity:      ███████░░░░░░░░░░░░░  20.7 (High)
+  Duplication:     ███████████░░░░░░░░░  44.2% (Very High)
+  Maintainability: ███████████░░░░░░░░░  57/100 (Poor)
 
-1. TypeScript/src/compiler/binder.ts
-   • High complexity: 959 (48x limit)
-   • Very large file: 3,255 lines (11x limit)
+╭─ ⚠️ Top 5 Critical Files to Address ────────────────
 
-2. TypeScript/src/compiler/checker.ts
-   • Extreme complexity: 16,110 (806x limit)
-   • Massive file: 43,108 lines (144x limit)
+  1. react/packages/react-reconciler/src/ReactFiberBeginWork.js
+    Criticity Score: 459  |  Impact: 3 dependents
+      🟠 High Complexity: 451 (23x above limit)
+      🟠 Very Large File: 3,179 lines (11x above limit)
+      🟠 High Duplication: 15.0% detected
 
-3. TypeScript/src/compiler/program.ts
-   • High complexity: 959 (48x limit)
-   • Very large file: 4,234 lines (14x limit)
+  2. react/packages/react-reconciler/src/ReactFiberCommitWork.js
+    Criticity Score: 801  |  Impact: 1 dependents
+      🟠 High Complexity: 797 (40x above limit)
+      🟠 Very Large File: 3,704 lines (12x above limit)
 
-4. TypeScript/src/harness/fourslashImpl.ts
-   • High complexity: 887 (44x limit)
-   • Very large file: 4,426 lines (15x limit)
+  3. react/packages/react-reconciler/src/ReactFiberWorkLoop.js
+    Criticity Score: 669  |  Impact: 23 dependents
+      🟠 High Complexity: 621 (31x above limit)
+      🟠 Very Large File: 3,570 lines (12x above limit)
 
-5. TypeScript/src/server/editorServices.ts
-   • High complexity: 792 (40x limit)
-   • Very large file: 4,383 lines (15x limit)
+  4. react/packages/react-dom-bindings/src/client/ReactFiberConfigDOM.js
+    Criticity Score: 747  |  Impact: 8 dependents
+      🟠 High Complexity: 729 (36x above limit)
+      🟠 Very Large File: 4,273 lines (14x above limit)
 
-💡 Quick wins to improve score:
+  5. react/compiler/packages/babel-plugin-react-compiler/src/HIR/BuildHIR.ts
+    Criticity Score: 416  |  Impact: 0 dependents
+      🟠 High Complexity: 414 (21x above limit)
+      🟠 Very Large File: 3,883 lines (13x above limit)
 
-  • Split top 3 complex files into modules (potential +8 points)
-  • Break down 5 large files (potential +5 points)
-  • Address duplication in 117 files (potential +4 points)
+╭─ 💡 Quick Wins to Improve Score ────────────────────
+  › Refactor the 1 most complex file(s) for a potential gain of ~+3 pts.
+  › Split the 3 largest file(s) for a potential gain of ~+8 pts.
+  › Abstract repeated code in 727 file(s) for a potential gain of ~+6 pts.
 
-──────────────────────────────────────────────────
-✅ Analysis complete! Run regularly to track progress.
 
+──────────────────────────────────────────────────────────
+  ✅ Analysis complete! Run regularly to maintain code quality.
+     Report generated on 7/3/2025, 9:27:56 PM
 ```
 
 ## 📐 How It Works
 
+InsightCode's analysis is built on a "criticality-first" philosophy. It first measures the fundamentals in each file, then uses project-wide context to weigh them based on their actual importance.
+
 ### What We Measure
 
-#### 1. Cyclomatic Complexity (40% weight)
+#### 1. Cyclomatic Complexity
 Counts decision points in your code. Based on McCabe's complexity metric (extended to include logical operators):
 - **Base complexity**: Every file starts at 1
 - **+1 for each**: `if`, `else if`, `for`, `while`, `switch case`, `catch`, `&&`, `||`, `? :`
@@ -135,20 +146,24 @@ function validate(user) {              // Base: 1
   return user.active && user.verified; // +1 for &&
 }                                      // Total: 4
 ```
-
-#### 2. Code Duplication (30% weight)
+#### 2. Code Duplication
 Detects actual copy-paste duplication using pragmatic content analysis:
 - **Algorithm**: 5-line sliding window with normalization
 - **Philosophy**: Focus on refactorable duplication, not structural patterns
 - **Target**: < 3% excellent, < 8% good
 
-> 💡 **Why we're different**: We report actionable duplication. While tools like SonarQube might show 70% duplication in test files, we focus on actual copy-paste that can be refactored. [Learn more →](./docs/DUPLICATION_DETECTION_PHILOSOPHY.md)
-
-#### 3. Maintainability (30% weight)
+#### 3. Maintainability
 Composite score based on file size and function density:
 - **File size**: ≤ 200 lines excellent, ≤ 300 good
 - **Function count**: ≤ 10 per file excellent, ≤ 15 good
 - **Extreme penalty**: Files > 1000 lines get additional penalties
+
+### Scoring Philosophy: Criticality Weighting
+The final project score is a weighted average of individual file scores.
+
+Instead of a fixed weight, the weight of each file is determined by its Criticality Score. This score is calculated from the file's own complexity combined with its Impact—how many other files in the project depend on it.
+
+This means issues in important, highly-connected files will affect your final grade more, guiding you to fix what truly matters.
 
 ### Scoring System
 
@@ -162,14 +177,12 @@ InsightCode uses graduated thresholds aligned with industry standards:
 | **D** | 60-69   | Poor, needs attention                  |
 | **F** | 0-59    | Critical, major refactoring needed     |
 
-**Real-World Context**: Based on our [analysis of 19 popular projects](./benchmarks/):
-- 16% achieved A (dotenv, chalk, prettier)
-- 42% achieved B (axios, commander, express)  
-- 21% got C (typescript, ms, debounce)
-- 11% got D (yargs, zod)
-- 11% got F (joi, eslint)
+**Real-World Context**: Based on our [analysis of 9 popular projects](./benchmarks/):
+- Grade B: Small, focused libraries (uuid, chalk).
+- Grade D: Large projects with significant duplication (jest).
+- Grade F: Complex frameworks, compilers, or linters (react, typescript, vue, eslint).
 
-Your C is respectable - you're in good company with TypeScript itself!
+A low score doesn't mean the code is "bad," but that it presents significant maintenance challenges according to our metrics.
 
 ### Smart Thresholds
 
@@ -233,61 +246,36 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 
 ```json
 {
-  "projectInfo": {
+  "project": {
     "name": "insightcode-cli",
-    "version": "0.3.0",
-    "description": "TypeScript code quality analyzer that runs 100% locally",
     "path": "src"
   },
   "summary": {
-    "totalFiles": 8,
-    "totalLines": 1375,
-    "avgComplexity": 14.1,
-    "avgDuplication": 1.6,
-    "avgFunctions": 6.1,
-    "avgLoc": 171.9
+    "totalFiles": 9,
+    "totalLines": 1077,
+    "avgComplexity": 23.1,
+    "avgDuplication": 9.2,
+    "avgFunctions": 8.9,
+    "avgLoc": 120
   },
-  "score": 69,
+  "scores": {
+    "complexity": 40,
+    "duplication": 77,
+    "maintainability": 90,
+    "overall": 66
+  },
+  "complexityStdDev": 19.9,
+  "silentKillers": [],
+  "score": 66,
   "grade": "D",
+
   "files": [
     {
       "path": "src/analyzer.ts",
-      "complexity": 24,
-      "duplication": 0,
-      "functionCount": 11,
-      "loc": 289,
-      "issues": [
-        {
-          "type": "complexity",
-          "severity": "high",
-          "message": "High complexity: 24 (recommended: < 20)",
-          "value": 24,
-          "ratio": 1.2
-        }
-      ],
-      "fileType": "production",
-      "totalScore": 120,
-      "complexityRatio": 1.2,
-      "sizeRatio": 0.96
-    },
-    {
-      "path": "src/cli.ts",
-      "complexity": 6,
-      "duplication": 3,
-      "functionCount": 1,
-      "loc": 51,
-      "issues": [],
-      "fileType": "production",
-      "totalScore": 100,
-      "complexityRatio": 0.3,
-      "sizeRatio": 0.17
-    },
-    {
-      "path": "src/parser.ts",
       "complexity": 33,
-      "duplication": 0,
-      "functionCount": 14,
-      "loc": 340,
+      "duplication": 2,
+      "functionCount": 24,
+      "loc": 215,
       "issues": [
         {
           "type": "complexity",
@@ -299,157 +287,106 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
         {
           "type": "size",
           "severity": "medium",
-          "message": "File getting large: 340 lines",
-          "value": 340,
-          "ratio": 1.13
+          "message": "File getting large: 215 lines",
+          "value": 215,
+          "ratio": 0.7
         }
       ],
       "fileType": "production",
-      "totalScore": 233,
+      "totalScore": 58,
       "complexityRatio": 1.65,
-      "sizeRatio": 1.13
+      "sizeRatio": 0.72,
+      "impact": 1,
+      "criticismScore": 37
     },
     {
-      "path": "src/reporter.ts",
-      "complexity": 44,
-      "duplication": 9,
-      "functionCount": 10,
-      "loc": 126,
-      "issues": [
-        {
-          "type": "complexity",
-          "severity": "high",
-          "message": "High complexity: 44 (recommended: < 20)"
-        }
-      ],
-      "fileType": "production"
-    },
-    {
-      "path": "src/scoring.ts",
-      "complexity": 26,
-      "duplication": 0,
-      "functionCount": 5,
-      "loc": 57,
-      "issues": [
-        {
-          "type": "complexity",
-          "severity": "high",
-          "message": "High complexity: 26 (recommended: < 20)"
-        }
-      ],
-      "fileType": "production"
-    },
-    {
-      "path": "src/topIssues.ts",
-      "complexity": 14,
+      "path": "src/parser.ts",
+      "complexity": 61,
       "duplication": 11,
       "functionCount": 10,
-      "loc": 88,
+      "loc": 260,
       "issues": [
         {
           "type": "complexity",
-          "severity": "medium",
-          "message": "Medium complexity: 14 (recommended: < 10)"
-        }
-      ],
-      "fileType": "production"
-    },
-    {
-      "path": "src/types.ts",
-      "complexity": 1,
-      "duplication": 19,
-      "functionCount": 0,
-      "loc": 57,
-      "issues": [
+          "severity": "high",
+          "message": "High complexity: 61 (recommended: < 20)",
+          "value": 61,
+          "ratio": 3.05
+        },
         {
-          "type": "duplication",
+          "type": "size",
           "severity": "medium",
-          "message": "Medium duplication: 19% of code is duplicated"
+          "message": "File getting large: 260 lines",
+          "value": 260,
+          "ratio": 0.8
         }
       ],
-      "fileType": "production"
-    }
+      "fileType": "production",
+      "totalScore": 55,
+      "complexityRatio": 3.05,
+      "sizeRatio": 0.87,
+      "impact": 3,
+      "criticismScore": 69
+    },
+   
+    ...
   ],
   "topFiles": [
     {
       "path": "src/parser.ts",
-      "totalScore": 233,
-      "complexityRatio": 1.65,
-      "sizeRatio": 1.13,
+      "complexity": 61,
+      "duplication": 11,
+      "functionCount": 10,
+      "loc": 260,
       "issues": [
         {
           "type": "complexity",
           "severity": "high",
-          "message": "High complexity: 33 (recommended: < 20)",
-          "value": 33,
-          "ratio": 1.65
+          "message": "High complexity: 61 (recommended: < 20)",
+          "value": 61,
+          "ratio": 3.05
         },
         {
           "type": "size",
           "severity": "medium",
-          "message": "File getting large: 340 lines",
-          "value": 340,
-          "ratio": 1.13
+          "message": "File getting large: 260 lines",
+          "value": 260,
+          "ratio": 0.8
         }
-      ]
-    },
-    {
-      "path": "src/reporter.ts",
-      "totalScore": 220,
-      "complexityRatio": 2.2,
-      "issues": [
-        {
-          "type": "complexity",
-          "severity": "low",
-          "message": "High complexity: 44 (recommended: < 20)",
-          "value": 44,
-          "ratio": 2.2
-        }
-      ]
+      ],
+      "fileType": "production",
+      "totalScore": 55,
+      "complexityRatio": 3.05,
+      "sizeRatio": 0.87,
+      "impact": 3,
+      "criticismScore": 69
     },
     {
       "path": "src/scoring.ts",
-      "totalScore": 130,
-      "complexityRatio": 1.3,
+      "complexity": 49,
+      "duplication": 10,
+      "functionCount": 13,
+      "loc": 119,
       "issues": [
         {
           "type": "complexity",
-          "severity": "low",
-          "message": "High complexity: 26 (recommended: < 20)",
-          "value": 26,
-          "ratio": 1.3
+          "severity": "high",
+          "message": "High complexity: 49 (recommended: < 20)",
+          "value": 49,
+          "ratio": 2.45
         }
-      ]
-    },
-    {
-      "path": "src/analyzer.ts",
-      "totalScore": 110,
-      "complexityRatio": 1.1,
-      "issues": [
-        {
-          "type": "complexity",
-          "severity": "low",
-          "message": "High complexity: 22 (recommended: < 20)",
-          "value": 22,
-          "ratio": 1.1
-        }
-      ]
-    },
-    {
-      "path": "src/types.ts",
-      "totalScore": 38,
-      "duplicationValue": 19,
-      "issues": [
-        {
-          "type": "duplication",
-          "severity": "medium",
-          "message": "Medium duplication: 19% of code is duplicated",
-          "value": 19
-        }
-      ]
+      ],
+      "fileType": "production",
+      "totalScore": 55,
+      "complexityRatio": 2.45,
+      "sizeRatio": 0.4,
+      "impact": 3,
+      "criticismScore": 56.5
     }
+  
+    ...
   ]
-}
+} 
 ```
 
 ## 📚 Best Practices
@@ -474,24 +411,18 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 
 ## 🗺️ Roadmap
 
-### v0.3.0 ✅ Released
-- File criticality scoring with weighted algorithm
-- Top 5 critical files in JSON output
-- Criticality-based file ranking in reporter
-- Enhanced scoring with graduated thresholds
-- Smart file type classification
-- Production-only analysis (`--exclude-utility`)
-- Industry-aligned metrics
+### What's New (v0.4.0) ✅
+  - **Advanced Criticality Engine**: Scoring is now weighted by file complexity and architectural impact.
+  - **Architectural Analysis**: The tool now detects "Silent Killers" and profiles complexity distribution (StdDev).
+  - **Enhanced JSON Output**: The API exposes all advanced metrics for CI/CD and external tools
 
-### v0.4.0 🚀 Ready for Release
-- Configurable thresholds with `insightcode.config.json`
-- Enhanced file scoring with issue ratios and criticality scoring
-- Project metadata display in analysis reports  
-- Academic best practices for metric aggregation
-- Improved reporting with better metrics display
-- Expanded test coverage (55 tests with comprehensive scenarios)
-- Robust configuration management with validation and defaults
-- Enhanced JSON output format with project information
+  - Configurable thresholds with `insightcode.config.json`
+  - Project metadata display in analysis reports  
+  - Academic best practices for metric aggregation
+  - Improved reporting with better metrics display
+  - Expanded test coverage (55 tests with comprehensive scenarios)
+  - Robust configuration management with validation and defaults
+  - Enhanced JSON output format with project information
 
 ### v0.5.0 🔮 Future Development
 - JSX/TSX support
@@ -499,11 +430,12 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 - HTML reports with charts
 - Historical tracking capabilities
 
-### v0.6.0 🔮 Future
+### Future 🔮
 - GitHub Actions integration
 - Test coverage metrics
 - Multi-language support (Python, Java)
 - Performance optimization features
+- Historical tracking & trend analysis
 
 ## 🤝 Contributing
 

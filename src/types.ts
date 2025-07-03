@@ -1,34 +1,39 @@
 // File: src/types.ts
 // Types for InsightCode CLI
 
+/**
+ * Représente toutes les métriques et scores calculés pour un seul fichier.
+ */
 export interface FileMetrics {
   path: string;
+  // Métriques brutes extraites par le parser
   complexity: number;
   duplication: number;
   functionCount: number; 
-  loc: number; // Lines of code
-  issues: Issue[];
+  loc: number; // Lignes de code
   fileType?: 'production' | 'test' | 'example' | 'utility' | 'config';
-  impact: number;           // Nombre de fichiers qui importent celui-ci
-  criticismScore: number;   // Score de criticité calculé
-  // Scoring fields
-  totalScore: number;
-  complexityRatio: number;
-  sizeRatio: number;
+  // Données enrichies par l'analyseur
+  issues: Issue[];
+  impact: number;           // Nombre de fichiers qui dépendent de celui-ci.
+  criticismScore: number;   // Score de criticité final du fichier (utilisé pour le poids).
 }
 
+/**
+ * Représente un problème unique identifié dans un fichier.
+ */
 export interface Issue {
   type: 'complexity' | 'duplication' | 'size';
   severity: 'high' | 'medium' | 'low';
   message: string;
+  value: number; // La valeur brute de la métrique (ex: complexité de 50)
   line?: number;
-  value: number;
-  ratio?: number;
+  ratio?: number; // Le rapport par rapport au seuil (ex: 2.5x au-dessus de la limite)
 }
 
+/**
+ * L'objet complet retourné par une analyse, contenant tous les résultats.
+ */
 export interface AnalysisResult {
-  files: FileMetrics[];
-  topFiles: FileMetrics[];
   project: {
     name: string;
     path: string;
@@ -47,13 +52,19 @@ export interface AnalysisResult {
     avgLoc: number;
   };
   scores: {
-    complexity: number;      // Individual complexity score (0-100)
-    duplication: number;     // Individual duplication score (0-100)  
-    maintainability: number; // Individual maintainability score (0-100)
-    overall: number;         // Weighted total (0-100)
+    complexity: number;
+    duplication: number;
+    maintainability: number;
+    overall: number;
   };
-  score: number; // Kept for backward compatibility
+  score: number; // Identique à scores.overall, pour la compatibilité.
   grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  // Métriques d'analyse avancées
+  complexityStdDev: number;     // Écart-type, pour détecter les monolithes.
+  silentKillers: FileMetrics[]; // Fichiers à risque architectural.
+  // Listes de fichiers
+  files: FileMetrics[];
+  topFiles: FileMetrics[];
 }
 
 export interface CliOptions {
@@ -62,7 +73,6 @@ export interface CliOptions {
   exclude?: string[];
   excludeUtility?: boolean;
 }
-
 export interface ThresholdConfig {
   complexity: {
     production: { medium: number; high: number };

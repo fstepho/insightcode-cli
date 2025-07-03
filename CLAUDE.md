@@ -4,101 +4,101 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-InsightCode CLI is a TypeScript code quality analyzer that runs 100% locally. It's a published NPM package (`insightcode-cli` v0.4.0) designed for zero-config analysis of TypeScript/JavaScript codebases.
+InsightCode CLI is a TypeScript code quality analyzer that runs 100% locally. It's a published NPM package (`insightcode-cli`) designed for zero-config analysis of TypeScript/JavaScript codebases. Its key differentiator is a **criticality-weighted scoring model** that prioritizes issues based on code complexity and architectural impact.
 
 ## Development Commands
 
 ```bash
-# Development
-npm run dev          # Start development server with tsx watch, do not use in claude code prompts because it requires a terminal to watch files 
-npm run start -- analyze  # Run CLI on current directory (equivalent to `insightcode analyze .`)
-# Testing  
-npm test            # Run Vitest test suite (31 tests)
-npm test -- --coverage  # Run tests with coverage report
+# Run CLI on current directory
+npm start -- analyze .
 
-# Building
-npm run build       # Compile TypeScript to dist/
-npm run prepublishOnly  # Auto-run before npm publish
+# Run the full test suite
+npm test
 
-# Validation & Benchmarking
-npm run benchmark   # Analyze 19 popular open-source projects (enhanced reporting with v0.3.0+ scoring)
-npm run benchmark:production  # Production-only analysis with --exclude-utility
-node scripts/validate.js  # Verify calculation accuracy (100% validated)
+# Run tests with coverage report
+npm test -- --coverage
 
-# Local Installation Testing
-npm link           # Install CLI globally for testing
-insightcode analyze  # Test the installed CLI
-```
+# Build for production
+npm run build
+
+# Run the full benchmark against 9 popular projects
+npm run benchmark
+
+# Run the benchmark on production code only
+npm run benchmark:production
+
+# Validate calculation accuracy
+node scripts/validate.js
+
+# Test the globally linked CLI
+insightcode analyze
+````
 
 ## Architecture
 
 ### Core Philosophy
-- **KISS Principle**: Keep It Stupid Simple
-- **Maximum 5 dependencies** (currently 4)
-- **Zero configuration** for basic usage
-- **100% local analysis** - never sends code to cloud
-- **Stateless architecture** - no database, no persistent cache
 
-### Codebase Structure (2,802 lines total)
+  * **Criticality-First**: The importance of an issue depends on the file's complexity and its architectural impact.
+  * **KISS Principle**: Keep It Stupid Simple.
+  * **Maximum 5 dependencies** (currently 4).
+  * **100% local analysis**; code never leaves the user's machine.
+  * **Stateless architecture**: No database, no persistent cache.
+
+### Codebase Structure
+
 ```
-src/                    # ~1,200 lines - all core logic (8 files)
-├── cli.ts              # Commander.js CLI entry point (40 lines)
-├── parser.ts           # TypeScript AST parsing with ts.createSourceFile() (257 lines)
-├── analyzer.ts         # Calculate 3 core metrics with weighted scoring (190 lines)
-├── reporter.ts         # Terminal output with chalk colors & ASCII bars (140 lines)
-├── scoring.ts          # Centralized scoring functions (140 lines)
-├── fileScoring.ts      # File-level scoring logic with criticality (100 lines)
-├── config.ts           # Configuration management with customizable thresholds (126 lines)
-└── types.ts            # TypeScript interfaces (80 lines)
+src/
+├── cli.ts              # Commander.js CLI entry point
+├── parser.ts           # TypeScript AST parsing logic
+├── analyzer.ts         # CORE: Calculates all metrics, impact, and criticality scores
+├── reporter.ts         # Renders terminal output with chalk
+├── scoring.ts          # Pure functions to convert raw metrics to scores (0-100)
+├── dependencyAnalyzer.ts # AST-based dependency graph analysis to calculate file impact
+├── duplication.ts      # Logic for duplication detection
+└── types.ts            # All TypeScript interfaces for the project
 
-tests/                  # ~900 lines (4 files)
-├── parser.test.ts      # Parser unit tests
-├── analyzer.test.ts    # Analyzer unit tests (significantly expanded)
-├── integration.test.ts # End-to-end CLI tests
-└── config.test.ts      # Configuration system tests
+tests/                  # Vitest test suite
+├── parser.test.ts
+├── analyzer.test.ts
+└── integration.test.ts
 
 scripts/                # Validation & benchmarking
-├── benchmark.ts        # Enhanced TypeScript benchmark with stable version cloning
-├── discover-rules.js   # Rule discovery utility
-└── validate.js         # Prove 100% calculation accuracy
+├── benchmark.ts
+└── validate.js
 ```
 
 ### Dependencies (Minimalist Stack)
-- `commander`: CLI framework
-- `typescript`: Compiler API for AST parsing
-- `chalk`: Terminal colors
-- `fast-glob`: File pattern matching
+
+  * `commander`: CLI framework
+  * `typescript`: Compiler API for AST parsing
+  * `chalk`: Terminal colors
+  * `fast-glob`: File pattern matching
 
 ## Core Algorithms
 
-### 1. Cyclomatic Complexity (40% weight)
-Uses extended McCabe's algorithm (including && and || operators) with TypeScript Compiler API. Counts decision points:
-- Control flow: `if`, `for`, `while`, `switch case`
-- Logical operators: `&&`, `||`
-- Ternary operators: `? :`
-- Exception handling: `catch`
+### 1\. Cyclomatic Complexity
 
-**100% validated accuracy** through extensive testing.
+Uses the extended McCabe's algorithm (including `&&` and `||` operators) via the TypeScript Compiler API.
 
-### 2. Code Duplication (30% weight)  
-Pragmatic content-based detection using 5-line sliding window with normalization. Focuses on actual copy-paste rather than structural similarity (~85% accuracy, avoids false positives).
+### 2\. Code Duplication
 
-**Philosophy**: Content over structure - reports 6% duplication on benchmark files vs SonarQube's 70%, focusing on actionable refactoring opportunities.
+Pragmatic content-based detection using a 5-line sliding window with normalization. Focuses on actual copy-paste rather than structural similarity, which avoids false positives in test suites.
 
-### 3. Maintainability (Size & Structure) (30% weight)
-Evaluates file maintainability based on lines of code, function count, and structural complexity. Considers file type context (production vs test vs utility).
+### 3\. Maintainability (Size & Structure)
 
-## Overall Score Calculation
-Composite score (0-100) with A-F grading calculated from the weighted combination of all three metrics above using academic best practices for metric aggregation.
+Evaluates file maintainability based on lines of code and function count, with different thresholds for production vs. test code.
+
+### Overall Score Calculation
+
+The final project score is a **criticality-weighted average**.
+
+1.  For each file, a **Criticality Score** is calculated (`complexity` + `impact`).
+2.  The final score is an average of individual file quality scores, weighted by this `Criticality Score`.
+3.  This ensures that issues in complex, highly-interconnected files have a larger impact on the final grade.
 
 ## Test Framework
 
-Uses **Vitest** with Node.js environment:
-- Comprehensive test suite with 100% passing rate
-- Test files in `tests/` directory with expanded coverage
-- Coverage reporting available via `npm test -- --coverage`
-- Integration tests validate full CLI workflow
-- Configuration system tests validate customizable thresholds
+Uses **Vitest** with the Node.js environment. Tests are located in the `tests/` directory and can be run with `npm test`.
 
 ## Development Guidelines
 
@@ -127,31 +127,11 @@ Uses **Vitest** with Node.js environment:
 - `scripts/benchmark.ts` - Enhanced TypeScript benchmark with stable version cloning (19 projects)
 - `scripts/validate.js` - Proves 100% calculation accuracy
 
-### Documentation
-- `.ai/AI_CONTEXT.md` - Complete project context and development history
-- `docs/DUPLICATION_DETECTION_PHILOSOPHY.md` - Pragmatic vs structural approach (vs SonarQube)
-- `docs/SCORING_THRESHOLDS_JUSTIFICATION.md` - Academic justification for all thresholds
-- `README.md` - User documentation with methodology
-- `benchmarks/` - Real-world validation results
-- `insightcode.config.json` - Example configuration file with customizable thresholds
+## Recent Enhancements (v0.4.0)
 
-## Current Status
-
-- **Version**: 0.4.0 ready for NPM publication
-- **Self-analysis score**: C (73/100) - stable after scoring system improvements
-- **Performance**: 62,761 lines/second analysis speed (latest full benchmark)
-- **Production analysis**: 18,490 lines/second with `--exclude-utility` flag
-- **Project grade among peers**: 16% achieve A grade, 42% achieve B grade among popular projects
-- **Zero critical bugs** reported since publication
-
-## Recent Enhancements (July 2025)
-
-- **Configurable thresholds**: Added `insightcode.config.json` support for customizable complexity, duplication, file size, and function count thresholds
-- **Enhanced file scoring**: Implemented criticality scoring and issue ratios for better prioritization
-- **Improved reporting**: Enhanced terminal output with better metrics display and project information
-- **Expanded test coverage**: Significantly increased test coverage with comprehensive analyzer tests
-- **Configuration management**: Added robust configuration system with validation and defaults
-- **Project metadata**: Added project information retrieval and display in analysis reports
+  * **Shift to Criticality-Weighted Scoring**: Replaced the old fixed-weight model. The final score is now weighted by each file's complexity and architectural **Impact**, providing a more accurate assessment of project health.
+  * **Unification of Scoring Logic**: All ranking and scoring logic is now centralized in `src/analyzer.ts`. The redundant `src/fileScoring.ts` module has been **deleted**.
+  * **Introduction of Advanced Architectural Metrics**: The analysis now identifies **"Silent Killers"** (high-impact, low-complexity files) and calculates the **Standard Deviation** of complexity to detect code monoliths.
 
 ## CLI Usage
 
@@ -162,10 +142,10 @@ insightcode analyze [path]
 # JSON output for CI/CD
 insightcode analyze --json
 
-# Production-only analysis (exclude tests, examples, configs)
+# Production-only analysis (excludes tests, examples, etc.)
 insightcode analyze --exclude-utility
 
-# Exclude patterns  
+# Exclude specific patterns
 insightcode analyze --exclude "**/*.spec.ts" --exclude "**/vendor/**"
 
 # Custom configuration
@@ -174,22 +154,22 @@ insightcode analyze --config ./custom-config.json
 
 ## When Making Changes
 
-1. **Run tests first**: `npm test` 
-2. **Validate with benchmarks**: `npm run benchmark`
-3. **Test CLI locally**: `npm link && insightcode analyze`
-4. **Check self-analysis score**: Should remain stable at C (80/100)
-5. **Build before commit**: `npm run build`
+1.  **Run tests first**: `npm test`
+2.  **Validate with a quick benchmark run**: `npm run benchmark`
+3.  **Check self-analysis score**: `npm start -- analyze .`
+4.  **Build before commit**: `npm run build`
 
 ## 📚 Extended Documentation
 
 For detailed information, refer to:
-- `.ai/AI_CONTEXT.md` - Full project history, metrics, session logs
-- `docs/DUPLICATION_DETECTION_PHILOSOPHY.md` - Why our approach differs from SonarQube
-- `docs/SCORING_THRESHOLDS_JUSTIFICATION.md` - Academic research behind thresholds
-- `.ai/CURRENT_TASK.md` - Active development task and checklist
-- `docs/DECISIONS.md` - Architectural decisions with rationale
-- `.ai/DOC_MAINTENANCE_CHECKLIST.md` - Documentation update process
+
+  - `docs/DECISIONS.md` - Architectural decisions with rationale.
+  - `docs/SCORING_THRESHOLDS_JUSTIFICATION.md` - Academic research behind our metrics.
+  - `docs/DUPLICATION_DETECTION_PHILOSOPHY.md` - Why our approach differs from SonarQube.
+  - `README.md` - User-facing documentation.
+  - `.ai/DOC_MAINTENANCE_CHECKLIST.md` - Documentation update process
 - `.ai/AI_PROMPTS.md` - Reusable AI prompts
+- `benchmarks/` - Real-world validation results
 
 ## 🎯 Quick Task Reference
 

@@ -4,7 +4,7 @@
 
 InsightCode uses a **pragmatic, content-based duplication detection** approach that focuses on actual copy-paste problems rather than structural similarities. This results in more actionable insights for developers.
 
-> **Note**: For technical details and academic justification of our detection algorithm, see [SCORING_THRESHOLDS_JUSTIFICATION.md](./SCORING_THRESHOLDS_JUSTIFICATION.md#2-code-duplication-thresholds-30-weight).
+> **Note**: For technical details and academic justification of our detection algorithm, see [SCORING_THRESHOLDS_JUSTIFICATION.md](./SCORING_THRESHOLDS_JUSTIFICATION.md).
 
 ## Practical Example: lodash/perf.js Case Study
 
@@ -151,26 +151,9 @@ function normalizeBlock(block: string): string {
 }
 ```
 
-## When to Use Which Tool
-
-### InsightCode is Best For:
-- **Actionable refactoring**: Only flags code that can actually be extracted
-- **CI/CD pipelines**: Fast, local analysis without false positives
-- **Developer experience**: Results align with developer intuition
-- **Production code focus**: Use `--exclude-utility` for cleaner metrics
-
-### SonarQube is Best For:
-- **Enterprise compliance**: Detailed reports for audits
-- **Architectural analysis**: Identifying structural patterns
-- **Team metrics**: Tracking long-term code health trends
-- **Deep analysis**: When you need 20+ different metrics
-
 ## Real-World Impact
 
-Based on our analysis of 19 popular projects:
-- **Average duplication (full)**: 27.4%
-- **Average duplication (production-only)**: 15.2%
-- **Reduction when excluding tests**: 44%
+Our latest benchmark of 9 popular projects confirms this philosophy. The average duplication across all production code was 20.4%. This highlights that even well-maintained projects carry a measurable level of duplication, and our tool provides a realistic baseline for evaluating it.
 
 This shows that **test code naturally has more duplication** due to setup/teardown patterns, and our pragmatic approach correctly identifies this as non-actionable.
 
@@ -186,4 +169,4 @@ While other tools might report high duplication in benchmark or test files, we f
 
 ---
 
-*For the technical implementation details and academic justification, see [SCORING_THRESHOLDS_JUSTIFICATION.md](./SCORING_THRESHOLDS_JUSTIFICATION.md#2-code-duplication-thresholds-30-weight).*
+*For the technical implementation details and academic justification, see [SCORING_THRESHOLDS_JUSTIFICATION.md](./SCORING_THRESHOLDS_JUSTIFICATION.md).*

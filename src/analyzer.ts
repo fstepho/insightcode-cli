@@ -2,10 +2,9 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
-import { FileMetrics, AnalysisResult, ThresholdConfig } from './types';
+import { FileMetrics, AnalysisResult, ThresholdConfig, Issue } from './types';
 import { DEFAULT_THRESHOLDS } from './parser';
-import { getGrade, calculateComplexityScore, calculateDuplicationScore, calculateMaintainabilityScore } from './scoring';
-import { calculateFileScores, getTopCriticalFiles } from './fileScoring';
+import { getGrade, calculateComplexityScore, calculateDuplicationScore, calculateMaintainabilityScore, calculateWeightedScore } from './scoring';
 import { analyzeDependencies } from './dependencyAnalyzer';
 
 /**
@@ -45,116 +44,142 @@ function getProjectInfo(projectPath: string) {
  * Ce score remplace le poids par lignes de code (LOC).
  * @param file - Le fichier à évaluer.
  */
-function calculateCriticismScore(file: FileMetrics): number {
-  // Facteurs de criticité (ajustez ces poids selon votre philosophie)
-  const complexityWeight = 1.0;
-  const impactWeight = 2.0;     // L'impact est souvent le facteur le plus important
-  const issueWeight = 0.5;
+function calculateCriticismScore(file: { complexity: number, impact: number, issues: Issue[] }): number {
+    const complexityWeight = 1.0;
+    const impactWeight = 2.0;
+    const issueWeight = 0.5;
 
-  // Plus un fichier est importé, plus il est critique
-  const impactFactor = file.impact * impactWeight;
+    const impactFactor = file.impact * impactWeight;
+    const complexityFactor = file.complexity * complexityWeight;
+    const issuesFactor = file.issues.length * issueWeight;
 
-  // Plus un fichier est complexe, plus il est critique
-  const complexityFactor = file.complexity * complexityWeight;
-  
-  // Plus un fichier a de problèmes, plus il est critique
-  const issuesFactor = file.issues.length * issueWeight;
+    return impactFactor + complexityFactor + issuesFactor + 1;
+}
 
-  // Le score de criticité est la somme des facteurs. +1 pour éviter les poids nuls.
-  return impactFactor + complexityFactor + issuesFactor + 1;
+function calculateStandardDeviation(numbers: number[]): number {
+    if (numbers.length === 0) return 0;
+    const mean = numbers.reduce((sum, val) => sum + val, 0) / numbers.length;
+    const variance = numbers.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / numbers.length;
+    return Math.sqrt(variance);
+}
+
+function findSilentKillers(allFiles: FileMetrics[], topFiles: FileMetrics[]): FileMetrics[] {
+    if (allFiles.length < 10) return [];
+    
+    const topFilePaths = new Set(topFiles.map(f => f.path));
+    const avgImpact = allFiles.reduce((sum, f) => sum + f.impact, 0) / allFiles.length;
+    const avgComplexity = allFiles.reduce((sum, f) => sum + f.complexity, 0) / allFiles.length;
+
+    const candidates = allFiles.filter(file => 
+        !topFilePaths.has(file.path) &&
+        file.impact > 5 &&
+        file.impact > avgImpact * 1.5 &&
+        file.complexity > avgComplexity
+    );
+    
+    candidates.sort((a, b) => (b.impact * b.complexity) - (a.impact * a.complexity));
+    return candidates.slice(0, 3);
 }
 
 /**
  * Analyse le code, calcule les métriques et les scores basés sur la CRITICITÉ.
+ * C'est la source unique de vérité pour toute l'analyse.
  */
-export function analyze(files: FileMetrics[], projectPath: string = '.', thresholds: ThresholdConfig = DEFAULT_THRESHOLDS): AnalysisResult {
-  // 1. Analyse des dépendances pour obtenir l'impact de chaque fichier
-  const impactScores = analyzeDependencies(files);
+export function analyze(files: FileMetrics[], projectPath: string, thresholds: ThresholdConfig = DEFAULT_THRESHOLDS): AnalysisResult {
+    // 1. Dependency and duplication analysis
+    const impactScores = analyzeDependencies(files);
+    const filesWithDuplication = detectDuplication(files, thresholds);
 
-  // 2. Enrichir chaque fichier avec son impact et son score de criticité
-  let totalCriticismScore = 0;
-  const filesWithCriticism = files.map(file => {
-    const enrichedFile = { ...file, impact: impactScores.get(file.path) ?? 0, criticismScore: 0 };
-    enrichedFile.criticismScore = calculateCriticismScore(enrichedFile);
-    totalCriticismScore += enrichedFile.criticismScore;
-    return enrichedFile;
-  });
+    // 2. Centralized enrichment and scoring for each file
+    let totalCriticismScore = 0;
+    const processedFiles: FileMetrics[] = filesWithDuplication.map(file => {
+        const impact = impactScores.get(file.path) ?? 0;
+        
+        // Enrich issues with ratios for reporter display
+        const fileType = file.fileType || 'production';
+        const sizeThreshold = thresholds.size[fileType]?.high || thresholds.size.production.high;
+        const complexityThreshold = thresholds.complexity[fileType]?.high || thresholds.complexity.production.high;
 
-  // 3. Poursuivre avec la logique existante (duplication, etc.)
-  const filesWithDuplication = detectDuplication(filesWithCriticism, thresholds);
-  
-  
-  // Calculate aggregate metrics
-  const totalFiles = filesWithDuplication.length;
-  const totalLines = filesWithDuplication.reduce((sum, f) => sum + f.loc, 0);
-  const avgComplexity = totalFiles > 0 
-    ? filesWithDuplication.reduce((sum, f) => sum + f.complexity, 0) / totalFiles 
-    : 0;
-  const avgDuplication = totalFiles > 0
-    ? filesWithDuplication.reduce((sum, f) => sum + f.duplication, 0) / totalFiles
-    : 0;
+        const enhancedIssues: Issue[] = file.issues.map(issue => ({
+            ...issue,
+            ratio: issue.type === 'complexity' ? file.complexity / complexityThreshold :
+                   issue.type === 'size' ? file.loc / sizeThreshold : 
+                   undefined,
+        }));
 
-  // Calculate average function count
-  const avgFunctions = totalFiles > 0
-    ? filesWithDuplication.reduce((sum, f) => sum + (f.functionCount || 0), 0) / totalFiles
-    : 0;
-  
-  // Calculate average lines of code (LOC)
-  const avgLoc = totalFiles > 0 ? totalLines / totalFiles : 0;
+        const enrichedFile = { ...file, issues: enhancedIssues, impact, criticismScore: 0 };
+        const criticismScore = calculateCriticismScore(enrichedFile);
+        totalCriticismScore += criticismScore;
 
-  // Calculate scores for all files first (source of truth)
-  const filesWithScores = calculateFileScores(filesWithDuplication);
-  const topFiles = getTopCriticalFiles(filesWithScores, 5);
-  
-  let complexityScore = 100, duplicationScore = 100, maintainabilityScore = 100, finalScore = 100;
-  
-  if (filesWithScores.length > 0 && totalCriticismScore > 0) {
-    let weightedComplexitySum = 0;
-    let weightedDuplicationSum = 0; 
-    let weightedMaintainabilitySum = 0;
-    let weightedTotalSum = 0;
-    
-    // 4. Pondérer le score final par CRITICITÉ au lieu de LOC
-    for (const file of filesWithScores) {
-      const weight = file.criticismScore / totalCriticismScore; // <-- LA MODIFICATION CENTRALE
-      
-      weightedComplexitySum += calculateComplexityScore(file.complexity) * weight;
-      weightedDuplicationSum += calculateDuplicationScore(file.duplication) * weight;
-      weightedMaintainabilitySum += calculateMaintainabilityScore(file.loc, file.functionCount) * weight;
-      weightedTotalSum += file.totalScore * weight;
+        return { ...enrichedFile, criticismScore };
+    });
+
+    // 3. Calculate final project scores, weighted by criticality
+    let weightedComplexityScore = 0;
+    let weightedDuplicationScore = 0;
+    let weightedMaintainabilityScore = 0;
+
+    if (totalCriticismScore > 0) {
+        for (const file of processedFiles) {
+            const weight = file.criticismScore / totalCriticismScore;
+            weightedComplexityScore += calculateComplexityScore(file.complexity) * weight;
+            weightedDuplicationScore += calculateDuplicationScore(file.duplication) * weight;
+            weightedMaintainabilityScore += calculateMaintainabilityScore(file.loc, file.functionCount) * weight;
+        }
     }
+
+    const finalComplexityScore = Math.round(weightedComplexityScore);
+    const finalDuplicationScore = Math.round(weightedDuplicationScore);
+    const finalMaintainabilityScore = Math.round(weightedMaintainabilityScore);
     
-    // Round project-level scores
-    complexityScore = Math.round(weightedComplexitySum);
-    duplicationScore = Math.round(weightedDuplicationSum);
-    maintainabilityScore = Math.round(weightedMaintainabilitySum);
-    finalScore = Math.round(weightedTotalSum);
-  }
-  const grade = getGrade(finalScore);
+    const finalScore = Math.round(calculateWeightedScore(
+        finalComplexityScore,
+        finalDuplicationScore,
+        finalMaintainabilityScore
+    ));
+    const grade = getGrade(finalScore);
 
-  return {
-    files: filesWithScores, // All files now have scores
-    topFiles,
-    project: getProjectInfo(projectPath),
-    summary: {
-      totalFiles,
-      totalLines,
-      avgComplexity: Math.round(avgComplexity * 10) / 10,
-      avgDuplication: Math.round(avgDuplication * 10) / 10,
-      avgFunctions: Math.round(avgFunctions * 10) / 10,
-      avgLoc: Math.round(avgLoc),
-    },
-    scores: {
-      complexity: complexityScore,
-      duplication: duplicationScore,
-      maintainability: maintainabilityScore,
-      overall: finalScore
-    },
-    score: finalScore, // Kept for backward compatibility
-    grade
-  };
+    // 4. Identify key files and advanced metrics
+    const topFiles = [...processedFiles]
+      .sort((a, b) => b.criticismScore - a.criticismScore)
+      .slice(0, 5);
+      
+    const silentKillers = findSilentKillers(processedFiles, topFiles);
+    const complexityStdDev = calculateStandardDeviation(processedFiles.map(f => f.complexity));
+
+    // 5. Assemble the final result object
+    const summary = {
+        totalFiles: processedFiles.length,
+        totalLines: processedFiles.reduce((sum, f) => sum + f.loc, 0),
+        avgComplexity: processedFiles.reduce((sum, f) => sum + f.complexity, 0) / (processedFiles.length || 1),
+        avgDuplication: processedFiles.reduce((sum, f) => sum + f.duplication, 0) / (processedFiles.length || 1),
+        avgFunctions: processedFiles.reduce((sum, f) => sum + f.functionCount, 0) / (processedFiles.length || 1),
+        avgLoc: processedFiles.reduce((sum, f) => sum + f.loc, 0) / (processedFiles.length || 1),
+    };
+
+    return {
+        files: processedFiles,
+        topFiles,
+        silentKillers,
+        project: getProjectInfo(projectPath),
+        summary: {
+            ...summary,
+            avgComplexity: Math.round(summary.avgComplexity * 10) / 10,
+            avgDuplication: Math.round(summary.avgDuplication * 10) / 10,
+            avgFunctions: Math.round(summary.avgFunctions * 10) / 10,
+            avgLoc: Math.round(summary.avgLoc),
+        },
+        scores: {
+            complexity: finalComplexityScore,
+            duplication: finalDuplicationScore,
+            maintainability: finalMaintainabilityScore,
+            overall: finalScore
+        },
+        complexityStdDev,
+        score: finalScore,
+        grade,
+    };
 }
-
 /**
  * Normalize code block for pragmatic duplication detection
  * 

@@ -291,9 +291,6 @@ export function parseFile(filePath: string, thresholds: ThresholdConfig = DEFAUL
     loc,
     issues,
     fileType,
-    totalScore: 0, // Placeholder, will be calculated later
-    complexityRatio: 0, // Placeholder, will be calculated later
-    sizeRatio: 0, // Placeholder, will be calculated later
     impact: 0, // Placeholder, will be calculated in analyzer
     criticismScore: 0 // Placeholder, will be calculated in analyzer
   };

@@ -1,40 +1,43 @@
 # 🧭 How to Use Code Quality Scores Wisely
 
-> Automated scores are a starting point, not a verdict! Especially important for static analysis tools like InsightCode CLI.
+> An automated score is a starting point, not a final verdict. This is especially true for a deep architectural analysis tool like InsightCode CLI.
 
 ## 📊 Understanding InsightCode Scores
 
-InsightCode CLI calculates an **Overall Quality Score** (0-100) based on three metrics:
-- **Cyclomatic Complexity** (40% weight) - Code complexity based on control flow
-- **Code Duplication** (30% weight) - Percentage of duplicated code blocks
-- **Maintainability** (30% weight) - File size and function count
+InsightCode CLI calculates an **Overall Quality Score** (0-100) using a **criticality-weighted model**. It's based on three core metrics:
+- **Cyclomatic Complexity** - The logical complexity of your code.
+- **Code Duplication** - The percentage of copy-pasted code.
+- **Maintainability** - A score based on file size and function count.
 
-This overall score translates to a grade:
-- **A** (90-100): Excellent code quality
-- **B** (80-89): Good code quality  
-- **C** (70-79): Acceptable, some refactoring needed
-- **D** (60-69): Poor, significant refactoring recommended
-- **F** (0-59): Critical, major architectural issues
+However, the final score is not a simple average. Each file's contribution is weighted by its **Criticality Score**, which is a combination of its own complexity and its architectural **Impact** (how many other files depend on it).
+
+This means a complex but isolated file has less impact on the score than a moderately complex utility file used everywhere.
+
+The overall score translates to a grade:
+- **A** (90-100): Exceptional code quality.
+- **B** (80-89): Good, production-ready code.
+- **C** (70-79): Acceptable, some refactoring may be needed.
+- **D** (60-69): Poor, indicates significant technical debt.
+- **F** (0-59): Critical, suggests major architectural or quality challenges.
 
 ## 🟢 Best Practices with InsightCode CLI
 
 | ✔️ Good Practice | 💡 Why? | 🛠️ InsightCode Command |
 |------------------|---------|------------------------|
-| Identify high-complexity files | Focus review efforts | `insightcode analyze --json \| jq '.topFiles'` |
-| Analyze production code only | Avoid test/config noise | `insightcode analyze --exclude-utility` |
-| Track trends over time | See if quality improves | Integrate in CI/CD with history |
-| Combine with human review | Context matters! | Score ≠ whole story |
-| Justify outliers | Not all complexity is bad | See our [explained benchmarks](./benchmarks/) |
+| **Focus on Criticality** | The tool guides you to the most important files. | Check `Top 5 Critical Files` & `Architectural Risks` first. |
+| **Analyze Production Code** | Avoid noise from tests and configuration files. | `insightcode analyze --exclude-utility` |
+| **Track Trends Over Time** | See if quality improves or degrades with new features. | Integrate the JSON output in your CI/CD pipeline. |
+| **Combine with Human Review** | Context is king! A score can't understand business logic. | The score is a conversation starter, not a judgment. |
+| **Justify Outliers** | Not all complexity is bad. | See our [explained benchmarks](./benchmark-results/). |
 
 ## 🔴 What to Avoid
 
 | 🚫 Don't Do This | ⚠️ Why Not? | 📊 Real Example |
 |------------------|-------------|-----------------|
-| Judge only by global score | Complexity ≠ poor engineering | lodash: F (deliberate), React: B (excellent) |
-| Blindly compare different projects | Nature/size matters | Utility lib ≠ Framework ≠ Compiler |
-| Refactor just to "improve the score" | Can harm stability | Algorithmic complexity is sometimes necessary |
-| Use for developer evaluation | Teams are more than a number | Focus on learning |
-| Ignore justifiable complexity | Some domains require it | Parsers, algorithms, compatibility |
+| **Judge only by the grade** | A low score on a complex system is often expected. | `TypeScript` gets an **F**, but it's a compiler—one of the most complex types of software. |
+| **Blindly compare projects** | The nature and size of projects matter immensely. | A utility library (`chalk`: B) cannot be fairly compared to a UI framework (`react`: F). |
+| **Refactor just to "improve the score"**| This can harm stability or readability. | Algorithmic complexity is sometimes necessary for performance. |
+| **Use for developer evaluation** | It's a tool for understanding code, not people. | Focus on learning and collaborative improvement. |
 
 ## 📈 Quick Visual Guide
 
@@ -42,15 +45,15 @@ This overall score translates to a grade:
 Low score (<60)?                High score (>80)?
       │                              │
       ▼                              ▼
-Quick check:                   Manual review:
-- Simple code?                 - Justified complexity?
-- Missing tests?                 └─ Yes: Algorithm, parsing, perf
-- Duplication?                   └─ No: Spaghetti, legacy
+Check the report for:          Manual review:
+- High Complexity?             - Is complexity justified?
+- High Duplication?              └─ Yes: Algorithm, parser, compatibility layer
+- "Silent Killers"?              └─ No: Spaghetti code, legacy issues
       │                              │
       ▼                              ▼
-Action: Add tests              Action: Team review → 
-                               Refactor/Document/Accept
-```
+Action: Review critical files  Action: Team review → 
+and architectural risks.       Refactor/Document/Accept
+````
 
 ## 🛠️ Useful InsightCode Commands
 
@@ -68,54 +71,41 @@ insightcode analyze --json > quality-report.json
 insightcode analyze --exclude "**/*.spec.ts,**/vendor/**"
 ```
 
-## 📊 Our Thresholds and Their Justification
-
-- **Cyclomatic Complexity**: >10 = warning, >20 = error ([academic justification](./SCORING_THRESHOLDS_JUSTIFICATION.md))
-- **Duplication**: Focus on actual copy-paste, not patterns ([philosophy](./DUPLICATION_DETECTION_PHILOSOPHY.md))
-- **Grade A**: Only 16% of popular projects achieve it!
-
-## 💡 Real Example: lodash
-
-```text
-lodash: Grade F (16/100)
-├─ Complexity: 1659 😱
-├─ Duplication: 47%
-└─ BUT: Deliberate architecture for universal compatibility
-         → Single file = Single <script> tag
-         → Assumed trade-off: UX > Maintainability
-```
-
-**Lesson**: An F score doesn't always mean bad code. Check our [detailed analyses](./benchmarks/) to understand the context.
-
 ## 🎯 When to Take Action
 
 ### High Priority (Fix Soon)
-- Files with complexity >50 AND high churn rate
-- Duplication >40% in production code
-- Multiple issues in the same module
+
+  - Files listed in the **Top 5 Critical Files**.
+  - Files identified as **Architectural Risks (Silent Killers)**.
+  - Duplication \>40% in core production code.
 
 ### Medium Priority (Plan Refactoring)
-- Complexity 20-50 in non-critical paths
-- Duplication in test setup/teardown
-- Large files (>500 lines) with moderate complexity
 
-### Low Priority (Monitor)
-- Justified complexity (algorithms, parsers)
-- Test file duplication
-- Generated or vendor code
+  - Complexity between 20-50 in non-critical paths.
+  - Duplication in test setup/teardown that is becoming hard to manage.
+  - Large files (\>500 lines) with moderate complexity.
 
-## 🏆 Success Stories from Benchmarks
+### Low Priority (Monitor or Accept)
 
-| Project | Grade | Score | Key Insight |
-|---------|-------|-------|-------------|
-| chalk | A | 96/100 | Clean, focused purpose |
-| axios | B | 87/100 | Well-structured HTTP client |
-| React | B | 81/100 | Complex but well-managed |
-| TypeScript | F | 4/100 | Compiler complexity justified |
+  - Justified complexity (algorithms, parsers, compilers).
+  - Duplication in generated code or vendored libraries.
 
----
+## 🏆 Insights from Our Benchmarks
 
-📚 **Learn More**: 
-- [Benchmarks of 19 Popular Projects](./benchmarks/benchmark-2025-06-28.md)
-- [Duplication Detection Philosophy](./DUPLICATION_DETECTION_PHILOSOPHY.md)
-- [Academic Threshold Justification](./SCORING_THRESHOLDS_JUSTIFICATION.md)
+| Project | Grade | Score | Key Insight from InsightCode |
+|---|---|---|---|
+| **uuid** | B | 88/100 | Clean, focused, and well-structured. A model library. |
+| **chalk** | B | 82/100 | Minimal complexity and duplication, a sign of high quality. |
+| **jest** | D | 63/100 | The low score is driven by a very high duplication rate (41.9%). |
+| **React** | F | 47/100 | Massive duplication (44.2%) and high complexity in core files like the reconciler. |
+| **TypeScript** | F | 38/100 | The lowest score, driven by extreme, but justified, complexity in the compiler core (`checker.ts`). |
+
+**Lesson**: An F score doesn't always mean "bad code." It means the code presents a significant maintenance challenge according to our metrics, which is expected for projects like React and TypeScript.
+
+-----
+
+📚 **Learn More**:
+
+  - [Full Benchmark Report](../benchmark-results/benchmark-report-production.md)
+  - [Our Duplication Detection Philosophy](./DUPLICATION_DETECTION_PHILOSOPHY.md)
+  - [Academic Justification for Our Thresholds](./SCORING_THRESHOLDS_JUSTIFICATION.md)
