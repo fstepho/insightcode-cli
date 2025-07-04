@@ -1,0 +1,498 @@
+{
+  "project": "uuid",
+  "repo": "https://github.com/uuidjs/uuid.git",
+  "type": "utility library",
+  "stars": "15k",
+  "stableVersion": "v11.1.0",
+  "description": "UUID generation library",
+  "category": "small",
+  "emblematicFiles": {
+    "coreFiles": [
+      "dist/index.js",
+      "src/index.js"
+    ],
+    "architecturalFiles": [
+      "src/v1.js",
+      "src/v4.js"
+    ],
+    "performanceCriticalFiles": [
+      "src/rng.js"
+    ],
+    "complexAlgorithmFiles": [
+      "src/v3.js",
+      "src/v5.js"
+    ]
+  },
+  "analysis": {
+    "files": [
+      {
+        "path": "prettier.config.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 7,
+        "issues": [],
+        "fileType": "utility",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "wdio.conf.js",
+        "complexity": 6,
+        "duplication": 18,
+        "functionCount": 0,
+        "loc": 82,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 7
+      },
+      {
+        "path": "src/index.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 15,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/max.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/md5-browser.ts",
+        "complexity": 5,
+        "duplication": 1,
+        "functionCount": 12,
+        "loc": 135,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 6
+      },
+      {
+        "path": "src/md5.ts",
+        "complexity": 3,
+        "duplication": 83,
+        "functionCount": 1,
+        "loc": 10,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/native-browser.ts",
+        "complexity": 3,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 3,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/native.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/nil.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/parse.ts",
+        "complexity": 2,
+        "duplication": 17,
+        "functionCount": 1,
+        "loc": 26,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/regex.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/rng-browser.ts",
+        "complexity": 4,
+        "duplication": 8,
+        "functionCount": 1,
+        "loc": 13,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 5
+      },
+      {
+        "path": "src/rng.ts",
+        "complexity": 2,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 10,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/sha1-browser.ts",
+        "complexity": 11,
+        "duplication": 5,
+        "functionCount": 3,
+        "loc": 91,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 11 (recommended: < 10)",
+            "value": 11,
+            "ratio": 0.55
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 12.5
+      },
+      {
+        "path": "src/sha1.ts",
+        "complexity": 3,
+        "duplication": 83,
+        "functionCount": 1,
+        "loc": 10,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/stringify.ts",
+        "complexity": 3,
+        "duplication": 9,
+        "functionCount": 2,
+        "loc": 37,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/types.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 21,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/uuid-bin.ts",
+        "complexity": 13,
+        "duplication": 16,
+        "functionCount": 1,
+        "loc": 72,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 13 (recommended: < 10)",
+            "value": 13,
+            "ratio": 0.65
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 14.5
+      },
+      {
+        "path": "src/v1.ts",
+        "complexity": 17,
+        "duplication": 14,
+        "functionCount": 5,
+        "loc": 120,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 17 (recommended: < 10)",
+            "value": 17,
+            "ratio": 0.85
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 18.5
+      },
+      {
+        "path": "src/v1ToV6.ts",
+        "complexity": 3,
+        "duplication": 3,
+        "functionCount": 4,
+        "loc": 30,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/v3.ts",
+        "complexity": 1,
+        "duplication": 70,
+        "functionCount": 3,
+        "loc": 27,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/v35.ts",
+        "complexity": 9,
+        "duplication": 7,
+        "functionCount": 2,
+        "loc": 45,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 10
+      },
+      {
+        "path": "src/v4.ts",
+        "complexity": 11,
+        "duplication": 0,
+        "functionCount": 3,
+        "loc": 38,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 11 (recommended: < 10)",
+            "value": 11,
+            "ratio": 0.55
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 12.5
+      },
+      {
+        "path": "src/v5.ts",
+        "complexity": 1,
+        "duplication": 70,
+        "functionCount": 3,
+        "loc": 27,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/v6.ts",
+        "complexity": 3,
+        "duplication": 11,
+        "functionCount": 3,
+        "loc": 28,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/v6ToV1.ts",
+        "complexity": 3,
+        "duplication": 3,
+        "functionCount": 4,
+        "loc": 30,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/v7.ts",
+        "complexity": 8,
+        "duplication": 9,
+        "functionCount": 5,
+        "loc": 83,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 9
+      },
+      {
+        "path": "src/validate.ts",
+        "complexity": 2,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 5,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/version.ts",
+        "complexity": 2,
+        "duplication": 25,
+        "functionCount": 1,
+        "loc": 8,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      }
+    ],
+    "topFiles": [
+      {
+        "path": "src/v1.ts",
+        "complexity": 17,
+        "duplication": 14,
+        "functionCount": 5,
+        "loc": 120,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 17 (recommended: < 10)",
+            "value": 17,
+            "ratio": 0.85
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 18.5
+      },
+      {
+        "path": "src/uuid-bin.ts",
+        "complexity": 13,
+        "duplication": 16,
+        "functionCount": 1,
+        "loc": 72,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 13 (recommended: < 10)",
+            "value": 13,
+            "ratio": 0.65
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 14.5
+      },
+      {
+        "path": "src/sha1-browser.ts",
+        "complexity": 11,
+        "duplication": 5,
+        "functionCount": 3,
+        "loc": 91,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 11 (recommended: < 10)",
+            "value": 11,
+            "ratio": 0.55
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 12.5
+      },
+      {
+        "path": "src/v4.ts",
+        "complexity": 11,
+        "duplication": 0,
+        "functionCount": 3,
+        "loc": 38,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 11 (recommended: < 10)",
+            "value": 11,
+            "ratio": 0.55
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 12.5
+      },
+      {
+        "path": "src/v35.ts",
+        "complexity": 9,
+        "duplication": 7,
+        "functionCount": 2,
+        "loc": 45,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 10
+      }
+    ],
+    "silentKillers": [],
+    "project": {
+      "name": "uuid",
+      "path": "temp-analysis/uuid",
+      "packageJson": {
+        "name": "uuid",
+        "version": "11.1.0",
+        "description": "RFC9562 UUIDs"
+      }
+    },
+    "summary": {
+      "totalFiles": 29,
+      "totalLines": 978,
+      "avgComplexity": 4.2,
+      "avgDuplication": 15.6,
+      "avgFunctions": 2,
+      "avgLoc": 34
+    },
+    "scores": {
+      "complexity": 92,
+      "duplication": 72,
+      "maintainability": 100,
+      "overall": 88
+    },
+    "complexityStdDev": 4.138793013668129,
+    "score": 88,
+    "grade": "B"
+  },
+  "duration": 681
+}

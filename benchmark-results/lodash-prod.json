@@ -1,0 +1,459 @@
+{
+  "project": "lodash",
+  "repo": "https://github.com/lodash/lodash.git",
+  "type": "utility library",
+  "stars": "60.6k",
+  "stableVersion": "4.17.21",
+  "description": "JavaScript utility library",
+  "category": "small",
+  "emblematicFiles": {
+    "coreFiles": [
+      "lodash.js",
+      "index.js"
+    ],
+    "architecturalFiles": [
+      "fp.js",
+      "core.js"
+    ],
+    "performanceCriticalFiles": [
+      "isEqual.js",
+      "cloneDeep.js",
+      "debounce.js"
+    ],
+    "complexAlgorithmFiles": [
+      "get.js",
+      "set.js",
+      "merge.js"
+    ]
+  },
+  "analysis": {
+    "files": [
+      {
+        "path": ".markdown-doctest-setup.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 8,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "lodash.js",
+        "complexity": 1659,
+        "duplication": 5,
+        "functionCount": 691,
+        "loc": 5970,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 1659 (recommended: < 20)",
+            "value": 1659,
+            "ratio": 82.95
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 5970 lines (recommended: < 300)",
+            "value": 5970,
+            "ratio": 19.9
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 1663
+      },
+      {
+        "path": "fp/_baseConvert.js",
+        "complexity": 86,
+        "duplication": 3,
+        "functionCount": 52,
+        "loc": 350,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 86 (recommended: < 20)",
+            "value": 86,
+            "ratio": 4.3
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 350 lines (recommended: < 300)",
+            "value": 350,
+            "ratio": 1.1666666666666667
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 90
+      },
+      {
+        "path": "fp/_convertBrowser.js",
+        "complexity": 3,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 8,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "fp/_mapping.js",
+        "complexity": 3,
+        "duplication": 23,
+        "functionCount": 1,
+        "loc": 328,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 328 lines (recommended: < 300)",
+            "value": 328,
+            "ratio": 1.0933333333333333
+          }
+        ],
+        "fileType": "production",
+        "impact": 2,
+        "criticismScore": 8.5
+      },
+      {
+        "path": "fp/placeholder.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 4
+      },
+      {
+        "path": "perf/perf.js",
+        "complexity": 55,
+        "duplication": 6,
+        "functionCount": 14,
+        "loc": 1639,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 55 (recommended: < 20)",
+            "value": 55,
+            "ratio": 2.75
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 1639 lines (recommended: < 300)",
+            "value": 1639,
+            "ratio": 5.463333333333333
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 57
+      },
+      {
+        "path": "lib/common/file.js",
+        "complexity": 1,
+        "duplication": 7,
+        "functionCount": 5,
+        "loc": 27,
+        "issues": [],
+        "fileType": "production",
+        "impact": 5,
+        "criticismScore": 12
+      },
+      {
+        "path": "lib/common/mapping.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 5,
+        "issues": [],
+        "fileType": "production",
+        "impact": 2,
+        "criticismScore": 6
+      },
+      {
+        "path": "lib/common/minify.js",
+        "complexity": 5,
+        "duplication": 10,
+        "functionCount": 1,
+        "loc": 20,
+        "issues": [],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 8
+      },
+      {
+        "path": "lib/common/uglify.options.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 15,
+        "issues": [],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 4
+      },
+      {
+        "path": "lib/common/util.js",
+        "complexity": 4,
+        "duplication": 0,
+        "functionCount": 3,
+        "loc": 19,
+        "issues": [],
+        "fileType": "production",
+        "impact": 8,
+        "criticismScore": 21
+      },
+      {
+        "path": "lib/fp/build-dist.js",
+        "complexity": 1,
+        "duplication": 14,
+        "functionCount": 1,
+        "loc": 41,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "lib/fp/build-doc.js",
+        "complexity": 6,
+        "duplication": 7,
+        "functionCount": 5,
+        "loc": 44,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 7
+      },
+      {
+        "path": "lib/fp/build-modules.js",
+        "complexity": 5,
+        "duplication": 11,
+        "functionCount": 9,
+        "loc": 92,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 6
+      },
+      {
+        "path": "lib/main/build-dist.js",
+        "complexity": 1,
+        "duplication": 25,
+        "functionCount": 1,
+        "loc": 17,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "lib/main/build-doc.js",
+        "complexity": 2,
+        "duplication": 9,
+        "functionCount": 3,
+        "loc": 49,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "lib/main/build-modules.js",
+        "complexity": 1,
+        "duplication": 23,
+        "functionCount": 2,
+        "loc": 19,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "lib/main/build-site.js",
+        "complexity": 12,
+        "duplication": 8,
+        "functionCount": 18,
+        "loc": 142,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 12 (recommended: < 10)",
+            "value": 12,
+            "ratio": 0.6
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 13.5
+      },
+      {
+        "path": "perf/asset/perf-ui.js",
+        "complexity": 19,
+        "duplication": 5,
+        "functionCount": 7,
+        "loc": 85,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 19 (recommended: < 10)",
+            "value": 19,
+            "ratio": 0.95
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 20.5
+      }
+    ],
+    "topFiles": [
+      {
+        "path": "lodash.js",
+        "complexity": 1659,
+        "duplication": 5,
+        "functionCount": 691,
+        "loc": 5970,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 1659 (recommended: < 20)",
+            "value": 1659,
+            "ratio": 82.95
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 5970 lines (recommended: < 300)",
+            "value": 5970,
+            "ratio": 19.9
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 1663
+      },
+      {
+        "path": "fp/_baseConvert.js",
+        "complexity": 86,
+        "duplication": 3,
+        "functionCount": 52,
+        "loc": 350,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 86 (recommended: < 20)",
+            "value": 86,
+            "ratio": 4.3
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 350 lines (recommended: < 300)",
+            "value": 350,
+            "ratio": 1.1666666666666667
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 90
+      },
+      {
+        "path": "perf/perf.js",
+        "complexity": 55,
+        "duplication": 6,
+        "functionCount": 14,
+        "loc": 1639,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 55 (recommended: < 20)",
+            "value": 55,
+            "ratio": 2.75
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 1639 lines (recommended: < 300)",
+            "value": 1639,
+            "ratio": 5.463333333333333
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 57
+      },
+      {
+        "path": "lib/common/util.js",
+        "complexity": 4,
+        "duplication": 0,
+        "functionCount": 3,
+        "loc": 19,
+        "issues": [],
+        "fileType": "production",
+        "impact": 8,
+        "criticismScore": 21
+      },
+      {
+        "path": "perf/asset/perf-ui.js",
+        "complexity": 19,
+        "duplication": 5,
+        "functionCount": 7,
+        "loc": 85,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 19 (recommended: < 10)",
+            "value": 19,
+            "ratio": 0.95
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 20.5
+      }
+    ],
+    "silentKillers": [],
+    "project": {
+      "name": "lodash",
+      "path": "temp-analysis/lodash",
+      "packageJson": {
+        "name": "lodash",
+        "version": "4.17.21"
+      }
+    },
+    "summary": {
+      "totalFiles": 20,
+      "totalLines": 8879,
+      "avgComplexity": 93.4,
+      "avgDuplication": 7.8,
+      "avgFunctions": 40.7,
+      "avgLoc": 444
+    },
+    "scores": {
+      "complexity": 12,
+      "duplication": 86,
+      "maintainability": 18,
+      "overall": 36
+    },
+    "complexityStdDev": 359.79539671874625,
+    "score": 36,
+    "grade": "F"
+  },
+  "duration": 1009
+}
