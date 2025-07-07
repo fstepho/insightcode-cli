@@ -103,11 +103,45 @@ Uses **Vitest** with the Node.js environment. Tests are located in the `tests/` 
 ## Development Guidelines
 
 ### Code Style
-- Prefer functions over classes
-- Functional programming patterns
 - Explicit over clever code
-- No comments unless absolutely necessary
 - TypeScript strict mode enabled
+
+- **Comments Philosophy**: 
+  - No redundant comments that explain WHAT the code does
+  - DO comment WHY when the reason isn't obvious
+  - DO comment performance optimizations or workarounds
+  - DO comment business logic decisions
+  
+```typescript
+// ❌ Bad: Redundant comment
+// Increment counter by 1
+counter++;
+
+// ✅ Good: Explains non-obvious decision
+// 50MB buffer prevents ENOBUFS on TypeScript repo (2.8M lines)
+const maxBuffer = 1024 * 1024 * 50;
+
+// ✅ Good: Documents performance choice
+// Pre-compile regex outside loop for 10x performance gain
+const IMPORT_REGEX = /^import\s+.+from\s+['"].+['"];?$/;
+
+// ✅ Good: Clarifies business logic
+// Industry standard: 15% duplication is acceptable in practice
+if (duplication <= 15) return 65;
+```
+
+- **Self-Documenting Code First**:
+  - Use descriptive variable/function names
+  - Prefer explicit over clever
+  - Structure code to tell a story
+  
+- **When Comments ARE Necessary**:
+  - Edge cases and workarounds
+  - Performance optimizations
+  - Business rule justifications  
+  - Complex algorithms (with examples)
+  - TODO/FIXME with context
+
 
 ### Constraints
 - **Never exceed 5 NPM dependencies**
