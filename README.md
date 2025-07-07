@@ -466,6 +466,12 @@ npm run build             # Build for production
 - **Actionable Metrics**: Clear insights that drive improvements
 - **Fast & Simple**: No setup, no config, just results
 
+## 🎓 Technical Philosophy
+
+InsightCode uses evidence-based thresholds:
+- [Academic justification for our scoring](docs/SCORING_THRESHOLDS_JUSTIFICATION.md)
+- [Why our duplication detection is different](docs/DUPLICATION_DETECTION_PHILOSOPHY.md)
+
 ## 🙏 Acknowledgments
 
 Built with:

@@ -20,6 +20,12 @@ Format: **Date | Decision | Reason | Impact**
 **Reason**: To provide deeper architectural insights beyond a simple quality score. `complexityStdDev` identifies "monolith" files, while `silentKillers` highlights high-impact files that might otherwise go unnoticed.
 **Impact**: The CLI provides significantly more value, offering users not just a grade, but a true profile of their project's architecture and hidden risks.
 
+
+## 2025-06-29: Scoring pattern pure functions
+**Decision**: Refactor scoring functions in `scoring.ts` to be pure functions that take a file object and return a score.
+**Reason**: To ensure that scoring logic is predictable, testable, and reusable across different contexts.
+**Impact**: Improved maintainability and testability of the scoring logic, allowing for easier future enhancements and bug fixes.
+
 ## 2025-06-29: File Scoring Algorithm with Weighted Criticality
 **Decision**: Create dedicated `topIssues.ts` module with weighted file scoring (complexity-heavy).
 **Reason**: Need prioritized list of files to fix; users want to know which files need attention first.
@@ -303,6 +309,12 @@ Format: **Date | Decision | Reason | Impact**
 **Decision**: commander, typescript, chalk, fast-glob only  
 **Reason**: Each dep = maintenance risk  
 **Impact**: Bundle <50KB, fewer bugs
+
+---
+## 2025-06-24: Avoid technical pitfalls
+**Decision**: Follow KISS, no over-engineering, no premature abstractions, 
+**Reason**: Keep it simple, avoid complexity
+**Impact**: Fewer bugs, easier to maintain, faster development
 
 ---
 

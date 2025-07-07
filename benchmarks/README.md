@@ -17,7 +17,7 @@ npm run benchmark              # Full codebase analysis
 npm run benchmark -- --prod    # Production code only
 ```
 
-Results are saved to `benchmark-results/` and significant results are archived here.
+Results are saved to `benchmarks/` and significant results are archived here.
 
 ## 📐 Methodology
 

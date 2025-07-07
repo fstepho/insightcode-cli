@@ -28,7 +28,7 @@ The overall score translates to a grade:
 | **Analyze Production Code** | Avoid noise from tests and configuration files. | `insightcode analyze --exclude-utility` |
 | **Track Trends Over Time** | See if quality improves or degrades with new features. | Integrate the JSON output in your CI/CD pipeline. |
 | **Combine with Human Review** | Context is king! A score can't understand business logic. | The score is a conversation starter, not a judgment. |
-| **Justify Outliers** | Not all complexity is bad. | See our [explained benchmarks](./benchmark-results/). |
+| **Justify Outliers** | Not all complexity is bad. | See our [explained benchmarks](./../benchmarks/). |
 
 ## 🔴 What to Avoid
 
@@ -106,6 +106,6 @@ insightcode analyze --exclude "**/*.spec.ts,**/vendor/**"
 
 📚 **Learn More**:
 
-  - [Full Benchmark Report](../benchmark-results/benchmark-report-production.md)
+  - [Full Benchmark Report](../benchmarks/benchmark-report-production-2025-07-03.md)
   - [Our Duplication Detection Philosophy](./DUPLICATION_DETECTION_PHILOSOPHY.md)
   - [Academic Justification for Our Thresholds](./SCORING_THRESHOLDS_JUSTIFICATION.md)
