@@ -1,0 +1,97 @@
+#!/bin/bash
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+
+# Lire le message de commit
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Si commit commence par "ai:", enrichir le contexte
+if [[ "$COMMIT_MSG" =~ ^ai: ]]; then
+  echo "🤖 Analyzing project for AI context..."
+  
+  # Analyser le projet
+  ANALYSIS=$(npx insightcode analyze . --json 2>/dev/null || echo '{}')
+  
+  # Extraire les métriques
+  SCORE=$(echo "$ANALYSIS" | jq -r '.score // "?"')
+  GRADE=$(echo "$ANALYSIS" | jq -r '.grade // "?"')
+  FILES=$(echo "$ANALYSIS" | jq -r '.summary.totalFiles // "?"')
+  LINES=$(echo "$ANALYSIS" | jq -r '.summary.totalLines // "?"')
+  TOP_ISSUE=$(echo "$ANALYSIS" | jq -r '.topFiles[0] // {} | "\(.path // "N/A") (complexity: \(.complexity // "N/A"))"')
+  
+  # Date au format ISO
+  CURRENT_DATE=$(date "+%Y-%m-%d %H:%M")
+  
+  # Créer le nouveau contenu pour Quick Status
+  NEW_STATUS="<!-- GIT-HOOK:START -->
+Last Analysis: $CURRENT_DATE
+Score: $GRADE ($SCORE/100) | Files: $FILES | Lines: $LINES
+Top Issues: $TOP_ISSUE
+<!-- GIT-HOOK:END -->"
+  
+  # Mettre à jour .ai.md avec sed
+  # D'abord, extraire tout avant GIT-HOOK:START
+  sed -n '1,/<!-- GIT-HOOK:START -->/p' .ai.md | sed '$d' > .ai.md.new
+  
+  # Ajouter le nouveau status
+  echo "$NEW_STATUS" >> .ai.md.new
+  
+  # Ajouter tout après GIT-HOOK:END
+  sed -n '/<!-- GIT-HOOK:END -->/,$p' .ai.md | tail -n +2 >> .ai.md.new
+  
+  # Remplacer le fichier
+  mv .ai.md.new .ai.md
+  
+  # Ajouter le contexte au message de commit
+  echo "" >> "$COMMIT_MSG_FILE"
+  echo "AI-Context: Score $SCORE/100 ($GRADE)" >> "$COMMIT_MSG_FILE"
+  
+  # Stage le fichier modifié
+  git add .ai.md
+fi
+
+# Logger dans l'historique (sauf pour les merges)
+if [[ "$COMMIT_SOURCE" != "merge" ]] && [[ ! -z "$COMMIT_MSG" ]]; then
+  # Extraire le message principal (première ligne)
+  MSG_LINE=$(head -1 "$COMMIT_MSG_FILE")
+  DATE=$(date +%Y-%m-%d)
+  
+  # Ajouter au log
+  if [[ "$MSG_LINE" =~ ^(ai|feat|fix|perf): ]]; then
+    # Nettoyer le message
+    CLEAN_MSG=$(echo "$MSG_LINE" | sed 's/^[^:]*: //')
+    
+    # Créer un fichier temporaire pour le nouveau log
+    cp .ai.md .ai.md.tmp
+    
+    # Insérer après GIT-LOG:START
+    awk -v date="$DATE" -v msg="$CLEAN_MSG" '
+      /<!-- GIT-LOG:START -->/ { 
+        print
+        print "- " date ": " msg
+        found=1
+        next
+      }
+      { print }
+    ' .ai.md.tmp > .ai.md
+    
+    rm .ai.md.tmp
+    
+    # Limiter à 20 dernières entrées
+    cp .ai.md .ai.md.tmp
+    awk '
+      BEGIN { count=0 }
+      /<!-- GIT-LOG:START -->/ { p=1; print; next }
+      /<!-- GIT-LOG:END -->/ { p=0; print; next }
+      p && /^- / { 
+        if (++count <= 20) print
+        next
+      }
+      { print }
+    ' .ai.md.tmp > .ai.md
+    
+    rm .ai.md.tmp
+    git add .ai.md
+  fi
+fi

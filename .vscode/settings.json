@@ -1,0 +1,6 @@
+{
+  "files.defaultLanguage": "markdown",
+  "workbench.startupEditor": "readme",
+  "markdown.preview.openMarkdownLinks": "inEditor",
+  "recommendations": ["file://./../.ai.md"]
+}

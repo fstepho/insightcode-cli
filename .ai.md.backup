@@ -1,0 +1,67 @@
+# 🤖 AI Development Context
+
+## 📊 Quick Status
+<!-- GIT-HOOK:START -->
+Last Analysis: 2025-07-07 22:46
+Score: B (82/100) | Files: 9 | Lines: 1,400
+Top Issues: src/analyzer.ts (complexity: 45)
+<!-- GIT-HOOK:END -->
+
+## Current Focus
+Working on: Marketing & Growth
+Next: Article series for dev.to
+
+## Smart Prompts
+📝 `git commit -m "ai: "` → Triggers AI analysis
+🐛 `git commit -m "fix: "` → Includes debug context
+🚀 `git commit -m "feat: "` → Updates roadmap
+
+## 📋 Project Context
+## 🎯 Mission
+Solo dev with side project, 2-4h/day max, goal 200 active users in 6 months.
+Create a TypeScript quality analyzer that works 100% locally, never sending data to the cloud.
+
+**Value proposition:** "TypeScript Quality Score in 30 Seconds - Zero Config, 100% Local"
+
+## 👤 Personal Context
+- **Technical expertise**: Senior Full-Stack (Java, TypeScript, Angular, Docker)
+- **Constraints**: 
+  - No customer support (automate everything)
+  - Maintenance < 1h/week
+  - Side project = absolute simplicity
+- **Budget**: €2k total (infrastructure + eventual marketing)
+- **Help**: AI as main co-developer
+
+## Session Log
+<!-- GIT-LOG:START -->
+### July 3, 2025 - Recent Enhancements Implementation 🚀
+- ✅ Implemented configurable thresholds system with insightcode.config.json support
+- ✅ Enhanced file scoring with criticality scoring and issue ratios
+- ✅ Improved reporting with better metrics display and project information
+- ✅ Expanded test coverage significantly (31 → 55 tests)
+- ✅ Added robust configuration management with validation
+- ✅ Implemented project metadata retrieval and display
+- ✅ Academic best practices implementation for weighted scoring
+- ✅ Updated documentation following DOC_MAINTENANCE_CHECKLIST.md
+- **Result**: Comprehensive enhancement with configurable thresholds and improved user experience!
+
+### June 28, 2025 (PM) - Benchmark Script Refactor & Enhanced Reporting 📊
+- ✅ Refactored benchmark scripts for v0.3.0+ scoring system compatibility
+- ✅ Updated all benchmark reports to reflect new graduated thresholds
+- ✅ Enhanced markdown report generation with detailed scoring breakdowns
+- ✅ Added complexity distribution analysis in benchmark validation
+- ✅ Improved command execution with better flag handling
+- ✅ Added helper function to retrieve InsightCode version from package.json
+- ✅ Changed analysis descriptions to "Production Code Analysis" and "Full Codebase Analysis"
+<!-- GIT-LOG:END -->
+
+## Context Injection
+```yaml
+project: insightcode-cli
+stage: growth
+constraints: [solo_dev, 2-4h_daily]
+tech_stack: [typescript, commander, vitest, chalk]
+recent_metrics:
+  npm_downloads: 150/week
+  github_stars: 12
+  version: 0.4.0
