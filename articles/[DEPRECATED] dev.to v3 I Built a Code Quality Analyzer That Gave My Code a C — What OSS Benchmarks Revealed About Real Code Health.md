@@ -4,7 +4,7 @@ Ever wondered how "healthy" your codebase really is? After waiting 47 minutes fo
 **Which files should we actually refactor first?**
 
 That frustration led me to build [**InsightCode**](https://github.com/fstepho/insightcode-cli): a CLI tool that scans your JavaScript/TypeScript code 100% locally and gives you *just three* actionable metrics.
-But after running it on 19 open-source projects, I realized: my code scored a C—and that’s actually pretty typical. Here’s why.
+But after running it on 9 open-source projects, I realized: my code scored a C—and that’s actually pretty typical. Here’s why.
 
 ---
 
@@ -71,7 +71,7 @@ insightcode analyze
 
 ### 2. Benchmarking Real OSS Projects: The Architectural Reality
 
-I benchmarked 19 open-source projects (from small libraries to TypeScript itself), running InsightCode both on the **full codebase** (prod + test + examples) and **production code only**.
+I benchmarked 9 open-source projects (from small libraries to TypeScript itself), running InsightCode both on the **full codebase** (prod + test + examples) and **production code only**.
 
 #### Key architectural insight:
 

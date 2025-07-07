@@ -21,7 +21,7 @@ Results are saved to `benchmark-results/` and significant results are archived h
 
 ## 📐 Methodology
 
-### Scoring System (v0.3.0+)
+### Scoring System (v0.4.0+)
 
 InsightCode uses graduated thresholds aligned with industry standards:
 
@@ -44,6 +44,13 @@ InsightCode uses graduated thresholds aligned with industry standards:
 - Based on file size (≤200 lines = 100 points)
 - Function count consideration
 - Additional penalties for files >1000 lines
+
+#### Criticality-Weighted Scoring
+The final project score uses these 40/30/30 weights, but each file's contribution is weighted by its **Criticality Score** - a combination of:
+- **Complexity**: How difficult the file is to understand
+- **Architectural Impact**: How many other files depend on it
+
+This means a small, complex file with many dependents (like a core utility) will impact the final score more than a large, simple file with no dependents.
 
 ### Measurement Accuracy
 
@@ -83,20 +90,20 @@ InsightCode uses graduated thresholds aligned with industry standards:
 ## 📈 Key Findings (v0.3.0 - June 28, 2025)
 
 ### Score Distribution
-Based on analysis of 19 popular projects with new graduated scoring:
+Based on analysis of 9 popular projects with new graduated scoring:
 
 **Full Codebase Analysis:**
-- **1 project** got an A grade (5%) - chalk
-- **8 projects** got a B grade (42%)
-- **4 projects** got a C grade (21%)
-- **2 projects** got a D grade (11%)
-- **4 projects** got an F grade (21%)
+- **x project** got an A grade 
+- **x projects** got a B grade
+- **x projects** got a C grade 
+- **x projects** got a D grade
+- **x projects** got an F grade
 
 **Production Code Only:**
-- **3 projects** got an A grade (16%) - axios, chalk, prettier
-- **4 projects** got a B grade (21%)
-- **4 projects** got a C grade (21%)
-- **2 projects** got a D grade (11%)
+- **0 projects** got an A grade (16%) - axios, chalk, prettier
+- **2 projects** got a B grade (21%)
+- **1 projects** got a C grade (21%)
+- **0 projects** got a D grade (11%)
 - **6 projects** got an F grade (32%)
 
 ### Performance Statistics
@@ -106,12 +113,10 @@ Based on analysis of 19 popular projects with new graduated scoring:
 - **Total lines analyzed**: 4.8M+ across all benchmarks
 
 ### Notable Insights
-
 1. **Chalk** achieves A grade (96/100) in full codebase analysis - exceptional code quality
-2. **Axios** jumps from B to A when analyzing production code only
-3. **Even popular projects struggle**: ESLint gets D, Joi gets F
-4. **Test code impacts scores**: Many projects improve when excluding tests
-5. **Size doesn't determine quality**: Small projects can have poor scores too
+2. **Even popular projects struggle**: ESLint gets D, Joi gets F
+3. **Test code impacts scores**: Many projects improve when excluding tests
+4. **Size doesn't determine quality**: Small projects can have poor scores too
 
 ## 🔍 Understanding the Results: Context Matters
 
@@ -176,10 +181,12 @@ When analyzing code quality, consider the historical context and business constr
 ## 📁 Historical Benchmarks
 
 Significant benchmark results are archived with dates:
-- `benchmark-2025-06-28.md` - v0.3.0 full codebase analysis with graduated scoring
-- `benchmark-2025-06-28-production-only.md` - Production code analysis
-- `benchmark-2025-06-27.md` - v0.1.0 initial benchmarks
-- `benchmark-explanations-comparison-2025-06-28.md` - Detailed complexity explanations
+- `benchmark-report-production-2025-07-03.md` - v0.4.0 production code analysis
+- `archives/benchmark-2025-06-03.md` - v0.3.0 full codebase analysis with graduated scoring
+- `archives/benchmark-2025-06-28.md` - v0.3.0 full codebase analysis with graduated scoring
+- `archives/benchmark-2025-06-28-production-only.md` - Production code analysis
+- `archives/benchmark-2025-06-27.md` - v0.1.0 initial benchmarks
+- `archives/benchmark-explanations-comparison-2025-06-28.md` - Detailed complexity explanations
 
 ## 🔄 Duplication Detection Philosophy
 

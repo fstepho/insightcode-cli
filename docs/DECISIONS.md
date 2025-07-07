@@ -90,7 +90,7 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
-## 2025-06-27: Benchmark 19 popular projects
+## 2025-06-27: Benchmark 9 popular projects
 **Decision**: Create automated script to analyze axios, eslint, prettier, etc.
 **Reason**: Validate our scoring, build credibility, find marketing insights
 

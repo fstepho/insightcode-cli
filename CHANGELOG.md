@@ -78,7 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - ENOBUFS error when analyzing large projects (increased buffer to 50MB)
-- All 19 benchmark projects now analyze successfully including TypeScript (2.8M lines)
+- All 9 benchmark projects now analyze successfully including TypeScript (2.8M lines)
 
 ## [0.1.0] - 2025-06-26
 

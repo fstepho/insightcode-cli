@@ -310,7 +310,7 @@ const PROJECTS: Project[] = [
 const scriptDir = __dirname;
 const projectRoot = path.resolve(scriptDir, '..');
 const TEMP_DIR = path.join(projectRoot, 'temp-analysis');
-const RESULTS_DIR = path.join(projectRoot, 'benchmark-results');
+const RESULTS_DIR = path.join(projectRoot, 'benchmarks');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -567,7 +567,11 @@ async function main(): Promise<void> {
 
   // Generate and save markdown report
   const markdown = generateMarkdownReport(results, summary);
-  const markdownFilename = excludeUtility ? 'benchmark-report-production.md' : 'benchmark-report.md';
+  const now = new Date();
+  const dateSuffix = now.toISOString().slice(0, 10); // e.g. "2024-06-07"
+  const markdownFilename = excludeUtility
+    ? `benchmark-report-production-${dateSuffix}.md`
+    : `benchmark-report-${dateSuffix}.md`;
   fs.writeFileSync(
     path.join(RESULTS_DIR, markdownFilename),
     markdown
