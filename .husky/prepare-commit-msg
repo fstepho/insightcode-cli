@@ -6,6 +6,16 @@ COMMIT_SOURCE=$2
 # Lire le message de commit
 COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
 
+# NOUVEAU: Détecter si c'est un message conventionnel (de VS Code AI)
+# et ajouter "ai:" devant pour déclencher l'analyse
+if [[ "$COMMIT_MSG" =~ ^(feat|fix|chore|test|docs|refactor|perf|style|ci|build|revert)(\(.+\))?: ]] && [[ ! "$COMMIT_MSG" =~ ^ai: ]]; then
+  # Version portable (macOS et Linux)
+  echo "ai: $COMMIT_MSG" > "$COMMIT_MSG_FILE.tmp"
+  mv "$COMMIT_MSG_FILE.tmp" "$COMMIT_MSG_FILE"
+  # Recharger le message modifié
+  COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+fi
+
 # Si commit commence par "ai:", enrichir le contexte
 if [[ "$COMMIT_MSG" =~ ^ai: ]]; then
   echo "🤖 Analyzing project for AI context..."
@@ -61,6 +71,12 @@ if [[ "$COMMIT_SOURCE" != "merge" ]] && [[ ! -z "$COMMIT_MSG" ]]; then
   if [[ "$MSG_LINE" =~ ^(ai|feat|fix|perf): ]]; then
     # Nettoyer le message
     CLEAN_MSG=$(echo "$MSG_LINE" | sed 's/^[^:]*: //')
+    
+    # NOUVEAU: Si le message a "ai: " au début à cause de notre modification
+    # enlever aussi ce préfixe pour le log
+    if [[ "$MSG_LINE" =~ ^ai:\ (feat|fix|chore|test|docs|refactor|perf|style|ci|build|revert) ]]; then
+      CLEAN_MSG=$(echo "$MSG_LINE" | sed 's/^ai: //' | sed 's/^[^:]*: //')
+    fi
     
     # Créer un fichier temporaire pour le nouveau log
     cp .ai.md .ai.md.tmp
