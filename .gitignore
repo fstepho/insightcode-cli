@@ -142,8 +142,11 @@ dist
 benchmark-workspace/
 temp-analysis/
 
-# Private work documents
-.ai
+# AI System temporary files
+.ai.md.backup     # Créé par vos scripts
+.ai.md.bak        # Créé par sed -i
+.ai.md.tmp        # Fichiers temporaires
+.ai-cache/        # Si vous créez un cache futur
 
 # archive of documentation
 docs-archive
