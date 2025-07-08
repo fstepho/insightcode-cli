@@ -2,29 +2,71 @@
 
 Format: **Date | Decision | Reason | Impact**
 
-## 2025-07-03: **Final Shift to Criticality-Weighted Scoring (Impact + Complexity)**
+## 2025-07-08: **Introduction of Rich Context Extraction for LLM Analysis**
+**Decision**: Implement comprehensive code context extraction system (`contextExtractor.ts`) that provides rich semantic information about TypeScript/JavaScript files to help LLMs better analyze InsightCode outputs. The system analyzes AST structure, patterns, dependencies, and complexity breakdowns to generate detailed context summaries.
 
+**Reason**: To enable more sophisticated analysis and reporting by providing LLMs with structured context about code architecture, patterns, and quality metrics when they analyze InsightCode results. This moves beyond simple metrics to provide semantic understanding of code structure, making LLM-based analysis more actionable and insightful.
+
+**Impact**: 
+- **New capabilities**: Rich architectural analysis, pattern detection (async/await, error handling, TypeScript usage), dependency mapping, and complexity breakdown at function level
+- **Enhanced benchmarking**: Detailed context reports with code samples, architectural insights, and "silent killer" detection
+- **Better UX**: More actionable insights for developers with specific function-level complexity analysis and architectural risk assessment
+- **Future-ready**: Foundation for AI-powered code analysis and recommendations
+
+---
+
+## 2025-07-03: **Final Shift to Criticality-Weighted Scoring (Impact + Complexity)**
 **Decision**: The final project score is now weighted by a `criticismScore` calculated for each file. This score is a combination of the file's intrinsic **complexity** and its architectural **Impact** (number of other files that import it). This decision **supersedes all previous decisions regarding LOC-based weighting**.
 **Reason**: Weighting by lines of code (LOC) was a flawed intermediate step. It incorrectly favored large, simple files over small, critical ones. The new model based on impact and complexity provides a much more accurate measure of a file's true importance and risk to the project.
 **Impact**: The scoring system is now fully aligned with our "criticality-first" philosophy. The final grade accurately reflects the maintenance burden posed by the most interconnected and complex parts of the codebase.
 
-## 2025-07-03: **Unification of Scoring and Ranking Logic in `analyzer.ts`**
+---
 
+## 2025-07-03: **Unification of Scoring and Ranking Logic in `analyzer.ts`**
 **Decision**: All file ranking and scoring logic is now centralized in `analyzer.ts`. The `fileScoring.ts` module has been **deleted**. The `criticismScore` is now the single source of truth for both weighting the final project score and for ranking the `topFiles`.
 **Reason**: The existence of `fileScoring.ts` created a competing and inconsistent definition of "criticality". This led to a confusing architecture with multiple sources of truth.
 **Impact**: The codebase is simpler, more maintainable, and logically coherent. There is now one clear, justifiable method for determining which files are the most important.
 
-## 2025-07-03: **Introduction of Advanced Architectural Metrics**
+---
 
+## 2025-07-03: **Introduction of Advanced Architectural Metrics**
 **Decision**: The core analysis (`analyzer.ts`) now calculates and exposes two new advanced metrics: `complexityStdDev` (Standard Deviation) and `silentKillers` (architecturally risky files).
 **Reason**: To provide deeper architectural insights beyond a simple quality score. `complexityStdDev` identifies "monolith" files, while `silentKillers` highlights high-impact files that might otherwise go unnoticed.
 **Impact**: The CLI provides significantly more value, offering users not just a grade, but a true profile of their project's architecture and hidden risks.
 
 
+## 2025-07-03: Academic Best Practices for Metric Aggregation
+**Decision**: Refactor analyzer.ts to calculate project scores as weighted averages of file scores instead of applying scoring functions to project averages.
+**Reason**: Follow academic research and industry standards for proper metric aggregation. The previous approach calculated complexity/duplication averages first, then scored them, which doesn't properly weight the impact of individual files.
+**Impact**: Mathematically correct scoring system where larger files have appropriate influence on project scores. Uses file size (LOC) as weighting factor, which is the industry standard. Maintains backward compatibility while ensuring academic rigor.
+
+---
+
+## 2025-07-03: Single Source of Truth for Scoring Logic
+**Decision**: Centralize all 40/30/30 weighting logic in scoring.ts and eliminate duplicate implementations across analyzer.ts, reporter.ts, and fileScoring.ts.
+**Reason**: Multiple scoring implementations created maintenance burden and potential inconsistencies. Found duplicate logic in three different files.
+**Impact**: All scoring calculations now use identical logic from shared functions. Easier maintenance, guaranteed consistency, and cleaner architecture.
+
+---
+
+## 2025-07-03: Weighted Average Project Scoring with LOC Weighting
+**Decision**: Use file size (lines of code) as weighting factor when aggregating file scores to project scores.
+**Reason**: Industry standard approach - larger files should have more influence on overall project health. A 1000-line file with issues is more impactful than a 10-line file with the same issues.
+**Impact**: More accurate project-level scores that reflect real-world maintenance burden. Follows academic literature on software metric aggregation.
+
+## 2025-07-03: Rename topIssues.ts to fileScoring.ts
+**Decision**: Rename the module from topIssues.ts to fileScoring.ts for clarity.
+**Reason**: The module does more than just identify top issues - it handles all file-level scoring logic using the same functions as project scoring.
+**Impact**: Better code organization and clearer module responsibility. Name reflects actual functionality.
+
+---
+
 ## 2025-06-29: Scoring pattern pure functions
 **Decision**: Refactor scoring functions in `scoring.ts` to be pure functions that take a file object and return a score.
 **Reason**: To ensure that scoring logic is predictable, testable, and reusable across different contexts.
 **Impact**: Improved maintainability and testability of the scoring logic, allowing for easier future enhancements and bug fixes.
+
+---
 
 ## 2025-06-29: File Scoring Algorithm with Weighted Criticality
 **Decision**: Create dedicated `topIssues.ts` module with weighted file scoring (complexity-heavy).
@@ -336,34 +378,6 @@ Format: **Date | Decision | Reason | Impact**
 **Decision**: Test parsing and scoring, not CLI  
 **Reason**: 80/20, effort vs value  
 **Impact**: 2h of tests vs 2 days
-
----
-
-## 2025-07-03: Academic Best Practices for Metric Aggregation
-**Decision**: Refactor analyzer.ts to calculate project scores as weighted averages of file scores instead of applying scoring functions to project averages.
-**Reason**: Follow academic research and industry standards for proper metric aggregation. The previous approach calculated complexity/duplication averages first, then scored them, which doesn't properly weight the impact of individual files.
-**Impact**: Mathematically correct scoring system where larger files have appropriate influence on project scores. Uses file size (LOC) as weighting factor, which is the industry standard. Maintains backward compatibility while ensuring academic rigor.
-
----
-
-## 2025-07-03: Single Source of Truth for Scoring Logic
-**Decision**: Centralize all 40/30/30 weighting logic in scoring.ts and eliminate duplicate implementations across analyzer.ts, reporter.ts, and fileScoring.ts.
-**Reason**: Multiple scoring implementations created maintenance burden and potential inconsistencies. Found duplicate logic in three different files.
-**Impact**: All scoring calculations now use identical logic from shared functions. Easier maintenance, guaranteed consistency, and cleaner architecture.
-
----
-
-## 2025-07-03: Weighted Average Project Scoring with LOC Weighting
-**Decision**: Use file size (lines of code) as weighting factor when aggregating file scores to project scores.
-**Reason**: Industry standard approach - larger files should have more influence on overall project health. A 1000-line file with issues is more impactful than a 10-line file with the same issues.
-**Impact**: More accurate project-level scores that reflect real-world maintenance burden. Follows academic literature on software metric aggregation.
-
----
-
-## 2025-07-03: Rename topIssues.ts to fileScoring.ts
-**Decision**: Rename the module from topIssues.ts to fileScoring.ts for clarity.
-**Reason**: The module does more than just identify top issues - it handles all file-level scoring logic using the same functions as project scoring.
-**Impact**: Better code organization and clearer module responsibility. Name reflects actual functionality.
 
 ---
 

@@ -33,6 +33,7 @@
 - **⚡ Fast** - Proven on large codebases (analyzes over 40,000 lines/sec)
 - **🧠 Criticality-Aware Scoring** - Prioritizes issues based on file complexity and its architectural impact.
 - **🎯 Actionable Metrics** - Focus on what matters: complexity, duplication, and maintainability.
+- **🧬 Rich Context for LLM Analysis** - Provides detailed architectural insights to help LLMs better understand and analyze code structure.
 - **🎨 Beautiful Output** - Clear, colorful terminal reports.
 
 ## 🚀 Quick Start
@@ -426,10 +427,18 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
   - Robust configuration management with validation and defaults
   - Enhanced JSON output format with project information
 
-### v0.5.0 🔮 Future Development
+### v0.5.0 🚧 In Development
+- **Rich Context Extraction for LLM Analysis**: Semantic analysis that provides detailed architectural insights to help LLMs better understand code structure and patterns.
+- **Enhanced Architectural Analysis**: Deep function-level complexity breakdown with code samples and dependency mapping.
+- **Comprehensive Code Context**: Detailed analysis of async patterns, error handling, TypeScript usage, and more.
+
+### v0.6.0 🔮 Future Development
 - JSX/TSX support
 - Improved duplication detection algorithm
 - HTML reports with charts
+- AI-powered code recommendations based on context analysis
+- Interactive HTML reports with architectural visualization
+- Advanced pattern matching for specific frameworks (React, Vue, etc.)
 - Historical tracking capabilities
 
 ### Future 🔮

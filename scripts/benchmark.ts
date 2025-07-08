@@ -315,6 +315,7 @@ const RESULTS_DIR = path.join(projectRoot, 'benchmarks');
 // Parse command line arguments
 const args = process.argv.slice(2);
 const excludeUtility = args.includes('--exclude-utility');
+const withContext = args.includes('--with-context');
 // --- FONCTIONS UTILITAIRES ---
 
 if (!fs.existsSync(RESULTS_DIR)) {
@@ -368,6 +369,9 @@ async function analyzeProject(project: Project, index: number, total: number): P
     const flags = ['--json'];
     if (excludeUtility) {
       flags.push('--exclude-utility');
+    }
+    if (withContext) {
+      flags.push('--with-context');
     }
     const command = `node ${path.join(projectRoot, 'dist/cli.js')} analyze "${projectTempDir}" ${flags.join(' ')}`;
     const analysisOutput = runCommand(command, projectRoot);
@@ -462,7 +466,59 @@ function generateMarkdownReport(results: BenchmarkResult[], summary: Summary): s
         markdown += `| \`${r.project}\` | ${r.analysis.summary.avgComplexity.toFixed(2)} | **${r.analysis.complexityStdDev.toFixed(2)}** | ${profile} |\n`;
     });
 
-    // --- 4. Individual Project Analysis Section ---
+    // --- 4. Code Context Section ---
+    // Add new Code Context Insights section if available
+    if (withContext && results.some(r => r.analysis.codeContext)) {
+        markdown += `\n## Code Context Insights for LLM Analysis\n\n`;
+        
+        const projectsWithContext = results.filter(r => r.analysis.codeContext && !r.error);
+        
+        // Architecture Overview
+        markdown += `### Architecture Overview\n\n`;
+        markdown += `| Project | Async Usage | Error Handling | TypeScript | JSX | Test Coverage |\n|---|---|---|---|---|---|\n`;
+        
+        projectsWithContext.forEach(r => {
+            const ctx = r.analysis.codeContext!.summary.patterns;
+            const total = r.analysis.codeContext!.contexts.length;
+            markdown += `| \`${r.project}\` | ${ctx.asyncUsage}/${total} | ${ctx.errorHandling}/${total} | ${ctx.typeScriptUsage}/${total} | ${ctx.jsxUsage}/${total} | ${ctx.testFiles}/${total} |\n`;
+        });
+        
+        // Most Complex Functions Across All Projects
+        markdown += `\n### Most Complex Functions Across Projects\n\n`;
+        const allComplexFunctions = projectsWithContext
+            .flatMap(r => r.analysis.codeContext!.contexts
+                .flatMap(c => c.complexityBreakdown.functions
+                    .map(f => ({ project: r.project, file: c.path, ...f }))
+                )
+            )
+            .sort((a, b) => b.complexity - a.complexity)
+            .slice(0, 10);
+            
+        markdown += `| Project | File | Function | Complexity | Lines | Async | Error Handling |\n|---|---|---|---|---|---|---|\n`;
+        allComplexFunctions.forEach(f => {
+            markdown += `| \`${f.project}\` | \`${f.file}\` | \`${f.name}\` | ${f.complexity} | ${f.lineCount} | ${f.isAsync ? '✓' : ''} | ${f.hasErrorHandling ? '✓' : ''} |\n`;
+        });
+        
+        // Code Samples for LLM
+        markdown += `\n### Code Complexity Samples for LLM Analysis\n\n`;
+        projectsWithContext.forEach(r => {
+            const samples = r.analysis.codeContext!.contexts
+                .flatMap(c => c.samples.complexFunctions)
+                .slice(0, 2);
+                
+            if (samples.length > 0) {
+                markdown += `#### ${r.project}\n\n`;
+                samples.forEach(sample => {
+                    markdown += `**${sample.name}** (Complexity: ${sample.complexity})\n`;
+                    markdown += '```typescript\n';
+                    markdown += sample.snippet;
+                    markdown += '\n```\n\n';
+                });
+            }
+        });
+    }
+
+    // --- 5. Individual Project Analysis Section ---
     markdown += `\n## Individual Project Analysis\n\n`;
     for (const result of results.sort((a, b) => a.project.localeCompare(b.project))) {
         if (result.error) continue;
@@ -474,7 +530,21 @@ function generateMarkdownReport(results: BenchmarkResult[], summary: Summary): s
         markdown += `- **Avg Complexity**: ${analysis.summary.avgComplexity.toFixed(2)} (StdDev: ${analysis.complexityStdDev.toFixed(2)})\n`;
         markdown += `- **Avg Duplication**: ${analysis.summary.avgDuplication.toFixed(2)}%\n\n`;
 
-        // --- 4a. Emblematic Files Validation ---
+         // Add code context summary if available
+        if (withContext && analysis.codeContext) {
+            markdown += `- **Code Context Summary**:\n`;
+            const ctx = analysis.codeContext.summary;
+            markdown += `  - Architecture: ${ctx.architecture.totalClasses} classes, ${ctx.architecture.totalFunctions} functions, ${ctx.architecture.totalInterfaces} interfaces\n`;
+            markdown += `  - Complexity: ${ctx.complexity.filesWithHighComplexity} files with high complexity, deepest nesting: ${ctx.complexity.deepestNesting}\n`;
+
+            const externalDeps = ctx.dependencies.mostUsedExternal
+                .map(dep => `${dep.name} (${dep.count})`)
+                .slice(0, 3)
+                .join(', ') || 'None';
+            markdown += `  - Dependencies: Most used external: ${externalDeps}\n`;
+        }
+        
+        // --- 5a. Emblematic Files Validation ---
         if (result.emblematicFiles) {
             markdown += `- **Emblematic Files Validation**:\n`;
             const topFilePaths = new Set(analysis.topFiles.map(f => f.path));
@@ -513,6 +583,9 @@ async function main(): Promise<void> {
     console.log(`⚙️  Mode: Production Only (excluding test/utility files)`);
   } else {
     console.log(`⚙️  Mode: Full Analysis (all files)`);
+  }
+  if (withContext) {
+    console.log(`🧠 Code Context: Enabled (extracting detailed AST data)`);
   }
 
   console.log(`📁 Results will be saved to: ${RESULTS_DIR}\n`);
@@ -574,9 +647,10 @@ async function main(): Promise<void> {
   const markdown = generateMarkdownReport(results, summary);
   const now = new Date();
   const dateSuffix = now.toISOString().slice(0, 10); // e.g. "2024-06-07"
+  const contextSuffix = withContext ? '-with-context' : '';
   const markdownFilename = excludeUtility
-    ? `benchmark-report-production-${dateSuffix}.md`
-    : `benchmark-report-${dateSuffix}.md`;
+    ? `benchmark-report-production${contextSuffix}-${dateSuffix}.md`
+    : `benchmark-report${contextSuffix}-${dateSuffix}.md`;
   fs.writeFileSync(
     path.join(RESULTS_DIR, markdownFilename),
     markdown

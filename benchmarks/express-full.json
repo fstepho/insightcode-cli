@@ -40,6 +40,17 @@
         "criticismScore": 150
       },
       {
+        "path": "benchmarks/middleware.js",
+        "complexity": 3,
+        "duplication": 0,
+        "functionCount": 2,
+        "loc": 13,
+        "issues": [],
+        "fileType": "utility",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
         "path": "lib/application.js",
         "complexity": 41,
         "duplication": 3,
@@ -158,17 +169,6 @@
         "fileType": "production",
         "impact": 1,
         "criticismScore": 20.5
-      },
-      {
-        "path": "benchmarks/middleware.js",
-        "complexity": 3,
-        "duplication": 0,
-        "functionCount": 2,
-        "loc": 13,
-        "issues": [],
-        "fileType": "utility",
-        "impact": 0,
-        "criticismScore": 4
       },
       {
         "path": "test/Route.js",
@@ -1092,17 +1092,6 @@
         "criticismScore": 6
       },
       {
-        "path": "examples/downloads/index.js",
-        "complexity": 4,
-        "duplication": 32,
-        "functionCount": 3,
-        "loc": 25,
-        "issues": [],
-        "fileType": "example",
-        "impact": 1,
-        "criticismScore": 7
-      },
-      {
         "path": "examples/cookies/index.js",
         "complexity": 8,
         "duplication": 12,
@@ -1114,11 +1103,11 @@
         "criticismScore": 11
       },
       {
-        "path": "examples/error/index.js",
+        "path": "examples/downloads/index.js",
         "complexity": 4,
-        "duplication": 41,
-        "functionCount": 4,
-        "loc": 24,
+        "duplication": 32,
+        "functionCount": 3,
+        "loc": 25,
         "issues": [],
         "fileType": "example",
         "impact": 1,
@@ -1136,15 +1125,15 @@
         "criticismScore": 5
       },
       {
-        "path": "examples/hello-world/index.js",
-        "complexity": 2,
-        "duplication": 29,
-        "functionCount": 1,
-        "loc": 10,
+        "path": "examples/error/index.js",
+        "complexity": 4,
+        "duplication": 41,
+        "functionCount": 4,
+        "loc": 24,
         "issues": [],
         "fileType": "example",
         "impact": 1,
-        "criticismScore": 5
+        "criticismScore": 7
       },
       {
         "path": "examples/error-pages/index.js",
@@ -1167,6 +1156,17 @@
         "fileType": "example",
         "impact": 1,
         "criticismScore": 7
+      },
+      {
+        "path": "examples/hello-world/index.js",
+        "complexity": 2,
+        "duplication": 29,
+        "functionCount": 1,
+        "loc": 10,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 5
       },
       {
         "path": "examples/multi-router/index.js",
@@ -1202,17 +1202,6 @@
         "criticismScore": 9
       },
       {
-        "path": "examples/params/index.js",
-        "complexity": 4,
-        "duplication": 19,
-        "functionCount": 6,
-        "loc": 43,
-        "issues": [],
-        "fileType": "example",
-        "impact": 1,
-        "criticismScore": 7
-      },
-      {
         "path": "examples/online/index.js",
         "complexity": 3,
         "duplication": 31,
@@ -1224,15 +1213,15 @@
         "criticismScore": 4
       },
       {
-        "path": "examples/route-map/index.js",
-        "complexity": 7,
-        "duplication": 5,
+        "path": "examples/params/index.js",
+        "complexity": 4,
+        "duplication": 19,
         "functionCount": 6,
-        "loc": 57,
+        "loc": 43,
         "issues": [],
         "fileType": "example",
         "impact": 1,
-        "criticismScore": 10
+        "criticismScore": 7
       },
       {
         "path": "examples/resource/index.js",
@@ -1244,6 +1233,17 @@
         "fileType": "example",
         "impact": 1,
         "criticismScore": 9
+      },
+      {
+        "path": "examples/route-map/index.js",
+        "complexity": 7,
+        "duplication": 5,
+        "functionCount": 6,
+        "loc": 57,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 10
       },
       {
         "path": "examples/route-middleware/index.js",
@@ -1312,17 +1312,6 @@
         "criticismScore": 4
       },
       {
-        "path": "examples/static-files/index.js",
-        "complexity": 1,
-        "duplication": 33,
-        "functionCount": 0,
-        "loc": 15,
-        "issues": [],
-        "fileType": "example",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
         "path": "examples/session/index.js",
         "complexity": 3,
         "duplication": 59,
@@ -1343,6 +1332,17 @@
         "fileType": "example",
         "impact": 0,
         "criticismScore": 3
+      },
+      {
+        "path": "examples/static-files/index.js",
+        "complexity": 1,
+        "duplication": 33,
+        "functionCount": 0,
+        "loc": 15,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
       },
       {
         "path": "examples/vhost/index.js",
@@ -1378,17 +1378,6 @@
         "criticismScore": 5
       },
       {
-        "path": "examples/web-service/index.js",
-        "complexity": 6,
-        "duplication": 23,
-        "functionCount": 7,
-        "loc": 55,
-        "issues": [],
-        "fileType": "example",
-        "impact": 1,
-        "criticismScore": 9
-      },
-      {
         "path": "examples/view-locals/index.js",
         "complexity": 8,
         "duplication": 15,
@@ -1409,6 +1398,17 @@
         "fileType": "example",
         "impact": 1,
         "criticismScore": 4
+      },
+      {
+        "path": "examples/web-service/index.js",
+        "complexity": 6,
+        "duplication": 23,
+        "functionCount": 7,
+        "loc": 55,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 9
       },
       {
         "path": "test/acceptance/auth.js",
@@ -1609,28 +1609,6 @@
         "criticismScore": 2
       },
       {
-        "path": "examples/multi-router/controllers/api_v1.js",
-        "complexity": 1,
-        "duplication": 83,
-        "functionCount": 2,
-        "loc": 10,
-        "issues": [],
-        "fileType": "example",
-        "impact": 1,
-        "criticismScore": 4
-      },
-      {
-        "path": "examples/multi-router/controllers/api_v2.js",
-        "complexity": 1,
-        "duplication": 83,
-        "functionCount": 2,
-        "loc": 10,
-        "issues": [],
-        "fileType": "example",
-        "impact": 1,
-        "criticismScore": 4
-      },
-      {
         "path": "test/support/env.js",
         "complexity": 1,
         "duplication": 0,
@@ -1664,15 +1642,26 @@
         "criticismScore": 24
       },
       {
-        "path": "examples/search/public/client.js",
-        "complexity": 2,
-        "duplication": 0,
+        "path": "examples/multi-router/controllers/api_v1.js",
+        "complexity": 1,
+        "duplication": 83,
         "functionCount": 2,
-        "loc": 13,
+        "loc": 10,
         "issues": [],
         "fileType": "example",
-        "impact": 0,
-        "criticismScore": 3
+        "impact": 1,
+        "criticismScore": 4
+      },
+      {
+        "path": "examples/multi-router/controllers/api_v2.js",
+        "complexity": 1,
+        "duplication": 83,
+        "functionCount": 2,
+        "loc": 10,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 4
       },
       {
         "path": "examples/mvc/lib/boot.js",
@@ -1684,6 +1673,17 @@
         "fileType": "example",
         "impact": 1,
         "criticismScore": 20
+      },
+      {
+        "path": "examples/search/public/client.js",
+        "complexity": 2,
+        "duplication": 0,
+        "functionCount": 2,
+        "loc": 13,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 3
       },
       {
         "path": "examples/mvc/controllers/main/index.js",
@@ -1870,7 +1870,1215 @@
     },
     "complexityStdDev": 10.46,
     "score": 70,
-    "grade": "C"
+    "grade": "C",
+    "codeContext": {
+      "contexts": [
+        {
+          "path": "temp-analysis/express/index.js",
+          "complexity": 1,
+          "structure": {
+            "imports": [],
+            "exports": [],
+            "classes": [],
+            "functions": [],
+            "interfaces": [],
+            "types": [],
+            "enums": [],
+            "constants": []
+          },
+          "patterns": {
+            "hasAsyncFunctions": false,
+            "hasGenerators": false,
+            "hasDecorators": false,
+            "hasJSX": false,
+            "usesTypeScript": false,
+            "hasErrorHandling": false,
+            "hasTests": false
+          },
+          "complexityBreakdown": {
+            "functions": [],
+            "highestComplexityFunction": "",
+            "deepestNesting": 0
+          },
+          "dependencies": {
+            "internal": [],
+            "external": [],
+            "mostImportedFrom": []
+          },
+          "samples": {
+            "complexFunctions": []
+          }
+        },
+        {
+          "path": "temp-analysis/express/lib/response.js",
+          "complexity": 109,
+          "structure": {
+            "imports": [],
+            "exports": [],
+            "classes": [],
+            "functions": [
+              "status",
+              "<anonymous>",
+              "<anonymous>",
+              "<anonymous>",
+              "send",
+              "json",
+              "jsonp",
+              "sendStatus",
+              "sendFile",
+              "<anonymous>",
+              "download",
+              "contentType",
+              "<anonymous>",
+              "<anonymous>",
+              "<anonymous>",
+              "attachment",
+              "append",
+              "header",
+              "<anonymous>",
+              "clearCookie",
+              "<anonymous>",
+              "location",
+              "redirect",
+              "text",
+              "html",
+              "default",
+              "<anonymous>",
+              "render",
+              "<anonymous>",
+              "sendfile",
+              "onaborted",
+              "ondirectory",
+              "onerror",
+              "onend",
+              "onfile",
+              "onfinish",
+              "<anonymous>",
+              "onstream",
+              "headers",
+              "stringify",
+              "<anonymous>"
+            ],
+            "interfaces": [],
+            "types": [],
+            "enums": [],
+            "constants": []
+          },
+          "patterns": {
+            "hasAsyncFunctions": false,
+            "hasGenerators": false,
+            "hasDecorators": false,
+            "hasJSX": false,
+            "usesTypeScript": false,
+            "hasErrorHandling": false,
+            "hasTests": false
+          },
+          "complexityBreakdown": {
+            "functions": [
+              {
+                "name": "send",
+                "complexity": 24,
+                "lineCount": 101,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "sendfile",
+                "complexity": 14,
+                "lineCount": 89,
+                "parameters": 4,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "sendFile",
+                "complexity": 13,
+                "lineCount": 43,
+                "parameters": 3,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "download",
+                "complexity": 13,
+                "lineCount": 50,
+                "parameters": 4,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 8,
+                "lineCount": 34,
+                "parameters": 3,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "onfinish",
+                "complexity": 8,
+                "lineCount": 16,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "stringify",
+                "complexity": 8,
+                "lineCount": 25,
+                "parameters": 4,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "jsonp",
+                "complexity": 7,
+                "lineCount": 45,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 7,
+                "lineCount": 9,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "header",
+                "complexity": 6,
+                "lineCount": 22,
+                "parameters": 2,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "render",
+                "complexity": 5,
+                "lineCount": 25,
+                "parameters": 3,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "status",
+                "complexity": 4,
+                "lineCount": 13,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 4,
+                "lineCount": 14,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 4,
+                "lineCount": 26,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "append",
+                "complexity": 4,
+                "lineCount": 13,
+                "parameters": 2,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 4,
+                "lineCount": 10,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 4,
+                "lineCount": 13,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "contentType",
+                "complexity": 3,
+                "lineCount": 7,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "redirect",
+                "complexity": 3,
+                "lineCount": 40,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 2,
+                "lineCount": 10,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "json",
+                "complexity": 2,
+                "lineCount": 15,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "sendStatus",
+                "complexity": 2,
+                "lineCount": 8,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "attachment",
+                "complexity": 2,
+                "lineCount": 9,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 2,
+                "lineCount": 4,
+                "parameters": 2,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "onaborted",
+                "complexity": 2,
+                "lineCount": 8,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "ondirectory",
+                "complexity": 2,
+                "lineCount": 8,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "onerror",
+                "complexity": 2,
+                "lineCount": 5,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "onend",
+                "complexity": 2,
+                "lineCount": 5,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "headers",
+                "complexity": 2,
+                "lineCount": 9,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 1,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 1,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "clearCookie",
+                "complexity": 1,
+                "lineCount": 8,
+                "parameters": 2,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "location",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "text",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "html",
+                "complexity": 1,
+                "lineCount": 4,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "default",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 5,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "onfile",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "onstream",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              }
+            ],
+            "highestComplexityFunction": "send",
+            "deepestNesting": 7
+          },
+          "dependencies": {
+            "internal": [],
+            "external": [],
+            "mostImportedFrom": []
+          },
+          "samples": {
+            "complexFunctions": [
+              {
+                "name": "send",
+                "complexity": 24,
+                "snippet": "function send(body) {\n  var chunk = body;\n  var encoding;\n  var req = this.req;\n  var type;\n\n  // settings\n  var app = this.app;\n\n  switch (typeof chunk) {\n    // ... more code ..."
+              },
+              {
+                "name": "sendFile",
+                "complexity": 13,
+                "snippet": "function sendFile(path, options, callback) {\n  var done = callback;\n  var req = this.req;\n  var res = this;\n  var next = req.next;\n  var opts = options || {};\n\n  if (!path) {\n    throw new TypeError('path argument is required to res.sendFile');\n  }\n    // ... more code ..."
+              },
+              {
+                "name": "download",
+                "complexity": 13,
+                "snippet": "function download (path, filename, options, callback) {\n  var done = callback;\n  var name = filename;\n  var opts = options || null\n\n  // support function as second or third arg\n  if (typeof filename === 'function') {\n    done = filename;\n    name = null;\n    opts = null\n    // ... more code ..."
+              }
+            ]
+          }
+        },
+        {
+          "path": "temp-analysis/express/lib/utils.js",
+          "complexity": 27,
+          "structure": {
+            "imports": [],
+            "exports": [],
+            "classes": [],
+            "functions": [
+              "<anonymous>",
+              "<anonymous>",
+              "<anonymous>",
+              "acceptParams",
+              "<anonymous>",
+              "compileQueryParser",
+              "<anonymous>",
+              "<anonymous>",
+              "<anonymous>",
+              "<anonymous>",
+              "setCharset",
+              "createETagGenerator",
+              "generateETag",
+              "parseExtendedQueryString"
+            ],
+            "interfaces": [],
+            "types": [],
+            "enums": [],
+            "constants": []
+          },
+          "patterns": {
+            "hasAsyncFunctions": false,
+            "hasGenerators": false,
+            "hasDecorators": false,
+            "hasJSX": false,
+            "usesTypeScript": false,
+            "hasErrorHandling": false,
+            "hasTests": true
+          },
+          "complexityBreakdown": {
+            "functions": [
+              {
+                "name": "acceptParams",
+                "complexity": 7,
+                "lineCount": 32,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 6,
+                "lineCount": 23,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "compileQueryParser",
+                "complexity": 6,
+                "lineCount": 23,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 6,
+                "lineCount": 21,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 3,
+                "lineCount": 5,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "setCharset",
+                "complexity": 3,
+                "lineCount": 14,
+                "parameters": 2,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "createETagGenerator",
+                "complexity": 2,
+                "lineCount": 9,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "generateETag",
+                "complexity": 2,
+                "lineCount": 7,
+                "parameters": 2,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 1,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 1,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 1,
+                "parameters": 2,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 1,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "parseExtendedQueryString",
+                "complexity": 1,
+                "lineCount": 5,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              }
+            ],
+            "highestComplexityFunction": "acceptParams",
+            "deepestNesting": 5
+          },
+          "dependencies": {
+            "internal": [],
+            "external": [],
+            "mostImportedFrom": []
+          },
+          "samples": {
+            "complexFunctions": []
+          }
+        },
+        {
+          "path": "temp-analysis/express/lib/application.js",
+          "complexity": 41,
+          "structure": {
+            "imports": [],
+            "exports": [],
+            "classes": [],
+            "functions": [
+              "init",
+              "getrouter",
+              "defaultConfiguration",
+              "onmount",
+              "handle",
+              "use",
+              "<anonymous>",
+              "mounted_app",
+              "<anonymous>",
+              "route",
+              "engine",
+              "param",
+              "set",
+              "path",
+              "enabled",
+              "disabled",
+              "enable",
+              "disable",
+              "<anonymous>",
+              "<anonymous>",
+              "all",
+              "render",
+              "listen",
+              "logerror",
+              "tryRender"
+            ],
+            "interfaces": [],
+            "types": [],
+            "enums": [],
+            "constants": []
+          },
+          "patterns": {
+            "hasAsyncFunctions": false,
+            "hasGenerators": false,
+            "hasDecorators": false,
+            "hasJSX": false,
+            "usesTypeScript": false,
+            "hasErrorHandling": true,
+            "hasTests": true
+          },
+          "complexityBreakdown": {
+            "functions": [
+              {
+                "name": "use",
+                "complexity": 9,
+                "lineCount": 55,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "render",
+                "complexity": 9,
+                "lineCount": 54,
+                "parameters": 3,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "defaultConfiguration",
+                "complexity": 5,
+                "lineCount": 52,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "set",
+                "complexity": 5,
+                "lineCount": 33,
+                "parameters": 2,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "handle",
+                "complexity": 4,
+                "lineCount": 27,
+                "parameters": 3,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 4,
+                "lineCount": 23,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "onmount",
+                "complexity": 3,
+                "lineCount": 14,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "engine",
+                "complexity": 3,
+                "lineCount": 15,
+                "parameters": 2,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "param",
+                "complexity": 3,
+                "lineCount": 13,
+                "parameters": 2,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 3,
+                "lineCount": 12,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 3,
+                "lineCount": 10,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "logerror",
+                "complexity": 3,
+                "lineCount": 4,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "init",
+                "complexity": 2,
+                "lineCount": 25,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "getrouter",
+                "complexity": 2,
+                "lineCount": 10,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "path",
+                "complexity": 2,
+                "lineCount": 5,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "all",
+                "complexity": 2,
+                "lineCount": 10,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "listen",
+                "complexity": 2,
+                "lineCount": 9,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "tryRender",
+                "complexity": 2,
+                "lineCount": 7,
+                "parameters": 3,
+                "isAsync": false,
+                "hasErrorHandling": true
+              },
+              {
+                "name": "mounted_app",
+                "complexity": 1,
+                "lineCount": 8,
+                "parameters": 3,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 5,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "route",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "enabled",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "disabled",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "enable",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "disable",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              }
+            ],
+            "highestComplexityFunction": "use",
+            "deepestNesting": 5
+          },
+          "dependencies": {
+            "internal": [],
+            "external": [],
+            "mostImportedFrom": []
+          },
+          "samples": {
+            "complexFunctions": []
+          }
+        },
+        {
+          "path": "temp-analysis/express/lib/request.js",
+          "complexity": 29,
+          "structure": {
+            "imports": [],
+            "exports": [],
+            "classes": [],
+            "functions": [
+              "header",
+              "<anonymous>",
+              "<anonymous>",
+              "<anonymous>",
+              "<anonymous>",
+              "range",
+              "query",
+              "is",
+              "protocol",
+              "secure",
+              "ip",
+              "ips",
+              "subdomains",
+              "path",
+              "host",
+              "hostname",
+              "<anonymous>",
+              "stale",
+              "xhr",
+              "defineGetter"
+            ],
+            "interfaces": [],
+            "types": [],
+            "enums": [],
+            "constants": []
+          },
+          "patterns": {
+            "hasAsyncFunctions": false,
+            "hasGenerators": false,
+            "hasDecorators": false,
+            "hasJSX": false,
+            "usesTypeScript": false,
+            "hasErrorHandling": false,
+            "hasTests": true
+          },
+          "complexityBreakdown": {
+            "functions": [
+              {
+                "name": "header",
+                "complexity": 6,
+                "lineCount": 20,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 6,
+                "lineCount": 18,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "protocol",
+                "complexity": 5,
+                "lineCount": 19,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "host",
+                "complexity": 5,
+                "lineCount": 14,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "hostname",
+                "complexity": 4,
+                "lineCount": 15,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "is",
+                "complexity": 3,
+                "lineCount": 13,
+                "parameters": 1,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "subdomains",
+                "complexity": 3,
+                "lineCount": 12,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "range",
+                "complexity": 2,
+                "lineCount": 5,
+                "parameters": 2,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "query",
+                "complexity": 2,
+                "lineCount": 12,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "xhr",
+                "complexity": 2,
+                "lineCount": 4,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 4,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 4,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 4,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "<anonymous>",
+                "complexity": 1,
+                "lineCount": 4,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "secure",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "ip",
+                "complexity": 1,
+                "lineCount": 4,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "ips",
+                "complexity": 1,
+                "lineCount": 10,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "path",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "stale",
+                "complexity": 1,
+                "lineCount": 3,
+                "parameters": 0,
+                "isAsync": false,
+                "hasErrorHandling": false
+              },
+              {
+                "name": "defineGetter",
+                "complexity": 1,
+                "lineCount": 7,
+                "parameters": 3,
+                "isAsync": false,
+                "hasErrorHandling": false
+              }
+            ],
+            "highestComplexityFunction": "header",
+            "deepestNesting": 5
+          },
+          "dependencies": {
+            "internal": [],
+            "external": [],
+            "mostImportedFrom": []
+          },
+          "samples": {
+            "complexFunctions": []
+          }
+        }
+      ],
+      "summary": {
+        "totalFiles": 5,
+        "patterns": {
+          "asyncUsage": 0,
+          "errorHandling": 1,
+          "typeScriptUsage": 0,
+          "jsxUsage": 0,
+          "testFiles": 3,
+          "decoratorUsage": 0,
+          "generatorUsage": 0
+        },
+        "architecture": {
+          "totalClasses": 0,
+          "totalFunctions": 100,
+          "totalInterfaces": 0,
+          "totalTypes": 0,
+          "totalEnums": 0,
+          "avgFunctionsPerFile": 20,
+          "avgImportsPerFile": 0
+        },
+        "complexity": {
+          "filesWithHighComplexity": 4,
+          "deepestNesting": 7,
+          "avgComplexityPerFunction": 3.4,
+          "mostComplexFunctions": [
+            {
+              "file": "temp-analysis/express/lib/response.js",
+              "name": "send",
+              "complexity": 24,
+              "lineCount": 101
+            },
+            {
+              "file": "temp-analysis/express/lib/response.js",
+              "name": "sendfile",
+              "complexity": 14,
+              "lineCount": 89
+            },
+            {
+              "file": "temp-analysis/express/lib/response.js",
+              "name": "sendFile",
+              "complexity": 13,
+              "lineCount": 43
+            },
+            {
+              "file": "temp-analysis/express/lib/response.js",
+              "name": "download",
+              "complexity": 13,
+              "lineCount": 50
+            },
+            {
+              "file": "temp-analysis/express/lib/application.js",
+              "name": "use",
+              "complexity": 9,
+              "lineCount": 55
+            },
+            {
+              "file": "temp-analysis/express/lib/application.js",
+              "name": "render",
+              "complexity": 9,
+              "lineCount": 54
+            },
+            {
+              "file": "temp-analysis/express/lib/response.js",
+              "name": "<anonymous>",
+              "complexity": 8,
+              "lineCount": 34
+            },
+            {
+              "file": "temp-analysis/express/lib/response.js",
+              "name": "onfinish",
+              "complexity": 8,
+              "lineCount": 16
+            },
+            {
+              "file": "temp-analysis/express/lib/response.js",
+              "name": "stringify",
+              "complexity": 8,
+              "lineCount": 25
+            },
+            {
+              "file": "temp-analysis/express/lib/response.js",
+              "name": "jsonp",
+              "complexity": 7,
+              "lineCount": 45
+            }
+          ]
+        },
+        "dependencies": {
+          "mostUsedExternal": [],
+          "mostImportedInternal": [],
+          "avgExternalDepsPerFile": 0,
+          "avgInternalDepsPerFile": 0
+        },
+        "codeQuality": {
+          "avgFunctionLength": 14,
+          "avgParametersPerFunction": 1.1,
+          "percentAsyncFunctions": 0,
+          "percentFunctionsWithErrorHandling": 1
+        }
+      }
+    }
   },
-  "duration": 905
+  "duration": 973
 }

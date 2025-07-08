@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Rich Context Extraction for LLM Analysis**: Semantic analysis system that extracts detailed architectural insights from TypeScript/JavaScript files to provide better context for LLM-based code analysis
+- **Deep Code Analysis**: Function-level complexity breakdown with pattern detection (async/await, error handling, TypeScript usage, JSX, decorators)
+- **Enhanced Architectural Insights**: AST-based structure analysis including imports, exports, classes, functions, interfaces, and dependencies
+- **Code Context Summaries**: Comprehensive project-level summaries with complexity distribution, dependency analysis, and code quality metrics
+- **Intelligent Code Sampling**: Automatic extraction of complex function samples for detailed analysis and reporting
 
 ## [0.4.0] - 2025-07-03
 

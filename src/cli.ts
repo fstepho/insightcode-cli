@@ -7,6 +7,7 @@ import { parseDirectory } from './parser';
 import { analyze } from './analyzer';
 import { reportToTerminal } from './reporter';
 import { getConfig } from './config';
+import { analyzeWithContext } from './contextExtractor';
 
 const program = new Command();
 
@@ -21,6 +22,7 @@ program
   .option('-j, --json', 'Output as JSON')
   .option('-e, --exclude <patterns...>', 'Exclude patterns (e.g., "**/*.spec.ts")')
   .option('--exclude-utility', 'Exclude test, example, and utility directories from analysis')
+  .option('--with-context', 'Include detailed code context for LLM analysis')
   .action(async (path = '.', options: CliOptions) => {
     try {
       if (!options.json) {
@@ -36,7 +38,14 @@ program
       }
       
       // Analyze metrics
-      const results = analyze(files, path, thresholds);
+       
+      // Analyze metrics
+      let results;
+      if (options.withContext) {
+        results = analyzeWithContext(files, path, thresholds, true);
+      } else {
+        results = analyze(files, path, thresholds);
+      }
       
       if (options.json) {
         console.log(JSON.stringify(results, null, 2));

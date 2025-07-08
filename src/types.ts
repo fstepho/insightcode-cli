@@ -15,6 +15,116 @@ export interface FileMetrics {
   issues: Issue[];
   impact: number;           // Nombre de fichiers qui dépendent de celui-ci.
   criticismScore: number;   // Score de criticité final du fichier (utilisé pour le poids).
+  context?: CodeContext;
+}
+
+/**
+ * Represents extracted context from a code file for LLM analysis
+ * (imported from codeContextExtractor.ts)
+ */
+/**
+ * Summary of code contexts for high-level insights
+ */
+export interface CodeContextSummary {
+  totalFiles: number;
+  patterns: {
+    asyncUsage: number;
+    errorHandling: number;
+    typeScriptUsage: number;
+    jsxUsage: number;
+    testFiles: number;
+    decoratorUsage: number;
+    generatorUsage: number;
+  };
+  architecture: {
+    totalClasses: number;
+    totalFunctions: number;
+    totalInterfaces: number;
+    totalTypes: number;
+    totalEnums: number;
+    avgFunctionsPerFile: number;
+    avgImportsPerFile: number;
+  };
+  complexity: {
+    filesWithHighComplexity: number;
+    deepestNesting: number;
+    avgComplexityPerFunction: number;
+    mostComplexFunctions: Array<{
+      file: string;
+      name: string;
+      complexity: number;
+      lineCount: number;
+    }>;
+  };
+  dependencies: {
+    mostUsedExternal: Array<{ name: string; count: number }>;
+    mostImportedInternal: Array<{ name: string; count: number }>;
+    avgExternalDepsPerFile: number;
+    avgInternalDepsPerFile: number;
+  };
+  codeQuality: {
+    avgFunctionLength: number;
+    avgParametersPerFunction: number;
+    percentAsyncFunctions: number;
+    percentFunctionsWithErrorHandling: number;
+  };
+}
+export interface CodeContext {
+  path: string;
+  complexity: number;
+  
+  // File structure overview
+  structure: {
+    imports: string[];
+    exports: string[];
+    classes: string[];
+    functions: string[];
+    interfaces: string[];
+    types: string[];
+    enums: string[];
+    constants: string[];
+  };
+  
+  // Key patterns detected
+  patterns: {
+    hasAsyncFunctions: boolean;
+    hasGenerators: boolean;
+    hasDecorators: boolean;
+    hasJSX: boolean;
+    usesTypeScript: boolean;
+    hasErrorHandling: boolean;
+    hasTests: boolean;
+  };
+  
+  // Complexity breakdown
+  complexityBreakdown: {
+    functions: Array<{
+      name: string;
+      complexity: number;
+      lineCount: number;
+      parameters: number;
+      isAsync: boolean;
+      hasErrorHandling: boolean;
+    }>;
+    highestComplexityFunction: string;
+    deepestNesting: number;
+  };
+  
+  // Dependencies analysis
+  dependencies: {
+    internal: string[];
+    external: string[];
+    mostImportedFrom: string[];
+  };
+  
+  // Code snippet samples (for LLM understanding)
+  samples: {
+    complexFunctions: Array<{
+      name: string;
+      complexity: number;
+      snippet: string;
+    }>;
+  };
 }
 
 /**
@@ -64,6 +174,11 @@ export interface AnalysisResult {
   // Listes de fichiers
   files: FileMetrics[];
   topFiles: FileMetrics[];
+  // Contexte de code optionnel pour analyse LLM
+  codeContext?: {
+    contexts: CodeContext[];
+    summary: CodeContextSummary;
+  };
 }
 
 export interface CliOptions {
@@ -71,6 +186,7 @@ export interface CliOptions {
   json?: boolean;
   exclude?: string[];
   excludeUtility?: boolean;
+  withContext?: boolean;
 }
 
 /**
