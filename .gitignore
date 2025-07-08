@@ -143,6 +143,7 @@ benchmark-workspace/
 temp-analysis/
 
 # AI System temporary files
+.ai-backups/
 .ai.md.backup     # Créé par vos scripts
 .ai.md.bak        # Créé par sed -i
 .ai.md.tmp        # Fichiers temporaires
@@ -150,3 +151,8 @@ temp-analysis/
 
 # archive of documentation
 docs-archive
+.ai.md.backup
+.ai.md.tmp
+.ai.md.new
+.skip-ai-hook
+.ai.md.backup

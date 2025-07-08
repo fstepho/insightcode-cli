@@ -3,6 +3,11 @@
 COMMIT_MSG_FILE=$1
 COMMIT_SOURCE=$2
 
+# Skip mode simple (NOUVEAU - 2 lignes)
+if [ "$SKIP_AI_HOOK" = "true" ] || [ -f ".skip-ai-hook" ]; then
+  exit 0
+fi
+
 # Lire le message de commit
 COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
 
@@ -20,45 +25,61 @@ fi
 if [[ "$COMMIT_MSG" =~ ^ai: ]]; then
   echo "🤖 Analyzing project for AI context..."
   
+  # Vérifications de base (NOUVEAU - protection)
+  if ! command -v jq &> /dev/null; then
+    echo "⚠️  Warning: jq is not installed. Skipping analysis."
+    exit 0
+  fi
+  
+  if [ ! -f ".ai.md" ]; then
+    echo "⚠️  Warning: .ai.md not found. Skipping."
+    exit 0
+  fi
+  
   # Analyser le projet
   ANALYSIS=$(npx insightcode analyze . --json 2>/dev/null || echo '{}')
   
-  # Extraire les métriques
-  SCORE=$(echo "$ANALYSIS" | jq -r '.score // "?"')
-  GRADE=$(echo "$ANALYSIS" | jq -r '.grade // "?"')
-  FILES=$(echo "$ANALYSIS" | jq -r '.summary.totalFiles // "?"')
-  LINES=$(echo "$ANALYSIS" | jq -r '.summary.totalLines // "?"')
-  TOP_ISSUE=$(echo "$ANALYSIS" | jq -r '.topFiles[0] // {} | "\(.path // "N/A") (complexity: \(.complexity // "N/A"))"')
-  
-  # Date au format ISO
-  CURRENT_DATE=$(date "+%Y-%m-%d %H:%M")
-  
-  # Créer le nouveau contenu pour Quick Status
-  NEW_STATUS="<!-- GIT-HOOK:START -->
+  # Vérifier si l'analyse a réussi (AMÉLIORATION)
+  if [ "$ANALYSIS" = "{}" ]; then
+    echo "⚠️  Warning: InsightCode analysis failed. Continuing without metrics."
+  else
+    # Extraire les métriques
+    SCORE=$(echo "$ANALYSIS" | jq -r '.score // "?"')
+    GRADE=$(echo "$ANALYSIS" | jq -r '.grade // "?"')
+    FILES=$(echo "$ANALYSIS" | jq -r '.summary.totalFiles // "?"')
+    LINES=$(echo "$ANALYSIS" | jq -r '.summary.totalLines // "?"')
+    TOP_ISSUE=$(echo "$ANALYSIS" | jq -r '.topFiles[0] // {} | "\(.path // "N/A") (complexity: \(.complexity // "N/A"))"')
+    
+    # Date au format ISO
+    CURRENT_DATE=$(date "+%Y-%m-%d %H:%M")
+    
+    # Créer le nouveau contenu pour Quick Status
+    NEW_STATUS="<!-- GIT-HOOK:START -->
 Last Analysis: $CURRENT_DATE
 Score: $GRADE ($SCORE/100) | Files: $FILES | Lines: $LINES
 Top Issues: $TOP_ISSUE
 <!-- GIT-HOOK:END -->"
-  
-  # Mettre à jour .ai.md avec sed
-  # D'abord, extraire tout avant GIT-HOOK:START
-  sed -n '1,/<!-- GIT-HOOK:START -->/p' .ai.md | sed '$d' > .ai.md.new
-  
-  # Ajouter le nouveau status
-  echo "$NEW_STATUS" >> .ai.md.new
-  
-  # Ajouter tout après GIT-HOOK:END
-  sed -n '/<!-- GIT-HOOK:END -->/,$p' .ai.md | tail -n +2 >> .ai.md.new
-  
-  # Remplacer le fichier
-  mv .ai.md.new .ai.md
-  
-  # Ajouter le contexte au message de commit
-  echo "" >> "$COMMIT_MSG_FILE"
-  echo "AI-Context: Score $SCORE/100 ($GRADE)" >> "$COMMIT_MSG_FILE"
-  
-  # Stage le fichier modifié
-  git add .ai.md
+    
+    # Mettre à jour .ai.md avec sed
+    # D'abord, extraire tout avant GIT-HOOK:START
+    sed -n '1,/<!-- GIT-HOOK:START -->/p' .ai.md | sed '$d' > .ai.md.new
+    
+    # Ajouter le nouveau status
+    echo "$NEW_STATUS" >> .ai.md.new
+    
+    # Ajouter tout après GIT-HOOK:END
+    sed -n '/<!-- GIT-HOOK:END -->/,$p' .ai.md | tail -n +2 >> .ai.md.new
+    
+    # Remplacer le fichier
+    mv .ai.md.new .ai.md
+    
+    # Ajouter le contexte au message de commit
+    echo "" >> "$COMMIT_MSG_FILE"
+    echo "AI-Context: Score $SCORE/100 ($GRADE)" >> "$COMMIT_MSG_FILE"
+    
+    # Stage le fichier modifié
+    git add .ai.md
+  fi
 fi
 
 # Logger dans l'historique (sauf pour les merges)
@@ -67,16 +88,18 @@ if [[ "$COMMIT_SOURCE" != "merge" ]] && [[ ! -z "$COMMIT_MSG" ]]; then
   MSG_LINE=$(head -1 "$COMMIT_MSG_FILE")
   DATE=$(date +%Y-%m-%d)
   
-  # Ajouter au log
-  if [[ "$MSG_LINE" =~ ^(ai|feat|fix|perf): ]]; then
-    # Nettoyer le message
-    CLEAN_MSG=$(echo "$MSG_LINE" | sed 's/^[^:]*: //')
-    
-    # NOUVEAU: Si le message a "ai: " au début à cause de notre modification
-    # enlever aussi ce préfixe pour le log
-    if [[ "$MSG_LINE" =~ ^ai:\ (feat|fix|chore|test|docs|refactor|perf|style|ci|build|revert) ]]; then
-      CLEAN_MSG=$(echo "$MSG_LINE" | sed 's/^ai: //' | sed 's/^[^:]*: //')
+  # Ajouter au log (AMÉLIORATION: support de tous les types)
+  if [[ "$MSG_LINE" =~ ^(ai|feat|fix|perf|chore|test|docs|refactor|style|ci|build|revert): ]]; then
+    # BUG FIX: Nettoyer le message en 2 étapes
+    # D'abord enlever "ai: " si présent
+    if [[ "$MSG_LINE" =~ ^ai: ]]; then
+      MSG_LINE_CLEAN=$(echo "$MSG_LINE" | sed 's/^ai: //')
+    else
+      MSG_LINE_CLEAN="$MSG_LINE"
     fi
+    
+    # Puis extraire le message après le type de commit
+    CLEAN_MSG=$(echo "$MSG_LINE_CLEAN" | sed 's/^[^:]*: //')
     
     # Créer un fichier temporaire pour le nouveau log
     cp .ai.md .ai.md.tmp
@@ -94,14 +117,14 @@ if [[ "$COMMIT_SOURCE" != "merge" ]] && [[ ! -z "$COMMIT_MSG" ]]; then
     
     rm .ai.md.tmp
     
-    # Limiter à 20 dernières entrées
+    # Limiter à 50 dernières entrées (AMÉLIORATION: 20 → 50)
     cp .ai.md .ai.md.tmp
     awk '
       BEGIN { count=0 }
       /<!-- GIT-LOG:START -->/ { p=1; print; next }
       /<!-- GIT-LOG:END -->/ { p=0; print; next }
       p && /^- / { 
-        if (++count <= 20) print
+        if (++count <= 50) print
         next
       }
       { print }
