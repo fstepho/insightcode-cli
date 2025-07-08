@@ -37,7 +37,7 @@ if [[ "$COMMIT_MSG" =~ ^ai: ]]; then
   fi
   
   # Analyser le projet
-  ANALYSIS=$(npx insightcode analyze . --json 2>/dev/null || echo '{}')
+  ANALYSIS=$(npx insightcode analyze ./src --json 2>/dev/null || echo '{}')
   
   # Vérifier si l'analyse a réussi (AMÉLIORATION)
   if [ "$ANALYSIS" = "{}" ]; then
