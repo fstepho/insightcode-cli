@@ -387,7 +387,7 @@ async function analyzeProject(project: Project, index: number, total: number): P
     analysis.silentKillers.forEach(file => (file.path = cleanPath(file.path)));
     
     const duration = Date.now() - startTime;
-    console.log(`  ✅ [${index}/${total}] ${project.name} completed in ${(duration / 1000).toFixed(1)}s`);
+    console.log(`  ✅ [${index}/${total}] ${project.name} completed in ${(duration / 1000).toFixed(2)}s`);
 
     return {
       project: project.name,
@@ -439,7 +439,7 @@ function generateMarkdownReport(results: BenchmarkResult[], summary: Summary): s
     markdown += `## Overall Summary\n\n`;
     markdown += `| Metric | Value |\n|---|---|\n`;
     markdown += `| **Total Projects Analyzed** | ${summary.successfulAnalyses} / ${summary.totalProjects} |\n`;
-    markdown += `| **Total Duration** | ${(summary.totalDuration / 1000).toFixed(1)}s |\n`;
+    markdown += `| **Total Duration** | ${(summary.totalDuration / 1000).toFixed(2)}s |\n`;
     markdown += `| **Total Lines of Code** | ${formatNumber(summary.totalLines)} |\n`;
     markdown += `| **Analysis Speed** | ${formatNumber(Math.round(summary.totalLines / (summary.totalDuration / 1000)))} lines/sec |\n`;
 
@@ -450,8 +450,8 @@ function generateMarkdownReport(results: BenchmarkResult[], summary: Summary): s
     const sortedByComplexity = [...results].sort((a, b) => a.analysis.summary.avgComplexity - b.analysis.summary.avgComplexity);
     const sortedByDuplication = [...results].sort((a, b) => a.analysis.summary.avgDuplication - b.analysis.summary.avgDuplication);
     markdown += `| **Best Score** | \`${sortedByScore[0].project}\` (${sortedByScore[0].analysis.score}/100) | \`${sortedByScore[sortedByScore.length - 1].project}\` (${sortedByScore[sortedByScore.length - 1].analysis.score}/100) | Overall Score |\n`;
-    markdown += `| **Lowest Complexity** | \`${sortedByComplexity[0].project}\` (${sortedByComplexity[0].analysis.summary.avgComplexity.toFixed(1)}) | \`${sortedByComplexity[sortedByComplexity.length - 1].project}\` (${sortedByComplexity[sortedByComplexity.length - 1].analysis.summary.avgComplexity.toFixed(1)}) | Avg. Complexity |\n`;
-    markdown += `| **Lowest Duplication** | \`${sortedByDuplication[0].project}\` (${sortedByDuplication[0].analysis.summary.avgDuplication.toFixed(1)}%) | \`${sortedByDuplication[sortedByDuplication.length - 1].project}\` (${sortedByDuplication[sortedByDuplication.length - 1].analysis.summary.avgDuplication.toFixed(1)}%) | Avg. Duplication |\n`;
+    markdown += `| **Lowest Complexity** | \`${sortedByComplexity[0].project}\` (${sortedByComplexity[0].analysis.summary.avgComplexity.toFixed(2)}) | \`${sortedByComplexity[sortedByComplexity.length - 1].project}\` (${sortedByComplexity[sortedByComplexity.length - 1].analysis.summary.avgComplexity.toFixed(2)}) | Avg. Complexity |\n`;
+    markdown += `| **Lowest Duplication** | \`${sortedByDuplication[0].project}\` (${sortedByDuplication[0].analysis.summary.avgDuplication.toFixed(2)}%) | \`${sortedByDuplication[sortedByDuplication.length - 1].project}\` (${sortedByDuplication[sortedByDuplication.length - 1].analysis.summary.avgDuplication.toFixed(2)}%) | Avg. Duplication |\n`;
 
     // --- 3. Complexity Distribution Section ---
     markdown += `\n## Complexity Distribution: The "Monolith" Indicator\n\n`;
@@ -459,7 +459,7 @@ function generateMarkdownReport(results: BenchmarkResult[], summary: Summary): s
     markdown += `| Project | Avg Complexity | StdDev | Profile |\n|---|---|---|---|\n`;
     results.sort((a, b) => b.analysis.complexityStdDev - a.analysis.complexityStdDev).forEach(r => {
         const profile = r.analysis.complexityStdDev > r.analysis.summary.avgComplexity * 2 ? 'Concentrated 🌋' : 'Evenly Distributed';
-        markdown += `| \`${r.project}\` | ${r.analysis.summary.avgComplexity.toFixed(1)} | **${r.analysis.complexityStdDev.toFixed(1)}** | ${profile} |\n`;
+        markdown += `| \`${r.project}\` | ${r.analysis.summary.avgComplexity.toFixed(2)} | **${r.analysis.complexityStdDev.toFixed(2)}** | ${profile} |\n`;
     });
 
     // --- 4. Individual Project Analysis Section ---
@@ -471,8 +471,8 @@ function generateMarkdownReport(results: BenchmarkResult[], summary: Summary): s
         markdown += `### ${result.project} (⭐ ${result.stars}) - Grade: ${analysis.grade} (${analysis.score}/100)\n\n`;
         markdown += `- **Description**: ${result.description}\n`;
         markdown += `- **Files**: ${formatNumber(analysis.summary.totalFiles)} files, ${formatNumber(analysis.summary.totalLines)} lines\n`;
-        markdown += `- **Avg Complexity**: ${analysis.summary.avgComplexity.toFixed(1)} (StdDev: ${analysis.complexityStdDev.toFixed(1)})\n`;
-        markdown += `- **Avg Duplication**: ${analysis.summary.avgDuplication.toFixed(1)}%\n\n`;
+        markdown += `- **Avg Complexity**: ${analysis.summary.avgComplexity.toFixed(2)} (StdDev: ${analysis.complexityStdDev.toFixed(2)})\n`;
+        markdown += `- **Avg Duplication**: ${analysis.summary.avgDuplication.toFixed(2)}%\n\n`;
 
         // --- 4a. Emblematic Files Validation ---
         if (result.emblematicFiles) {
@@ -537,7 +537,10 @@ async function main(): Promise<void> {
   results.forEach(result => {
     if(!result.project || result.project === 'Unknown') return;
     const resultFilename = `${result.project}-${excludeUtility ? 'prod' : 'full'}.json`;
-    fs.writeFileSync(path.join(RESULTS_DIR, resultFilename), JSON.stringify(result, null, 2));
+    fs.writeFileSync(path.join(RESULTS_DIR, resultFilename), 
+    JSON.stringify(result, function(key, val) {
+      return val.toFixed ? Number(val.toFixed(2)) : val;
+    }, 2));
   });
 
 
@@ -550,7 +553,7 @@ async function main(): Promise<void> {
     totalDuration: results.reduce((sum, r) => sum + r.duration, 0),
     totalLines: successfulResults.reduce((sum, r) => sum + r.analysis.summary.totalLines, 0),
     avgComplexity: successfulResults.reduce((sum, r) => sum + r.analysis.summary.avgComplexity, 0) / successfulResults.length,
-    avgDuplication: successfulResults.reduce((sum, r) => sum + r.analysis.summary.avgDuplication, 0) / successfulResults.length,
+    avgDuplication: (successfulResults.reduce((sum, r) => sum + r.analysis.summary.avgDuplication, 0) / successfulResults.length),
     gradeDistribution: successfulResults.reduce((dist, r) => {
       dist[r.analysis.grade] = (dist[r.analysis.grade] || 0) + 1;
       return dist;
@@ -562,7 +565,9 @@ async function main(): Promise<void> {
   const summaryFilename = excludeUtility ? 'benchmark-summary-production.json' : 'benchmark-summary.json';
   fs.writeFileSync(
     path.join(RESULTS_DIR, summaryFilename),
-    JSON.stringify(summary, null, 2)
+    JSON.stringify(summary, function(key, val) {
+      return val.toFixed ? Number(val.toFixed(2)) : val;
+    }, 2)
   );
 
   // Generate and save markdown report
@@ -583,8 +588,8 @@ async function main(): Promise<void> {
   console.log(`  - Success rate: ${summary.successfulAnalyses}/${summary.totalProjects}`);
   console.log(`  - Total lines analyzed: ${formatNumber(summary.totalLines)}`);
   console.log(`  - Analysis speed: ${formatNumber(Math.round(summary.totalLines / (summary.totalDuration / 1000)))} lines/second`);
-  console.log(`  - Average complexity: ${summary.avgComplexity.toFixed(1)}`);
-  console.log(`  - Average duplication: ${summary.avgDuplication.toFixed(1)}%`);
+  console.log(`  - Average complexity: ${summary.avgComplexity.toFixed(2)}`);
+  console.log(`  - Average duplication: ${summary.avgDuplication.toFixed(2)}%`);
   console.log(`  - Grade distribution: ${Object.entries(summary.gradeDistribution).map(([g, c]) => `${g}:${c}`).join(', ')}`);
   console.log(`\n📁 Results saved to: ${RESULTS_DIR}`);
 }
