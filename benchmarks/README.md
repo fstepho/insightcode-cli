@@ -118,6 +118,20 @@ Based on analysis of 9 popular projects with new graduated scoring:
 3. **Test code impacts scores**: Many projects improve when excluding tests
 4. **Size doesn't determine quality**: Small projects can have poor scores too
 
+## 🧪 Self-Analysis (Testing & Demo)
+
+InsightCode analyzes itself to:
+- ✅ Test all features work correctly  
+- ✅ Generate real metrics for documentation
+- ✅ Provide examples of output format
+- ❌ NOT to judge its own code quality
+
+The C score (72/100) is expected for a parsing/analysis tool due to 
+the inherent complexity of AST manipulation.
+
+**Note**: When you see InsightCode's self-analysis score in documentation or examples, 
+remember it's demonstrating the tool's capabilities, not evaluating its quality.
+
 ## 🔍 Understanding the Results: Context Matters
 
 ### Case Study: Lodash's Deliberate Monolithic Design

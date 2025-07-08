@@ -41,7 +41,7 @@
 # Install globally
 npm install -g insightcode-cli
 
-# Analyze current directory
+# Analyze any TypeScript project, including InsightCode itself:
 insightcode analyze
 
 # Analyze specific path
@@ -53,6 +53,8 @@ insightcode analyze --exclude-utility
 # Output JSON for CI/CD
 insightcode analyze --json > report.json
 ```
+# Note: We use self-analysis for testing and documentation,
+# not as a quality metric of the tool itself
 
 ## 📋 Requirements
 

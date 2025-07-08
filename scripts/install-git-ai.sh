@@ -1,9 +1,9 @@
 #!/bin/bash
-# Installation simplifiée du système Git AI
+# Git AI System Installation for InsightCode
 
 echo "🚀 Installing Git AI System..."
 
-# Déterminer la racine du projet
+# Determine project root
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 if [ -z "$PROJECT_ROOT" ]; then
   echo "❌ Error: Not in a git repository"
@@ -13,13 +13,18 @@ fi
 echo "📁 Project root: $PROJECT_ROOT"
 cd "$PROJECT_ROOT"
 
-# Vérifier les dépendances
+# Check dependencies
 if ! command -v jq &> /dev/null; then
   echo "❌ Missing jq. Install with: brew install jq"
   exit 1
 fi
 
-# Créer les alias Git
+# Check if InsightCode is installed
+if ! command -v npx insightcode &> /dev/null 2>&1; then
+  echo "⚠️  InsightCode CLI not found. Install with: npm install -g insightcode-cli"
+fi
+
+# Create Git aliases
 echo "📝 Installing Git aliases..."
 
 git config --local alias.ai '!f() { git commit -m "ai: $*"; }; f'
@@ -27,17 +32,24 @@ git config --local alias.ai '!f() { git commit -m "ai: $*"; }; f'
 git config --local alias.ai-status '!f() {
   [ ! -f ".ai.md" ] && echo "❌ .ai.md not found" && return 1
   echo "🔄 Updating metrics..."
+  
+  # Detect if we are analyzing InsightCode itself
+  PROJECT_NAME=$(basename "$PWD")
+  if [[ "$PROJECT_NAME" == "insightcode-cli" ]] || grep -q "insightcode-cli" package.json 2>/dev/null; then
+    echo "📊 Self-analysis mode (for testing/demo purposes)..."
+  fi
+  
   ANALYSIS=$(npx insightcode analyze . --json 2>/dev/null || echo "{}")
   [ "$ANALYSIS" = "{}" ] && echo "❌ Analysis failed" && return 1
   
-  # Extraire les métriques
+  # Extract metrics
   SCORE=$(echo "$ANALYSIS" | jq -r ".score // \"?\"")
   GRADE=$(echo "$ANALYSIS" | jq -r ".grade // \"?\"")
   FILES=$(echo "$ANALYSIS" | jq -r ".summary.totalFiles // \"?\"")
   LINES=$(echo "$ANALYSIS" | jq -r ".summary.totalLines // \"?\"")
   TOP=$(echo "$ANALYSIS" | jq -r ".topFiles[0] // {} | \"\\(.path // \"N/A\") (complexity: \\(.complexity // \"N/A\"))\"")
   
-  # Mettre à jour .ai.md
+  # Update .ai.md
   DATE=$(date "+%Y-%m-%d %H:%M")
   NEW_STATUS="<!-- GIT-HOOK:START -->
 Last Analysis: $DATE
@@ -45,7 +57,7 @@ Score: $GRADE ($SCORE/100) | Files: $FILES | Lines: $LINES
 Top Issues: $TOP
 <!-- GIT-HOOK:END -->"
   
-  # Remplacer dans le fichier
+  # Replace in file
   sed -n "1,/<!-- GIT-HOOK:START -->/p" .ai.md | sed "\$d" > .ai.md.new
   echo "$NEW_STATUS" >> .ai.md.new
   sed -n "/<!-- GIT-HOOK:END -->/,\$p" .ai.md | tail -n +2 >> .ai.md.new
@@ -68,10 +80,47 @@ git config --local alias.ai-task '!f() {
   echo "✅ Task added to Current Focus"
 }; f'
 
-# Créer .ai.md minimal si absent (à la racine)
+# Create minimal .ai.md if not present (at root)
 if [ ! -f "$PROJECT_ROOT/.ai.md" ]; then
   echo "📁 Creating minimal .ai.md at project root..."
-  cat > "$PROJECT_ROOT/.ai.md" << 'EOF'
+  
+  # Detect if this is InsightCode itself
+  IS_INSIGHTCODE=false
+  if [[ "$(basename "$PWD")" == "insightcode-cli" ]] || grep -q '"name".*"insightcode-cli"' package.json 2>/dev/null; then
+    IS_INSIGHTCODE=true
+  fi
+  
+  if [ "$IS_INSIGHTCODE" = true ]; then
+    cat > "$PROJECT_ROOT/.ai.md" << 'EOF'
+# 🤖 AI Development Context
+
+## 📊 Quick Status
+<!-- GIT-HOOK:START -->
+Last Analysis: Never
+Score: ? (?/100) | Files: ? | Lines: ?
+Top Issues: N/A
+<!-- GIT-HOOK:END -->
+
+> ⚠️ **Note**: This score is InsightCode analyzing itself for testing and demo purposes.
+> It is NOT a quality indicator of InsightCode, but demonstrates its capabilities.
+
+## 🎯 Current Focus
+**Active**: Initial setup
+**Next**: TBD
+**Blocker**: None
+
+## 📅 Session Log
+<!-- GIT-LOG:START -->
+<!-- GIT-LOG:END -->
+
+## 📖 For AI Assistants
+This is the InsightCode project itself. Self-analysis is used for:
+- Testing all features work correctly
+- Generating real metrics for documentation
+- Providing output examples
+EOF
+  else
+    cat > "$PROJECT_ROOT/.ai.md" << 'EOF'
 # 🤖 AI Development Context
 
 ## 📊 Quick Status
@@ -90,19 +139,20 @@ Top Issues: N/A
 <!-- GIT-LOG:START -->
 <!-- GIT-LOG:END -->
 EOF
+  fi
   echo "✅ Created $PROJECT_ROOT/.ai.md"
 else
   echo "✅ .ai.md already exists at project root"
 fi
 
-# Mettre à jour .gitignore (à la racine)
+# Update .gitignore (at root)
 echo "📝 Updating .gitignore..."
 GITIGNORE="$PROJECT_ROOT/.gitignore"
 for pattern in ".ai.md.backup" ".ai.md.tmp" ".ai.md.new" ".ai-backups/" ".skip-ai-hook"; do
   grep -q "^$pattern$" "$GITIGNORE" 2>/dev/null || echo "$pattern" >> "$GITIGNORE"
 done
 
-# Vérifier le hook Git
+# Check Git hook
 if [ -f "$PROJECT_ROOT/.husky/prepare-commit-msg" ]; then
   echo "✅ Git hook found"
   [ ! -x "$PROJECT_ROOT/.husky/prepare-commit-msg" ] && chmod +x "$PROJECT_ROOT/.husky/prepare-commit-msg"
@@ -160,6 +210,7 @@ echo "
 ⚠️  REQUIREMENTS:
   - jq must be installed (you have it ✓)
   - npx/npm must be available
+  - InsightCode CLI should be installed
   - Run commands from project root with .ai.md
 
 🔗 MORE INFO:
