@@ -1,0 +1,326 @@
+{
+  "project": "chalk",
+  "repo": "https://github.com/chalk/chalk.git",
+  "type": "utility library",
+  "stars": "22.3k",
+  "stableVersion": "v5.4.1",
+  "description": "Terminal string styling library",
+  "category": "small",
+  "emblematicFiles": {
+    "coreFiles": [
+      "source/index.js",
+      "index.js"
+    ],
+    "architecturalFiles": [
+      "source/templates.js"
+    ],
+    "performanceCriticalFiles": [
+      "source/utilities.js"
+    ],
+    "complexAlgorithmFiles": [
+      "source/vendor/ansi-styles/index.js"
+    ]
+  },
+  "analysis": {
+    "files": [
+      {
+        "path": "benchmark.js",
+        "complexity": 1,
+        "duplication": 5,
+        "functionCount": 12,
+        "loc": 41,
+        "issues": [],
+        "fileType": "utility",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/rainbow.js",
+        "complexity": 6,
+        "duplication": 0,
+        "functionCount": 2,
+        "loc": 31,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 7
+      },
+      {
+        "path": "examples/screenshot.js",
+        "complexity": 10,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 21,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 11
+      },
+      {
+        "path": "source/index.js",
+        "complexity": 23,
+        "duplication": 1,
+        "functionCount": 19,
+        "loc": 169,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 23 (recommended: < 20)",
+            "value": 23,
+            "ratio": 1.15
+          }
+        ],
+        "fileType": "production",
+        "impact": 9,
+        "criticismScore": 42.5
+      },
+      {
+        "path": "source/index.test-d.ts",
+        "complexity": 3,
+        "duplication": 2,
+        "functionCount": 0,
+        "loc": 148,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "source/utilities.js",
+        "complexity": 6,
+        "duplication": 0,
+        "functionCount": 2,
+        "loc": 28,
+        "issues": [],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 9
+      },
+      {
+        "path": "test/_fixture.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/chalk.js",
+        "complexity": 3,
+        "duplication": 4,
+        "functionCount": 22,
+        "loc": 100,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "test/instance.js",
+        "complexity": 1,
+        "duplication": 6,
+        "functionCount": 4,
+        "loc": 18,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/level.js",
+        "complexity": 1,
+        "duplication": 13,
+        "functionCount": 4,
+        "loc": 38,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/no-color-support.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 6,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/visible.js",
+        "complexity": 1,
+        "duplication": 20,
+        "functionCount": 3,
+        "loc": 33,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "source/vendor/ansi-styles/index.js",
+        "complexity": 14,
+        "duplication": 6,
+        "functionCount": 14,
+        "loc": 178,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 14 (recommended: < 10)",
+            "value": 14,
+            "ratio": 0.7
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 17.5
+      },
+      {
+        "path": "source/vendor/supports-color/browser.js",
+        "complexity": 7,
+        "duplication": 4,
+        "functionCount": 2,
+        "loc": 26,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 8
+      },
+      {
+        "path": "source/vendor/supports-color/index.js",
+        "complexity": 55,
+        "duplication": 4,
+        "functionCount": 7,
+        "loc": 139,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 55 (recommended: < 20)",
+            "value": 55,
+            "ratio": 2.75
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 56.5
+      }
+    ],
+    "topFiles": [
+      {
+        "path": "source/vendor/supports-color/index.js",
+        "complexity": 55,
+        "duplication": 4,
+        "functionCount": 7,
+        "loc": 139,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 55 (recommended: < 20)",
+            "value": 55,
+            "ratio": 2.75
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 56.5
+      },
+      {
+        "path": "source/index.js",
+        "complexity": 23,
+        "duplication": 1,
+        "functionCount": 19,
+        "loc": 169,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 23 (recommended: < 20)",
+            "value": 23,
+            "ratio": 1.15
+          }
+        ],
+        "fileType": "production",
+        "impact": 9,
+        "criticismScore": 42.5
+      },
+      {
+        "path": "source/vendor/ansi-styles/index.js",
+        "complexity": 14,
+        "duplication": 6,
+        "functionCount": 14,
+        "loc": 178,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 14 (recommended: < 10)",
+            "value": 14,
+            "ratio": 0.7
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 17.5
+      },
+      {
+        "path": "examples/screenshot.js",
+        "complexity": 10,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 21,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 11
+      },
+      {
+        "path": "source/utilities.js",
+        "complexity": 6,
+        "duplication": 0,
+        "functionCount": 2,
+        "loc": 28,
+        "issues": [],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 9
+      }
+    ],
+    "silentKillers": [],
+    "project": {
+      "name": "chalk",
+      "path": "temp-analysis/chalk",
+      "packageJson": {
+        "name": "chalk",
+        "version": "5.4.1",
+        "description": "Terminal string styling done right"
+      }
+    },
+    "summary": {
+      "totalFiles": 15,
+      "totalLines": 978,
+      "avgComplexity": 8.9,
+      "avgDuplication": 4.3,
+      "avgFunctions": 6.1,
+      "avgLoc": 65
+    },
+    "scores": {
+      "complexity": 57,
+      "duplication": 91,
+      "maintainability": 95,
+      "overall": 79
+    },
+    "complexityStdDev": 13.7,
+    "score": 79,
+    "grade": "C"
+  },
+  "duration": 688
+}

@@ -150,7 +150,7 @@
         "criticismScore": 3
       },
       {
-        "path": "packages/runtime-core/index.js",
+        "path": "packages/reactivity/index.js",
         "complexity": 2,
         "duplication": 100,
         "functionCount": 0,
@@ -161,7 +161,7 @@
         "criticismScore": 3
       },
       {
-        "path": "packages/reactivity/index.js",
+        "path": "packages/runtime-core/index.js",
         "complexity": 2,
         "duplication": 100,
         "functionCount": 0,
@@ -183,17 +183,6 @@
         "criticismScore": 3
       },
       {
-        "path": "packages/server-renderer/index.js",
-        "complexity": 2,
-        "duplication": 100,
-        "functionCount": 0,
-        "loc": 6,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 3
-      },
-      {
         "path": "packages/runtime-test/index.js",
         "complexity": 2,
         "duplication": 100,
@@ -205,7 +194,7 @@
         "criticismScore": 3
       },
       {
-        "path": "packages/shared/index.js",
+        "path": "packages/server-renderer/index.js",
         "complexity": 2,
         "duplication": 100,
         "functionCount": 0,
@@ -217,6 +206,17 @@
       },
       {
         "path": "packages/vue/index.js",
+        "complexity": 2,
+        "duplication": 100,
+        "functionCount": 0,
+        "loc": 6,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "packages/shared/index.js",
         "complexity": 2,
         "duplication": 100,
         "functionCount": 0,
@@ -437,7 +437,7 @@
             "severity": "high",
             "message": "Large file: 406 lines (recommended: < 300)",
             "value": 406,
-            "ratio": 1.3533333333333333
+            "ratio": 1.35
           }
         ],
         "fileType": "production",
@@ -456,7 +456,7 @@
             "severity": "high",
             "message": "Large file: 505 lines (recommended: < 300)",
             "value": 505,
-            "ratio": 1.6833333333333333
+            "ratio": 1.68
           }
         ],
         "fileType": "production",
@@ -589,7 +589,7 @@
             "severity": "high",
             "message": "Large file: 992 lines (recommended: < 300)",
             "value": 992,
-            "ratio": 3.3066666666666666
+            "ratio": 3.31
           }
         ],
         "fileType": "production",
@@ -667,7 +667,7 @@
             "severity": "high",
             "message": "Large file: 955 lines (recommended: < 300)",
             "value": 955,
-            "ratio": 3.183333333333333
+            "ratio": 3.18
           }
         ],
         "fileType": "production",
@@ -712,7 +712,7 @@
             "severity": "high",
             "message": "Large file: 1001 lines (recommended: < 300)",
             "value": 1001,
-            "ratio": 3.3366666666666664
+            "ratio": 3.34
           }
         ],
         "fileType": "production",
@@ -1072,12 +1072,291 @@
             "severity": "medium",
             "message": "File getting large: 218 lines",
             "value": 218,
-            "ratio": 0.7266666666666667
+            "ratio": 0.73
           }
         ],
         "fileType": "production",
         "impact": 0,
         "criticismScore": 26
+      },
+      {
+        "path": "packages/reactivity/src/arrayInstrumentations.ts",
+        "complexity": 21,
+        "duplication": 4,
+        "functionCount": 42,
+        "loc": 247,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 21 (recommended: < 20)",
+            "value": 21,
+            "ratio": 1.05
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 247 lines",
+            "value": 247,
+            "ratio": 0.82
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 23
+      },
+      {
+        "path": "packages/reactivity/src/baseHandlers.ts",
+        "complexity": 47,
+        "duplication": 3,
+        "functionCount": 13,
+        "loc": 205,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 47 (recommended: < 20)",
+            "value": 47,
+            "ratio": 2.35
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 205 lines",
+            "value": 205,
+            "ratio": 0.68
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 49
+      },
+      {
+        "path": "packages/reactivity/src/collectionHandlers.ts",
+        "complexity": 56,
+        "duplication": 3,
+        "functionCount": 22,
+        "loc": 286,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 56 (recommended: < 20)",
+            "value": 56,
+            "ratio": 2.8
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 286 lines",
+            "value": 286,
+            "ratio": 0.95
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 58
+      },
+      {
+        "path": "packages/reactivity/src/computed.ts",
+        "complexity": 12,
+        "duplication": 4,
+        "functionCount": 7,
+        "loc": 116,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 12 (recommended: < 10)",
+            "value": 12,
+            "ratio": 0.6
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 13.5
+      },
+      {
+        "path": "packages/reactivity/src/constants.ts",
+        "complexity": 1,
+        "duplication": 13,
+        "functionCount": 0,
+        "loc": 19,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "packages/reactivity/src/dep.ts",
+        "complexity": 60,
+        "duplication": 3,
+        "functionCount": 11,
+        "loc": 267,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 60 (recommended: < 20)",
+            "value": 60,
+            "ratio": 3
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 267 lines",
+            "value": 267,
+            "ratio": 0.89
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 62
+      },
+      {
+        "path": "packages/reactivity/src/effect.ts",
+        "complexity": 69,
+        "duplication": 5,
+        "functionCount": 25,
+        "loc": 383,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 69 (recommended: < 20)",
+            "value": 69,
+            "ratio": 3.45
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 383 lines (recommended: < 300)",
+            "value": 383,
+            "ratio": 1.28
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 71
+      },
+      {
+        "path": "packages/reactivity/src/effectScope.ts",
+        "complexity": 31,
+        "duplication": 3,
+        "functionCount": 11,
+        "loc": 125,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 31 (recommended: < 20)",
+            "value": 31,
+            "ratio": 1.55
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 32.5
+      },
+      {
+        "path": "packages/reactivity/src/index.ts",
+        "complexity": 1,
+        "duplication": 1,
+        "functionCount": 0,
+        "loc": 97,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "packages/reactivity/src/reactive.ts",
+        "complexity": 30,
+        "duplication": 3,
+        "functionCount": 16,
+        "loc": 201,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 30 (recommended: < 20)",
+            "value": 30,
+            "ratio": 1.5
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 201 lines",
+            "value": 201,
+            "ratio": 0.67
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 32
+      },
+      {
+        "path": "packages/reactivity/src/ref.ts",
+        "complexity": 30,
+        "duplication": 0,
+        "functionCount": 36,
+        "loc": 300,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 30 (recommended: < 20)",
+            "value": 30,
+            "ratio": 1.5
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 300 lines",
+            "value": 300,
+            "ratio": 1
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 32
+      },
+      {
+        "path": "packages/reactivity/src/warning.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 3,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "packages/reactivity/src/watch.ts",
+        "complexity": 69,
+        "duplication": 3,
+        "functionCount": 22,
+        "loc": 299,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 69 (recommended: < 20)",
+            "value": 69,
+            "ratio": 3.45
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 299 lines",
+            "value": 299,
+            "ratio": 1
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 71
       },
       {
         "path": "packages/runtime-core/src/apiAsyncComponent.ts",
@@ -1098,7 +1377,7 @@
             "severity": "medium",
             "message": "File getting large: 229 lines",
             "value": 229,
-            "ratio": 0.7633333333333333
+            "ratio": 0.76
           }
         ],
         "fileType": "production",
@@ -1154,7 +1433,7 @@
             "severity": "medium",
             "message": "File getting large: 277 lines",
             "value": 277,
-            "ratio": 0.9233333333333333
+            "ratio": 0.92
           }
         ],
         "fileType": "production",
@@ -1210,7 +1489,7 @@
             "severity": "medium",
             "message": "File getting large: 296 lines",
             "value": 296,
-            "ratio": 0.9866666666666667
+            "ratio": 0.99
           }
         ],
         "fileType": "production",
@@ -1236,7 +1515,7 @@
             "severity": "medium",
             "message": "File getting large: 235 lines",
             "value": 235,
-            "ratio": 0.7833333333333333
+            "ratio": 0.78
           }
         ],
         "fileType": "production",
@@ -1262,7 +1541,7 @@
             "severity": "high",
             "message": "Large file: 823 lines (recommended: < 300)",
             "value": 823,
-            "ratio": 2.743333333333333
+            "ratio": 2.74
           }
         ],
         "fileType": "production",
@@ -1288,7 +1567,7 @@
             "severity": "medium",
             "message": "File getting large: 275 lines",
             "value": 275,
-            "ratio": 0.9166666666666666
+            "ratio": 0.92
           }
         ],
         "fileType": "production",
@@ -1314,7 +1593,7 @@
             "severity": "high",
             "message": "Large file: 1100 lines (recommended: < 300)",
             "value": 1100,
-            "ratio": 3.6666666666666665
+            "ratio": 3.67
           }
         ],
         "fileType": "production",
@@ -1411,7 +1690,7 @@
             "severity": "high",
             "message": "Large file: 403 lines (recommended: < 300)",
             "value": 403,
-            "ratio": 1.3433333333333333
+            "ratio": 1.34
           }
         ],
         "fileType": "production",
@@ -1437,7 +1716,7 @@
             "severity": "medium",
             "message": "File getting large: 208 lines",
             "value": 208,
-            "ratio": 0.6933333333333334
+            "ratio": 0.69
           }
         ],
         "fileType": "production",
@@ -1599,7 +1878,7 @@
             "severity": "high",
             "message": "Large file: 863 lines (recommended: < 300)",
             "value": 863,
-            "ratio": 2.8766666666666665
+            "ratio": 2.88
           }
         ],
         "fileType": "production",
@@ -1644,7 +1923,7 @@
             "severity": "high",
             "message": "Large file: 395 lines (recommended: < 300)",
             "value": 395,
-            "ratio": 1.3166666666666667
+            "ratio": 1.32
           }
         ],
         "fileType": "production",
@@ -1700,7 +1979,7 @@
             "severity": "high",
             "message": "Large file: 2155 lines (recommended: < 300)",
             "value": 2155,
-            "ratio": 7.183333333333334
+            "ratio": 7.18
           }
         ],
         "fileType": "production",
@@ -1745,7 +2024,7 @@
             "severity": "medium",
             "message": "File getting large: 211 lines",
             "value": 211,
-            "ratio": 0.7033333333333334
+            "ratio": 0.7
           }
         ],
         "fileType": "production",
@@ -1798,285 +2077,6 @@
         "criticismScore": 35.5
       },
       {
-        "path": "packages/reactivity/src/arrayInstrumentations.ts",
-        "complexity": 21,
-        "duplication": 4,
-        "functionCount": 42,
-        "loc": 247,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 21 (recommended: < 20)",
-            "value": 21,
-            "ratio": 1.05
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 247 lines",
-            "value": 247,
-            "ratio": 0.8233333333333334
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 23
-      },
-      {
-        "path": "packages/reactivity/src/baseHandlers.ts",
-        "complexity": 47,
-        "duplication": 3,
-        "functionCount": 13,
-        "loc": 205,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 47 (recommended: < 20)",
-            "value": 47,
-            "ratio": 2.35
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 205 lines",
-            "value": 205,
-            "ratio": 0.6833333333333333
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 49
-      },
-      {
-        "path": "packages/reactivity/src/collectionHandlers.ts",
-        "complexity": 56,
-        "duplication": 3,
-        "functionCount": 22,
-        "loc": 286,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 56 (recommended: < 20)",
-            "value": 56,
-            "ratio": 2.8
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 286 lines",
-            "value": 286,
-            "ratio": 0.9533333333333334
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 58
-      },
-      {
-        "path": "packages/reactivity/src/computed.ts",
-        "complexity": 12,
-        "duplication": 4,
-        "functionCount": 7,
-        "loc": 116,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 12 (recommended: < 10)",
-            "value": 12,
-            "ratio": 0.6
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 13.5
-      },
-      {
-        "path": "packages/reactivity/src/constants.ts",
-        "complexity": 1,
-        "duplication": 13,
-        "functionCount": 0,
-        "loc": 19,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "packages/reactivity/src/dep.ts",
-        "complexity": 60,
-        "duplication": 3,
-        "functionCount": 11,
-        "loc": 267,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 60 (recommended: < 20)",
-            "value": 60,
-            "ratio": 3
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 267 lines",
-            "value": 267,
-            "ratio": 0.89
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 62
-      },
-      {
-        "path": "packages/reactivity/src/effect.ts",
-        "complexity": 69,
-        "duplication": 5,
-        "functionCount": 25,
-        "loc": 383,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 69 (recommended: < 20)",
-            "value": 69,
-            "ratio": 3.45
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 383 lines (recommended: < 300)",
-            "value": 383,
-            "ratio": 1.2766666666666666
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 71
-      },
-      {
-        "path": "packages/reactivity/src/effectScope.ts",
-        "complexity": 31,
-        "duplication": 3,
-        "functionCount": 11,
-        "loc": 125,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 31 (recommended: < 20)",
-            "value": 31,
-            "ratio": 1.55
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 32.5
-      },
-      {
-        "path": "packages/reactivity/src/index.ts",
-        "complexity": 1,
-        "duplication": 1,
-        "functionCount": 0,
-        "loc": 97,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "packages/reactivity/src/reactive.ts",
-        "complexity": 30,
-        "duplication": 3,
-        "functionCount": 16,
-        "loc": 201,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 30 (recommended: < 20)",
-            "value": 30,
-            "ratio": 1.5
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 201 lines",
-            "value": 201,
-            "ratio": 0.67
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 32
-      },
-      {
-        "path": "packages/reactivity/src/ref.ts",
-        "complexity": 30,
-        "duplication": 0,
-        "functionCount": 36,
-        "loc": 300,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 30 (recommended: < 20)",
-            "value": 30,
-            "ratio": 1.5
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 300 lines",
-            "value": 300,
-            "ratio": 1
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 32
-      },
-      {
-        "path": "packages/reactivity/src/warning.ts",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 1,
-        "loc": 3,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "packages/reactivity/src/watch.ts",
-        "complexity": 69,
-        "duplication": 3,
-        "functionCount": 22,
-        "loc": 299,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 69 (recommended: < 20)",
-            "value": 69,
-            "ratio": 3.45
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 299 lines",
-            "value": 299,
-            "ratio": 0.9966666666666667
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 71
-      },
-      {
         "path": "packages/runtime-dom/src/apiCustomElement.ts",
         "complexity": 118,
         "duplication": 6,
@@ -2095,7 +2095,7 @@
             "severity": "high",
             "message": "Large file: 569 lines (recommended: < 300)",
             "value": 569,
-            "ratio": 1.8966666666666667
+            "ratio": 1.9
           }
         ],
         "fileType": "production",
@@ -2121,7 +2121,7 @@
             "severity": "medium",
             "message": "File getting large: 245 lines",
             "value": 245,
-            "ratio": 0.8166666666666667
+            "ratio": 0.82
           }
         ],
         "fileType": "production",
@@ -2140,7 +2140,7 @@
             "severity": "high",
             "message": "Large file: 1097 lines (recommended: < 300)",
             "value": 1097,
-            "ratio": 3.6566666666666667
+            "ratio": 3.66
           }
         ],
         "fileType": "production",
@@ -2186,92 +2186,6 @@
         "criticismScore": 44.5
       },
       {
-        "path": "packages/server-renderer/src/index.ts",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 0,
-        "loc": 14,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "packages/server-renderer/src/internal.ts",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 0,
-        "loc": 22,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "packages/server-renderer/src/render.ts",
-        "complexity": 78,
-        "duplication": 2,
-        "functionCount": 14,
-        "loc": 362,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 78 (recommended: < 20)",
-            "value": 78,
-            "ratio": 3.9
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 362 lines (recommended: < 300)",
-            "value": 362,
-            "ratio": 1.2066666666666668
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 80
-      },
-      {
-        "path": "packages/server-renderer/src/renderToStream.ts",
-        "complexity": 19,
-        "duplication": 7,
-        "functionCount": 23,
-        "loc": 183,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 19 (recommended: < 10)",
-            "value": 19,
-            "ratio": 0.95
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 20.5
-      },
-      {
-        "path": "packages/server-renderer/src/renderToString.ts",
-        "complexity": 14,
-        "duplication": 10,
-        "functionCount": 8,
-        "loc": 88,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 14 (recommended: < 10)",
-            "value": 14,
-            "ratio": 0.7
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 15.5
-      },
-      {
         "path": "packages/runtime-test/src/index.ts",
         "complexity": 1,
         "duplication": 0,
@@ -2301,7 +2215,7 @@
             "severity": "medium",
             "message": "File getting large: 235 lines",
             "value": 235,
-            "ratio": 0.7833333333333333
+            "ratio": 0.78
           }
         ],
         "fileType": "production",
@@ -2348,6 +2262,188 @@
         "fileType": "production",
         "impact": 0,
         "criticismScore": 6
+      },
+      {
+        "path": "packages/server-renderer/src/index.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 14,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "packages/server-renderer/src/internal.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 22,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "packages/server-renderer/src/render.ts",
+        "complexity": 78,
+        "duplication": 2,
+        "functionCount": 14,
+        "loc": 362,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 78 (recommended: < 20)",
+            "value": 78,
+            "ratio": 3.9
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 362 lines (recommended: < 300)",
+            "value": 362,
+            "ratio": 1.21
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 80
+      },
+      {
+        "path": "packages/server-renderer/src/renderToStream.ts",
+        "complexity": 19,
+        "duplication": 7,
+        "functionCount": 23,
+        "loc": 183,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 19 (recommended: < 10)",
+            "value": 19,
+            "ratio": 0.95
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 20.5
+      },
+      {
+        "path": "packages/server-renderer/src/renderToString.ts",
+        "complexity": 14,
+        "duplication": 10,
+        "functionCount": 8,
+        "loc": 88,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 14 (recommended: < 10)",
+            "value": 14,
+            "ratio": 0.7
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 15.5
+      },
+      {
+        "path": "packages/vue/compiler-sfc/index.browser.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "packages/vue/compiler-sfc/index.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "packages/vue/compiler-sfc/register-ts.js",
+        "complexity": 2,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 3,
+        "issues": [],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 5
+      },
+      {
+        "path": "packages/vue/jsx-runtime/index.js",
+        "complexity": 2,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 13,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "packages/vue/server-renderer/index.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "packages/vue/src/dev.ts",
+        "complexity": 3,
+        "duplication": 100,
+        "functionCount": 1,
+        "loc": 12,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "packages/vue/src/index.ts",
+        "complexity": 18,
+        "duplication": 56,
+        "functionCount": 4,
+        "loc": 82,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 18 (recommended: < 10)",
+            "value": 18,
+            "ratio": 0.9
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 19.5
+      },
+      {
+        "path": "packages/vue/src/runtime.ts",
+        "complexity": 6,
+        "duplication": 44,
+        "functionCount": 1,
+        "loc": 20,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 7
       },
       {
         "path": "packages/shared/src/codeframe.ts",
@@ -2563,102 +2659,6 @@
         "criticismScore": 2
       },
       {
-        "path": "packages/vue/compiler-sfc/index.browser.js",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 0,
-        "loc": 1,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "packages/vue/compiler-sfc/index.js",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 0,
-        "loc": 2,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "packages/vue/compiler-sfc/register-ts.js",
-        "complexity": 2,
-        "duplication": 0,
-        "functionCount": 1,
-        "loc": 3,
-        "issues": [],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 5
-      },
-      {
-        "path": "packages/vue/jsx-runtime/index.js",
-        "complexity": 2,
-        "duplication": 0,
-        "functionCount": 1,
-        "loc": 13,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 3
-      },
-      {
-        "path": "packages/vue/server-renderer/index.js",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 0,
-        "loc": 1,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "packages/vue/src/dev.ts",
-        "complexity": 3,
-        "duplication": 100,
-        "functionCount": 1,
-        "loc": 12,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 4
-      },
-      {
-        "path": "packages/vue/src/index.ts",
-        "complexity": 18,
-        "duplication": 56,
-        "functionCount": 4,
-        "loc": 82,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 18 (recommended: < 10)",
-            "value": 18,
-            "ratio": 0.9
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 19.5
-      },
-      {
-        "path": "packages/vue/src/runtime.ts",
-        "complexity": 6,
-        "duplication": 44,
-        "functionCount": 1,
-        "loc": 20,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 7
-      },
-      {
         "path": "packages/vue-compat/src/createCompatVue.ts",
         "complexity": 3,
         "duplication": 6,
@@ -2806,7 +2806,7 @@
             "severity": "medium",
             "message": "File getting large: 250 lines",
             "value": 250,
-            "ratio": 0.8333333333333334
+            "ratio": 0.83
           }
         ],
         "fileType": "production",
@@ -2851,7 +2851,7 @@
             "severity": "medium",
             "message": "File getting large: 244 lines",
             "value": 244,
-            "ratio": 0.8133333333333334
+            "ratio": 0.81
           }
         ],
         "fileType": "production",
@@ -2952,7 +2952,7 @@
             "severity": "high",
             "message": "Large file: 773 lines (recommended: < 300)",
             "value": 773,
-            "ratio": 2.5766666666666667
+            "ratio": 2.58
           }
         ],
         "fileType": "production",
@@ -2978,7 +2978,7 @@
             "severity": "high",
             "message": "Large file: 328 lines (recommended: < 300)",
             "value": 328,
-            "ratio": 1.0933333333333333
+            "ratio": 1.09
           }
         ],
         "fileType": "production",
@@ -3061,7 +3061,7 @@
             "severity": "high",
             "message": "Large file: 353 lines (recommended: < 300)",
             "value": 353,
-            "ratio": 1.1766666666666667
+            "ratio": 1.18
           }
         ],
         "fileType": "production",
@@ -3173,7 +3173,7 @@
             "severity": "high",
             "message": "Large file: 359 lines (recommended: < 300)",
             "value": 359,
-            "ratio": 1.1966666666666668
+            "ratio": 1.2
           }
         ],
         "fileType": "production",
@@ -3229,7 +3229,7 @@
             "severity": "high",
             "message": "Large file: 319 lines (recommended: < 300)",
             "value": 319,
-            "ratio": 1.0633333333333332
+            "ratio": 1.06
           }
         ],
         "fileType": "production",
@@ -3480,7 +3480,7 @@
             "severity": "medium",
             "message": "File getting large: 257 lines",
             "value": 257,
-            "ratio": 0.8566666666666667
+            "ratio": 0.86
           }
         ],
         "fileType": "production",
@@ -3630,7 +3630,7 @@
             "severity": "medium",
             "message": "File getting large: 250 lines",
             "value": 250,
-            "ratio": 0.8333333333333334
+            "ratio": 0.83
           }
         ],
         "fileType": "production",
@@ -3773,7 +3773,7 @@
             "severity": "high",
             "message": "Large file: 308 lines (recommended: < 300)",
             "value": 308,
-            "ratio": 1.0266666666666666
+            "ratio": 1.03
           }
         ],
         "fileType": "production",
@@ -3799,7 +3799,7 @@
             "severity": "high",
             "message": "Large file: 407 lines (recommended: < 300)",
             "value": 407,
-            "ratio": 1.3566666666666667
+            "ratio": 1.36
           }
         ],
         "fileType": "production",
@@ -3959,7 +3959,7 @@
             "severity": "high",
             "message": "Large file: 538 lines (recommended: < 300)",
             "value": 538,
-            "ratio": 1.7933333333333332
+            "ratio": 1.79
           }
         ],
         "fileType": "production",
@@ -4059,7 +4059,7 @@
             "severity": "high",
             "message": "Large file: 511 lines (recommended: < 300)",
             "value": 511,
-            "ratio": 1.7033333333333334
+            "ratio": 1.7
           }
         ],
         "fileType": "production",
@@ -4167,7 +4167,7 @@
             "severity": "high",
             "message": "Large file: 301 lines (recommended: < 300)",
             "value": 301,
-            "ratio": 1.0033333333333334
+            "ratio": 1
           }
         ],
         "fileType": "production",
@@ -4238,7 +4238,7 @@
             "severity": "high",
             "message": "Large file: 373 lines (recommended: < 300)",
             "value": 373,
-            "ratio": 1.2433333333333334
+            "ratio": 1.24
           }
         ],
         "fileType": "production",
@@ -4264,7 +4264,7 @@
             "severity": "high",
             "message": "Large file: 751 lines (recommended: < 300)",
             "value": 751,
-            "ratio": 2.5033333333333334
+            "ratio": 2.5
           }
         ],
         "fileType": "production",
@@ -4290,7 +4290,7 @@
             "severity": "high",
             "message": "Large file: 448 lines (recommended: < 300)",
             "value": 448,
-            "ratio": 1.4933333333333334
+            "ratio": 1.49
           }
         ],
         "fileType": "production",
@@ -4458,7 +4458,7 @@
             "severity": "high",
             "message": "Large file: 410 lines (recommended: < 300)",
             "value": 410,
-            "ratio": 1.3666666666666667
+            "ratio": 1.37
           }
         ],
         "fileType": "production",
@@ -4503,7 +4503,7 @@
             "severity": "high",
             "message": "Large file: 337 lines (recommended: < 300)",
             "value": 337,
-            "ratio": 1.1233333333333333
+            "ratio": 1.12
           }
         ],
         "fileType": "production",
@@ -4887,7 +4887,7 @@
             "severity": "high",
             "message": "Large file: 2155 lines (recommended: < 300)",
             "value": 2155,
-            "ratio": 7.183333333333334
+            "ratio": 7.18
           }
         ],
         "fileType": "production",
@@ -4939,7 +4939,7 @@
             "severity": "high",
             "message": "Large file: 955 lines (recommended: < 300)",
             "value": 955,
-            "ratio": 3.183333333333333
+            "ratio": 3.18
           }
         ],
         "fileType": "production",
@@ -4965,7 +4965,7 @@
             "severity": "high",
             "message": "Large file: 1001 lines (recommended: < 300)",
             "value": 1001,
-            "ratio": 3.3366666666666664
+            "ratio": 3.34
           }
         ],
         "fileType": "production",
@@ -4995,9 +4995,9 @@
       "maintainability": 62,
       "overall": 57
     },
-    "complexityStdDev": 53.959996354012894,
+    "complexityStdDev": 53.96,
     "score": 57,
     "grade": "F"
   },
-  "duration": 1337
+  "duration": 1351
 }

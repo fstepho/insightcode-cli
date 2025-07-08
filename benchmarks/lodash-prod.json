@@ -84,7 +84,7 @@
             "severity": "high",
             "message": "Large file: 350 lines (recommended: < 300)",
             "value": 350,
-            "ratio": 1.1666666666666667
+            "ratio": 1.17
           }
         ],
         "fileType": "production",
@@ -114,7 +114,7 @@
             "severity": "high",
             "message": "Large file: 328 lines (recommended: < 300)",
             "value": 328,
-            "ratio": 1.0933333333333333
+            "ratio": 1.09
           }
         ],
         "fileType": "production",
@@ -151,7 +151,7 @@
             "severity": "high",
             "message": "Large file: 1639 lines (recommended: < 300)",
             "value": 1639,
-            "ratio": 5.463333333333333
+            "ratio": 5.46
           }
         ],
         "fileType": "production",
@@ -364,7 +364,7 @@
             "severity": "high",
             "message": "Large file: 350 lines (recommended: < 300)",
             "value": 350,
-            "ratio": 1.1666666666666667
+            "ratio": 1.17
           }
         ],
         "fileType": "production",
@@ -390,7 +390,7 @@
             "severity": "high",
             "message": "Large file: 1639 lines (recommended: < 300)",
             "value": 1639,
-            "ratio": 5.463333333333333
+            "ratio": 5.46
           }
         ],
         "fileType": "production",
@@ -451,9 +451,9 @@
       "maintainability": 18,
       "overall": 36
     },
-    "complexityStdDev": 359.79539671874625,
+    "complexityStdDev": 359.8,
     "score": 36,
     "grade": "F"
   },
-  "duration": 1009
+  "duration": 979
 }

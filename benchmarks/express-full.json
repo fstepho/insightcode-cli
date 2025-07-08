@@ -1,0 +1,1876 @@
+{
+  "project": "express",
+  "repo": "https://github.com/expressjs/express.git",
+  "type": "web framework",
+  "stars": "66.2k",
+  "stableVersion": "v5.1.0",
+  "description": "Fast web framework for Node.js",
+  "category": "medium",
+  "emblematicFiles": {
+    "coreFiles": [
+      "lib/application.js",
+      "lib/express.js",
+      "lib/router/index.js"
+    ],
+    "architecturalFiles": [
+      "lib/middleware/init.js",
+      "lib/view.js"
+    ],
+    "performanceCriticalFiles": [
+      "lib/router/layer.js",
+      "lib/router/route.js"
+    ],
+    "complexAlgorithmFiles": [
+      "lib/utils.js",
+      "lib/request.js",
+      "lib/response.js"
+    ]
+  },
+  "analysis": {
+    "files": [
+      {
+        "path": "index.js",
+        "complexity": 1,
+        "duplication": 80,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "production",
+        "impact": 74,
+        "criticismScore": 150
+      },
+      {
+        "path": "lib/application.js",
+        "complexity": 41,
+        "duplication": 3,
+        "functionCount": 25,
+        "loc": 262,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 41 (recommended: < 20)",
+            "value": 41,
+            "ratio": 2.05
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 262 lines",
+            "value": 262,
+            "ratio": 0.87
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 45
+      },
+      {
+        "path": "lib/express.js",
+        "complexity": 1,
+        "duplication": 18,
+        "functionCount": 2,
+        "loc": 34,
+        "issues": [],
+        "fileType": "production",
+        "impact": 3,
+        "criticismScore": 8
+      },
+      {
+        "path": "lib/request.js",
+        "complexity": 29,
+        "duplication": 7,
+        "functionCount": 20,
+        "loc": 155,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 29 (recommended: < 20)",
+            "value": 29,
+            "ratio": 1.45
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 32.5
+      },
+      {
+        "path": "lib/response.js",
+        "complexity": 109,
+        "duplication": 4,
+        "functionCount": 41,
+        "loc": 467,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 109 (recommended: < 20)",
+            "value": 109,
+            "ratio": 5.45
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 467 lines (recommended: < 300)",
+            "value": 467,
+            "ratio": 1.56
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 113
+      },
+      {
+        "path": "lib/utils.js",
+        "complexity": 27,
+        "duplication": 10,
+        "functionCount": 14,
+        "loc": 119,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 27 (recommended: < 20)",
+            "value": 27,
+            "ratio": 1.35
+          }
+        ],
+        "fileType": "production",
+        "impact": 12,
+        "criticismScore": 52.5
+      },
+      {
+        "path": "lib/view.js",
+        "complexity": 17,
+        "duplication": 5,
+        "functionCount": 7,
+        "loc": 90,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 17 (recommended: < 10)",
+            "value": 17,
+            "ratio": 0.85
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 20.5
+      },
+      {
+        "path": "benchmarks/middleware.js",
+        "complexity": 3,
+        "duplication": 0,
+        "functionCount": 2,
+        "loc": 13,
+        "issues": [],
+        "fileType": "utility",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "test/Route.js",
+        "complexity": 10,
+        "duplication": 13,
+        "functionCount": 53,
+        "loc": 222,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 11
+      },
+      {
+        "path": "test/Router.js",
+        "complexity": 13,
+        "duplication": 17,
+        "functionCount": 138,
+        "loc": 505,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 505 lines (recommended: < 500)",
+            "value": 505,
+            "ratio": 1.01
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 14.5
+      },
+      {
+        "path": "test/app.all.js",
+        "complexity": 2,
+        "duplication": 12,
+        "functionCount": 5,
+        "loc": 30,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "test/app.engine.js",
+        "complexity": 6,
+        "duplication": 43,
+        "functionCount": 14,
+        "loc": 68,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 7
+      },
+      {
+        "path": "test/app.head.js",
+        "complexity": 3,
+        "duplication": 13,
+        "functionCount": 11,
+        "loc": 53,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "test/app.js",
+        "complexity": 1,
+        "duplication": 23,
+        "functionCount": 22,
+        "loc": 98,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/app.listen.js",
+        "complexity": 1,
+        "duplication": 6,
+        "functionCount": 6,
+        "loc": 23,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/app.locals.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 5,
+        "loc": 23,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/app.options.js",
+        "complexity": 1,
+        "duplication": 11,
+        "functionCount": 30,
+        "loc": 92,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/app.param.js",
+        "complexity": 8,
+        "duplication": 29,
+        "functionCount": 59,
+        "loc": 262,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 9
+      },
+      {
+        "path": "test/app.render.js",
+        "complexity": 20,
+        "duplication": 38,
+        "functionCount": 66,
+        "loc": 300,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 20 (recommended: < 15)",
+            "value": 20,
+            "ratio": 0.67
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 21.5
+      },
+      {
+        "path": "test/app.request.js",
+        "complexity": 1,
+        "duplication": 75,
+        "functionCount": 23,
+        "loc": 109,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/app.response.js",
+        "complexity": 1,
+        "duplication": 72,
+        "functionCount": 23,
+        "loc": 109,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/app.route.js",
+        "complexity": 1,
+        "duplication": 36,
+        "functionCount": 36,
+        "loc": 155,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/app.router.js",
+        "complexity": 15,
+        "duplication": 31,
+        "functionCount": 211,
+        "loc": 939,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 939 lines (recommended: < 500)",
+            "value": 939,
+            "ratio": 1.88
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 16.5
+      },
+      {
+        "path": "test/app.routes.error.js",
+        "complexity": 1,
+        "duplication": 12,
+        "functionCount": 12,
+        "loc": 53,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/app.use.js",
+        "complexity": 1,
+        "duplication": 23,
+        "functionCount": 80,
+        "loc": 425,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 425 lines",
+            "value": 425,
+            "ratio": 0.85
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2.5
+      },
+      {
+        "path": "test/config.js",
+        "complexity": 1,
+        "duplication": 6,
+        "functionCount": 41,
+        "loc": 168,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/exports.js",
+        "complexity": 1,
+        "duplication": 7,
+        "functionCount": 18,
+        "loc": 65,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/express.json.js",
+        "complexity": 13,
+        "duplication": 70,
+        "functionCount": 112,
+        "loc": 639,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 639 lines (recommended: < 500)",
+            "value": 639,
+            "ratio": 1.28
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 14.5
+      },
+      {
+        "path": "test/express.raw.js",
+        "complexity": 13,
+        "duplication": 72,
+        "functionCount": 75,
+        "loc": 431,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 431 lines",
+            "value": 431,
+            "ratio": 0.86
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 14.5
+      },
+      {
+        "path": "test/express.static.js",
+        "complexity": 5,
+        "duplication": 29,
+        "functionCount": 153,
+        "loc": 685,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 685 lines (recommended: < 500)",
+            "value": 685,
+            "ratio": 1.37
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 6.5
+      },
+      {
+        "path": "test/express.text.js",
+        "complexity": 9,
+        "duplication": 82,
+        "functionCount": 85,
+        "loc": 477,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 477 lines",
+            "value": 477,
+            "ratio": 0.95
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 10.5
+      },
+      {
+        "path": "test/express.urlencoded.js",
+        "complexity": 15,
+        "duplication": 67,
+        "functionCount": 120,
+        "loc": 700,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 700 lines (recommended: < 500)",
+            "value": 700,
+            "ratio": 1.4
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 16.5
+      },
+      {
+        "path": "test/middleware.basic.js",
+        "complexity": 1,
+        "duplication": 9,
+        "functionCount": 9,
+        "loc": 36,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/regression.js",
+        "complexity": 1,
+        "duplication": 17,
+        "functionCount": 3,
+        "loc": 16,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.accepts.js",
+        "complexity": 5,
+        "duplication": 60,
+        "functionCount": 21,
+        "loc": 97,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 6
+      },
+      {
+        "path": "test/req.acceptsCharsets.js",
+        "complexity": 4,
+        "duplication": 79,
+        "functionCount": 10,
+        "loc": 40,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 5
+      },
+      {
+        "path": "test/req.acceptsEncodings.js",
+        "complexity": 1,
+        "duplication": 38,
+        "functionCount": 6,
+        "loc": 32,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.acceptsLanguages.js",
+        "complexity": 1,
+        "duplication": 38,
+        "functionCount": 9,
+        "loc": 47,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.baseUrl.js",
+        "complexity": 1,
+        "duplication": 10,
+        "functionCount": 14,
+        "loc": 75,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.fresh.js",
+        "complexity": 1,
+        "duplication": 37,
+        "functionCount": 10,
+        "loc": 56,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.get.js",
+        "complexity": 1,
+        "duplication": 33,
+        "functionCount": 10,
+        "loc": 47,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.host.js",
+        "complexity": 1,
+        "duplication": 78,
+        "functionCount": 25,
+        "loc": 121,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.hostname.js",
+        "complexity": 1,
+        "duplication": 82,
+        "functionCount": 29,
+        "loc": 145,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.ip.js",
+        "complexity": 2,
+        "duplication": 31,
+        "functionCount": 19,
+        "loc": 84,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "test/req.ips.js",
+        "complexity": 1,
+        "duplication": 73,
+        "functionCount": 14,
+        "loc": 56,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.is.js",
+        "complexity": 1,
+        "duplication": 78,
+        "functionCount": 28,
+        "loc": 135,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.path.js",
+        "complexity": 1,
+        "duplication": 58,
+        "functionCount": 4,
+        "loc": 16,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.protocol.js",
+        "complexity": 1,
+        "duplication": 77,
+        "functionCount": 19,
+        "loc": 86,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.query.js",
+        "complexity": 3,
+        "duplication": 20,
+        "functionCount": 20,
+        "loc": 84,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "test/req.range.js",
+        "complexity": 1,
+        "duplication": 54,
+        "functionCount": 18,
+        "loc": 82,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.route.js",
+        "complexity": 1,
+        "duplication": 47,
+        "functionCount": 5,
+        "loc": 23,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.secure.js",
+        "complexity": 7,
+        "duplication": 72,
+        "functionCount": 18,
+        "loc": 78,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 8
+      },
+      {
+        "path": "test/req.signedCookies.js",
+        "complexity": 3,
+        "duplication": 19,
+        "functionCount": 5,
+        "loc": 30,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "test/req.stale.js",
+        "complexity": 1,
+        "duplication": 58,
+        "functionCount": 8,
+        "loc": 40,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.subdomains.js",
+        "complexity": 1,
+        "duplication": 47,
+        "functionCount": 32,
+        "loc": 139,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/req.xhr.js",
+        "complexity": 1,
+        "duplication": 45,
+        "functionCount": 8,
+        "loc": 36,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.append.js",
+        "complexity": 2,
+        "duplication": 19,
+        "functionCount": 18,
+        "loc": 95,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "test/res.attachment.js",
+        "complexity": 1,
+        "duplication": 73,
+        "functionCount": 14,
+        "loc": 61,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.clearCookie.js",
+        "complexity": 1,
+        "duplication": 43,
+        "functionCount": 11,
+        "loc": 49,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.cookie.js",
+        "complexity": 1,
+        "duplication": 26,
+        "functionCount": 49,
+        "loc": 233,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.download.js",
+        "complexity": 6,
+        "duplication": 53,
+        "functionCount": 69,
+        "loc": 401,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 401 lines",
+            "value": 401,
+            "ratio": 0.8
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 7.5
+      },
+      {
+        "path": "test/res.format.js",
+        "complexity": 2,
+        "duplication": 23,
+        "functionCount": 54,
+        "loc": 205,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "test/res.get.js",
+        "complexity": 1,
+        "duplication": 54,
+        "functionCount": 4,
+        "loc": 17,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.json.js",
+        "complexity": 2,
+        "duplication": 56,
+        "functionCount": 33,
+        "loc": 146,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "test/res.jsonp.js",
+        "complexity": 2,
+        "duplication": 34,
+        "functionCount": 58,
+        "loc": 270,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "test/res.links.js",
+        "complexity": 1,
+        "duplication": 58,
+        "functionCount": 8,
+        "loc": 52,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.locals.js",
+        "complexity": 1,
+        "duplication": 19,
+        "functionCount": 7,
+        "loc": 31,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.location.js",
+        "complexity": 5,
+        "duplication": 36,
+        "functionCount": 39,
+        "loc": 265,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 6
+      },
+      {
+        "path": "test/res.redirect.js",
+        "complexity": 1,
+        "duplication": 51,
+        "functionCount": 33,
+        "loc": 174,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.render.js",
+        "complexity": 2,
+        "duplication": 39,
+        "functionCount": 57,
+        "loc": 277,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "test/res.send.js",
+        "complexity": 5,
+        "duplication": 38,
+        "functionCount": 93,
+        "loc": 447,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 447 lines",
+            "value": 447,
+            "ratio": 0.89
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 6.5
+      },
+      {
+        "path": "test/res.sendFile.js",
+        "complexity": 7,
+        "duplication": 42,
+        "functionCount": 143,
+        "loc": 748,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 748 lines (recommended: < 500)",
+            "value": 748,
+            "ratio": 1.5
+          }
+        ],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 8.5
+      },
+      {
+        "path": "test/res.sendStatus.js",
+        "complexity": 1,
+        "duplication": 42,
+        "functionCount": 8,
+        "loc": 34,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.set.js",
+        "complexity": 1,
+        "duplication": 33,
+        "functionCount": 20,
+        "loc": 99,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.status.js",
+        "complexity": 1,
+        "duplication": 41,
+        "functionCount": 36,
+        "loc": 155,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.type.js",
+        "complexity": 1,
+        "duplication": 46,
+        "functionCount": 8,
+        "loc": 36,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/res.vary.js",
+        "complexity": 1,
+        "duplication": 37,
+        "functionCount": 16,
+        "loc": 74,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/utils.js",
+        "complexity": 1,
+        "duplication": 2,
+        "functionCount": 16,
+        "loc": 56,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/auth/index.js",
+        "complexity": 14,
+        "duplication": 6,
+        "functionCount": 13,
+        "loc": 88,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 17
+      },
+      {
+        "path": "examples/content-negotiation/db.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 6,
+        "issues": [],
+        "fileType": "example",
+        "impact": 2,
+        "criticismScore": 6
+      },
+      {
+        "path": "examples/content-negotiation/index.js",
+        "complexity": 2,
+        "duplication": 3,
+        "functionCount": 8,
+        "loc": 32,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 5
+      },
+      {
+        "path": "examples/content-negotiation/users.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 5,
+        "loc": 15,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/cookie-sessions/index.js",
+        "complexity": 3,
+        "duplication": 38,
+        "functionCount": 1,
+        "loc": 13,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 6
+      },
+      {
+        "path": "examples/downloads/index.js",
+        "complexity": 4,
+        "duplication": 32,
+        "functionCount": 3,
+        "loc": 25,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 7
+      },
+      {
+        "path": "examples/cookies/index.js",
+        "complexity": 8,
+        "duplication": 12,
+        "functionCount": 3,
+        "loc": 32,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 11
+      },
+      {
+        "path": "examples/error/index.js",
+        "complexity": 4,
+        "duplication": 41,
+        "functionCount": 4,
+        "loc": 24,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 7
+      },
+      {
+        "path": "examples/ejs/index.js",
+        "complexity": 2,
+        "duplication": 46,
+        "functionCount": 1,
+        "loc": 24,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 5
+      },
+      {
+        "path": "examples/hello-world/index.js",
+        "complexity": 2,
+        "duplication": 29,
+        "functionCount": 1,
+        "loc": 10,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 5
+      },
+      {
+        "path": "examples/error-pages/index.js",
+        "complexity": 5,
+        "duplication": 21,
+        "functionCount": 9,
+        "loc": 47,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 8
+      },
+      {
+        "path": "examples/markdown/index.js",
+        "complexity": 4,
+        "duplication": 28,
+        "functionCount": 5,
+        "loc": 28,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 7
+      },
+      {
+        "path": "examples/multi-router/index.js",
+        "complexity": 2,
+        "duplication": 22,
+        "functionCount": 1,
+        "loc": 12,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 5
+      },
+      {
+        "path": "examples/mvc/db.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 10,
+        "issues": [],
+        "fileType": "example",
+        "impact": 3,
+        "criticismScore": 8
+      },
+      {
+        "path": "examples/mvc/index.js",
+        "complexity": 6,
+        "duplication": 34,
+        "functionCount": 4,
+        "loc": 47,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 9
+      },
+      {
+        "path": "examples/params/index.js",
+        "complexity": 4,
+        "duplication": 19,
+        "functionCount": 6,
+        "loc": 43,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 7
+      },
+      {
+        "path": "examples/online/index.js",
+        "complexity": 3,
+        "duplication": 31,
+        "functionCount": 5,
+        "loc": 26,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "examples/route-map/index.js",
+        "complexity": 7,
+        "duplication": 5,
+        "functionCount": 6,
+        "loc": 57,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 10
+      },
+      {
+        "path": "examples/resource/index.js",
+        "complexity": 6,
+        "duplication": 14,
+        "functionCount": 9,
+        "loc": 70,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 9
+      },
+      {
+        "path": "examples/route-middleware/index.js",
+        "complexity": 5,
+        "duplication": 8,
+        "functionCount": 9,
+        "loc": 53,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 6
+      },
+      {
+        "path": "examples/route-separation/index.js",
+        "complexity": 3,
+        "duplication": 9,
+        "functionCount": 0,
+        "loc": 32,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 6
+      },
+      {
+        "path": "examples/route-separation/post.js",
+        "complexity": 1,
+        "duplication": 33,
+        "functionCount": 1,
+        "loc": 9,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 4
+      },
+      {
+        "path": "examples/route-separation/site.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 4,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 4
+      },
+      {
+        "path": "examples/route-separation/user.js",
+        "complexity": 3,
+        "duplication": 13,
+        "functionCount": 5,
+        "loc": 37,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 6
+      },
+      {
+        "path": "examples/search/index.js",
+        "complexity": 3,
+        "duplication": 17,
+        "functionCount": 3,
+        "loc": 26,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "examples/static-files/index.js",
+        "complexity": 1,
+        "duplication": 33,
+        "functionCount": 0,
+        "loc": 15,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/session/index.js",
+        "complexity": 3,
+        "duplication": 59,
+        "functionCount": 1,
+        "loc": 23,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "examples/session/redis.js",
+        "complexity": 2,
+        "duplication": 40,
+        "functionCount": 1,
+        "loc": 25,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "examples/vhost/index.js",
+        "complexity": 4,
+        "duplication": 9,
+        "functionCount": 3,
+        "loc": 28,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 7
+      },
+      {
+        "path": "examples/view-constructor/github-view.js",
+        "complexity": 2,
+        "duplication": 3,
+        "functionCount": 5,
+        "loc": 28,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 5
+      },
+      {
+        "path": "examples/view-constructor/index.js",
+        "complexity": 4,
+        "duplication": 23,
+        "functionCount": 4,
+        "loc": 28,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 5
+      },
+      {
+        "path": "examples/web-service/index.js",
+        "complexity": 6,
+        "duplication": 23,
+        "functionCount": 7,
+        "loc": 55,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 9
+      },
+      {
+        "path": "examples/view-locals/index.js",
+        "complexity": 8,
+        "duplication": 15,
+        "functionCount": 14,
+        "loc": 80,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 9
+      },
+      {
+        "path": "examples/view-locals/user.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 5,
+        "loc": 23,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 4
+      },
+      {
+        "path": "test/acceptance/auth.js",
+        "complexity": 4,
+        "duplication": 57,
+        "functionCount": 20,
+        "loc": 106,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 5
+      },
+      {
+        "path": "test/acceptance/content-negotiation.js",
+        "complexity": 1,
+        "duplication": 95,
+        "functionCount": 9,
+        "loc": 42,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/cookie-sessions.js",
+        "complexity": 2,
+        "duplication": 24,
+        "functionCount": 8,
+        "loc": 33,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "test/acceptance/cookies.js",
+        "complexity": 3,
+        "duplication": 31,
+        "functionCount": 12,
+        "loc": 64,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "test/acceptance/downloads.js",
+        "complexity": 1,
+        "duplication": 75,
+        "functionCount": 11,
+        "loc": 41,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/ejs.js",
+        "complexity": 1,
+        "duplication": 36,
+        "functionCount": 3,
+        "loc": 15,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/error-pages.js",
+        "complexity": 1,
+        "duplication": 55,
+        "functionCount": 24,
+        "loc": 87,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/error.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 7,
+        "loc": 25,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/hello-world.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 5,
+        "loc": 18,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/markdown.js",
+        "complexity": 1,
+        "duplication": 57,
+        "functionCount": 5,
+        "loc": 18,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/multi-router.js",
+        "complexity": 1,
+        "duplication": 82,
+        "functionCount": 11,
+        "loc": 39,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/mvc.js",
+        "complexity": 4,
+        "duplication": 22,
+        "functionCount": 27,
+        "loc": 119,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 5
+      },
+      {
+        "path": "test/acceptance/params.js",
+        "complexity": 1,
+        "duplication": 17,
+        "functionCount": 11,
+        "loc": 39,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/resource.js",
+        "complexity": 1,
+        "duplication": 18,
+        "functionCount": 17,
+        "loc": 60,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/route-map.js",
+        "complexity": 1,
+        "duplication": 88,
+        "functionCount": 11,
+        "loc": 39,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/route-separation.js",
+        "complexity": 3,
+        "duplication": 31,
+        "functionCount": 21,
+        "loc": 86,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "test/acceptance/vhost.js",
+        "complexity": 1,
+        "duplication": 43,
+        "functionCount": 12,
+        "loc": 42,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/acceptance/web-service.js",
+        "complexity": 1,
+        "duplication": 70,
+        "functionCount": 25,
+        "loc": 93,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/multi-router/controllers/api_v1.js",
+        "complexity": 1,
+        "duplication": 83,
+        "functionCount": 2,
+        "loc": 10,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 4
+      },
+      {
+        "path": "examples/multi-router/controllers/api_v2.js",
+        "complexity": 1,
+        "duplication": 83,
+        "functionCount": 2,
+        "loc": 10,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 4
+      },
+      {
+        "path": "test/support/env.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "test/support/tmpl.js",
+        "complexity": 4,
+        "duplication": 0,
+        "functionCount": 4,
+        "loc": 28,
+        "issues": [],
+        "fileType": "test",
+        "impact": 2,
+        "criticismScore": 9
+      },
+      {
+        "path": "test/support/utils.js",
+        "complexity": 3,
+        "duplication": 0,
+        "functionCount": 10,
+        "loc": 36,
+        "issues": [],
+        "fileType": "test",
+        "impact": 10,
+        "criticismScore": 24
+      },
+      {
+        "path": "examples/search/public/client.js",
+        "complexity": 2,
+        "duplication": 0,
+        "functionCount": 2,
+        "loc": 13,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "examples/mvc/lib/boot.js",
+        "complexity": 17,
+        "duplication": 10,
+        "functionCount": 2,
+        "loc": 63,
+        "issues": [],
+        "fileType": "example",
+        "impact": 1,
+        "criticismScore": 20
+      },
+      {
+        "path": "examples/mvc/controllers/main/index.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 4,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/mvc/controllers/pet/index.js",
+        "complexity": 2,
+        "duplication": 17,
+        "functionCount": 4,
+        "loc": 21,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "examples/mvc/controllers/user/index.js",
+        "complexity": 3,
+        "duplication": 15,
+        "functionCount": 6,
+        "loc": 27,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "examples/mvc/controllers/user-pet/index.js",
+        "complexity": 2,
+        "duplication": 8,
+        "functionCount": 1,
+        "loc": 15,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "examples/static-files/public/js/app.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 0,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      }
+    ],
+    "topFiles": [
+      {
+        "path": "index.js",
+        "complexity": 1,
+        "duplication": 80,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "production",
+        "impact": 74,
+        "criticismScore": 150
+      },
+      {
+        "path": "lib/response.js",
+        "complexity": 109,
+        "duplication": 4,
+        "functionCount": 41,
+        "loc": 467,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 109 (recommended: < 20)",
+            "value": 109,
+            "ratio": 5.45
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 467 lines (recommended: < 300)",
+            "value": 467,
+            "ratio": 1.56
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 113
+      },
+      {
+        "path": "lib/utils.js",
+        "complexity": 27,
+        "duplication": 10,
+        "functionCount": 14,
+        "loc": 119,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 27 (recommended: < 20)",
+            "value": 27,
+            "ratio": 1.35
+          }
+        ],
+        "fileType": "production",
+        "impact": 12,
+        "criticismScore": 52.5
+      },
+      {
+        "path": "lib/application.js",
+        "complexity": 41,
+        "duplication": 3,
+        "functionCount": 25,
+        "loc": 262,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 41 (recommended: < 20)",
+            "value": 41,
+            "ratio": 2.05
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 262 lines",
+            "value": 262,
+            "ratio": 0.87
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 45
+      },
+      {
+        "path": "lib/request.js",
+        "complexity": 29,
+        "duplication": 7,
+        "functionCount": 20,
+        "loc": 155,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 29 (recommended: < 20)",
+            "value": 29,
+            "ratio": 1.45
+          }
+        ],
+        "fileType": "production",
+        "impact": 1,
+        "criticismScore": 32.5
+      }
+    ],
+    "silentKillers": [],
+    "project": {
+      "name": "express",
+      "path": "temp-analysis/express",
+      "packageJson": {
+        "name": "express",
+        "version": "5.1.0",
+        "description": "Fast, unopinionated, minimalist web framework"
+      }
+    },
+    "summary": {
+      "totalFiles": 142,
+      "totalLines": 15569,
+      "avgComplexity": 4.6,
+      "avgDuplication": 34,
+      "avgFunctions": 21.6,
+      "avgLoc": 110
+    },
+    "scores": {
+      "complexity": 80,
+      "duplication": 50,
+      "maintainability": 78,
+      "overall": 70
+    },
+    "complexityStdDev": 10.46,
+    "score": 70,
+    "grade": "C"
+  },
+  "duration": 905
+}

@@ -58,7 +58,7 @@
             "severity": "medium",
             "message": "File getting large: 262 lines",
             "value": 262,
-            "ratio": 0.8733333333333333
+            "ratio": 0.87
           }
         ],
         "fileType": "production",
@@ -114,7 +114,7 @@
             "severity": "high",
             "message": "Large file: 467 lines (recommended: < 300)",
             "value": 467,
-            "ratio": 1.5566666666666666
+            "ratio": 1.56
           }
         ],
         "fileType": "production",
@@ -180,7 +180,7 @@
             "severity": "high",
             "message": "Large file: 467 lines (recommended: < 300)",
             "value": 467,
-            "ratio": 1.5566666666666666
+            "ratio": 1.56
           }
         ],
         "fileType": "production",
@@ -206,7 +206,7 @@
             "severity": "medium",
             "message": "File getting large: 262 lines",
             "value": 262,
-            "ratio": 0.8733333333333333
+            "ratio": 0.87
           }
         ],
         "fileType": "production",
@@ -295,9 +295,9 @@
       "maintainability": 65,
       "overall": 56
     },
-    "complexityStdDev": 34.20705262046983,
+    "complexityStdDev": 34.21,
     "score": 56,
     "grade": "F"
   },
-  "duration": 738
+  "duration": 727
 }

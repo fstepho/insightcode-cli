@@ -152,7 +152,7 @@
             "severity": "high",
             "message": "Large file: 445 lines (recommended: < 300)",
             "value": 445,
-            "ratio": 1.4833333333333334
+            "ratio": 1.48
           }
         ],
         "fileType": "production",
@@ -189,7 +189,7 @@
             "severity": "high",
             "message": "Large file: 43108 lines (recommended: < 300)",
             "value": 43108,
-            "ratio": 143.69333333333333
+            "ratio": 143.69
           }
         ],
         "fileType": "production",
@@ -215,7 +215,7 @@
             "severity": "high",
             "message": "Large file: 3667 lines (recommended: < 300)",
             "value": 3667,
-            "ratio": 12.223333333333333
+            "ratio": 12.22
           }
         ],
         "fileType": "production",
@@ -241,7 +241,7 @@
             "severity": "high",
             "message": "Large file: 1625 lines (recommended: < 300)",
             "value": 1625,
-            "ratio": 5.416666666666667
+            "ratio": 5.42
           }
         ],
         "fileType": "production",
@@ -304,7 +304,7 @@
             "severity": "high",
             "message": "Large file: 5252 lines (recommended: < 300)",
             "value": 5252,
-            "ratio": 17.506666666666668
+            "ratio": 17.51
           }
         ],
         "fileType": "production",
@@ -330,7 +330,7 @@
             "severity": "high",
             "message": "Large file: 1141 lines (recommended: < 300)",
             "value": 1141,
-            "ratio": 3.8033333333333332
+            "ratio": 3.8
           }
         ],
         "fileType": "production",
@@ -356,7 +356,7 @@
             "severity": "high",
             "message": "Large file: 1238 lines (recommended: < 300)",
             "value": 1238,
-            "ratio": 4.126666666666667
+            "ratio": 4.13
           }
         ],
         "fileType": "production",
@@ -408,7 +408,7 @@
             "severity": "high",
             "message": "Large file: 1196 lines (recommended: < 300)",
             "value": 1196,
-            "ratio": 3.986666666666667
+            "ratio": 3.99
           }
         ],
         "fileType": "production",
@@ -434,7 +434,7 @@
             "severity": "high",
             "message": "Large file: 8227 lines (recommended: < 300)",
             "value": 8227,
-            "ratio": 27.423333333333332
+            "ratio": 27.42
           }
         ],
         "fileType": "production",
@@ -460,7 +460,7 @@
             "severity": "high",
             "message": "Large file: 535 lines (recommended: < 300)",
             "value": 535,
-            "ratio": 1.7833333333333334
+            "ratio": 1.78
           }
         ],
         "fileType": "production",
@@ -524,7 +524,7 @@
             "severity": "high",
             "message": "Large file: 4234 lines (recommended: < 300)",
             "value": 4234,
-            "ratio": 14.113333333333333
+            "ratio": 14.11
           }
         ],
         "fileType": "production",
@@ -550,7 +550,7 @@
             "severity": "high",
             "message": "Large file: 374 lines (recommended: < 300)",
             "value": 374,
-            "ratio": 1.2466666666666666
+            "ratio": 1.25
           }
         ],
         "fileType": "production",
@@ -576,7 +576,7 @@
             "severity": "high",
             "message": "Large file: 1453 lines (recommended: < 300)",
             "value": 1453,
-            "ratio": 4.843333333333334
+            "ratio": 4.84
           }
         ],
         "fileType": "production",
@@ -602,7 +602,7 @@
             "severity": "high",
             "message": "Large file: 3386 lines (recommended: < 300)",
             "value": 3386,
-            "ratio": 11.286666666666667
+            "ratio": 11.29
           }
         ],
         "fileType": "production",
@@ -628,7 +628,7 @@
             "severity": "high",
             "message": "Large file: 311 lines (recommended: < 300)",
             "value": 311,
-            "ratio": 1.0366666666666666
+            "ratio": 1.04
           }
         ],
         "fileType": "production",
@@ -725,7 +725,7 @@
             "severity": "medium",
             "message": "File getting large: 290 lines",
             "value": 290,
-            "ratio": 0.9666666666666667
+            "ratio": 0.97
           }
         ],
         "fileType": "production",
@@ -751,7 +751,7 @@
             "severity": "high",
             "message": "Large file: 524 lines (recommended: < 300)",
             "value": 524,
-            "ratio": 1.7466666666666666
+            "ratio": 1.75
           }
         ],
         "fileType": "production",
@@ -788,7 +788,7 @@
             "severity": "high",
             "message": "Large file: 2095 lines (recommended: < 300)",
             "value": 2095,
-            "ratio": 6.983333333333333
+            "ratio": 6.98
           }
         ],
         "fileType": "production",
@@ -833,7 +833,7 @@
             "severity": "high",
             "message": "Large file: 9124 lines (recommended: < 300)",
             "value": 9124,
-            "ratio": 30.413333333333334
+            "ratio": 30.41
           }
         ],
         "fileType": "production",
@@ -911,7 +911,7 @@
             "severity": "high",
             "message": "Large file: 820 lines (recommended: < 300)",
             "value": 820,
-            "ratio": 2.7333333333333334
+            "ratio": 2.73
           }
         ],
         "fileType": "production",
@@ -937,7 +937,7 @@
             "severity": "high",
             "message": "Large file: 977 lines (recommended: < 300)",
             "value": 977,
-            "ratio": 3.256666666666667
+            "ratio": 3.26
           }
         ],
         "fileType": "production",
@@ -1063,7 +1063,7 @@
             "severity": "medium",
             "message": "File getting large: 272 lines",
             "value": 272,
-            "ratio": 0.9066666666666666
+            "ratio": 0.91
           }
         ],
         "fileType": "production",
@@ -1089,7 +1089,7 @@
             "severity": "medium",
             "message": "File getting large: 251 lines",
             "value": 251,
-            "ratio": 0.8366666666666667
+            "ratio": 0.84
           }
         ],
         "fileType": "production",
@@ -1134,7 +1134,7 @@
             "severity": "high",
             "message": "Large file: 635 lines (recommended: < 300)",
             "value": 635,
-            "ratio": 2.1166666666666667
+            "ratio": 2.12
           }
         ],
         "fileType": "production",
@@ -1197,7 +1197,7 @@
             "severity": "high",
             "message": "Large file: 4426 lines (recommended: < 300)",
             "value": 4426,
-            "ratio": 14.753333333333334
+            "ratio": 14.75
           }
         ],
         "fileType": "production",
@@ -1223,7 +1223,7 @@
             "severity": "high",
             "message": "Large file: 1727 lines (recommended: < 300)",
             "value": 1727,
-            "ratio": 5.756666666666667
+            "ratio": 5.76
           }
         ],
         "fileType": "production",
@@ -1260,7 +1260,7 @@
             "severity": "high",
             "message": "Large file: 1315 lines (recommended: < 300)",
             "value": 1315,
-            "ratio": 4.383333333333334
+            "ratio": 4.38
           }
         ],
         "fileType": "production",
@@ -1286,7 +1286,7 @@
             "severity": "high",
             "message": "Large file: 566 lines (recommended: < 300)",
             "value": 566,
-            "ratio": 1.8866666666666667
+            "ratio": 1.89
           }
         ],
         "fileType": "production",
@@ -1312,7 +1312,7 @@
             "severity": "high",
             "message": "Large file: 313 lines (recommended: < 300)",
             "value": 313,
-            "ratio": 1.0433333333333332
+            "ratio": 1.04
           }
         ],
         "fileType": "production",
@@ -1338,7 +1338,7 @@
             "severity": "high",
             "message": "Large file: 605 lines (recommended: < 300)",
             "value": 605,
-            "ratio": 2.0166666666666666
+            "ratio": 2.02
           }
         ],
         "fileType": "production",
@@ -1401,7 +1401,7 @@
             "severity": "high",
             "message": "Large file: 305 lines (recommended: < 300)",
             "value": 305,
-            "ratio": 1.0166666666666666
+            "ratio": 1.02
           }
         ],
         "fileType": "production",
@@ -1438,7 +1438,7 @@
             "severity": "medium",
             "message": "File getting large: 292 lines",
             "value": 292,
-            "ratio": 0.9733333333333334
+            "ratio": 0.97
           }
         ],
         "fileType": "production",
@@ -1528,7 +1528,7 @@
             "severity": "medium",
             "message": "File getting large: 227 lines",
             "value": 227,
-            "ratio": 0.7566666666666667
+            "ratio": 0.76
           }
         ],
         "fileType": "production",
@@ -1610,7 +1610,7 @@
             "severity": "high",
             "message": "Large file: 2476 lines (recommended: < 300)",
             "value": 2476,
-            "ratio": 8.253333333333334
+            "ratio": 8.25
           }
         ],
         "fileType": "production",
@@ -1655,7 +1655,7 @@
             "severity": "high",
             "message": "Large file: 545 lines (recommended: < 300)",
             "value": 545,
-            "ratio": 1.8166666666666667
+            "ratio": 1.82
           }
         ],
         "fileType": "production",
@@ -1681,7 +1681,7 @@
             "severity": "high",
             "message": "Large file: 733 lines (recommended: < 300)",
             "value": 733,
-            "ratio": 2.4433333333333334
+            "ratio": 2.44
           }
         ],
         "fileType": "production",
@@ -1707,7 +1707,7 @@
             "severity": "high",
             "message": "Large file: 3478 lines (recommended: < 300)",
             "value": 3478,
-            "ratio": 11.593333333333334
+            "ratio": 11.59
           }
         ],
         "fileType": "production",
@@ -1744,7 +1744,7 @@
             "severity": "medium",
             "message": "File getting large: 224 lines",
             "value": 224,
-            "ratio": 0.7466666666666667
+            "ratio": 0.75
           }
         ],
         "fileType": "production",
@@ -1800,7 +1800,7 @@
             "severity": "medium",
             "message": "File getting large: 293 lines",
             "value": 293,
-            "ratio": 0.9766666666666667
+            "ratio": 0.98
           }
         ],
         "fileType": "production",
@@ -1882,7 +1882,7 @@
             "severity": "medium",
             "message": "File getting large: 232 lines",
             "value": 232,
-            "ratio": 0.7733333333333333
+            "ratio": 0.77
           }
         ],
         "fileType": "production",
@@ -1968,6 +1968,17 @@
         "criticismScore": 9
       },
       {
+        "path": "src/typescript/typescript.ts",
+        "complexity": 6,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 22,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 7
+      },
+      {
         "path": "src/services/breakpoints.ts",
         "complexity": 207,
         "duplication": 5,
@@ -1986,7 +1997,7 @@
             "severity": "high",
             "message": "Large file: 580 lines (recommended: < 300)",
             "value": 580,
-            "ratio": 1.9333333333333333
+            "ratio": 1.93
           }
         ],
         "fileType": "production",
@@ -2012,7 +2023,7 @@
             "severity": "high",
             "message": "Large file: 578 lines (recommended: < 300)",
             "value": 578,
-            "ratio": 1.9266666666666667
+            "ratio": 1.93
           }
         ],
         "fileType": "production",
@@ -2038,7 +2049,7 @@
             "severity": "high",
             "message": "Large file: 970 lines (recommended: < 300)",
             "value": 970,
-            "ratio": 3.2333333333333334
+            "ratio": 3.23
           }
         ],
         "fileType": "production",
@@ -2187,7 +2198,7 @@
             "severity": "high",
             "message": "Large file: 550 lines (recommended: < 300)",
             "value": 550,
-            "ratio": 1.8333333333333333
+            "ratio": 1.83
           }
         ],
         "fileType": "production",
@@ -2213,7 +2224,7 @@
             "severity": "high",
             "message": "Large file: 2180 lines (recommended: < 300)",
             "value": 2180,
-            "ratio": 7.266666666666667
+            "ratio": 7.27
           }
         ],
         "fileType": "production",
@@ -2239,7 +2250,7 @@
             "severity": "medium",
             "message": "File getting large: 263 lines",
             "value": 263,
-            "ratio": 0.8766666666666667
+            "ratio": 0.88
           }
         ],
         "fileType": "production",
@@ -2265,7 +2276,7 @@
             "severity": "high",
             "message": "Large file: 590 lines (recommended: < 300)",
             "value": 590,
-            "ratio": 1.9666666666666666
+            "ratio": 1.97
           }
         ],
         "fileType": "production",
@@ -2291,7 +2302,7 @@
             "severity": "high",
             "message": "Large file: 635 lines (recommended: < 300)",
             "value": 635,
-            "ratio": 2.1166666666666667
+            "ratio": 2.12
           }
         ],
         "fileType": "production",
@@ -2317,7 +2328,7 @@
             "severity": "high",
             "message": "Large file: 875 lines (recommended: < 300)",
             "value": 875,
-            "ratio": 2.9166666666666665
+            "ratio": 2.92
           }
         ],
         "fileType": "production",
@@ -2414,7 +2425,7 @@
             "severity": "high",
             "message": "Large file: 910 lines (recommended: < 300)",
             "value": 910,
-            "ratio": 3.033333333333333
+            "ratio": 3.03
           }
         ],
         "fileType": "production",
@@ -2440,7 +2451,7 @@
             "severity": "high",
             "message": "Large file: 739 lines (recommended: < 300)",
             "value": 739,
-            "ratio": 2.4633333333333334
+            "ratio": 2.46
           }
         ],
         "fileType": "production",
@@ -2466,7 +2477,7 @@
             "severity": "high",
             "message": "Large file: 365 lines (recommended: < 300)",
             "value": 365,
-            "ratio": 1.2166666666666666
+            "ratio": 1.22
           }
         ],
         "fileType": "production",
@@ -2537,7 +2548,7 @@
             "severity": "high",
             "message": "Large file: 368 lines (recommended: < 300)",
             "value": 368,
-            "ratio": 1.2266666666666666
+            "ratio": 1.23
           }
         ],
         "fileType": "production",
@@ -2645,7 +2656,7 @@
             "severity": "high",
             "message": "Large file: 640 lines (recommended: < 300)",
             "value": 640,
-            "ratio": 2.1333333333333333
+            "ratio": 2.13
           }
         ],
         "fileType": "production",
@@ -2671,7 +2682,7 @@
             "severity": "medium",
             "message": "File getting large: 263 lines",
             "value": 263,
-            "ratio": 0.8766666666666667
+            "ratio": 0.88
           }
         ],
         "fileType": "production",
@@ -2716,7 +2727,7 @@
             "severity": "high",
             "message": "Large file: 1180 lines (recommended: < 300)",
             "value": 1180,
-            "ratio": 3.933333333333333
+            "ratio": 3.93
           }
         ],
         "fileType": "production",
@@ -2768,7 +2779,7 @@
             "severity": "high",
             "message": "Large file: 806 lines (recommended: < 300)",
             "value": 806,
-            "ratio": 2.6866666666666665
+            "ratio": 2.69
           }
         ],
         "fileType": "production",
@@ -2794,7 +2805,7 @@
             "severity": "high",
             "message": "Large file: 1471 lines (recommended: < 300)",
             "value": 1471,
-            "ratio": 4.903333333333333
+            "ratio": 4.9
           }
         ],
         "fileType": "production",
@@ -2877,17 +2888,6 @@
         "criticismScore": 1018
       },
       {
-        "path": "src/typescript/typescript.ts",
-        "complexity": 6,
-        "duplication": 0,
-        "functionCount": 1,
-        "loc": 22,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 7
-      },
-      {
         "path": "src/typingsInstaller/nodeTypingsInstaller.ts",
         "complexity": 33,
         "duplication": 3,
@@ -2925,7 +2925,7 @@
             "severity": "high",
             "message": "Large file: 473 lines (recommended: < 300)",
             "value": 473,
-            "ratio": 1.5766666666666667
+            "ratio": 1.58
           }
         ],
         "fileType": "production",
@@ -3043,7 +3043,7 @@
             "severity": "medium",
             "message": "File getting large: 229 lines",
             "value": 229,
-            "ratio": 0.7633333333333333
+            "ratio": 0.76
           }
         ],
         "fileType": "production",
@@ -3099,7 +3099,7 @@
             "severity": "high",
             "message": "Large file: 6047 lines (recommended: < 300)",
             "value": 6047,
-            "ratio": 20.156666666666666
+            "ratio": 20.16
           }
         ],
         "fileType": "production",
@@ -3144,7 +3144,7 @@
             "severity": "high",
             "message": "Large file: 416 lines (recommended: < 300)",
             "value": 416,
-            "ratio": 1.3866666666666667
+            "ratio": 1.39
           }
         ],
         "fileType": "production",
@@ -3170,7 +3170,7 @@
             "severity": "high",
             "message": "Large file: 1216 lines (recommended: < 300)",
             "value": 1216,
-            "ratio": 4.053333333333334
+            "ratio": 4.05
           }
         ],
         "fileType": "production",
@@ -3215,7 +3215,7 @@
             "severity": "high",
             "message": "Large file: 2545 lines (recommended: < 300)",
             "value": 2545,
-            "ratio": 8.483333333333333
+            "ratio": 8.48
           }
         ],
         "fileType": "production",
@@ -3286,7 +3286,7 @@
             "severity": "high",
             "message": "Large file: 472 lines (recommended: < 300)",
             "value": 472,
-            "ratio": 1.5733333333333333
+            "ratio": 1.57
           }
         ],
         "fileType": "production",
@@ -3349,7 +3349,7 @@
             "severity": "high",
             "message": "Large file: 914 lines (recommended: < 300)",
             "value": 914,
-            "ratio": 3.046666666666667
+            "ratio": 3.05
           }
         ],
         "fileType": "production",
@@ -3375,7 +3375,7 @@
             "severity": "high",
             "message": "Large file: 1225 lines (recommended: < 300)",
             "value": 1225,
-            "ratio": 4.083333333333333
+            "ratio": 4.08
           }
         ],
         "fileType": "production",
@@ -3475,7 +3475,7 @@
             "severity": "high",
             "message": "Large file: 565 lines (recommended: < 300)",
             "value": 565,
-            "ratio": 1.8833333333333333
+            "ratio": 1.88
           }
         ],
         "fileType": "production",
@@ -3501,7 +3501,7 @@
             "severity": "high",
             "message": "Large file: 2057 lines (recommended: < 300)",
             "value": 2057,
-            "ratio": 6.8566666666666665
+            "ratio": 6.86
           }
         ],
         "fileType": "production",
@@ -3527,7 +3527,7 @@
             "severity": "high",
             "message": "Large file: 799 lines (recommended: < 300)",
             "value": 799,
-            "ratio": 2.6633333333333336
+            "ratio": 2.66
           }
         ],
         "fileType": "production",
@@ -3553,7 +3553,7 @@
             "severity": "high",
             "message": "Large file: 515 lines (recommended: < 300)",
             "value": 515,
-            "ratio": 1.7166666666666666
+            "ratio": 1.72
           }
         ],
         "fileType": "production",
@@ -3642,7 +3642,7 @@
             "severity": "high",
             "message": "Large file: 434 lines (recommended: < 300)",
             "value": 434,
-            "ratio": 1.4466666666666668
+            "ratio": 1.45
           }
         ],
         "fileType": "production",
@@ -4079,7 +4079,7 @@
             "severity": "high",
             "message": "Large file: 595 lines (recommended: < 300)",
             "value": 595,
-            "ratio": 1.9833333333333334
+            "ratio": 1.98
           }
         ],
         "fileType": "production",
@@ -4116,7 +4116,7 @@
             "severity": "medium",
             "message": "File getting large: 263 lines",
             "value": 263,
-            "ratio": 0.8766666666666667
+            "ratio": 0.88
           }
         ],
         "fileType": "production",
@@ -4175,7 +4175,7 @@
             "severity": "medium",
             "message": "File getting large: 217 lines",
             "value": 217,
-            "ratio": 0.7233333333333334
+            "ratio": 0.72
           }
         ],
         "fileType": "production",
@@ -4298,7 +4298,7 @@
             "severity": "high",
             "message": "Large file: 739 lines (recommended: < 300)",
             "value": 739,
-            "ratio": 2.4633333333333334
+            "ratio": 2.46
           }
         ],
         "fileType": "production",
@@ -4354,7 +4354,7 @@
             "severity": "high",
             "message": "Large file: 1033 lines (recommended: < 300)",
             "value": 1033,
-            "ratio": 3.4433333333333334
+            "ratio": 3.44
           }
         ],
         "fileType": "production",
@@ -4392,7 +4392,7 @@
             "severity": "high",
             "message": "Large file: 407 lines (recommended: < 300)",
             "value": 407,
-            "ratio": 1.3566666666666667
+            "ratio": 1.36
           }
         ],
         "fileType": "production",
@@ -4411,7 +4411,7 @@
             "severity": "medium",
             "message": "File getting large: 268 lines",
             "value": 268,
-            "ratio": 0.8933333333333333
+            "ratio": 0.89
           }
         ],
         "fileType": "production",
@@ -4441,7 +4441,7 @@
             "severity": "medium",
             "message": "File getting large: 278 lines",
             "value": 278,
-            "ratio": 0.9266666666666666
+            "ratio": 0.93
           }
         ],
         "fileType": "production",
@@ -4471,7 +4471,7 @@
             "severity": "high",
             "message": "Large file: 943 lines (recommended: < 300)",
             "value": 943,
-            "ratio": 3.1433333333333335
+            "ratio": 3.14
           }
         ],
         "fileType": "production",
@@ -4497,7 +4497,7 @@
             "severity": "high",
             "message": "Large file: 839 lines (recommended: < 300)",
             "value": 839,
-            "ratio": 2.796666666666667
+            "ratio": 2.8
           }
         ],
         "fileType": "production",
@@ -4558,6 +4558,28 @@
         "duplication": 0,
         "functionCount": 0,
         "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/typescript/_namespaces/ts.server.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/typescript/_namespaces/ts.ts",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 0,
+        "loc": 6,
         "issues": [],
         "fileType": "production",
         "impact": 0,
@@ -4956,7 +4978,7 @@
             "severity": "high",
             "message": "Large file: 1094 lines (recommended: < 300)",
             "value": 1094,
-            "ratio": 3.6466666666666665
+            "ratio": 3.65
           }
         ],
         "fileType": "production",
@@ -5030,7 +5052,7 @@
             "severity": "high",
             "message": "Large file: 731 lines (recommended: < 300)",
             "value": 731,
-            "ratio": 2.4366666666666665
+            "ratio": 2.44
           }
         ],
         "fileType": "production",
@@ -5075,7 +5097,7 @@
             "severity": "high",
             "message": "Large file: 542 lines (recommended: < 300)",
             "value": 542,
-            "ratio": 1.8066666666666666
+            "ratio": 1.81
           }
         ],
         "fileType": "production",
@@ -5083,22 +5105,398 @@
         "criticismScore": 212
       },
       {
-        "path": "src/typescript/_namespaces/ts.server.ts",
+        "path": "src/services/refactors/addOrRemoveBracesToArrowFunction.ts",
+        "complexity": 24,
+        "duplication": 8,
+        "functionCount": 4,
+        "loc": 139,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 24 (recommended: < 20)",
+            "value": 24,
+            "ratio": 1.2
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 25.5
+      },
+      {
+        "path": "src/services/refactors/convertArrowFunctionOrFunctionExpression.ts",
+        "complexity": 57,
+        "duplication": 2,
+        "functionCount": 18,
+        "loc": 276,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 57 (recommended: < 20)",
+            "value": 57,
+            "ratio": 2.85
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 276 lines",
+            "value": 276,
+            "ratio": 0.92
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 59
+      },
+      {
+        "path": "src/services/refactors/convertExport.ts",
+        "complexity": 69,
+        "duplication": 7,
+        "functionCount": 14,
+        "loc": 297,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 69 (recommended: < 20)",
+            "value": 69,
+            "ratio": 3.45
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 297 lines",
+            "value": 297,
+            "ratio": 0.99
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 71
+      },
+      {
+        "path": "src/services/refactors/convertImport.ts",
+        "complexity": 47,
+        "duplication": 4,
+        "functionCount": 23,
+        "loc": 251,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 47 (recommended: < 20)",
+            "value": 47,
+            "ratio": 2.35
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 251 lines",
+            "value": 251,
+            "ratio": 0.84
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 49
+      },
+      {
+        "path": "src/services/refactors/convertOverloadListToSingleSignature.ts",
+        "complexity": 37,
+        "duplication": 8,
+        "functionCount": 16,
+        "loc": 250,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 37 (recommended: < 20)",
+            "value": 37,
+            "ratio": 1.85
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 250 lines",
+            "value": 250,
+            "ratio": 0.83
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 39
+      },
+      {
+        "path": "src/services/refactors/convertParamsToDestructuredObject.ts",
+        "complexity": 136,
+        "duplication": 3,
+        "functionCount": 46,
+        "loc": 677,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 136 (recommended: < 20)",
+            "value": 136,
+            "ratio": 6.8
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 677 lines (recommended: < 300)",
+            "value": 677,
+            "ratio": 2.26
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 138
+      },
+      {
+        "path": "src/services/refactors/convertStringOrTemplateLiteral.ts",
+        "complexity": 44,
+        "duplication": 4,
+        "functionCount": 23,
+        "loc": 243,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 44 (recommended: < 20)",
+            "value": 44,
+            "ratio": 2.2
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 243 lines",
+            "value": 243,
+            "ratio": 0.81
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 46
+      },
+      {
+        "path": "src/services/refactors/convertToOptionalChainExpression.ts",
+        "complexity": 87,
+        "duplication": 4,
+        "functionCount": 19,
+        "loc": 271,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 87 (recommended: < 20)",
+            "value": 87,
+            "ratio": 4.35
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 271 lines",
+            "value": 271,
+            "ratio": 0.9
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 89
+      },
+      {
+        "path": "src/services/refactors/extractSymbol.ts",
+        "complexity": 436,
+        "duplication": 4,
+        "functionCount": 74,
+        "loc": 1742,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 436 (recommended: < 20)",
+            "value": 436,
+            "ratio": 21.8
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 1742 lines (recommended: < 300)",
+            "value": 1742,
+            "ratio": 5.81
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 438
+      },
+      {
+        "path": "src/services/refactors/extractType.ts",
+        "complexity": 80,
+        "duplication": 3,
+        "functionCount": 31,
+        "loc": 391,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 80 (recommended: < 20)",
+            "value": 80,
+            "ratio": 4
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 391 lines (recommended: < 300)",
+            "value": 391,
+            "ratio": 1.3
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 82
+      },
+      {
+        "path": "src/services/refactors/generateGetAccessorAndSetAccessor.ts",
+        "complexity": 10,
+        "duplication": 0,
+        "functionCount": 2,
+        "loc": 58,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 11
+      },
+      {
+        "path": "src/services/refactors/helpers.ts",
+        "complexity": 10,
+        "duplication": 0,
+        "functionCount": 5,
+        "loc": 60,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 11
+      },
+      {
+        "path": "src/services/refactors/inferFunctionReturnType.ts",
+        "complexity": 33,
+        "duplication": 12,
+        "functionCount": 8,
+        "loc": 146,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 33 (recommended: < 20)",
+            "value": 33,
+            "ratio": 1.65
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 34.5
+      },
+      {
+        "path": "src/services/refactors/inlineVariable.ts",
+        "complexity": 47,
+        "duplication": 4,
+        "functionCount": 9,
+        "loc": 207,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 47 (recommended: < 20)",
+            "value": 47,
+            "ratio": 2.35
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 207 lines",
+            "value": 207,
+            "ratio": 0.69
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 49
+      },
+      {
+        "path": "src/services/refactors/moveToFile.ts",
+        "complexity": 299,
+        "duplication": 3,
+        "functionCount": 96,
+        "loc": 1002,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 299 (recommended: < 20)",
+            "value": 299,
+            "ratio": 14.95
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 1002 lines (recommended: < 300)",
+            "value": 1002,
+            "ratio": 3.34
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 301
+      },
+      {
+        "path": "src/services/refactors/moveToNewFile.ts",
+        "complexity": 12,
+        "duplication": 5,
+        "functionCount": 4,
+        "loc": 82,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 12 (recommended: < 10)",
+            "value": 12,
+            "ratio": 0.6
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 13.5
+      },
+      {
+        "path": "src/typingsInstallerCore/_namespaces/ts.server.ts",
         "complexity": 1,
         "duplication": 0,
         "functionCount": 0,
-        "loc": 2,
+        "loc": 3,
         "issues": [],
         "fileType": "production",
         "impact": 0,
         "criticismScore": 2
       },
       {
-        "path": "src/typescript/_namespaces/ts.ts",
+        "path": "src/typingsInstallerCore/_namespaces/ts.server.typingsInstaller.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/typingsInstallerCore/_namespaces/ts.ts",
         "complexity": 1,
         "duplication": 100,
         "functionCount": 0,
-        "loc": 6,
+        "loc": 4,
         "issues": [],
         "fileType": "production",
         "impact": 0,
@@ -5164,7 +5562,7 @@
             "severity": "high",
             "message": "Large file: 317 lines (recommended: < 300)",
             "value": 317,
-            "ratio": 1.0566666666666666
+            "ratio": 1.06
           }
         ],
         "fileType": "production",
@@ -5272,7 +5670,7 @@
             "severity": "medium",
             "message": "File getting large: 208 lines",
             "value": 208,
-            "ratio": 0.6933333333333334
+            "ratio": 0.69
           }
         ],
         "fileType": "production",
@@ -5309,7 +5707,7 @@
             "severity": "medium",
             "message": "File getting large: 286 lines",
             "value": 286,
-            "ratio": 0.9533333333333334
+            "ratio": 0.95
           }
         ],
         "fileType": "production",
@@ -5346,7 +5744,7 @@
             "severity": "high",
             "message": "Large file: 704 lines (recommended: < 300)",
             "value": 704,
-            "ratio": 2.3466666666666667
+            "ratio": 2.35
           }
         ],
         "fileType": "production",
@@ -5372,7 +5770,7 @@
             "severity": "high",
             "message": "Large file: 563 lines (recommended: < 300)",
             "value": 563,
-            "ratio": 1.8766666666666667
+            "ratio": 1.88
           }
         ],
         "fileType": "production",
@@ -5499,7 +5897,7 @@
             "severity": "high",
             "message": "Large file: 694 lines (recommended: < 300)",
             "value": 694,
-            "ratio": 2.3133333333333335
+            "ratio": 2.31
           }
         ],
         "fileType": "production",
@@ -5843,7 +6241,7 @@
             "severity": "high",
             "message": "Large file: 1024 lines (recommended: < 300)",
             "value": 1024,
-            "ratio": 3.4133333333333336
+            "ratio": 3.41
           }
         ],
         "fileType": "production",
@@ -5910,7 +6308,7 @@
             "severity": "medium",
             "message": "File getting large: 208 lines",
             "value": 208,
-            "ratio": 0.6933333333333334
+            "ratio": 0.69
           }
         ],
         "fileType": "production",
@@ -6064,7 +6462,7 @@
             "severity": "high",
             "message": "Large file: 409 lines (recommended: < 300)",
             "value": 409,
-            "ratio": 1.3633333333333333
+            "ratio": 1.36
           }
         ],
         "fileType": "production",
@@ -6179,7 +6577,7 @@
             "severity": "high",
             "message": "Large file: 1081 lines (recommended: < 300)",
             "value": 1081,
-            "ratio": 3.6033333333333335
+            "ratio": 3.6
           }
         ],
         "fileType": "production",
@@ -6246,7 +6644,7 @@
             "severity": "medium",
             "message": "File getting large: 268 lines",
             "value": 268,
-            "ratio": 0.8933333333333333
+            "ratio": 0.89
           }
         ],
         "fileType": "production",
@@ -6317,404 +6715,6 @@
         "criticismScore": 14.5
       },
       {
-        "path": "src/typingsInstallerCore/_namespaces/ts.server.ts",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 0,
-        "loc": 3,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "src/typingsInstallerCore/_namespaces/ts.server.typingsInstaller.ts",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 0,
-        "loc": 1,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "src/typingsInstallerCore/_namespaces/ts.ts",
-        "complexity": 1,
-        "duplication": 100,
-        "functionCount": 0,
-        "loc": 4,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "src/services/refactors/addOrRemoveBracesToArrowFunction.ts",
-        "complexity": 24,
-        "duplication": 8,
-        "functionCount": 4,
-        "loc": 139,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 24 (recommended: < 20)",
-            "value": 24,
-            "ratio": 1.2
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 25.5
-      },
-      {
-        "path": "src/services/refactors/convertArrowFunctionOrFunctionExpression.ts",
-        "complexity": 57,
-        "duplication": 2,
-        "functionCount": 18,
-        "loc": 276,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 57 (recommended: < 20)",
-            "value": 57,
-            "ratio": 2.85
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 276 lines",
-            "value": 276,
-            "ratio": 0.92
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 59
-      },
-      {
-        "path": "src/services/refactors/convertExport.ts",
-        "complexity": 69,
-        "duplication": 7,
-        "functionCount": 14,
-        "loc": 297,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 69 (recommended: < 20)",
-            "value": 69,
-            "ratio": 3.45
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 297 lines",
-            "value": 297,
-            "ratio": 0.99
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 71
-      },
-      {
-        "path": "src/services/refactors/convertImport.ts",
-        "complexity": 47,
-        "duplication": 4,
-        "functionCount": 23,
-        "loc": 251,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 47 (recommended: < 20)",
-            "value": 47,
-            "ratio": 2.35
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 251 lines",
-            "value": 251,
-            "ratio": 0.8366666666666667
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 49
-      },
-      {
-        "path": "src/services/refactors/convertOverloadListToSingleSignature.ts",
-        "complexity": 37,
-        "duplication": 8,
-        "functionCount": 16,
-        "loc": 250,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 37 (recommended: < 20)",
-            "value": 37,
-            "ratio": 1.85
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 250 lines",
-            "value": 250,
-            "ratio": 0.8333333333333334
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 39
-      },
-      {
-        "path": "src/services/refactors/convertParamsToDestructuredObject.ts",
-        "complexity": 136,
-        "duplication": 3,
-        "functionCount": 46,
-        "loc": 677,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 136 (recommended: < 20)",
-            "value": 136,
-            "ratio": 6.8
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 677 lines (recommended: < 300)",
-            "value": 677,
-            "ratio": 2.256666666666667
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 138
-      },
-      {
-        "path": "src/services/refactors/convertStringOrTemplateLiteral.ts",
-        "complexity": 44,
-        "duplication": 4,
-        "functionCount": 23,
-        "loc": 243,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 44 (recommended: < 20)",
-            "value": 44,
-            "ratio": 2.2
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 243 lines",
-            "value": 243,
-            "ratio": 0.81
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 46
-      },
-      {
-        "path": "src/services/refactors/convertToOptionalChainExpression.ts",
-        "complexity": 87,
-        "duplication": 4,
-        "functionCount": 19,
-        "loc": 271,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 87 (recommended: < 20)",
-            "value": 87,
-            "ratio": 4.35
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 271 lines",
-            "value": 271,
-            "ratio": 0.9033333333333333
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 89
-      },
-      {
-        "path": "src/services/refactors/extractSymbol.ts",
-        "complexity": 436,
-        "duplication": 4,
-        "functionCount": 74,
-        "loc": 1742,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 436 (recommended: < 20)",
-            "value": 436,
-            "ratio": 21.8
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 1742 lines (recommended: < 300)",
-            "value": 1742,
-            "ratio": 5.806666666666667
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 438
-      },
-      {
-        "path": "src/services/refactors/extractType.ts",
-        "complexity": 80,
-        "duplication": 3,
-        "functionCount": 31,
-        "loc": 391,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 80 (recommended: < 20)",
-            "value": 80,
-            "ratio": 4
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 391 lines (recommended: < 300)",
-            "value": 391,
-            "ratio": 1.3033333333333332
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 82
-      },
-      {
-        "path": "src/services/refactors/generateGetAccessorAndSetAccessor.ts",
-        "complexity": 10,
-        "duplication": 0,
-        "functionCount": 2,
-        "loc": 58,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 11
-      },
-      {
-        "path": "src/services/refactors/helpers.ts",
-        "complexity": 10,
-        "duplication": 0,
-        "functionCount": 5,
-        "loc": 60,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 11
-      },
-      {
-        "path": "src/services/refactors/inferFunctionReturnType.ts",
-        "complexity": 33,
-        "duplication": 12,
-        "functionCount": 8,
-        "loc": 146,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 33 (recommended: < 20)",
-            "value": 33,
-            "ratio": 1.65
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 34.5
-      },
-      {
-        "path": "src/services/refactors/inlineVariable.ts",
-        "complexity": 47,
-        "duplication": 4,
-        "functionCount": 9,
-        "loc": 207,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 47 (recommended: < 20)",
-            "value": 47,
-            "ratio": 2.35
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 207 lines",
-            "value": 207,
-            "ratio": 0.69
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 49
-      },
-      {
-        "path": "src/services/refactors/moveToFile.ts",
-        "complexity": 299,
-        "duplication": 3,
-        "functionCount": 96,
-        "loc": 1002,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 299 (recommended: < 20)",
-            "value": 299,
-            "ratio": 14.95
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 1002 lines (recommended: < 300)",
-            "value": 1002,
-            "ratio": 3.34
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 301
-      },
-      {
-        "path": "src/services/refactors/moveToNewFile.ts",
-        "complexity": 12,
-        "duplication": 5,
-        "functionCount": 4,
-        "loc": 82,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 12 (recommended: < 10)",
-            "value": 12,
-            "ratio": 0.6
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 13.5
-      },
-      {
         "path": "src/compiler/transformers/declarations/diagnostics.ts",
         "complexity": 213,
         "duplication": 4,
@@ -6733,7 +6733,7 @@
             "severity": "high",
             "message": "Large file: 733 lines (recommended: < 300)",
             "value": 733,
-            "ratio": 2.4433333333333334
+            "ratio": 2.44
           }
         ],
         "fileType": "production",
@@ -6759,7 +6759,7 @@
             "severity": "high",
             "message": "Large file: 356 lines (recommended: < 300)",
             "value": 356,
-            "ratio": 1.1866666666666668
+            "ratio": 1.19
           }
         ],
         "fileType": "production",
@@ -6841,7 +6841,7 @@
             "severity": "medium",
             "message": "File getting large: 223 lines",
             "value": 223,
-            "ratio": 0.7433333333333333
+            "ratio": 0.74
           }
         ],
         "fileType": "production",
@@ -6860,7 +6860,7 @@
             "severity": "high",
             "message": "Large file: 374 lines (recommended: < 300)",
             "value": 374,
-            "ratio": 1.2466666666666666
+            "ratio": 1.25
           }
         ],
         "fileType": "production",
@@ -6879,7 +6879,7 @@
             "severity": "medium",
             "message": "File getting large: 269 lines",
             "value": 269,
-            "ratio": 0.8966666666666666
+            "ratio": 0.9
           }
         ],
         "fileType": "production",
@@ -6969,7 +6969,7 @@
             "severity": "medium",
             "message": "File getting large: 389 lines",
             "value": 389,
-            "ratio": 0.778
+            "ratio": 0.78
           }
         ],
         "fileType": "config",
@@ -7095,7 +7095,7 @@
             "severity": "high",
             "message": "Large file: 2342 lines (recommended: < 300)",
             "value": 2342,
-            "ratio": 7.806666666666667
+            "ratio": 7.81
           }
         ],
         "fileType": "production",
@@ -7199,7 +7199,7 @@
             "severity": "medium",
             "message": "File getting large: 217 lines",
             "value": 217,
-            "ratio": 0.7233333333333334
+            "ratio": 0.72
           }
         ],
         "fileType": "production",
@@ -7240,262 +7240,12 @@
             "severity": "high",
             "message": "Large file: 1625 lines (recommended: < 300)",
             "value": 1625,
-            "ratio": 5.416666666666667
+            "ratio": 5.42
           }
         ],
         "fileType": "production",
         "impact": 0,
         "criticismScore": 2.5
-      },
-      {
-        "path": "src/testRunner/unittests/services/cancellableLanguageServiceOperations.ts",
-        "complexity": 5,
-        "duplication": 13,
-        "functionCount": 20,
-        "loc": 89,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 6
-      },
-      {
-        "path": "src/testRunner/unittests/services/colorization.ts",
-        "complexity": 7,
-        "duplication": 14,
-        "functionCount": 53,
-        "loc": 276,
-        "issues": [
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 276 lines",
-            "value": 276,
-            "ratio": 0.92
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 8.5
-      },
-      {
-        "path": "src/testRunner/unittests/services/convertToAsyncFunction.ts",
-        "complexity": 16,
-        "duplication": 11,
-        "functionCount": 18,
-        "loc": 1842,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 16 (recommended: < 10)",
-            "value": 16,
-            "ratio": 0.8
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 1842 lines (recommended: < 300)",
-            "value": 1842,
-            "ratio": 6.14
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 18
-      },
-      {
-        "path": "src/testRunner/unittests/services/documentRegistry.ts",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 6,
-        "loc": 46,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "src/testRunner/unittests/services/hostNewLineSupport.ts",
-        "complexity": 8,
-        "duplication": 5,
-        "functionCount": 19,
-        "loc": 69,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 9
-      },
-      {
-        "path": "src/testRunner/unittests/services/languageService.ts",
-        "complexity": 8,
-        "duplication": 12,
-        "functionCount": 51,
-        "loc": 253,
-        "issues": [
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 253 lines",
-            "value": 253,
-            "ratio": 0.8433333333333334
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 9.5
-      },
-      {
-        "path": "src/testRunner/unittests/services/organizeImports.ts",
-        "complexity": 20,
-        "duplication": 20,
-        "functionCount": 60,
-        "loc": 1067,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 20 (recommended: < 10)",
-            "value": 20,
-            "ratio": 1
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 1067 lines (recommended: < 300)",
-            "value": 1067,
-            "ratio": 3.5566666666666666
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 22
-      },
-      {
-        "path": "src/testRunner/unittests/services/patternMatcher.ts",
-        "complexity": 1,
-        "duplication": 24,
-        "functionCount": 89,
-        "loc": 260,
-        "issues": [
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 260 lines",
-            "value": 260,
-            "ratio": 0.8666666666666667
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2.5
-      },
-      {
-        "path": "src/testRunner/unittests/services/preProcessFile.ts",
-        "complexity": 2,
-        "duplication": 42,
-        "functionCount": 45,
-        "loc": 738,
-        "issues": [
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 738 lines (recommended: < 300)",
-            "value": 738,
-            "ratio": 2.46
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 3.5
-      },
-      {
-        "path": "src/testRunner/unittests/services/textChanges.ts",
-        "complexity": 12,
-        "duplication": 15,
-        "functionCount": 101,
-        "loc": 687,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 12 (recommended: < 10)",
-            "value": 12,
-            "ratio": 0.6
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 687 lines (recommended: < 300)",
-            "value": 687,
-            "ratio": 2.29
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 14
-      },
-      {
-        "path": "src/testRunner/unittests/services/transpile.ts",
-        "complexity": 16,
-        "duplication": 16,
-        "functionCount": 10,
-        "loc": 574,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 16 (recommended: < 10)",
-            "value": 16,
-            "ratio": 0.8
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 574 lines (recommended: < 300)",
-            "value": 574,
-            "ratio": 1.9133333333333333
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 18
-      },
-      {
-        "path": "src/testRunner/unittests/services/utilities.ts",
-        "complexity": 2,
-        "duplication": 0,
-        "functionCount": 4,
-        "loc": 20,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 3
-      },
-      {
-        "path": "src/testRunner/unittests/sys/symlinkWatching.ts",
-        "complexity": 67,
-        "duplication": 15,
-        "functionCount": 75,
-        "loc": 785,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 67 (recommended: < 20)",
-            "value": 67,
-            "ratio": 3.35
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 785 lines (recommended: < 300)",
-            "value": 785,
-            "ratio": 2.6166666666666667
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 69
       },
       {
         "path": "src/testRunner/unittests/helpers/alternateResult.ts",
@@ -7527,7 +7277,7 @@
             "severity": "high",
             "message": "Large file: 487 lines (recommended: < 300)",
             "value": 487,
-            "ratio": 1.6233333333333333
+            "ratio": 1.62
           }
         ],
         "fileType": "production",
@@ -7601,7 +7351,7 @@
             "severity": "medium",
             "message": "File getting large: 233 lines",
             "value": 233,
-            "ratio": 0.7766666666666666
+            "ratio": 0.78
           }
         ],
         "fileType": "production",
@@ -7627,7 +7377,7 @@
             "severity": "medium",
             "message": "File getting large: 274 lines",
             "value": 274,
-            "ratio": 0.9133333333333333
+            "ratio": 0.91
           }
         ],
         "fileType": "production",
@@ -7745,7 +7495,7 @@
             "severity": "high",
             "message": "Large file: 458 lines (recommended: < 300)",
             "value": 458,
-            "ratio": 1.5266666666666666
+            "ratio": 1.53
           }
         ],
         "fileType": "production",
@@ -7764,7 +7514,7 @@
             "severity": "medium",
             "message": "File getting large: 265 lines",
             "value": 265,
-            "ratio": 0.8833333333333333
+            "ratio": 0.88
           }
         ],
         "fileType": "production",
@@ -7790,7 +7540,7 @@
             "severity": "high",
             "message": "Large file: 592 lines (recommended: < 300)",
             "value": 592,
-            "ratio": 1.9733333333333334
+            "ratio": 1.97
           }
         ],
         "fileType": "production",
@@ -7842,12 +7592,421 @@
             "severity": "high",
             "message": "Large file: 1202 lines (recommended: < 300)",
             "value": 1202,
-            "ratio": 4.006666666666667
+            "ratio": 4.01
           }
         ],
         "fileType": "production",
         "impact": 0,
         "criticismScore": 163
+      },
+      {
+        "path": "src/testRunner/unittests/services/cancellableLanguageServiceOperations.ts",
+        "complexity": 5,
+        "duplication": 13,
+        "functionCount": 20,
+        "loc": 89,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 6
+      },
+      {
+        "path": "src/testRunner/unittests/services/colorization.ts",
+        "complexity": 7,
+        "duplication": 14,
+        "functionCount": 53,
+        "loc": 276,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 276 lines",
+            "value": 276,
+            "ratio": 0.92
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 8.5
+      },
+      {
+        "path": "src/testRunner/unittests/services/convertToAsyncFunction.ts",
+        "complexity": 16,
+        "duplication": 11,
+        "functionCount": 18,
+        "loc": 1842,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 16 (recommended: < 10)",
+            "value": 16,
+            "ratio": 0.8
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 1842 lines (recommended: < 300)",
+            "value": 1842,
+            "ratio": 6.14
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 18
+      },
+      {
+        "path": "src/testRunner/unittests/services/documentRegistry.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 6,
+        "loc": 46,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/testRunner/unittests/services/hostNewLineSupport.ts",
+        "complexity": 8,
+        "duplication": 5,
+        "functionCount": 19,
+        "loc": 69,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 9
+      },
+      {
+        "path": "src/testRunner/unittests/services/languageService.ts",
+        "complexity": 8,
+        "duplication": 12,
+        "functionCount": 51,
+        "loc": 253,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 253 lines",
+            "value": 253,
+            "ratio": 0.84
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 9.5
+      },
+      {
+        "path": "src/testRunner/unittests/services/organizeImports.ts",
+        "complexity": 20,
+        "duplication": 20,
+        "functionCount": 60,
+        "loc": 1067,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 20 (recommended: < 10)",
+            "value": 20,
+            "ratio": 1
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 1067 lines (recommended: < 300)",
+            "value": 1067,
+            "ratio": 3.56
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 22
+      },
+      {
+        "path": "src/testRunner/unittests/services/patternMatcher.ts",
+        "complexity": 1,
+        "duplication": 24,
+        "functionCount": 89,
+        "loc": 260,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 260 lines",
+            "value": 260,
+            "ratio": 0.87
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2.5
+      },
+      {
+        "path": "src/testRunner/unittests/services/preProcessFile.ts",
+        "complexity": 2,
+        "duplication": 42,
+        "functionCount": 45,
+        "loc": 738,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 738 lines (recommended: < 300)",
+            "value": 738,
+            "ratio": 2.46
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3.5
+      },
+      {
+        "path": "src/testRunner/unittests/services/textChanges.ts",
+        "complexity": 12,
+        "duplication": 15,
+        "functionCount": 101,
+        "loc": 687,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 12 (recommended: < 10)",
+            "value": 12,
+            "ratio": 0.6
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 687 lines (recommended: < 300)",
+            "value": 687,
+            "ratio": 2.29
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 14
+      },
+      {
+        "path": "src/testRunner/unittests/services/transpile.ts",
+        "complexity": 16,
+        "duplication": 16,
+        "functionCount": 10,
+        "loc": 574,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 16 (recommended: < 10)",
+            "value": 16,
+            "ratio": 0.8
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 574 lines (recommended: < 300)",
+            "value": 574,
+            "ratio": 1.91
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 18
+      },
+      {
+        "path": "src/testRunner/unittests/services/utilities.ts",
+        "complexity": 2,
+        "duplication": 0,
+        "functionCount": 4,
+        "loc": 20,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/testRunner/unittests/sys/symlinkWatching.ts",
+        "complexity": 67,
+        "duplication": 15,
+        "functionCount": 75,
+        "loc": 785,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 67 (recommended: < 20)",
+            "value": 67,
+            "ratio": 3.35
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 785 lines (recommended: < 300)",
+            "value": 785,
+            "ratio": 2.62
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 69
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/configFileErrors.ts",
+        "complexity": 3,
+        "duplication": 70,
+        "functionCount": 11,
+        "loc": 71,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/demo.ts",
+        "complexity": 1,
+        "duplication": 40,
+        "functionCount": 7,
+        "loc": 57,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/extends.ts",
+        "complexity": 1,
+        "duplication": 27,
+        "functionCount": 2,
+        "loc": 14,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/libraryResolution.ts",
+        "complexity": 1,
+        "duplication": 9,
+        "functionCount": 2,
+        "loc": 13,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/moduleResolution.ts",
+        "complexity": 1,
+        "duplication": 73,
+        "functionCount": 18,
+        "loc": 223,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 223 lines",
+            "value": 223,
+            "ratio": 0.74
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2.5
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/noEmit.ts",
+        "complexity": 2,
+        "duplication": 46,
+        "functionCount": 7,
+        "loc": 41,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/noEmitOnError.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 4,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/programUpdates.ts",
+        "complexity": 2,
+        "duplication": 39,
+        "functionCount": 94,
+        "loc": 787,
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 787 lines (recommended: < 300)",
+            "value": 787,
+            "ratio": 2.62
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3.5
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/projectsBuilding.ts",
+        "complexity": 4,
+        "duplication": 53,
+        "functionCount": 38,
+        "loc": 198,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 5
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/publicApi.ts",
+        "complexity": 3,
+        "duplication": 49,
+        "functionCount": 12,
+        "loc": 111,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/reexport.ts",
+        "complexity": 1,
+        "duplication": 53,
+        "functionCount": 6,
+        "loc": 65,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/roots.ts",
+        "complexity": 1,
+        "duplication": 8,
+        "functionCount": 3,
+        "loc": 16,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/testRunner/unittests/tsbuildWatch/watchEnvironment.ts",
+        "complexity": 2,
+        "duplication": 36,
+        "functionCount": 16,
+        "loc": 118,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
       },
       {
         "path": "src/testRunner/unittests/tsbuild/amdModulesWithOut.ts",
@@ -7883,7 +8042,7 @@
             "severity": "high",
             "message": "Large file: 305 lines (recommended: < 300)",
             "value": 305,
-            "ratio": 1.0166666666666666
+            "ratio": 1.02
           }
         ],
         "fileType": "production",
@@ -8196,7 +8355,7 @@
             "severity": "high",
             "message": "Large file: 565 lines (recommended: < 300)",
             "value": 565,
-            "ratio": 1.8833333333333333
+            "ratio": 1.88
           }
         ],
         "fileType": "production",
@@ -8213,165 +8372,6 @@
         "fileType": "production",
         "impact": 0,
         "criticismScore": 2
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/configFileErrors.ts",
-        "complexity": 3,
-        "duplication": 70,
-        "functionCount": 11,
-        "loc": 71,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 4
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/demo.ts",
-        "complexity": 1,
-        "duplication": 40,
-        "functionCount": 7,
-        "loc": 57,
-        "issues": [],
-        "fileType": "example",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/extends.ts",
-        "complexity": 1,
-        "duplication": 27,
-        "functionCount": 2,
-        "loc": 14,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/libraryResolution.ts",
-        "complexity": 1,
-        "duplication": 9,
-        "functionCount": 2,
-        "loc": 13,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/moduleResolution.ts",
-        "complexity": 1,
-        "duplication": 73,
-        "functionCount": 18,
-        "loc": 223,
-        "issues": [
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 223 lines",
-            "value": 223,
-            "ratio": 0.7433333333333333
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2.5
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/noEmit.ts",
-        "complexity": 2,
-        "duplication": 46,
-        "functionCount": 7,
-        "loc": 41,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 3
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/noEmitOnError.ts",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 1,
-        "loc": 4,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/programUpdates.ts",
-        "complexity": 2,
-        "duplication": 39,
-        "functionCount": 94,
-        "loc": 787,
-        "issues": [
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 787 lines (recommended: < 300)",
-            "value": 787,
-            "ratio": 2.6233333333333335
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 3.5
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/projectsBuilding.ts",
-        "complexity": 4,
-        "duplication": 53,
-        "functionCount": 38,
-        "loc": 198,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 5
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/publicApi.ts",
-        "complexity": 3,
-        "duplication": 49,
-        "functionCount": 12,
-        "loc": 111,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 4
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/reexport.ts",
-        "complexity": 1,
-        "duplication": 53,
-        "functionCount": 6,
-        "loc": 65,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/roots.ts",
-        "complexity": 1,
-        "duplication": 8,
-        "functionCount": 3,
-        "loc": 16,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "src/testRunner/unittests/tsbuildWatch/watchEnvironment.ts",
-        "complexity": 2,
-        "duplication": 36,
-        "functionCount": 16,
-        "loc": 118,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 3
       },
       {
         "path": "src/testRunner/unittests/tsc/cancellationToken.ts",
@@ -8418,7 +8418,7 @@
             "severity": "high",
             "message": "Large file: 353 lines (recommended: < 300)",
             "value": 353,
-            "ratio": 1.1766666666666667
+            "ratio": 1.18
           }
         ],
         "fileType": "production",
@@ -8459,7 +8459,7 @@
             "severity": "high",
             "message": "Large file: 629 lines (recommended: < 300)",
             "value": 629,
-            "ratio": 2.0966666666666667
+            "ratio": 2.1
           }
         ],
         "fileType": "production",
@@ -8555,7 +8555,7 @@
             "severity": "medium",
             "message": "File getting large: 209 lines",
             "value": 209,
-            "ratio": 0.6966666666666667
+            "ratio": 0.7
           }
         ],
         "fileType": "production",
@@ -8757,7 +8757,7 @@
             "severity": "high",
             "message": "Large file: 2399 lines (recommended: < 300)",
             "value": 2399,
-            "ratio": 7.996666666666667
+            "ratio": 8
           }
         ],
         "fileType": "production",
@@ -8795,7 +8795,7 @@
             "severity": "high",
             "message": "Large file: 734 lines (recommended: < 300)",
             "value": 734,
-            "ratio": 2.4466666666666668
+            "ratio": 2.45
           }
         ],
         "fileType": "production",
@@ -8933,7 +8933,7 @@
             "severity": "high",
             "message": "Large file: 548 lines (recommended: < 300)",
             "value": 548,
-            "ratio": 1.8266666666666667
+            "ratio": 1.83
           }
         ],
         "fileType": "production",
@@ -8974,7 +8974,7 @@
             "severity": "high",
             "message": "Large file: 944 lines (recommended: < 300)",
             "value": 944,
-            "ratio": 3.1466666666666665
+            "ratio": 3.15
           }
         ],
         "fileType": "production",
@@ -8993,7 +8993,7 @@
             "severity": "high",
             "message": "Large file: 407 lines (recommended: < 300)",
             "value": 407,
-            "ratio": 1.3566666666666667
+            "ratio": 1.36
           }
         ],
         "fileType": "production",
@@ -9012,7 +9012,7 @@
             "severity": "medium",
             "message": "File getting large: 253 lines",
             "value": 253,
-            "ratio": 0.8433333333333334
+            "ratio": 0.84
           }
         ],
         "fileType": "production",
@@ -9068,7 +9068,7 @@
             "severity": "high",
             "message": "Large file: 368 lines (recommended: < 300)",
             "value": 368,
-            "ratio": 1.2266666666666666
+            "ratio": 1.23
           }
         ],
         "fileType": "production",
@@ -9128,7 +9128,7 @@
             "severity": "high",
             "message": "Large file: 325 lines (recommended: < 300)",
             "value": 325,
-            "ratio": 1.0833333333333333
+            "ratio": 1.08
           }
         ],
         "fileType": "production",
@@ -9158,7 +9158,7 @@
             "severity": "high",
             "message": "Large file: 734 lines (recommended: < 300)",
             "value": 734,
-            "ratio": 2.4466666666666668
+            "ratio": 2.45
           }
         ],
         "fileType": "production",
@@ -9188,7 +9188,7 @@
             "severity": "high",
             "message": "Large file: 347 lines (recommended: < 300)",
             "value": 347,
-            "ratio": 1.1566666666666667
+            "ratio": 1.16
           }
         ],
         "fileType": "production",
@@ -9236,7 +9236,7 @@
             "severity": "medium",
             "message": "File getting large: 283 lines",
             "value": 283,
-            "ratio": 0.9433333333333334
+            "ratio": 0.94
           }
         ],
         "fileType": "production",
@@ -9321,7 +9321,7 @@
             "severity": "high",
             "message": "Large file: 307 lines (recommended: < 300)",
             "value": 307,
-            "ratio": 1.0233333333333334
+            "ratio": 1.02
           }
         ],
         "fileType": "production",
@@ -9406,7 +9406,7 @@
             "severity": "medium",
             "message": "File getting large: 262 lines",
             "value": 262,
-            "ratio": 0.8733333333333333
+            "ratio": 0.87
           }
         ],
         "fileType": "production",
@@ -9458,7 +9458,7 @@
             "severity": "medium",
             "message": "File getting large: 236 lines",
             "value": 236,
-            "ratio": 0.7866666666666666
+            "ratio": 0.79
           }
         ],
         "fileType": "production",
@@ -9567,7 +9567,7 @@
             "severity": "high",
             "message": "Large file: 1430 lines (recommended: < 300)",
             "value": 1430,
-            "ratio": 4.766666666666667
+            "ratio": 4.77
           }
         ],
         "fileType": "production",
@@ -9660,7 +9660,7 @@
             "severity": "high",
             "message": "Large file: 1381 lines (recommended: < 300)",
             "value": 1381,
-            "ratio": 4.6033333333333335
+            "ratio": 4.6
           }
         ],
         "fileType": "production",
@@ -9679,7 +9679,7 @@
             "severity": "medium",
             "message": "File getting large: 235 lines",
             "value": 235,
-            "ratio": 0.7833333333333333
+            "ratio": 0.78
           }
         ],
         "fileType": "production",
@@ -9780,7 +9780,7 @@
             "severity": "high",
             "message": "Large file: 608 lines (recommended: < 300)",
             "value": 608,
-            "ratio": 2.026666666666667
+            "ratio": 2.03
           }
         ],
         "fileType": "production",
@@ -9821,7 +9821,7 @@
             "severity": "medium",
             "message": "File getting large: 250 lines",
             "value": 250,
-            "ratio": 0.8333333333333334
+            "ratio": 0.83
           }
         ],
         "fileType": "production",
@@ -9954,7 +9954,7 @@
             "severity": "medium",
             "message": "File getting large: 268 lines",
             "value": 268,
-            "ratio": 0.8933333333333333
+            "ratio": 0.89
           }
         ],
         "fileType": "production",
@@ -9973,7 +9973,7 @@
             "severity": "high",
             "message": "Large file: 553 lines (recommended: < 300)",
             "value": 553,
-            "ratio": 1.8433333333333333
+            "ratio": 1.84
           }
         ],
         "fileType": "production",
@@ -9992,7 +9992,7 @@
             "severity": "high",
             "message": "Large file: 329 lines (recommended: < 300)",
             "value": 329,
-            "ratio": 1.0966666666666667
+            "ratio": 1.1
           }
         ],
         "fileType": "production",
@@ -10011,7 +10011,7 @@
             "severity": "high",
             "message": "Large file: 647 lines (recommended: < 300)",
             "value": 647,
-            "ratio": 2.1566666666666667
+            "ratio": 2.16
           }
         ],
         "fileType": "production",
@@ -10049,7 +10049,7 @@
             "severity": "high",
             "message": "Large file: 457 lines (recommended: < 300)",
             "value": 457,
-            "ratio": 1.5233333333333334
+            "ratio": 1.52
           }
         ],
         "fileType": "production",
@@ -10112,7 +10112,7 @@
             "severity": "high",
             "message": "Large file: 332 lines (recommended: < 300)",
             "value": 332,
-            "ratio": 1.1066666666666667
+            "ratio": 1.11
           }
         ],
         "fileType": "production",
@@ -10151,7 +10151,7 @@
             "severity": "high",
             "message": "Large file: 43108 lines (recommended: < 300)",
             "value": 43108,
-            "ratio": 143.69333333333333
+            "ratio": 143.69
           }
         ],
         "fileType": "production",
@@ -10177,7 +10177,7 @@
             "severity": "high",
             "message": "Large file: 9124 lines (recommended: < 300)",
             "value": 9124,
-            "ratio": 30.413333333333334
+            "ratio": 30.41
           }
         ],
         "fileType": "production",
@@ -10203,7 +10203,7 @@
             "severity": "high",
             "message": "Large file: 8227 lines (recommended: < 300)",
             "value": 8227,
-            "ratio": 27.423333333333332
+            "ratio": 27.42
           }
         ],
         "fileType": "production",
@@ -10255,7 +10255,7 @@
             "severity": "high",
             "message": "Large file: 5252 lines (recommended: < 300)",
             "value": 5252,
-            "ratio": 17.506666666666668
+            "ratio": 17.51
           }
         ],
         "fileType": "production",
@@ -10287,9 +10287,9 @@
       "maintainability": 19,
       "overall": 38
     },
-    "complexityStdDev": 687.3050468614565,
+    "complexityStdDev": 687.31,
     "score": 38,
     "grade": "F"
   },
-  "duration": 4655
+  "duration": 4754
 }

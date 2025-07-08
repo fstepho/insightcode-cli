@@ -154,9 +154,9 @@
       "maintainability": 90,
       "overall": 82
     },
-    "complexityStdDev": 8.699856320652657,
+    "complexityStdDev": 8.7,
     "score": 82,
     "grade": "B"
   },
-  "duration": 661
+  "duration": 638
 }

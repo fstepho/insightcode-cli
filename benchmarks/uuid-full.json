@@ -1,0 +1,1048 @@
+{
+  "project": "uuid",
+  "repo": "https://github.com/uuidjs/uuid.git",
+  "type": "utility library",
+  "stars": "15k",
+  "stableVersion": "v11.1.0",
+  "description": "UUID generation library",
+  "category": "small",
+  "emblematicFiles": {
+    "coreFiles": [
+      "dist/index.js",
+      "src/index.js"
+    ],
+    "architecturalFiles": [
+      "src/v1.js",
+      "src/v4.js"
+    ],
+    "performanceCriticalFiles": [
+      "src/rng.js"
+    ],
+    "complexAlgorithmFiles": [
+      "src/v3.js",
+      "src/v5.js"
+    ]
+  },
+  "analysis": {
+    "files": [
+      {
+        "path": "prettier.config.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 7,
+        "issues": [],
+        "fileType": "utility",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "wdio.conf.js",
+        "complexity": 6,
+        "duplication": 18,
+        "functionCount": 0,
+        "loc": 82,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 7
+      },
+      {
+        "path": "src/index.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 15,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/max.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/md5-browser.ts",
+        "complexity": 5,
+        "duplication": 1,
+        "functionCount": 12,
+        "loc": 135,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 6
+      },
+      {
+        "path": "src/md5.ts",
+        "complexity": 3,
+        "duplication": 83,
+        "functionCount": 1,
+        "loc": 10,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/native-browser.ts",
+        "complexity": 3,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 3,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/native.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/nil.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/parse.ts",
+        "complexity": 2,
+        "duplication": 17,
+        "functionCount": 1,
+        "loc": 26,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/regex.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/rng-browser.ts",
+        "complexity": 4,
+        "duplication": 8,
+        "functionCount": 1,
+        "loc": 13,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 5
+      },
+      {
+        "path": "src/rng.ts",
+        "complexity": 2,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 10,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/sha1-browser.ts",
+        "complexity": 11,
+        "duplication": 5,
+        "functionCount": 3,
+        "loc": 91,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 11 (recommended: < 10)",
+            "value": 11,
+            "ratio": 0.55
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 12.5
+      },
+      {
+        "path": "src/sha1.ts",
+        "complexity": 3,
+        "duplication": 83,
+        "functionCount": 1,
+        "loc": 10,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/stringify.ts",
+        "complexity": 3,
+        "duplication": 9,
+        "functionCount": 2,
+        "loc": 37,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/types.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 21,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/uuid-bin.ts",
+        "complexity": 13,
+        "duplication": 16,
+        "functionCount": 1,
+        "loc": 72,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 13 (recommended: < 10)",
+            "value": 13,
+            "ratio": 0.65
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 14.5
+      },
+      {
+        "path": "src/v1.ts",
+        "complexity": 17,
+        "duplication": 14,
+        "functionCount": 5,
+        "loc": 120,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 17 (recommended: < 10)",
+            "value": 17,
+            "ratio": 0.85
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 18.5
+      },
+      {
+        "path": "src/v1ToV6.ts",
+        "complexity": 3,
+        "duplication": 3,
+        "functionCount": 4,
+        "loc": 30,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/v3.ts",
+        "complexity": 1,
+        "duplication": 70,
+        "functionCount": 3,
+        "loc": 27,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/v35.ts",
+        "complexity": 9,
+        "duplication": 7,
+        "functionCount": 2,
+        "loc": 45,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 10
+      },
+      {
+        "path": "src/v4.ts",
+        "complexity": 11,
+        "duplication": 0,
+        "functionCount": 3,
+        "loc": 38,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 11 (recommended: < 10)",
+            "value": 11,
+            "ratio": 0.55
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 12.5
+      },
+      {
+        "path": "src/v5.ts",
+        "complexity": 1,
+        "duplication": 70,
+        "functionCount": 3,
+        "loc": 27,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/v6.ts",
+        "complexity": 3,
+        "duplication": 11,
+        "functionCount": 3,
+        "loc": 28,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/v6ToV1.ts",
+        "complexity": 3,
+        "duplication": 3,
+        "functionCount": 4,
+        "loc": 30,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/v7.ts",
+        "complexity": 8,
+        "duplication": 9,
+        "functionCount": 5,
+        "loc": 83,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 9
+      },
+      {
+        "path": "src/validate.ts",
+        "complexity": 2,
+        "duplication": 0,
+        "functionCount": 1,
+        "loc": 5,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/version.ts",
+        "complexity": 2,
+        "duplication": 25,
+        "functionCount": 1,
+        "loc": 8,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "test/browser/browser.spec.js",
+        "complexity": 3,
+        "duplication": 21,
+        "functionCount": 35,
+        "loc": 103,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/test/parse.test.ts",
+        "complexity": 3,
+        "duplication": 0,
+        "functionCount": 12,
+        "loc": 57,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/test/rng.test.ts",
+        "complexity": 2,
+        "duplication": 0,
+        "functionCount": 2,
+        "loc": 12,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/test/stringify.test.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 6,
+        "loc": 38,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "src/test/test_constants.ts",
+        "complexity": 8,
+        "duplication": 15,
+        "functionCount": 0,
+        "loc": 90,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 9
+      },
+      {
+        "path": "src/test/v1.test.ts",
+        "complexity": 4,
+        "duplication": 7,
+        "functionCount": 18,
+        "loc": 158,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 5
+      },
+      {
+        "path": "src/test/v35.test.ts",
+        "complexity": 2,
+        "duplication": 5,
+        "functionCount": 35,
+        "loc": 209,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/test/v4.test.ts",
+        "complexity": 3,
+        "duplication": 15,
+        "functionCount": 18,
+        "loc": 113,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "src/test/v6.test.ts",
+        "complexity": 2,
+        "duplication": 1,
+        "functionCount": 8,
+        "loc": 74,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/test/v7.test.ts",
+        "complexity": 7,
+        "duplication": 13,
+        "functionCount": 28,
+        "loc": 246,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 8
+      },
+      {
+        "path": "src/test/validate.test.ts",
+        "complexity": 2,
+        "duplication": 0,
+        "functionCount": 2,
+        "loc": 15,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "src/test/version.test.ts",
+        "complexity": 3,
+        "duplication": 0,
+        "functionCount": 2,
+        "loc": 17,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "examples/benchmark/benchmark.js",
+        "complexity": 2,
+        "duplication": 4,
+        "functionCount": 27,
+        "loc": 106,
+        "issues": [],
+        "fileType": "example",
+        "impact": 2,
+        "criticismScore": 7
+      },
+      {
+        "path": "examples/benchmark/browser.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 5,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/benchmark/node.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 4,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-esmodules/example.js",
+        "complexity": 1,
+        "duplication": 82,
+        "functionCount": 0,
+        "loc": 63,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/example-all-require.js",
+        "complexity": 1,
+        "duplication": 77,
+        "functionCount": 1,
+        "loc": 62,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/example-all.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 1,
+        "loc": 62,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/example-v1.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 1,
+        "loc": 6,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/example-v4.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 1,
+        "loc": 6,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/example-v7.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 1,
+        "loc": 6,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/size-v1.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/size-v3.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/size-v4.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/size-v5.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/size-v6.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/size-v7.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-webpack/webpack.config.js",
+        "complexity": 1,
+        "duplication": 25,
+        "functionCount": 0,
+        "loc": 24,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/node-jest/jsdom.test.js",
+        "complexity": 1,
+        "duplication": 83,
+        "functionCount": 2,
+        "loc": 9,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/node-jest/node.test.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 2,
+        "loc": 9,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/node-webpack/example-all.js",
+        "complexity": 1,
+        "duplication": 41,
+        "functionCount": 0,
+        "loc": 20,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/node-webpack/example-v1.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/node-webpack/example-v4.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/node-webpack/example-v7.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/node-webpack/webpack.config.js",
+        "complexity": 1,
+        "duplication": 25,
+        "functionCount": 0,
+        "loc": 16,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/typescript/buffer.test.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 4,
+        "issues": [],
+        "fileType": "test",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/typescript/index.ts",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/node-commonjs/example.js",
+        "complexity": 1,
+        "duplication": 88,
+        "functionCount": 0,
+        "loc": 59,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/utils/testpage.js",
+        "complexity": 4,
+        "duplication": 0,
+        "functionCount": 4,
+        "loc": 36,
+        "issues": [],
+        "fileType": "example",
+        "impact": 9,
+        "criticismScore": 23
+      },
+      {
+        "path": "examples/browser-rollup/example-all.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 1,
+        "loc": 62,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-rollup/example-v1.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 1,
+        "loc": 6,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-rollup/example-v4.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 1,
+        "loc": 6,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-rollup/example-v7.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 1,
+        "loc": 6,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-rollup/rollup.config.js",
+        "complexity": 1,
+        "duplication": 72,
+        "functionCount": 0,
+        "loc": 89,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-rollup/size-v1.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-rollup/size-v3.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-rollup/size-v4.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-rollup/size-v5.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-rollup/size-v6.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "examples/browser-rollup/size-v7.js",
+        "complexity": 1,
+        "duplication": 0,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "example",
+        "impact": 0,
+        "criticismScore": 2
+      }
+    ],
+    "topFiles": [
+      {
+        "path": "examples/utils/testpage.js",
+        "complexity": 4,
+        "duplication": 0,
+        "functionCount": 4,
+        "loc": 36,
+        "issues": [],
+        "fileType": "example",
+        "impact": 9,
+        "criticismScore": 23
+      },
+      {
+        "path": "src/v1.ts",
+        "complexity": 17,
+        "duplication": 14,
+        "functionCount": 5,
+        "loc": 120,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 17 (recommended: < 10)",
+            "value": 17,
+            "ratio": 0.85
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 18.5
+      },
+      {
+        "path": "src/uuid-bin.ts",
+        "complexity": 13,
+        "duplication": 16,
+        "functionCount": 1,
+        "loc": 72,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 13 (recommended: < 10)",
+            "value": 13,
+            "ratio": 0.65
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 14.5
+      },
+      {
+        "path": "src/sha1-browser.ts",
+        "complexity": 11,
+        "duplication": 5,
+        "functionCount": 3,
+        "loc": 91,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 11 (recommended: < 10)",
+            "value": 11,
+            "ratio": 0.55
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 12.5
+      },
+      {
+        "path": "src/v4.ts",
+        "complexity": 11,
+        "duplication": 0,
+        "functionCount": 3,
+        "loc": 38,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 11 (recommended: < 10)",
+            "value": 11,
+            "ratio": 0.55
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 12.5
+      }
+    ],
+    "silentKillers": [],
+    "project": {
+      "name": "uuid",
+      "path": "temp-analysis/uuid",
+      "packageJson": {
+        "name": "uuid",
+        "version": "11.1.0",
+        "description": "RFC9562 UUIDs"
+      }
+    },
+    "summary": {
+      "totalFiles": 79,
+      "totalLines": 2808,
+      "avgComplexity": 2.6,
+      "avgDuplication": 24.4,
+      "avgFunctions": 3.4,
+      "avgLoc": 36
+    },
+    "scores": {
+      "complexity": 96,
+      "duplication": 73,
+      "maintainability": 97,
+      "overall": 89
+    },
+    "complexityStdDev": 3.02,
+    "score": 89,
+    "grade": "B"
+  },
+  "duration": 698
+}

@@ -67,7 +67,7 @@
             "severity": "medium",
             "message": "File getting large: 290 lines",
             "value": 290,
-            "ratio": 0.9666666666666667
+            "ratio": 0.97
           }
         ],
         "fileType": "production",
@@ -93,7 +93,7 @@
             "severity": "medium",
             "message": "File getting large: 235 lines",
             "value": 235,
-            "ratio": 0.7833333333333333
+            "ratio": 0.78
           }
         ],
         "fileType": "production",
@@ -123,7 +123,7 @@
             "severity": "medium",
             "message": "File getting large: 290 lines",
             "value": 290,
-            "ratio": 0.725
+            "ratio": 0.72
           }
         ],
         "fileType": "utility",
@@ -725,61 +725,6 @@
         "criticismScore": 2
       },
       {
-        "path": "e2e/global-setup-custom-transform/index.js",
-        "complexity": 1,
-        "duplication": 100,
-        "functionCount": 0,
-        "loc": 1,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "e2e/global-setup-custom-transform/setup.js",
-        "complexity": 1,
-        "duplication": 100,
-        "functionCount": 2,
-        "loc": 14,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "e2e/global-setup-custom-transform/transformer.js",
-        "complexity": 2,
-        "duplication": 25,
-        "functionCount": 1,
-        "loc": 10,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 3
-      },
-      {
-        "path": "e2e/global-setup-esm/index.js",
-        "complexity": 1,
-        "duplication": 100,
-        "functionCount": 0,
-        "loc": 1,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "e2e/global-setup-esm/setup.js",
-        "complexity": 1,
-        "duplication": 100,
-        "functionCount": 2,
-        "loc": 14,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
         "path": "e2e/global-setup/babel.config.js",
         "complexity": 1,
         "duplication": 100,
@@ -851,6 +796,61 @@
         "duplication": 100,
         "functionCount": 1,
         "loc": 4,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "e2e/global-setup-custom-transform/index.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "e2e/global-setup-custom-transform/setup.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 2,
+        "loc": 14,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "e2e/global-setup-custom-transform/transformer.js",
+        "complexity": 2,
+        "duplication": 25,
+        "functionCount": 1,
+        "loc": 10,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 3
+      },
+      {
+        "path": "e2e/global-setup-esm/index.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "e2e/global-setup-esm/setup.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 2,
+        "loc": 14,
         "issues": [],
         "fileType": "production",
         "impact": 0,
@@ -1330,28 +1330,6 @@
         "criticismScore": 2
       },
       {
-        "path": "e2e/require-main-after-create-require/child.js",
-        "complexity": 1,
-        "duplication": 75,
-        "functionCount": 0,
-        "loc": 1,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "e2e/require-main-after-create-require/empty.js",
-        "complexity": 1,
-        "duplication": 100,
-        "functionCount": 0,
-        "loc": 0,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
         "path": "e2e/require-main-isolate-modules/child.js",
         "complexity": 1,
         "duplication": 100,
@@ -1368,6 +1346,28 @@
         "duplication": 67,
         "functionCount": 1,
         "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "e2e/require-main-after-create-require/child.js",
+        "complexity": 1,
+        "duplication": 75,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "e2e/require-main-after-create-require/empty.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 0,
+        "loc": 0,
         "issues": [],
         "fileType": "production",
         "impact": 0,
@@ -1539,6 +1539,17 @@
         "criticismScore": 2
       },
       {
+        "path": "e2e/resolve-get-paths/babel.config.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "utility",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
         "path": "e2e/resolve-conditions/custom-env-conditions-method-override.js",
         "complexity": 1,
         "duplication": 56,
@@ -1557,17 +1568,6 @@
         "loc": 5,
         "issues": [],
         "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "e2e/resolve-get-paths/babel.config.js",
-        "complexity": 1,
-        "duplication": 100,
-        "functionCount": 0,
-        "loc": 1,
-        "issues": [],
-        "fileType": "utility",
         "impact": 0,
         "criticismScore": 2
       },
@@ -1858,17 +1858,6 @@
         "criticismScore": 3
       },
       {
-        "path": "e2e/test-environment-circus-async/CircusAsyncHandleTestEventEnvironment.js",
-        "complexity": 4,
-        "duplication": 15,
-        "functionCount": 4,
-        "loc": 24,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 5
-      },
-      {
         "path": "e2e/test-environment-esm/EnvESM.js",
         "complexity": 1,
         "duplication": 22,
@@ -1878,6 +1867,17 @@
         "fileType": "production",
         "impact": 0,
         "criticismScore": 2
+      },
+      {
+        "path": "e2e/test-environment-circus-async/CircusAsyncHandleTestEventEnvironment.js",
+        "complexity": 4,
+        "duplication": 15,
+        "functionCount": 4,
+        "loc": 24,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 5
       },
       {
         "path": "e2e/test-environment-run-script/EnvUsingRunScript.js",
@@ -2430,17 +2430,6 @@
         "criticismScore": 2
       },
       {
-        "path": "e2e/custom-resolver/__mocks__/manualMock.js",
-        "complexity": 1,
-        "duplication": 100,
-        "functionCount": 0,
-        "loc": 1,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
         "path": "e2e/custom-reporters/reporters/AssertionCountsReporter.js",
         "complexity": 3,
         "duplication": 29,
@@ -2494,6 +2483,17 @@
         "fileType": "production",
         "impact": 0,
         "criticismScore": 4
+      },
+      {
+        "path": "e2e/custom-resolver/__mocks__/manualMock.js",
+        "complexity": 1,
+        "duplication": 100,
+        "functionCount": 0,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
       },
       {
         "path": "e2e/esm-config/js/jest.config.js",
@@ -3391,7 +3391,7 @@
             "severity": "high",
             "message": "Large file: 560 lines (recommended: < 300)",
             "value": 560,
-            "ratio": 1.8666666666666667
+            "ratio": 1.87
           }
         ],
         "fileType": "production",
@@ -3465,7 +3465,7 @@
             "severity": "medium",
             "message": "File getting large: 245 lines",
             "value": 245,
-            "ratio": 0.8166666666666667
+            "ratio": 0.82
           }
         ],
         "fileType": "production",
@@ -3502,7 +3502,7 @@
             "severity": "high",
             "message": "Large file: 337 lines (recommended: < 300)",
             "value": 337,
-            "ratio": 1.1233333333333333
+            "ratio": 1.12
           }
         ],
         "fileType": "production",
@@ -3643,7 +3643,7 @@
             "severity": "high",
             "message": "Large file: 575 lines (recommended: < 300)",
             "value": 575,
-            "ratio": 1.9166666666666667
+            "ratio": 1.92
           }
         ],
         "fileType": "production",
@@ -3669,7 +3669,7 @@
             "severity": "high",
             "message": "Large file: 335 lines (recommended: < 300)",
             "value": 335,
-            "ratio": 1.1166666666666667
+            "ratio": 1.12
           }
         ],
         "fileType": "production",
@@ -3706,7 +3706,7 @@
             "severity": "high",
             "message": "Large file: 394 lines (recommended: < 300)",
             "value": 394,
-            "ratio": 1.3133333333333332
+            "ratio": 1.31
           }
         ],
         "fileType": "production",
@@ -3743,7 +3743,7 @@
             "severity": "high",
             "message": "Large file: 824 lines (recommended: < 300)",
             "value": 824,
-            "ratio": 2.7466666666666666
+            "ratio": 2.75
           }
         ],
         "fileType": "production",
@@ -3788,7 +3788,7 @@
             "severity": "high",
             "message": "Large file: 1090 lines (recommended: < 300)",
             "value": 1090,
-            "ratio": 3.6333333333333333
+            "ratio": 3.63
           }
         ],
         "fileType": "production",
@@ -3814,7 +3814,7 @@
             "severity": "high",
             "message": "Large file: 457 lines (recommended: < 300)",
             "value": 457,
-            "ratio": 1.5233333333333334
+            "ratio": 1.52
           }
         ],
         "fileType": "production",
@@ -3911,7 +3911,7 @@
             "severity": "high",
             "message": "Large file: 404 lines (recommended: < 300)",
             "value": 404,
-            "ratio": 1.3466666666666667
+            "ratio": 1.35
           }
         ],
         "fileType": "production",
@@ -4004,6 +4004,73 @@
         "criticismScore": 2
       },
       {
+        "path": "packages/jest-cli/bin/jest.js",
+        "complexity": 3,
+        "duplication": 50,
+        "functionCount": 0,
+        "loc": 8,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 4
+      },
+      {
+        "path": "packages/jest-cli/src/args.ts",
+        "complexity": 19,
+        "duplication": 42,
+        "functionCount": 2,
+        "loc": 764,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "message": "Medium complexity: 19 (recommended: < 10)",
+            "value": 19,
+            "ratio": 0.95
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "message": "Large file: 764 lines (recommended: < 300)",
+            "value": 764,
+            "ratio": 2.55
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 21
+      },
+      {
+        "path": "packages/jest-cli/src/index.ts",
+        "complexity": 1,
+        "duplication": 50,
+        "functionCount": 0,
+        "loc": 2,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
+      },
+      {
+        "path": "packages/jest-cli/src/run.ts",
+        "complexity": 21,
+        "duplication": 9,
+        "functionCount": 8,
+        "loc": 120,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 21 (recommended: < 20)",
+            "value": 21,
+            "ratio": 1.05
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 22.5
+      },
+      {
         "path": "packages/jest-circus/src/eventHandler.ts",
         "complexity": 51,
         "duplication": 7,
@@ -4022,7 +4089,7 @@
             "severity": "medium",
             "message": "File getting large: 271 lines",
             "value": 271,
-            "ratio": 0.9033333333333333
+            "ratio": 0.9
           }
         ],
         "fileType": "production",
@@ -4078,7 +4145,7 @@
             "severity": "medium",
             "message": "File getting large: 223 lines",
             "value": 223,
-            "ratio": 0.7433333333333333
+            "ratio": 0.74
           }
         ],
         "fileType": "production",
@@ -4104,7 +4171,7 @@
             "severity": "medium",
             "message": "File getting large: 262 lines",
             "value": 262,
-            "ratio": 0.8733333333333333
+            "ratio": 0.87
           }
         ],
         "fileType": "production",
@@ -4204,79 +4271,12 @@
             "severity": "high",
             "message": "Large file: 436 lines (recommended: < 300)",
             "value": 436,
-            "ratio": 1.4533333333333334
+            "ratio": 1.45
           }
         ],
         "fileType": "production",
         "impact": 0,
         "criticismScore": 60
-      },
-      {
-        "path": "packages/jest-cli/bin/jest.js",
-        "complexity": 3,
-        "duplication": 50,
-        "functionCount": 0,
-        "loc": 8,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 4
-      },
-      {
-        "path": "packages/jest-cli/src/args.ts",
-        "complexity": 19,
-        "duplication": 42,
-        "functionCount": 2,
-        "loc": 764,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 19 (recommended: < 10)",
-            "value": 19,
-            "ratio": 0.95
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 764 lines (recommended: < 300)",
-            "value": 764,
-            "ratio": 2.546666666666667
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 21
-      },
-      {
-        "path": "packages/jest-cli/src/index.ts",
-        "complexity": 1,
-        "duplication": 50,
-        "functionCount": 0,
-        "loc": 2,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "packages/jest-cli/src/run.ts",
-        "complexity": 21,
-        "duplication": 9,
-        "functionCount": 8,
-        "loc": 120,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 21 (recommended: < 20)",
-            "value": 21,
-            "ratio": 1.05
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 22.5
       },
       {
         "path": "packages/jest-config/src/Defaults.ts",
@@ -4412,7 +4412,7 @@
             "severity": "high",
             "message": "Large file: 355 lines (recommended: < 300)",
             "value": 355,
-            "ratio": 1.1833333333333333
+            "ratio": 1.18
           }
         ],
         "fileType": "production",
@@ -4438,7 +4438,7 @@
             "severity": "high",
             "message": "Large file: 998 lines (recommended: < 300)",
             "value": 998,
-            "ratio": 3.3266666666666667
+            "ratio": 3.33
           }
         ],
         "fileType": "production",
@@ -4634,6 +4634,17 @@
         "criticismScore": 2
       },
       {
+        "path": "packages/jest-create-cache-key-function/src/index.ts",
+        "complexity": 6,
+        "duplication": 3,
+        "functionCount": 6,
+        "loc": 70,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 7
+      },
+      {
         "path": "packages/jest-core/src/FailedTestsCache.ts",
         "complexity": 5,
         "duplication": 6,
@@ -4701,7 +4712,7 @@
             "severity": "high",
             "message": "Large file: 325 lines (recommended: < 300)",
             "value": 325,
-            "ratio": 1.0833333333333333
+            "ratio": 1.08
           }
         ],
         "fileType": "production",
@@ -4727,7 +4738,7 @@
             "severity": "medium",
             "message": "File getting large: 203 lines",
             "value": 203,
-            "ratio": 0.6766666666666666
+            "ratio": 0.68
           }
         ],
         "fileType": "production",
@@ -4775,7 +4786,7 @@
             "severity": "high",
             "message": "Large file: 409 lines (recommended: < 300)",
             "value": 409,
-            "ratio": 1.3633333333333333
+            "ratio": 1.36
           }
         ],
         "fileType": "production",
@@ -4979,7 +4990,7 @@
             "severity": "medium",
             "message": "File getting large: 286 lines",
             "value": 286,
-            "ratio": 0.9533333333333334
+            "ratio": 0.95
           }
         ],
         "fileType": "production",
@@ -5038,23 +5049,12 @@
             "severity": "high",
             "message": "Large file: 508 lines (recommended: < 300)",
             "value": 508,
-            "ratio": 1.6933333333333334
+            "ratio": 1.69
           }
         ],
         "fileType": "production",
         "impact": 0,
         "criticismScore": 62
-      },
-      {
-        "path": "packages/jest-create-cache-key-function/src/index.ts",
-        "complexity": 6,
-        "duplication": 3,
-        "functionCount": 6,
-        "loc": 70,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 7
       },
       {
         "path": "packages/jest-diff/src/cleanupSemantic.ts",
@@ -5075,7 +5075,7 @@
             "severity": "high",
             "message": "Large file: 371 lines (recommended: < 300)",
             "value": 371,
-            "ratio": 1.2366666666666666
+            "ratio": 1.24
           }
         ],
         "fileType": "production",
@@ -5191,7 +5191,7 @@
             "severity": "medium",
             "message": "File getting large: 250 lines",
             "value": 250,
-            "ratio": 0.8333333333333334
+            "ratio": 0.83
           }
         ],
         "fileType": "production",
@@ -5351,7 +5351,7 @@
             "severity": "medium",
             "message": "File getting large: 290 lines",
             "value": 290,
-            "ratio": 0.9666666666666667
+            "ratio": 0.97
           }
         ],
         "fileType": "production",
@@ -5410,7 +5410,7 @@
             "severity": "high",
             "message": "Large file: 503 lines (recommended: < 300)",
             "value": 503,
-            "ratio": 1.6766666666666667
+            "ratio": 1.68
           }
         ],
         "fileType": "production",
@@ -5504,7 +5504,7 @@
             "severity": "medium",
             "message": "File getting large: 224 lines",
             "value": 224,
-            "ratio": 0.7466666666666667
+            "ratio": 0.75
           }
         ],
         "fileType": "production",
@@ -5946,7 +5946,7 @@
             "severity": "high",
             "message": "Large file: 1142 lines (recommended: < 300)",
             "value": 1142,
-            "ratio": 3.8066666666666666
+            "ratio": 3.81
           }
         ],
         "fileType": "production",
@@ -5987,6 +5987,17 @@
         "criticismScore": 8
       },
       {
+        "path": "packages/jest-regex-util/src/index.ts",
+        "complexity": 5,
+        "duplication": 13,
+        "functionCount": 4,
+        "loc": 18,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 6
+      },
+      {
         "path": "packages/jest-reporters/src/BaseReporter.ts",
         "complexity": 3,
         "duplication": 13,
@@ -6016,7 +6027,7 @@
             "severity": "high",
             "message": "Large file: 431 lines (recommended: < 300)",
             "value": 431,
-            "ratio": 1.4366666666666668
+            "ratio": 1.44
           }
         ],
         "fileType": "production",
@@ -6053,7 +6064,7 @@
             "severity": "medium",
             "message": "File getting large: 209 lines",
             "value": 209,
-            "ratio": 0.6966666666666667
+            "ratio": 0.7
           }
         ],
         "fileType": "production",
@@ -6143,7 +6154,7 @@
             "severity": "medium",
             "message": "File getting large: 214 lines",
             "value": 214,
-            "ratio": 0.7133333333333334
+            "ratio": 0.71
           }
         ],
         "fileType": "production",
@@ -6329,28 +6340,6 @@
         "criticismScore": 10
       },
       {
-        "path": "packages/jest-regex-util/src/index.ts",
-        "complexity": 5,
-        "duplication": 13,
-        "functionCount": 4,
-        "loc": 18,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 6
-      },
-      {
-        "path": "packages/jest-resolve-dependencies/__mocks__/fake-node-module.js",
-        "complexity": 1,
-        "duplication": 75,
-        "functionCount": 1,
-        "loc": 1,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
         "path": "packages/jest-resolve/src/ModuleNotFoundError.ts",
         "complexity": 6,
         "duplication": 8,
@@ -6495,6 +6484,17 @@
         "fileType": "production",
         "impact": 0,
         "criticismScore": 12.5
+      },
+      {
+        "path": "packages/jest-resolve-dependencies/__mocks__/fake-node-module.js",
+        "complexity": 1,
+        "duplication": 75,
+        "functionCount": 1,
+        "loc": 1,
+        "issues": [],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 2
       },
       {
         "path": "packages/jest-resolve-dependencies/src/index.ts",
@@ -6642,7 +6642,7 @@
             "severity": "high",
             "message": "Large file: 326 lines (recommended: < 300)",
             "value": 326,
-            "ratio": 1.0866666666666667
+            "ratio": 1.09
           }
         ],
         "fileType": "production",
@@ -6698,7 +6698,7 @@
             "severity": "medium",
             "message": "File getting large: 272 lines",
             "value": 272,
-            "ratio": 0.9066666666666666
+            "ratio": 0.91
           }
         ],
         "fileType": "production",
@@ -6754,7 +6754,7 @@
             "severity": "high",
             "message": "Large file: 451 lines (recommended: < 300)",
             "value": 451,
-            "ratio": 1.5033333333333334
+            "ratio": 1.5
           }
         ],
         "fileType": "production",
@@ -6839,7 +6839,7 @@
             "severity": "high",
             "message": "Large file: 350 lines (recommended: < 300)",
             "value": 350,
-            "ratio": 1.1666666666666667
+            "ratio": 1.17
           }
         ],
         "fileType": "production",
@@ -6984,25 +6984,6 @@
         "criticismScore": 2
       },
       {
-        "path": "packages/jest-test-sequencer/src/index.ts",
-        "complexity": 26,
-        "duplication": 2,
-        "functionCount": 17,
-        "loc": 154,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 26 (recommended: < 20)",
-            "value": 26,
-            "ratio": 1.3
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 27.5
-      },
-      {
         "path": "packages/jest-transform/src/ScriptTransformer.ts",
         "complexity": 93,
         "duplication": 9,
@@ -7103,7 +7084,7 @@
             "severity": "medium",
             "message": "File getting large: 241 lines",
             "value": 241,
-            "ratio": 0.8033333333333333
+            "ratio": 0.8
           }
         ],
         "fileType": "production",
@@ -7122,7 +7103,7 @@
             "severity": "high",
             "message": "Large file: 401 lines (recommended: < 300)",
             "value": 401,
-            "ratio": 1.3366666666666667
+            "ratio": 1.34
           }
         ],
         "fileType": "production",
@@ -7681,6 +7662,25 @@
         "criticismScore": 2
       },
       {
+        "path": "packages/jest-test-sequencer/src/index.ts",
+        "complexity": 26,
+        "duplication": 2,
+        "functionCount": 17,
+        "loc": 154,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 26 (recommended: < 20)",
+            "value": 26,
+            "ratio": 1.3
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 27.5
+      },
+      {
         "path": "packages/jest-worker/__benchmarks__/test.js",
         "complexity": 9,
         "duplication": 5,
@@ -7849,7 +7849,7 @@
             "severity": "high",
             "message": "Large file: 464 lines (recommended: < 300)",
             "value": 464,
-            "ratio": 1.5466666666666666
+            "ratio": 1.55
           }
         ],
         "fileType": "production",
@@ -8322,12 +8322,38 @@
             "severity": "medium",
             "message": "File getting large: 244 lines",
             "value": 244,
-            "ratio": 0.8133333333333334
+            "ratio": 0.81
           }
         ],
         "fileType": "production",
         "impact": 0,
         "criticismScore": 21
+      },
+      {
+        "path": "packages/jest-core/src/cli/index.ts",
+        "complexity": 28,
+        "duplication": 3,
+        "functionCount": 13,
+        "loc": 263,
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "message": "High complexity: 28 (recommended: < 20)",
+            "value": 28,
+            "ratio": 1.4
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "message": "File getting large: 263 lines",
+            "value": 263,
+            "ratio": 0.88
+          }
+        ],
+        "fileType": "production",
+        "impact": 0,
+        "criticismScore": 30
       },
       {
         "path": "packages/jest-config/src/__mocks__/fs.js",
@@ -8361,32 +8387,6 @@
         "fileType": "production",
         "impact": 0,
         "criticismScore": 4
-      },
-      {
-        "path": "packages/jest-core/src/cli/index.ts",
-        "complexity": 28,
-        "duplication": 3,
-        "functionCount": 13,
-        "loc": 263,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 28 (recommended: < 20)",
-            "value": 28,
-            "ratio": 1.4
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "message": "File getting large: 263 lines",
-            "value": 263,
-            "ratio": 0.8766666666666667
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 30
       },
       {
         "path": "packages/jest-core/src/lib/activeFiltersMessage.ts",
@@ -8626,7 +8626,7 @@
             "severity": "medium",
             "message": "File getting large: 205 lines",
             "value": 205,
-            "ratio": 0.6833333333333333
+            "ratio": 0.68
           }
         ],
         "fileType": "production",
@@ -8752,7 +8752,7 @@
             "severity": "medium",
             "message": "File getting large: 218 lines",
             "value": 218,
-            "ratio": 0.7266666666666667
+            "ratio": 0.73
           }
         ],
         "fileType": "production",
@@ -8789,7 +8789,7 @@
             "severity": "medium",
             "message": "File getting large: 206 lines",
             "value": 206,
-            "ratio": 0.6866666666666666
+            "ratio": 0.69
           }
         ],
         "fileType": "production",
@@ -9188,7 +9188,7 @@
             "severity": "high",
             "message": "Large file: 364 lines (recommended: < 300)",
             "value": 364,
-            "ratio": 1.2133333333333334
+            "ratio": 1.21
           }
         ],
         "fileType": "production",
@@ -9540,7 +9540,7 @@
             "severity": "high",
             "message": "Large file: 998 lines (recommended: < 300)",
             "value": 998,
-            "ratio": 3.3266666666666667
+            "ratio": 3.33
           }
         ],
         "fileType": "production",
@@ -9592,7 +9592,7 @@
             "severity": "high",
             "message": "Large file: 1090 lines (recommended: < 300)",
             "value": 1090,
-            "ratio": 3.6333333333333333
+            "ratio": 3.63
           }
         ],
         "fileType": "production",
@@ -9618,7 +9618,7 @@
             "severity": "high",
             "message": "Large file: 1142 lines (recommended: < 300)",
             "value": 1142,
-            "ratio": 3.8066666666666666
+            "ratio": 3.81
           }
         ],
         "fileType": "production",
@@ -9675,9 +9675,9 @@
       "maintainability": 73,
       "overall": 62
     },
-    "complexityStdDev": 21.740871045057716,
+    "complexityStdDev": 21.74,
     "score": 62,
     "grade": "D"
   },
-  "duration": 1399
+  "duration": 1444
 }
