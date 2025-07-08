@@ -74,6 +74,9 @@ Top Issues: $TOP_ISSUE
     mv .ai.md.new .ai.md
     
     # Ajouter le contexte au message de commit
+
+    # Ajouter le contexte au message de commit
+    # Note: Ce score est InsightCode s'analysant lui-même pour les tests
     echo "" >> "$COMMIT_MSG_FILE"
     echo "AI-Context: Score $SCORE/100 ($GRADE)" >> "$COMMIT_MSG_FILE"
     
