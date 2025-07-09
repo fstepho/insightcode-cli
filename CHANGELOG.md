@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2025-07-09
+
 ### Added
 - **Rich Context Extraction for LLM Analysis**: Semantic analysis system that extracts detailed architectural insights from TypeScript/JavaScript files to provide better context for LLM-based code analysis
 - **Deep Code Analysis**: Function-level complexity breakdown with pattern detection (async/await, error handling, TypeScript usage, JSX, decorators)
@@ -131,7 +133,8 @@ insightcode analyze --json > report.json
 
 ---
 
-[Unreleased]: https://github.com/fstepho/insightcode-cli/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/fstepho/insightcode-cli/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/fstepho/insightcode-cli/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/fstepho/insightcode-cli/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/fstepho/insightcode-cli/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/fstepho/insightcode-cli/compare/v0.1.0...v0.2.0

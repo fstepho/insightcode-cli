@@ -427,12 +427,15 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
   - Robust configuration management with validation and defaults
   - Enhanced JSON output format with project information
 
-### v0.5.0 🚧 In Development
-- **Rich Context Extraction for LLM Analysis**: Semantic analysis that provides detailed architectural insights to help LLMs better understand code structure and patterns.
-- **Enhanced Architectural Analysis**: Deep function-level complexity breakdown with code samples and dependency mapping.
-- **Comprehensive Code Context**: Detailed analysis of async patterns, error handling, TypeScript usage, and more.
+### What's New (v0.5.0) ✅
+- **Rich Context Extraction**: `--with-context` flag provides detailed architectural insights for external tools and AI systems
+- **Enhanced Architectural Analysis**: Deep function-level complexity breakdown with code samples and dependency mapping
+- **Comprehensive Code Context**: Detailed analysis of async patterns, error handling, TypeScript usage, and more
 
 ### v0.6.0 🔮 Future Development
+- Major breaking changes release focused on clarity, consistency, and eliminating redundancy.
+
+### v0.7.0 🔮 Future Development
 - JSX/TSX support
 - Improved duplication detection algorithm
 - HTML reports with charts

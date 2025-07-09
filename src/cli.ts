@@ -14,7 +14,7 @@ const program = new Command();
 program
   .name('insightcode')
   .description('TypeScript code quality analyzer - 100% local')
-  .version('0.4.0');
+  .version('0.5.0');
 
 program
   .command('analyze [path]')
