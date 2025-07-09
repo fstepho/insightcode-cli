@@ -34,3 +34,39 @@ export function deepMerge(target: any, source: any): any {
 function isObject(item: any): boolean {
   return (item && typeof item === 'object' && !Array.isArray(item));
 }
+
+/**
+ * Normalizes file paths for consistent cross-platform usage.
+ * Converts Windows backslashes to forward slashes, removes leading './' and trailing '/',
+ * and ensures relative paths (no leading '/').
+ * 
+ * @param filePath The file path to normalize
+ * @returns The normalized file path
+ * 
+ * @example
+ * normalizePath("./src/index.ts") → "src/index.ts"
+ * normalizePath("src\\parser.ts") → "src/parser.ts"
+ * normalizePath("/src/index.ts") → "src/index.ts"
+ * normalizePath("src/utils/") → "src/utils"
+ */
+export function normalizePath(filePath: string): string {
+  // 1. Convert Windows backslashes to forward slashes
+  let normalized = filePath.replace(/\\/g, '/');
+  
+  // 2. Remove leading './' if present
+  if (normalized.startsWith('./')) {
+    normalized = normalized.substring(2);
+  }
+  
+  // 3. Remove trailing slashes
+  if (normalized.endsWith('/')) {
+    normalized = normalized.slice(0, -1);
+  }
+  
+  // 4. Ensure relative path (no leading /)
+  if (normalized.startsWith('/')) {
+    normalized = normalized.substring(1);
+  }
+  
+  return normalized;
+}
