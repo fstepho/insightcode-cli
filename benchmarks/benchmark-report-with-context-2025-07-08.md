@@ -55,16 +55,16 @@ A high Standard Deviation (StdDev) indicates that complexity is heavily concentr
 
 | Project | File | Function | Complexity | Lines | Async | Error Handling |
 |---|---|---|---|---|---|---|
-| `typescript` | `temp-analysis/typescript/src/compiler/checker.ts` | `createTypeChecker` | 16081 | 51349 |  | ✓ |
-| `lodash` | `temp-analysis/lodash/vendor/firebug-lite/src/firebug-lite-debug.js` | `<anonymous>` | 3556 | 31176 |  | ✓ |
-| `eslint` | `temp-analysis/eslint/tests/performance/jshint.js` | `<anonymous>` | 2164 | 15210 |  | ✓ |
-| `eslint` | `temp-analysis/eslint/tests/bench/large.js` | `<anonymous>` | 2079 | 19497 |  | ✓ |
-| `lodash` | `temp-analysis/lodash/lodash.js` | `<anonymous>` | 1659 | 17201 |  | ✓ |
-| `lodash` | `temp-analysis/lodash/lodash.js` | `runInContext` | 1547 | 15730 |  | ✓ |
-| `eslint` | `temp-analysis/eslint/tests/bench/large.js` | `<anonymous>` | 1263 | 6820 |  | ✓ |
-| `eslint` | `temp-analysis/eslint/tests/bench/large.js` | `<anonymous>` | 1261 | 6761 |  | ✓ |
-| `typescript` | `temp-analysis/typescript/src/compiler/checker.ts` | `createNodeBuilder` | 1228 | 4410 |  |  |
-| `lodash` | `temp-analysis/lodash/test/test.js` | `<anonymous>` | 1179 | 27077 |  | ✓ |
+| `typescript` | `typescript/src/compiler/checker.ts` | `createTypeChecker` | 16081 | 51349 |  | ✓ |
+| `lodash` | `lodash/vendor/firebug-lite/src/firebug-lite-debug.js` | `<anonymous>` | 3556 | 31176 |  | ✓ |
+| `eslint` | `eslint/tests/performance/jshint.js` | `<anonymous>` | 2164 | 15210 |  | ✓ |
+| `eslint` | `eslint/tests/bench/large.js` | `<anonymous>` | 2079 | 19497 |  | ✓ |
+| `lodash` | `lodash/lodash.js` | `<anonymous>` | 1659 | 17201 |  | ✓ |
+| `lodash` | `lodash/lodash.js` | `runInContext` | 1547 | 15730 |  | ✓ |
+| `eslint` | `eslint/tests/bench/large.js` | `<anonymous>` | 1263 | 6820 |  | ✓ |
+| `eslint` | `eslint/tests/bench/large.js` | `<anonymous>` | 1261 | 6761 |  | ✓ |
+| `typescript` | `typescript/src/compiler/checker.ts` | `createNodeBuilder` | 1228 | 4410 |  |  |
+| `lodash` | `lodash/test/test.js` | `<anonymous>` | 1179 | 27077 |  | ✓ |
 
 ### Code Complexity Samples for LLM Analysis
 
