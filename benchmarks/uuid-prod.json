@@ -27,19 +27,18 @@
     "context": {
       "project": {
         "name": "uuid",
-        "path": "temp-analysis/uuid",
+        "path": ".",
         "version": "11.1.0"
       },
       "analysis": {
-        "timestamp": "2025-07-09T23:27:17.085Z",
-        "durationMs": 59,
+        "timestamp": "2025-07-10T17:30:32.489Z",
+        "durationMs": 21,
         "toolVersion": "0.6.0",
         "filesAnalyzed": 29
       }
     },
     "overview": {
-      "grade": "B",
-      "health": "good",
+      "grade": "A",
       "statistics": {
         "totalFiles": 29,
         "totalLOC": 978,
@@ -47,12 +46,12 @@
         "avgLOC": 34
       },
       "scores": {
-        "complexity": 94,
-        "duplication": 56,
+        "complexity": 92,
+        "duplication": 99,
         "maintainability": 100,
-        "overall": 84
+        "overall": 97
       },
-      "summary": "5 critical issues found in core modules"
+      "summary": "4 critical issues found in core modules"
     },
     "details": [
       {
@@ -61,17 +60,15 @@
           "complexity": 1,
           "loc": 7,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 0,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 0,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "wdio.conf.js",
@@ -79,36 +76,15 @@
           "complexity": 6,
           "loc": 82,
           "functionCount": 0,
-          "duplication": 0.2
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 4,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 4,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 20.4% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.36,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 91,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/index.ts",
@@ -116,17 +92,15 @@
           "complexity": 1,
           "loc": 15,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 7,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 7,
+          "isEntryPoint": true
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "src/max.ts",
@@ -134,17 +108,15 @@
           "complexity": 1,
           "loc": 1,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 1,
-          "usageRank": 29,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 11,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "src/md5-browser.ts",
@@ -152,17 +124,15 @@
           "complexity": 5,
           "loc": 135,
           "functionCount": 12,
-          "duplication": 0.06
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 11,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 14,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 99,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "src/md5.ts",
@@ -170,36 +140,15 @@
           "complexity": 3,
           "loc": 10,
           "functionCount": 1,
-          "duplication": 0.88
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 1,
-          "usageRank": 32,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 18,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 87.5% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.92,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 73,
-        "isCritical": true
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/native-browser.ts",
@@ -207,17 +156,15 @@
           "complexity": 3,
           "loc": 3,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 14,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 21,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "src/native.ts",
@@ -225,17 +172,15 @@
           "complexity": 1,
           "loc": 2,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 1,
-          "usageRank": 36,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 25,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "src/nil.ts",
@@ -243,17 +188,15 @@
           "complexity": 1,
           "loc": 1,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 1,
-          "usageRank": 39,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 29,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "src/parse.ts",
@@ -261,36 +204,15 @@
           "complexity": 2,
           "loc": 26,
           "functionCount": 1,
-          "duplication": 0.24
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 4,
-          "usageRank": 86,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 32,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 23.8% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.59,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 90,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/regex.ts",
@@ -298,17 +220,15 @@
           "complexity": 1,
           "loc": 1,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 1,
-          "usageRank": 43,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 36,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "src/rng-browser.ts",
@@ -316,17 +236,15 @@
           "complexity": 4,
           "loc": 13,
           "functionCount": 1,
-          "duplication": 0.07
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 18,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 39,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 99,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "src/rng.ts",
@@ -334,17 +252,15 @@
           "complexity": 2,
           "loc": 10,
           "functionCount": 1,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 3,
-          "usageRank": 79,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 43,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "src/sha1-browser.ts",
@@ -352,36 +268,23 @@
           "complexity": 12,
           "loc": 91,
           "functionCount": 3,
-          "duplication": 0.06
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 21,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 46,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium complexity: 12 (recommended: < 10)",
-              "threshold": 10,
-              "excessRatio": 1.2,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Refactor to reduce complexity",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 2
-            }
+            "line": 1,
+            "threshold": 10,
+            "excessRatio": 1.2
           }
         ],
-        "healthScore": 76,
-        "isCritical": false
+        "healthScore": 77
       },
       {
         "file": "src/sha1.ts",
@@ -389,36 +292,15 @@
           "complexity": 3,
           "loc": 10,
           "functionCount": 1,
-          "duplication": 0.88
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 1,
-          "usageRank": 46,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 50,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 87.5% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.92,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 73,
-        "isCritical": true
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/stringify.ts",
@@ -426,36 +308,15 @@
           "complexity": 3,
           "loc": 37,
           "functionCount": 2,
-          "duplication": 0.17
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 8,
-          "usageRank": 96,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 54,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 17.2% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.15,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 92,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/types.ts",
@@ -463,17 +324,23 @@
           "complexity": 1,
           "loc": 21,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0.18
         },
-        "importance": {
-          "usageCount": 10,
-          "usageRank": 100,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 57,
+          "isEntryPoint": false
         },
-        "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "medium",
+            "line": 1,
+            "threshold": 0.15,
+            "excessRatio": 1.18
+          }
+        ],
+        "healthScore": 91
       },
       {
         "file": "src/uuid-bin.ts",
@@ -481,54 +348,23 @@
           "complexity": 14,
           "loc": 72,
           "functionCount": 1,
-          "duplication": 0.27
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 25,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 61,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium complexity: 14 (recommended: < 10)",
-              "threshold": 10,
-              "excessRatio": 1.4,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Refactor to reduce complexity",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 2
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 26.9% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.79,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
+            "line": 1,
+            "threshold": 10,
+            "excessRatio": 1.4
           }
         ],
-        "healthScore": 64,
-        "isCritical": true
+        "healthScore": 74
       },
       {
         "file": "src/v1.ts",
@@ -536,54 +372,23 @@
           "complexity": 17,
           "loc": 120,
           "functionCount": 5,
-          "duplication": 0.2
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 3,
-          "usageRank": 82,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 64,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium complexity: 17 (recommended: < 10)",
-              "threshold": 10,
-              "excessRatio": 1.7,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Refactor to reduce complexity",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 2
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 20.0% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.33,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
+            "line": 1,
+            "threshold": 10,
+            "excessRatio": 1.7
           }
         ],
-        "healthScore": 61,
-        "isCritical": true
+        "healthScore": 70
       },
       {
         "file": "src/v1ToV6.ts",
@@ -591,36 +396,15 @@
           "complexity": 3,
           "loc": 30,
           "functionCount": 4,
-          "duplication": 0.28
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 2,
-          "usageRank": 57,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 68,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 27.6% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.84,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 89,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/v3.ts",
@@ -628,36 +412,15 @@
           "complexity": 1,
           "loc": 27,
           "functionCount": 3,
-          "duplication": 0.75
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 2,
-          "usageRank": 61,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 71,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 75.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.5,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 75,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/v35.ts",
@@ -665,36 +428,15 @@
           "complexity": 9,
           "loc": 45,
           "functionCount": 2,
-          "duplication": 0.2
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 4,
-          "usageRank": 89,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 75,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 20.0% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.33,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 91,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/v4.ts",
@@ -702,54 +444,23 @@
           "complexity": 11,
           "loc": 38,
           "functionCount": 3,
-          "duplication": 0.22
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 2,
-          "usageRank": 64,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 79,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium complexity: 11 (recommended: < 10)",
-              "threshold": 10,
-              "excessRatio": 1.1,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Refactor to reduce complexity",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 2
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 21.6% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.44,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
+            "line": 1,
+            "threshold": 10,
+            "excessRatio": 1.1
           }
         ],
-        "healthScore": 69,
-        "isCritical": true
+        "healthScore": 79
       },
       {
         "file": "src/v5.ts",
@@ -757,36 +468,15 @@
           "complexity": 1,
           "loc": 27,
           "functionCount": 3,
-          "duplication": 0.75
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 2,
-          "usageRank": 68,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 82,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 75.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.5,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 75,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/v6.ts",
@@ -794,36 +484,15 @@
           "complexity": 3,
           "loc": 28,
           "functionCount": 3,
-          "duplication": 0.28
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 2,
-          "usageRank": 71,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 86,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 27.6% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.84,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 89,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/v6ToV1.ts",
@@ -831,36 +500,15 @@
           "complexity": 3,
           "loc": 30,
           "functionCount": 4,
-          "duplication": 0.22
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 1,
-          "usageRank": 50,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 89,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 21.9% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.46,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 91,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/v7.ts",
@@ -868,36 +516,15 @@
           "complexity": 8,
           "loc": 83,
           "functionCount": 5,
-          "duplication": 0.24
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 2,
-          "usageRank": 75,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 93,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 24.4% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.63,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 90,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "src/validate.ts",
@@ -905,17 +532,15 @@
           "complexity": 2,
           "loc": 5,
           "functionCount": 1,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 4,
-          "usageRank": 93,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 96,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "src/version.ts",
@@ -923,191 +548,17 @@
           "complexity": 2,
           "loc": 8,
           "functionCount": 1,
-          "duplication": 0.5
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 1,
-          "usageRank": 54,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 100,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 50.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.67,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 80,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       }
-    ],
-    "recommendations": {
-      "critical": [
-        {
-          "file": "temp-analysis/uuid/src/md5.ts",
-          "issue": "High duplication: 87.5% (recommended: < 30%)",
-          "solution": "Extract common code into shared utilities",
-          "effortHours": 6,
-          "impact": "Reduced maintenance overhead",
-          "priority": 6
-        },
-        {
-          "file": "temp-analysis/uuid/src/sha1.ts",
-          "issue": "High duplication: 87.5% (recommended: < 30%)",
-          "solution": "Extract common code into shared utilities",
-          "effortHours": 6,
-          "impact": "Reduced maintenance overhead",
-          "priority": 6
-        },
-        {
-          "file": "temp-analysis/uuid/src/uuid-bin.ts",
-          "issue": "Medium complexity: 14 (recommended: < 10)",
-          "solution": "Refactor to reduce complexity",
-          "effortHours": 6,
-          "impact": "Improved readability and maintainability",
-          "priority": 6
-        },
-        {
-          "file": "temp-analysis/uuid/src/v1.ts",
-          "issue": "Medium complexity: 17 (recommended: < 10)",
-          "solution": "Refactor to reduce complexity",
-          "effortHours": 6,
-          "impact": "Improved readability and maintainability",
-          "priority": 6
-        },
-        {
-          "file": "temp-analysis/uuid/src/v4.ts",
-          "issue": "Medium complexity: 11 (recommended: < 10)",
-          "solution": "Refactor to reduce complexity",
-          "effortHours": 6,
-          "impact": "Improved readability and maintainability",
-          "priority": 6
-        }
-      ],
-      "quickWins": [
-        {
-          "description": "Eliminate common code patterns in 11 files",
-          "files": [
-            "temp-analysis/uuid/wdio.conf.js",
-            "temp-analysis/uuid/src/parse.ts",
-            "temp-analysis/uuid/src/stringify.ts",
-            "temp-analysis/uuid/src/uuid-bin.ts",
-            "temp-analysis/uuid/src/v1.ts",
-            "temp-analysis/uuid/src/v1ToV6.ts",
-            "temp-analysis/uuid/src/v35.ts",
-            "temp-analysis/uuid/src/v4.ts",
-            "temp-analysis/uuid/src/v6.ts",
-            "temp-analysis/uuid/src/v6ToV1.ts",
-            "temp-analysis/uuid/src/v7.ts"
-          ],
-          "effortMinutes": 45,
-          "scoreImprovement": 22
-        },
-        {
-          "description": "Reduce complexity in 4 files through method extraction",
-          "files": [
-            "temp-analysis/uuid/src/sha1-browser.ts",
-            "temp-analysis/uuid/src/uuid-bin.ts",
-            "temp-analysis/uuid/src/v1.ts",
-            "temp-analysis/uuid/src/v4.ts"
-          ],
-          "effortMinutes": 45,
-          "scoreImprovement": 8
-        },
-        {
-          "description": "Quick fix: Medium duplication: 20.4% (recommended: < 15%)",
-          "files": [
-            "temp-analysis/uuid/wdio.conf.js"
-          ],
-          "effortMinutes": 30,
-          "scoreImprovement": 3
-        },
-        {
-          "description": "Quick fix: Medium duplication: 23.8% (recommended: < 15%)",
-          "files": [
-            "temp-analysis/uuid/src/parse.ts"
-          ],
-          "effortMinutes": 30,
-          "scoreImprovement": 3
-        },
-        {
-          "description": "Quick fix: Medium complexity: 12 (recommended: < 10)",
-          "files": [
-            "temp-analysis/uuid/src/sha1-browser.ts"
-          ],
-          "effortMinutes": 30,
-          "scoreImprovement": 3
-        }
-      ],
-      "improvements": [
-        {
-          "title": "Duplication Elimination",
-          "description": "Extract common code into reusable utilities and shared modules",
-          "files": [
-            "temp-analysis/uuid/wdio.conf.js",
-            "temp-analysis/uuid/src/md5.ts",
-            "temp-analysis/uuid/src/parse.ts",
-            "temp-analysis/uuid/src/sha1.ts",
-            "temp-analysis/uuid/src/stringify.ts",
-            "temp-analysis/uuid/src/uuid-bin.ts",
-            "temp-analysis/uuid/src/v1.ts",
-            "temp-analysis/uuid/src/v1ToV6.ts",
-            "temp-analysis/uuid/src/v3.ts",
-            "temp-analysis/uuid/src/v35.ts",
-            "temp-analysis/uuid/src/v4.ts",
-            "temp-analysis/uuid/src/v5.ts",
-            "temp-analysis/uuid/src/v6.ts",
-            "temp-analysis/uuid/src/v6ToV1.ts",
-            "temp-analysis/uuid/src/v7.ts",
-            "temp-analysis/uuid/src/version.ts"
-          ],
-          "approach": "Identify common patterns, create utility functions, implement shared libraries",
-          "effortDays": 3,
-          "benefits": [
-            "Reduced maintenance overhead",
-            "Improved consistency across codebase",
-            "Smaller bundle size"
-          ],
-          "risks": [
-            "Over-abstraction risk",
-            "Potential breaking changes"
-          ]
-        },
-        {
-          "title": "Critical Path Optimization",
-          "description": "Refactor high-usage files to improve overall system performance",
-          "files": [
-            "temp-analysis/uuid/src/parse.ts",
-            "temp-analysis/uuid/src/stringify.ts",
-            "temp-analysis/uuid/src/types.ts"
-          ],
-          "approach": "Incremental refactoring with comprehensive test coverage",
-          "effortDays": 1,
-          "benefits": [
-            "Improved system performance",
-            "Reduced coupling between modules",
-            "Better maintainability for core features"
-          ],
-          "risks": [
-            "Potential breaking changes in core functionality"
-          ]
-        }
-      ]
-    }
+    ]
   },
-  "duration": 759
+  "duration": 737
 }

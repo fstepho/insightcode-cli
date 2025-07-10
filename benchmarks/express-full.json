@@ -30,19 +30,18 @@
     "context": {
       "project": {
         "name": "express",
-        "path": "temp-analysis/express",
+        "path": ".",
         "version": "5.1.0"
       },
       "analysis": {
-        "timestamp": "2025-07-09T23:20:00.919Z",
-        "durationMs": 464,
+        "timestamp": "2025-07-10T17:28:43.245Z",
+        "durationMs": 10,
         "toolVersion": "0.6.0",
         "filesAnalyzed": 142
       }
     },
     "overview": {
-      "grade": "D",
-      "health": "poor",
+      "grade": "B",
       "statistics": {
         "totalFiles": 142,
         "totalLOC": 15093,
@@ -50,12 +49,12 @@
         "avgLOC": 106
       },
       "scores": {
-        "complexity": 77,
-        "duplication": 35,
-        "maintainability": 72,
-        "overall": 63
+        "complexity": 75,
+        "duplication": 100,
+        "maintainability": 71,
+        "overall": 81
       },
-      "summary": "5 critical issues found in core modules"
+      "summary": "19 critical issues found in core modules"
     },
     "details": [
       {
@@ -64,36 +63,15 @@
           "complexity": 1,
           "loc": 2,
           "functionCount": 0,
-          "duplication": 0.86
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 0,
-          "isEntryPoint": true,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 0,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 85.7% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.86,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 73,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "benchmarks/middleware.js",
@@ -101,17 +79,15 @@
           "complexity": 3,
           "loc": 13,
           "functionCount": 2,
-          "duplication": 0.08
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 1,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 1,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 98,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "lib/application.js",
@@ -119,54 +95,30 @@
           "complexity": 42,
           "loc": 262,
           "functionCount": 25,
-          "duplication": 0.09
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 1,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 1,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High complexity: 42 (recommended: < 20)",
-              "threshold": 20,
-              "excessRatio": 2.1,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Break down into smaller functions",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 2.1
           },
           {
             "type": "size",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "File getting large: 262 lines (recommended: < 200)",
-              "threshold": 200,
-              "excessRatio": 1.31,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Consider splitting into smaller modules",
-              "impact": "Better module organization",
-              "effortHours": 3
-            }
+            "line": 1,
+            "threshold": 200,
+            "excessRatio": 1.31
           }
         ],
-        "healthScore": 36,
-        "isCritical": false
+        "healthScore": 38
       },
       {
         "file": "lib/express.js",
@@ -174,36 +126,15 @@
           "complexity": 1,
           "loc": 34,
           "functionCount": 2,
-          "duplication": 0.2
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 2,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 2,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 20.0% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.33,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 91,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "lib/request.js",
@@ -211,36 +142,23 @@
           "complexity": 30,
           "loc": 155,
           "functionCount": 20,
-          "duplication": 0.15
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 3,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 3,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High complexity: 30 (recommended: < 20)",
-              "threshold": 20,
-              "excessRatio": 1.5,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Break down into smaller functions",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 1.5
           }
         ],
-        "healthScore": 57,
-        "isCritical": false
+        "healthScore": 60
       },
       {
         "file": "lib/response.js",
@@ -248,54 +166,30 @@
           "complexity": 111,
           "loc": 468,
           "functionCount": 41,
-          "duplication": 0.11
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 4,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 4,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High complexity: 111 (recommended: < 20)",
-              "threshold": 20,
-              "excessRatio": 5.55,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Break down into smaller functions",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 5.55
           },
           {
             "type": "size",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Large file: 468 lines (recommended: < 300)",
-              "threshold": 300,
-              "excessRatio": 1.56,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Split into smaller, focused modules",
-              "impact": "Better module organization",
-              "effortHours": 6
-            }
+            "line": 1,
+            "threshold": 300,
+            "excessRatio": 1.56
           }
         ],
-        "healthScore": 28,
-        "isCritical": true
+        "healthScore": 30
       },
       {
         "file": "lib/utils.js",
@@ -303,54 +197,23 @@
           "complexity": 29,
           "loc": 119,
           "functionCount": 14,
-          "duplication": 0.2
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 4,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 4,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High complexity: 29 (recommended: < 20)",
-              "threshold": 20,
-              "excessRatio": 1.45,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Break down into smaller functions",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 4
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 19.7% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.31,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 1.45
           }
         ],
-        "healthScore": 51,
-        "isCritical": false
+        "healthScore": 60
       },
       {
         "file": "lib/view.js",
@@ -358,36 +221,23 @@
           "complexity": 17,
           "loc": 90,
           "functionCount": 7,
-          "duplication": 0.14
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 5,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 5,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium complexity: 17 (recommended: < 10)",
-              "threshold": 10,
-              "excessRatio": 1.7,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Refactor to reduce complexity",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 2
-            }
+            "line": 1,
+            "threshold": 10,
+            "excessRatio": 1.7
           }
         ],
-        "healthScore": 67,
-        "isCritical": false
+        "healthScore": 70
       },
       {
         "file": "test/Route.js",
@@ -395,36 +245,15 @@
           "complexity": 10,
           "loc": 222,
           "functionCount": 53,
-          "duplication": 0.32
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 6,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 6,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 32.1% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.07,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 69,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 85
       },
       {
         "file": "test/Router.js",
@@ -432,54 +261,23 @@
           "complexity": 13,
           "loc": 505,
           "functionCount": 138,
-          "duplication": 0.35
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 6,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 6,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "size",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Large file: 505 lines (recommended: < 500)",
-              "threshold": 500,
-              "excessRatio": 1.01,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Split into smaller, focused modules",
-              "impact": "Better module organization",
-              "effortHours": 6
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 35.5% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.18,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 500,
+            "excessRatio": 1.01
           }
         ],
-        "healthScore": 33,
-        "isCritical": false
+        "healthScore": 51
       },
       {
         "file": "test/app.all.js",
@@ -487,36 +285,15 @@
           "complexity": 2,
           "loc": 21,
           "functionCount": 5,
-          "duplication": 0.39
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 7,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 7,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 39.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.31,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 82,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/app.engine.js",
@@ -524,36 +301,15 @@
           "complexity": 6,
           "loc": 68,
           "functionCount": 14,
-          "duplication": 0.54
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 8,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 8,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 54.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.81,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 79,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/app.head.js",
@@ -561,36 +317,15 @@
           "complexity": 3,
           "loc": 53,
           "functionCount": 11,
-          "duplication": 0.44
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 9,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 9,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 44.2% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.47,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 81,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/app.js",
@@ -598,36 +333,15 @@
           "complexity": 1,
           "loc": 98,
           "functionCount": 22,
-          "duplication": 0.43
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 9,
-          "isEntryPoint": true,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 9,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 42.9% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.43,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 81,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/app.listen.js",
@@ -635,36 +349,15 @@
           "complexity": 1,
           "loc": 23,
           "functionCount": 6,
-          "duplication": 0.42
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 10,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 10,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 42.1% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.4,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 82,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/app.locals.js",
@@ -672,36 +365,15 @@
           "complexity": 1,
           "loc": 23,
           "functionCount": 5,
-          "duplication": 0.28
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 11,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 11,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 27.8% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.85,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 89,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/app.options.js",
@@ -709,36 +381,15 @@
           "complexity": 1,
           "loc": 92,
           "functionCount": 30,
-          "duplication": 0.39
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 11,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 11,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 38.6% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.29,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 82,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/app.param.js",
@@ -746,36 +397,15 @@
           "complexity": 8,
           "loc": 262,
           "functionCount": 59,
-          "duplication": 0.43
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 12,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 12,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 42.8% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.43,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 64,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 83
       },
       {
         "file": "test/app.render.js",
@@ -783,54 +413,23 @@
           "complexity": 20,
           "loc": 300,
           "functionCount": 66,
-          "duplication": 0.58
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 13,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 13,
+          "isEntryPoint": false
         },
         "issues": [
           {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 58.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.93,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          },
-          {
             "type": "complexity",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium complexity: 20 (recommended: < 15)",
-              "threshold": 15,
-              "excessRatio": 1.33,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Refactor to reduce complexity",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 2
-            }
+            "line": 1,
+            "threshold": 15,
+            "excessRatio": 1.33
           }
         ],
-        "healthScore": 23,
-        "isCritical": true
+        "healthScore": 45
       },
       {
         "file": "test/app.request.js",
@@ -838,36 +437,15 @@
           "complexity": 1,
           "loc": 109,
           "functionCount": 23,
-          "duplication": 0.8
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 13,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 13,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 80.4% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.68,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 74,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/app.response.js",
@@ -875,36 +453,15 @@
           "complexity": 1,
           "loc": 109,
           "functionCount": 23,
-          "duplication": 0.79
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 14,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 14,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 79.2% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.64,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 74,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/app.route.js",
@@ -912,36 +469,15 @@
           "complexity": 1,
           "loc": 155,
           "functionCount": 36,
-          "duplication": 0.63
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 15,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 15,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 62.7% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.09,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 77,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/app.router.js",
@@ -949,54 +485,23 @@
           "complexity": 15,
           "loc": 542,
           "functionCount": 211,
-          "duplication": 0.42
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 16,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 16,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "size",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Large file: 542 lines (recommended: < 500)",
-              "threshold": 500,
-              "excessRatio": 1.08,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Split into smaller, focused modules",
-              "impact": "Better module organization",
-              "effortHours": 6
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 42.1% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.4,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 500,
+            "excessRatio": 1.08
           }
         ],
-        "healthScore": 29,
-        "isCritical": false
+        "healthScore": 48
       },
       {
         "file": "test/app.routes.error.js",
@@ -1004,36 +509,15 @@
           "complexity": 1,
           "loc": 53,
           "functionCount": 12,
-          "duplication": 0.36
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 16,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 16,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 36.2% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.21,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 83,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/app.use.js",
@@ -1041,54 +525,23 @@
           "complexity": 1,
           "loc": 425,
           "functionCount": 80,
-          "duplication": 0.44
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 17,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 17,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "size",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "File getting large: 425 lines (recommended: < 300)",
-              "threshold": 300,
-              "excessRatio": 1.42,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Consider splitting into smaller modules",
-              "impact": "Better module organization",
-              "effortHours": 3
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 44.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.47,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 300,
+            "excessRatio": 1.42
           }
         ],
-        "healthScore": 56,
-        "isCritical": false
+        "healthScore": 75
       },
       {
         "file": "test/config.js",
@@ -1096,36 +549,15 @@
           "complexity": 1,
           "loc": 168,
           "functionCount": 41,
-          "duplication": 0.24
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 18,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 18,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 23.7% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.58,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 90,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/exports.js",
@@ -1133,17 +565,15 @@
           "complexity": 1,
           "loc": 65,
           "functionCount": 18,
-          "duplication": 0.15
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 18,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 18,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 97,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "test/express.json.js",
@@ -1151,54 +581,23 @@
           "complexity": 13,
           "loc": 639,
           "functionCount": 112,
-          "duplication": 0.78
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 19,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 19,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "size",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Large file: 639 lines (recommended: < 500)",
-              "threshold": 500,
-              "excessRatio": 1.28,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Split into smaller, focused modules",
-              "impact": "Better module organization",
-              "effortHours": 6
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 78.4% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.61,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 500,
+            "excessRatio": 1.28
           }
         ],
-        "healthScore": 25,
-        "isCritical": true
+        "healthScore": 51
       },
       {
         "file": "test/express.raw.js",
@@ -1206,54 +605,23 @@
           "complexity": 13,
           "loc": 431,
           "functionCount": 75,
-          "duplication": 0.85
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 20,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 20,
+          "isEntryPoint": false
         },
         "issues": [
           {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 85.1% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.84,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          },
-          {
             "type": "size",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "File getting large: 431 lines (recommended: < 300)",
-              "threshold": 300,
-              "excessRatio": 1.44,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Consider splitting into smaller modules",
-              "impact": "Better module organization",
-              "effortHours": 3
-            }
+            "line": 1,
+            "threshold": 300,
+            "excessRatio": 1.44
           }
         ],
-        "healthScore": 28,
-        "isCritical": true
+        "healthScore": 56
       },
       {
         "file": "test/express.static.js",
@@ -1261,54 +629,23 @@
           "complexity": 5,
           "loc": 685,
           "functionCount": 153,
-          "duplication": 0.39
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 21,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 21,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "size",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Large file: 685 lines (recommended: < 500)",
-              "threshold": 500,
-              "excessRatio": 1.37,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Split into smaller, focused modules",
-              "impact": "Better module organization",
-              "effortHours": 6
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 38.7% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.29,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 500,
+            "excessRatio": 1.37
           }
         ],
-        "healthScore": 52,
-        "isCritical": false
+        "healthScore": 70
       },
       {
         "file": "test/express.text.js",
@@ -1316,54 +653,23 @@
           "complexity": 9,
           "loc": 477,
           "functionCount": 85,
-          "duplication": 0.89
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 21,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 21,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "size",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "File getting large: 477 lines (recommended: < 300)",
-              "threshold": 300,
-              "excessRatio": 1.59,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Consider splitting into smaller modules",
-              "impact": "Better module organization",
-              "effortHours": 3
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 88.7% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.96,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 300,
+            "excessRatio": 1.59
           }
         ],
-        "healthScore": 47,
-        "isCritical": false
+        "healthScore": 75
       },
       {
         "file": "test/express.urlencoded.js",
@@ -1371,54 +677,23 @@
           "complexity": 15,
           "loc": 700,
           "functionCount": 120,
-          "duplication": 0.73
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 22,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 22,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "size",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Large file: 700 lines (recommended: < 500)",
-              "threshold": 500,
-              "excessRatio": 1.4,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Split into smaller, focused modules",
-              "impact": "Better module organization",
-              "effortHours": 6
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 72.8% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.43,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 500,
+            "excessRatio": 1.4
           }
         ],
-        "healthScore": 23,
-        "isCritical": true
+        "healthScore": 48
       },
       {
         "file": "test/middleware.basic.js",
@@ -1426,36 +701,15 @@
           "complexity": 1,
           "loc": 36,
           "functionCount": 9,
-          "duplication": 0.42
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 23,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 23,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 41.9% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.4,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 82,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/regression.js",
@@ -1463,36 +717,15 @@
           "complexity": 1,
           "loc": 16,
           "functionCount": 3,
-          "duplication": 0.57
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 23,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 23,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 57.1% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.9,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 79,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.accepts.js",
@@ -1500,36 +733,15 @@
           "complexity": 5,
           "loc": 97,
           "functionCount": 21,
-          "duplication": 0.8
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 24,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 24,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 80.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.67,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 74,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.acceptsCharsets.js",
@@ -1537,36 +749,15 @@
           "complexity": 4,
           "loc": 40,
           "functionCount": 10,
-          "duplication": 0.96
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 25,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 25,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 95.7% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 3.19,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 71,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.acceptsEncodings.js",
@@ -1574,36 +765,15 @@
           "complexity": 1,
           "loc": 32,
           "functionCount": 6,
-          "duplication": 0.71
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 26,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 26,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 70.8% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.36,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 76,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.acceptsLanguages.js",
@@ -1611,36 +781,15 @@
           "complexity": 1,
           "loc": 47,
           "functionCount": 9,
-          "duplication": 0.7
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 26,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 26,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 70.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.33,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 76,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.baseUrl.js",
@@ -1648,36 +797,15 @@
           "complexity": 1,
           "loc": 75,
           "functionCount": 14,
-          "duplication": 0.38
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 27,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 27,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 38.2% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.27,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 82,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.fresh.js",
@@ -1685,36 +813,15 @@
           "complexity": 1,
           "loc": 56,
           "functionCount": 10,
-          "duplication": 0.6
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 28,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 28,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 60.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 78,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.get.js",
@@ -1722,36 +829,15 @@
           "complexity": 1,
           "loc": 47,
           "functionCount": 10,
-          "duplication": 0.51
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 28,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 28,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 51.4% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.71,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 80,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.host.js",
@@ -1759,36 +845,15 @@
           "complexity": 1,
           "loc": 121,
           "functionCount": 25,
-          "duplication": 0.87
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 29,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 29,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 87.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.9,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 73,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.hostname.js",
@@ -1796,36 +861,15 @@
           "complexity": 1,
           "loc": 145,
           "functionCount": 29,
-          "duplication": 0.92
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 30,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 30,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 92.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 3.07,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 72,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.ip.js",
@@ -1833,36 +877,15 @@
           "complexity": 2,
           "loc": 84,
           "functionCount": 19,
-          "duplication": 0.5
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 30,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 30,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 50.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.67,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 80,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.ips.js",
@@ -1870,36 +893,15 @@
           "complexity": 1,
           "loc": 56,
           "functionCount": 14,
-          "duplication": 0.93
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 31,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 31,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 92.6% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 3.09,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 71,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.is.js",
@@ -1907,36 +909,15 @@
           "complexity": 1,
           "loc": 99,
           "functionCount": 28,
-          "duplication": 0.91
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 32,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 32,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 90.9% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 3.03,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 72,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.path.js",
@@ -1944,36 +925,15 @@
           "complexity": 1,
           "loc": 16,
           "functionCount": 4,
-          "duplication": 0.77
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 33,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 33,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 76.9% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.56,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 75,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.protocol.js",
@@ -1981,36 +941,15 @@
           "complexity": 1,
           "loc": 86,
           "functionCount": 19,
-          "duplication": 0.84
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 33,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 33,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 83.8% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.79,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 73,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.query.js",
@@ -2018,36 +957,15 @@
           "complexity": 3,
           "loc": 84,
           "functionCount": 20,
-          "duplication": 0.42
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 34,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 34,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 41.7% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.39,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 82,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.range.js",
@@ -2055,36 +973,15 @@
           "complexity": 1,
           "loc": 82,
           "functionCount": 18,
-          "duplication": 0.71
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 35,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 35,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 71.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.37,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 76,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.route.js",
@@ -2092,36 +989,15 @@
           "complexity": 1,
           "loc": 23,
           "functionCount": 5,
-          "duplication": 0.65
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 35,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 35,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 65.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.17,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 77,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.secure.js",
@@ -2129,36 +1005,15 @@
           "complexity": 7,
           "loc": 78,
           "functionCount": 18,
-          "duplication": 0.87
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 36,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 36,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 87.1% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.9,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 73,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.signedCookies.js",
@@ -2166,36 +1021,15 @@
           "complexity": 3,
           "loc": 30,
           "functionCount": 5,
-          "duplication": 0.35
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 37,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 37,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 34.6% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.15,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 83,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.stale.js",
@@ -2203,36 +1037,15 @@
           "complexity": 1,
           "loc": 40,
           "functionCount": 8,
-          "duplication": 0.81
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 38,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 38,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 81.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.71,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 74,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.subdomains.js",
@@ -2240,36 +1053,15 @@
           "complexity": 1,
           "loc": 139,
           "functionCount": 32,
-          "duplication": 0.69
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 38,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 38,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 68.8% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.29,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 76,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/req.xhr.js",
@@ -2277,36 +1069,15 @@
           "complexity": 1,
           "loc": 36,
           "functionCount": 8,
-          "duplication": 0.68
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 39,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 39,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 68.4% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.28,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 76,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.append.js",
@@ -2314,36 +1085,15 @@
           "complexity": 2,
           "loc": 95,
           "functionCount": 18,
-          "duplication": 0.44
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 40,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 40,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 44.4% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.48,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 81,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.attachment.js",
@@ -2351,36 +1101,15 @@
           "complexity": 1,
           "loc": 61,
           "functionCount": 14,
-          "duplication": 0.82
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 40,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 40,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 82.1% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.74,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 74,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.clearCookie.js",
@@ -2388,36 +1117,15 @@
           "complexity": 1,
           "loc": 49,
           "functionCount": 11,
-          "duplication": 0.56
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 41,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 41,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 55.6% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.85,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 79,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.cookie.js",
@@ -2425,36 +1133,15 @@
           "complexity": 1,
           "loc": 233,
           "functionCount": 49,
-          "duplication": 0.38
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 42,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 42,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 38.1% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.27,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 67,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 84
       },
       {
         "file": "test/res.download.js",
@@ -2462,54 +1149,23 @@
           "complexity": 6,
           "loc": 401,
           "functionCount": 69,
-          "duplication": 0.67
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 43,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 43,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "size",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "File getting large: 401 lines (recommended: < 300)",
-              "threshold": 300,
-              "excessRatio": 1.34,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Consider splitting into smaller modules",
-              "impact": "Better module organization",
-              "effortHours": 3
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 66.9% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.23,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 300,
+            "excessRatio": 1.34
           }
         ],
-        "healthScore": 52,
-        "isCritical": false
+        "healthScore": 75
       },
       {
         "file": "test/res.format.js",
@@ -2517,36 +1173,15 @@
           "complexity": 2,
           "loc": 205,
           "functionCount": 54,
-          "duplication": 0.39
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 43,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 43,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 38.9% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.3,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 69,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 86
       },
       {
         "file": "test/res.get.js",
@@ -2554,36 +1189,15 @@
           "complexity": 1,
           "loc": 17,
           "functionCount": 4,
-          "duplication": 0.79
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 44,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 44,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 78.6% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.62,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 74,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.json.js",
@@ -2591,36 +1205,15 @@
           "complexity": 2,
           "loc": 146,
           "functionCount": 33,
-          "duplication": 0.71
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 45,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 45,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 70.7% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.36,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 76,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.jsonp.js",
@@ -2628,36 +1221,15 @@
           "complexity": 2,
           "loc": 270,
           "functionCount": 58,
-          "duplication": 0.56
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 45,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 45,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 56.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.87,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 61,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 82
       },
       {
         "file": "test/res.links.js",
@@ -2665,36 +1237,15 @@
           "complexity": 1,
           "loc": 52,
           "functionCount": 8,
-          "duplication": 0.77
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 46,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 46,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 76.9% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.56,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 75,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.locals.js",
@@ -2702,36 +1253,15 @@
           "complexity": 1,
           "loc": 31,
           "functionCount": 7,
-          "duplication": 0.54
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 47,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 47,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 53.8% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.79,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 79,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.location.js",
@@ -2739,36 +1269,15 @@
           "complexity": 5,
           "loc": 265,
           "functionCount": 39,
-          "duplication": 0.43
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 48,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 48,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 43.4% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.45,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 64,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 82
       },
       {
         "file": "test/res.redirect.js",
@@ -2776,36 +1285,15 @@
           "complexity": 1,
           "loc": 174,
           "functionCount": 33,
-          "duplication": 0.74
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 48,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 48,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 73.5% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.45,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 75,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.render.js",
@@ -2813,36 +1301,15 @@
           "complexity": 2,
           "loc": 277,
           "functionCount": 57,
-          "duplication": 0.5
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 49,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 49,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 49.6% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.65,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 62,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 82
       },
       {
         "file": "test/res.send.js",
@@ -2850,54 +1317,23 @@
           "complexity": 5,
           "loc": 447,
           "functionCount": 93,
-          "duplication": 0.59
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 50,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 50,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "size",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "File getting large: 447 lines (recommended: < 300)",
-              "threshold": 300,
-              "excessRatio": 1.49,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Consider splitting into smaller modules",
-              "impact": "Better module organization",
-              "effortHours": 3
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 59.4% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.98,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 300,
+            "excessRatio": 1.49
           }
         ],
-        "healthScore": 53,
-        "isCritical": false
+        "healthScore": 75
       },
       {
         "file": "test/res.sendFile.js",
@@ -2905,54 +1341,23 @@
           "complexity": 7,
           "loc": 748,
           "functionCount": 143,
-          "duplication": 0.54
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 50,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 50,
+          "isEntryPoint": false
         },
         "issues": [
           {
             "type": "size",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Large file: 748 lines (recommended: < 500)",
-              "threshold": 500,
-              "excessRatio": 1.5,
-              "unit": "lines"
-            },
-            "action": {
-              "description": "Split into smaller, focused modules",
-              "impact": "Better module organization",
-              "effortHours": 6
-            }
-          },
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 54.1% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.8,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 500,
+            "excessRatio": 1.5
           }
         ],
-        "healthScore": 49,
-        "isCritical": false
+        "healthScore": 70
       },
       {
         "file": "test/res.sendStatus.js",
@@ -2960,36 +1365,15 @@
           "complexity": 1,
           "loc": 34,
           "functionCount": 8,
-          "duplication": 0.74
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 51,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 51,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 73.9% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.46,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 75,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.set.js",
@@ -2997,36 +1381,15 @@
           "complexity": 1,
           "loc": 99,
           "functionCount": 20,
-          "duplication": 0.52
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 52,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 52,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 51.6% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.72,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 80,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.status.js",
@@ -3034,36 +1397,15 @@
           "complexity": 1,
           "loc": 155,
           "functionCount": 36,
-          "duplication": 0.59
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 52,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 52,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 59.2% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.97,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 78,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.type.js",
@@ -3071,36 +1413,15 @@
           "complexity": 1,
           "loc": 36,
           "functionCount": 8,
-          "duplication": 0.78
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 53,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 53,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 78.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.61,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 74,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/res.vary.js",
@@ -3108,36 +1429,15 @@
           "complexity": 1,
           "loc": 74,
           "functionCount": 16,
-          "duplication": 0.58
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 54,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 54,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 58.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.94,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 78,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/utils.js",
@@ -3145,36 +1445,15 @@
           "complexity": 1,
           "loc": 56,
           "functionCount": 16,
-          "duplication": 0.44
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 55,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 55,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 43.6% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.45,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 81,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/auth/index.js",
@@ -3182,36 +1461,15 @@
           "complexity": 14,
           "loc": 88,
           "functionCount": 13,
-          "duplication": 0.22
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 55,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 55,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 21.5% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.43,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 70,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 79
       },
       {
         "file": "examples/content-negotiation/db.js",
@@ -3219,17 +1477,15 @@
           "complexity": 1,
           "loc": 6,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 56,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 56,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "examples/content-negotiation/index.js",
@@ -3237,36 +1493,15 @@
           "complexity": 2,
           "loc": 32,
           "functionCount": 8,
-          "duplication": 0.29
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 57,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 57,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 29.0% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.94,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 89,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/content-negotiation/users.js",
@@ -3274,36 +1509,15 @@
           "complexity": 1,
           "loc": 15,
           "functionCount": 5,
-          "duplication": 0.15
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 57,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 57,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 15.4% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.03,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 92,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/cookie-sessions/index.js",
@@ -3311,36 +1525,15 @@
           "complexity": 3,
           "loc": 13,
           "functionCount": 1,
-          "duplication": 0.5
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 58,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 58,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 50.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.67,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 80,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/cookies/index.js",
@@ -3348,36 +1541,15 @@
           "complexity": 8,
           "loc": 32,
           "functionCount": 3,
-          "duplication": 0.3
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 59,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 59,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 30.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.01,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 84,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/downloads/index.js",
@@ -3385,73 +1557,15 @@
           "complexity": 4,
           "loc": 13,
           "functionCount": 3,
-          "duplication": 0.42
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 60,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 60,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 42.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.41,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 82,
-        "isCritical": false
-      },
-      {
-        "file": "examples/ejs/index.js",
-        "metrics": {
-          "complexity": 2,
-          "loc": 24,
-          "functionCount": 1,
-          "duplication": 0.64
-        },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 60,
-          "isEntryPoint": true,
-          "isCriticalPath": false
-        },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 64.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.13,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 77,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/error-pages/index.js",
@@ -3459,147 +1573,31 @@
           "complexity": 5,
           "loc": 47,
           "functionCount": 9,
-          "duplication": 0.4
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 61,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 60,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 40.4% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.35,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 82,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
-        "file": "examples/hello-world/index.js",
+        "file": "examples/ejs/index.js",
         "metrics": {
           "complexity": 2,
-          "loc": 10,
+          "loc": 24,
           "functionCount": 1,
-          "duplication": 0.63
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 62,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 61,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 62.5% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.08,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 78,
-        "isCritical": false
-      },
-      {
-        "file": "examples/markdown/index.js",
-        "metrics": {
-          "complexity": 4,
-          "loc": 28,
-          "functionCount": 5,
-          "duplication": 0.5
-        },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 62,
-          "isEntryPoint": true,
-          "isCriticalPath": false
-        },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 50.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.67,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 80,
-        "isCritical": false
-      },
-      {
-        "file": "examples/multi-router/index.js",
-        "metrics": {
-          "complexity": 2,
-          "loc": 12,
-          "functionCount": 1,
-          "duplication": 0.5
-        },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 63,
-          "isEntryPoint": true,
-          "isCriticalPath": false
-        },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 50.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.67,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 80,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/error/index.js",
@@ -3607,36 +1605,63 @@
           "complexity": 4,
           "loc": 24,
           "functionCount": 4,
-          "duplication": 0.37
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 64,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 62,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 37.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.23,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 83,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
+      },
+      {
+        "file": "examples/hello-world/index.js",
+        "metrics": {
+          "complexity": 2,
+          "loc": 10,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 62,
+          "isEntryPoint": true
+        },
+        "issues": [],
+        "healthScore": 100
+      },
+      {
+        "file": "examples/markdown/index.js",
+        "metrics": {
+          "complexity": 4,
+          "loc": 28,
+          "functionCount": 5,
+          "duplicationRatio": 0
+        },
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 63,
+          "isEntryPoint": true
+        },
+        "issues": [],
+        "healthScore": 100
+      },
+      {
+        "file": "examples/multi-router/index.js",
+        "metrics": {
+          "complexity": 2,
+          "loc": 12,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 64,
+          "isEntryPoint": true
+        },
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/mvc/db.js",
@@ -3644,17 +1669,15 @@
           "complexity": 1,
           "loc": 10,
           "functionCount": 0,
-          "duplication": 0.13
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 65,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 65,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 98,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "examples/mvc/index.js",
@@ -3662,36 +1685,15 @@
           "complexity": 6,
           "loc": 43,
           "functionCount": 4,
-          "duplication": 0.39
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 65,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 65,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 39.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.31,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 82,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/online/index.js",
@@ -3699,36 +1701,15 @@
           "complexity": 3,
           "loc": 26,
           "functionCount": 5,
-          "duplication": 0.38
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 66,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 66,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 37.5% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.25,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 83,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/params/index.js",
@@ -3736,36 +1717,15 @@
           "complexity": 4,
           "loc": 43,
           "functionCount": 6,
-          "duplication": 0.32
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 67,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 67,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 32.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.07,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 84,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/resource/index.js",
@@ -3773,36 +1733,15 @@
           "complexity": 7,
           "loc": 70,
           "functionCount": 9,
-          "duplication": 0.25
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 67,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 67,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 25.0% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.67,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 90,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/route-map/index.js",
@@ -3810,36 +1749,15 @@
           "complexity": 8,
           "loc": 57,
           "functionCount": 6,
-          "duplication": 0.19
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 68,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 68,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 18.9% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.26,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 91,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/route-middleware/index.js",
@@ -3847,36 +1765,15 @@
           "complexity": 5,
           "loc": 53,
           "functionCount": 9,
-          "duplication": 0.23
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 69,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 69,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 23.2% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.55,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 90,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/route-separation/index.js",
@@ -3884,36 +1781,15 @@
           "complexity": 3,
           "loc": 32,
           "functionCount": 0,
-          "duplication": 0.28
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 70,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 70,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 28.1% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.88,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 89,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/route-separation/post.js",
@@ -3921,36 +1797,15 @@
           "complexity": 1,
           "loc": 9,
           "functionCount": 1,
-          "duplication": 0.75
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 70,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 70,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 75.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.5,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 75,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/route-separation/site.js",
@@ -3958,17 +1813,15 @@
           "complexity": 1,
           "loc": 4,
           "functionCount": 1,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 71,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 71,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "examples/route-separation/user.js",
@@ -3976,36 +1829,15 @@
           "complexity": 3,
           "loc": 37,
           "functionCount": 5,
-          "duplication": 0.34
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 72,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 72,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 34.4% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.15,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 83,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/search/index.js",
@@ -4013,36 +1845,15 @@
           "complexity": 3,
           "loc": 26,
           "functionCount": 3,
-          "duplication": 0.35
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 72,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 72,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 35.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.18,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 83,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/session/index.js",
@@ -4050,36 +1861,15 @@
           "complexity": 3,
           "loc": 23,
           "functionCount": 1,
-          "duplication": 0.88
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 73,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 73,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 87.5% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.92,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 73,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/session/redis.js",
@@ -4087,36 +1877,15 @@
           "complexity": 2,
           "loc": 25,
           "functionCount": 1,
-          "duplication": 0.67
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 74,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 74,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 66.7% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.22,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 77,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/static-files/index.js",
@@ -4124,36 +1893,15 @@
           "complexity": 1,
           "loc": 15,
           "functionCount": 0,
-          "duplication": 0.82
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 74,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 74,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 81.8% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.73,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 74,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/vhost/index.js",
@@ -4161,36 +1909,15 @@
           "complexity": 4,
           "loc": 24,
           "functionCount": 3,
-          "duplication": 0.26
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 75,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 75,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 26.5% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.76,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 90,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/view-constructor/github-view.js",
@@ -4198,17 +1925,15 @@
           "complexity": 2,
           "loc": 28,
           "functionCount": 5,
-          "duplication": 0.1
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 76,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 76,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 98,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "examples/view-constructor/index.js",
@@ -4216,36 +1941,15 @@
           "complexity": 4,
           "loc": 28,
           "functionCount": 4,
-          "duplication": 0.47
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 77,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 77,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 46.7% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.56,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 81,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/view-locals/index.js",
@@ -4253,36 +1957,15 @@
           "complexity": 8,
           "loc": 65,
           "functionCount": 14,
-          "duplication": 0.34
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 77,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 77,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 34.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.14,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 83,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/view-locals/user.js",
@@ -4290,17 +1973,15 @@
           "complexity": 1,
           "loc": 23,
           "functionCount": 5,
-          "duplication": 0.05
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 78,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 78,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 99,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "examples/web-service/index.js",
@@ -4308,36 +1989,15 @@
           "complexity": 6,
           "loc": 55,
           "functionCount": 7,
-          "duplication": 0.35
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 79,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 79,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 34.9% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.16,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 83,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/auth.js",
@@ -4345,36 +2005,15 @@
           "complexity": 4,
           "loc": 106,
           "functionCount": 20,
-          "duplication": 0.7
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 79,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 79,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 69.8% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.33,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 76,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/content-negotiation.js",
@@ -4382,36 +2021,15 @@
           "complexity": 1,
           "loc": 42,
           "functionCount": 9,
-          "duplication": 1
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 80,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 80,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 100.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 3.33,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 70,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/cookie-sessions.js",
@@ -4419,36 +2037,15 @@
           "complexity": 2,
           "loc": 33,
           "functionCount": 8,
-          "duplication": 0.46
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 81,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 81,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 46.2% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.54,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 81,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/cookies.js",
@@ -4456,36 +2053,15 @@
           "complexity": 3,
           "loc": 64,
           "functionCount": 12,
-          "duplication": 0.57
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 82,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 82,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 56.8% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.89,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 79,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/downloads.js",
@@ -4493,36 +2069,15 @@
           "complexity": 1,
           "loc": 41,
           "functionCount": 11,
-          "duplication": 0.85
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 82,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 82,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 85.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.83,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 73,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/ejs.js",
@@ -4530,36 +2085,15 @@
           "complexity": 1,
           "loc": 15,
           "functionCount": 3,
-          "duplication": 0.58
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 83,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 83,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 58.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.94,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 78,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/error-pages.js",
@@ -4567,36 +2101,15 @@
           "complexity": 1,
           "loc": 87,
           "functionCount": 24,
-          "duplication": 0.76
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 84,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 84,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 75.9% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.53,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 75,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/error.js",
@@ -4604,36 +2117,15 @@
           "complexity": 1,
           "loc": 25,
           "functionCount": 7,
-          "duplication": 1
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 84,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 84,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 100.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 3.33,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 70,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/hello-world.js",
@@ -4641,36 +2133,15 @@
           "complexity": 1,
           "loc": 18,
           "functionCount": 5,
-          "duplication": 1
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 85,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 85,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 100.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 3.33,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 70,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/markdown.js",
@@ -4678,36 +2149,15 @@
           "complexity": 1,
           "loc": 18,
           "functionCount": 5,
-          "duplication": 0.79
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 86,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 86,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 78.6% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.62,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 74,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/multi-router.js",
@@ -4715,36 +2165,15 @@
           "complexity": 1,
           "loc": 39,
           "functionCount": 11,
-          "duplication": 0.9
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 87,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 87,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 90.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 3,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 72,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/mvc.js",
@@ -4752,36 +2181,15 @@
           "complexity": 4,
           "loc": 119,
           "functionCount": 27,
-          "duplication": 0.38
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 87,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 87,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 38.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.27,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 82,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/params.js",
@@ -4789,36 +2197,15 @@
           "complexity": 1,
           "loc": 39,
           "functionCount": 11,
-          "duplication": 0.32
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 88,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 88,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 31.8% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.06,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 84,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/resource.js",
@@ -4826,36 +2213,15 @@
           "complexity": 1,
           "loc": 60,
           "functionCount": 17,
-          "duplication": 0.35
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 89,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 89,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 35.5% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.18,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 83,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/route-map.js",
@@ -4863,36 +2229,15 @@
           "complexity": 1,
           "loc": 39,
           "functionCount": 11,
-          "duplication": 1
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 89,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 89,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 100.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 3.33,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 70,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/route-separation.js",
@@ -4900,36 +2245,15 @@
           "complexity": 3,
           "loc": 86,
           "functionCount": 21,
-          "duplication": 0.49
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 90,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 90,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 48.8% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.63,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 80,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/vhost.js",
@@ -4937,36 +2261,15 @@
           "complexity": 1,
           "loc": 42,
           "functionCount": 12,
-          "duplication": 0.59
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 91,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 91,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 59.1% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.97,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 78,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/acceptance/web-service.js",
@@ -4974,36 +2277,15 @@
           "complexity": 1,
           "loc": 93,
           "functionCount": 25,
-          "duplication": 0.89
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 91,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 91,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 89.3% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.98,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 72,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/support/env.js",
@@ -5011,17 +2293,15 @@
           "complexity": 1,
           "loc": 2,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 92,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 92,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "test/support/tmpl.js",
@@ -5029,17 +2309,15 @@
           "complexity": 4,
           "loc": 28,
           "functionCount": 4,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 93,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 93,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "test/support/utils.js",
@@ -5047,17 +2325,15 @@
           "complexity": 3,
           "loc": 36,
           "functionCount": 10,
-          "duplication": 0.11
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 94,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 94,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 98,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "examples/multi-router/controllers/api_v1.js",
@@ -5065,36 +2341,15 @@
           "complexity": 1,
           "loc": 10,
           "functionCount": 2,
-          "duplication": 0.86
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 94,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 94,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 85.7% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.86,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 73,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/multi-router/controllers/api_v2.js",
@@ -5102,36 +2357,15 @@
           "complexity": 1,
           "loc": 10,
           "functionCount": 2,
-          "duplication": 0.86
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 95,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 95,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 85.7% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 2.86,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 73,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/mvc/lib/boot.js",
@@ -5139,36 +2373,15 @@
           "complexity": 18,
           "loc": 63,
           "functionCount": 2,
-          "duplication": 0.22
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 96,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 96,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 22.2% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.48,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 64,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 73
       },
       {
         "file": "examples/search/public/client.js",
@@ -5176,17 +2389,15 @@
           "complexity": 2,
           "loc": 13,
           "functionCount": 2,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 96,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 96,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "examples/mvc/controllers/main/index.js",
@@ -5194,91 +2405,15 @@
           "complexity": 1,
           "loc": 4,
           "functionCount": 1,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 97,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 97,
+          "isEntryPoint": true
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
-      },
-      {
-        "file": "examples/mvc/controllers/user/index.js",
-        "metrics": {
-          "complexity": 3,
-          "loc": 27,
-          "functionCount": 6,
-          "duplication": 0.4
-        },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 98,
-          "isEntryPoint": true,
-          "isCriticalPath": false
-        },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 40.0% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.33,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 82,
-        "isCritical": false
-      },
-      {
-        "file": "examples/mvc/controllers/user-pet/index.js",
-        "metrics": {
-          "complexity": 2,
-          "loc": 15,
-          "functionCount": 1,
-          "duplication": 0.27
-        },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 99,
-          "isEntryPoint": true,
-          "isCriticalPath": false
-        },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 26.7% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.78,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 90,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "examples/mvc/controllers/pet/index.js",
@@ -5286,36 +2421,47 @@
           "complexity": 2,
           "loc": 21,
           "functionCount": 4,
-          "duplication": 0.44
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 99,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 98,
+          "isEntryPoint": true
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 44.4% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.48,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 81,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
+      },
+      {
+        "file": "examples/mvc/controllers/user/index.js",
+        "metrics": {
+          "complexity": 3,
+          "loc": 27,
+          "functionCount": 6,
+          "duplicationRatio": 0
+        },
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 99,
+          "isEntryPoint": true
+        },
+        "issues": [],
+        "healthScore": 100
+      },
+      {
+        "file": "examples/mvc/controllers/user-pet/index.js",
+        "metrics": {
+          "complexity": 2,
+          "loc": 15,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 99,
+          "isEntryPoint": true
+        },
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "examples/static-files/public/js/app.js",
@@ -5323,343 +2469,17 @@
           "complexity": 1,
           "loc": 0,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 100,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 100,
+          "isEntryPoint": true
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       }
-    ],
-    "recommendations": {
-      "critical": [
-        {
-          "file": "temp-analysis/express/lib/response.js",
-          "issue": "High complexity: 111 (recommended: < 20)",
-          "solution": "Break down into smaller functions",
-          "effortHours": 16,
-          "impact": "Improved readability and maintainability",
-          "priority": 10
-        },
-        {
-          "file": "temp-analysis/express/test/express.json.js",
-          "issue": "Large file: 639 lines (recommended: < 500)",
-          "solution": "Split into smaller, focused modules",
-          "effortHours": 16,
-          "impact": "Better module organization",
-          "priority": 10
-        },
-        {
-          "file": "temp-analysis/express/test/express.urlencoded.js",
-          "issue": "Large file: 700 lines (recommended: < 500)",
-          "solution": "Split into smaller, focused modules",
-          "effortHours": 16,
-          "impact": "Better module organization",
-          "priority": 10
-        },
-        {
-          "file": "temp-analysis/express/test/app.render.js",
-          "issue": "High duplication: 58.0% (recommended: < 30%)",
-          "solution": "Extract common code into shared utilities",
-          "effortHours": 8,
-          "impact": "Reduced maintenance overhead",
-          "priority": 9
-        },
-        {
-          "file": "temp-analysis/express/test/express.raw.js",
-          "issue": "High duplication: 85.1% (recommended: < 30%)",
-          "solution": "Extract common code into shared utilities",
-          "effortHours": 9,
-          "impact": "Reduced maintenance overhead",
-          "priority": 9
-        }
-      ],
-      "quickWins": [
-        {
-          "description": "Eliminate common code patterns in 20 files",
-          "files": [
-            "temp-analysis/express/lib/express.js",
-            "temp-analysis/express/lib/utils.js",
-            "temp-analysis/express/test/app.locals.js",
-            "temp-analysis/express/test/app.render.js",
-            "temp-analysis/express/test/app.use.js",
-            "temp-analysis/express/test/config.js",
-            "temp-analysis/express/test/express.raw.js",
-            "temp-analysis/express/test/express.text.js",
-            "temp-analysis/express/test/res.download.js",
-            "temp-analysis/express/test/res.send.js",
-            "temp-analysis/express/examples/auth/index.js",
-            "temp-analysis/express/examples/content-negotiation/index.js",
-            "temp-analysis/express/examples/content-negotiation/users.js",
-            "temp-analysis/express/examples/resource/index.js",
-            "temp-analysis/express/examples/route-map/index.js",
-            "temp-analysis/express/examples/route-middleware/index.js",
-            "temp-analysis/express/examples/route-separation/index.js",
-            "temp-analysis/express/examples/vhost/index.js",
-            "temp-analysis/express/examples/mvc/lib/boot.js",
-            "temp-analysis/express/examples/mvc/controllers/user-pet/index.js"
-          ],
-          "effortMinutes": 45,
-          "scoreImprovement": 40
-        },
-        {
-          "description": "Split 6 large files into smaller modules",
-          "files": [
-            "temp-analysis/express/lib/application.js",
-            "temp-analysis/express/test/app.use.js",
-            "temp-analysis/express/test/express.raw.js",
-            "temp-analysis/express/test/express.text.js",
-            "temp-analysis/express/test/res.download.js",
-            "temp-analysis/express/test/res.send.js"
-          ],
-          "effortMinutes": 45,
-          "scoreImprovement": 12
-        },
-        {
-          "description": "Reduce complexity in 4 files through method extraction",
-          "files": [
-            "temp-analysis/express/lib/application.js",
-            "temp-analysis/express/lib/utils.js",
-            "temp-analysis/express/lib/view.js",
-            "temp-analysis/express/test/app.render.js"
-          ],
-          "effortMinutes": 45,
-          "scoreImprovement": 8
-        },
-        {
-          "description": "Quick fix: Medium duplication: 20.0% (recommended: < 15%)",
-          "files": [
-            "temp-analysis/express/lib/express.js"
-          ],
-          "effortMinutes": 30,
-          "scoreImprovement": 3
-        },
-        {
-          "description": "Quick fix: Medium duplication: 27.8% (recommended: < 15%)",
-          "files": [
-            "temp-analysis/express/test/app.locals.js"
-          ],
-          "effortMinutes": 30,
-          "scoreImprovement": 3
-        }
-      ],
-      "improvements": [
-        {
-          "title": "Duplication Elimination",
-          "description": "Extract common code into reusable utilities and shared modules",
-          "files": [
-            "temp-analysis/express/index.js",
-            "temp-analysis/express/lib/express.js",
-            "temp-analysis/express/lib/request.js",
-            "temp-analysis/express/lib/response.js",
-            "temp-analysis/express/lib/utils.js",
-            "temp-analysis/express/lib/view.js",
-            "temp-analysis/express/test/Route.js",
-            "temp-analysis/express/test/Router.js",
-            "temp-analysis/express/test/app.all.js",
-            "temp-analysis/express/test/app.engine.js",
-            "temp-analysis/express/test/app.head.js",
-            "temp-analysis/express/test/app.js",
-            "temp-analysis/express/test/app.listen.js",
-            "temp-analysis/express/test/app.locals.js",
-            "temp-analysis/express/test/app.options.js",
-            "temp-analysis/express/test/app.param.js",
-            "temp-analysis/express/test/app.render.js",
-            "temp-analysis/express/test/app.request.js",
-            "temp-analysis/express/test/app.response.js",
-            "temp-analysis/express/test/app.route.js",
-            "temp-analysis/express/test/app.router.js",
-            "temp-analysis/express/test/app.routes.error.js",
-            "temp-analysis/express/test/app.use.js",
-            "temp-analysis/express/test/config.js",
-            "temp-analysis/express/test/exports.js",
-            "temp-analysis/express/test/express.json.js",
-            "temp-analysis/express/test/express.raw.js",
-            "temp-analysis/express/test/express.static.js",
-            "temp-analysis/express/test/express.text.js",
-            "temp-analysis/express/test/express.urlencoded.js",
-            "temp-analysis/express/test/middleware.basic.js",
-            "temp-analysis/express/test/regression.js",
-            "temp-analysis/express/test/req.accepts.js",
-            "temp-analysis/express/test/req.acceptsCharsets.js",
-            "temp-analysis/express/test/req.acceptsEncodings.js",
-            "temp-analysis/express/test/req.acceptsLanguages.js",
-            "temp-analysis/express/test/req.baseUrl.js",
-            "temp-analysis/express/test/req.fresh.js",
-            "temp-analysis/express/test/req.get.js",
-            "temp-analysis/express/test/req.host.js",
-            "temp-analysis/express/test/req.hostname.js",
-            "temp-analysis/express/test/req.ip.js",
-            "temp-analysis/express/test/req.ips.js",
-            "temp-analysis/express/test/req.is.js",
-            "temp-analysis/express/test/req.path.js",
-            "temp-analysis/express/test/req.protocol.js",
-            "temp-analysis/express/test/req.query.js",
-            "temp-analysis/express/test/req.range.js",
-            "temp-analysis/express/test/req.route.js",
-            "temp-analysis/express/test/req.secure.js",
-            "temp-analysis/express/test/req.signedCookies.js",
-            "temp-analysis/express/test/req.stale.js",
-            "temp-analysis/express/test/req.subdomains.js",
-            "temp-analysis/express/test/req.xhr.js",
-            "temp-analysis/express/test/res.append.js",
-            "temp-analysis/express/test/res.attachment.js",
-            "temp-analysis/express/test/res.clearCookie.js",
-            "temp-analysis/express/test/res.cookie.js",
-            "temp-analysis/express/test/res.download.js",
-            "temp-analysis/express/test/res.format.js",
-            "temp-analysis/express/test/res.get.js",
-            "temp-analysis/express/test/res.json.js",
-            "temp-analysis/express/test/res.jsonp.js",
-            "temp-analysis/express/test/res.links.js",
-            "temp-analysis/express/test/res.locals.js",
-            "temp-analysis/express/test/res.location.js",
-            "temp-analysis/express/test/res.redirect.js",
-            "temp-analysis/express/test/res.render.js",
-            "temp-analysis/express/test/res.send.js",
-            "temp-analysis/express/test/res.sendFile.js",
-            "temp-analysis/express/test/res.sendStatus.js",
-            "temp-analysis/express/test/res.set.js",
-            "temp-analysis/express/test/res.status.js",
-            "temp-analysis/express/test/res.type.js",
-            "temp-analysis/express/test/res.vary.js",
-            "temp-analysis/express/test/utils.js",
-            "temp-analysis/express/examples/auth/index.js",
-            "temp-analysis/express/examples/content-negotiation/index.js",
-            "temp-analysis/express/examples/content-negotiation/users.js",
-            "temp-analysis/express/examples/cookie-sessions/index.js",
-            "temp-analysis/express/examples/cookies/index.js",
-            "temp-analysis/express/examples/downloads/index.js",
-            "temp-analysis/express/examples/ejs/index.js",
-            "temp-analysis/express/examples/error-pages/index.js",
-            "temp-analysis/express/examples/hello-world/index.js",
-            "temp-analysis/express/examples/markdown/index.js",
-            "temp-analysis/express/examples/multi-router/index.js",
-            "temp-analysis/express/examples/error/index.js",
-            "temp-analysis/express/examples/mvc/db.js",
-            "temp-analysis/express/examples/mvc/index.js",
-            "temp-analysis/express/examples/online/index.js",
-            "temp-analysis/express/examples/params/index.js",
-            "temp-analysis/express/examples/resource/index.js",
-            "temp-analysis/express/examples/route-map/index.js",
-            "temp-analysis/express/examples/route-middleware/index.js",
-            "temp-analysis/express/examples/route-separation/index.js",
-            "temp-analysis/express/examples/route-separation/post.js",
-            "temp-analysis/express/examples/route-separation/user.js",
-            "temp-analysis/express/examples/search/index.js",
-            "temp-analysis/express/examples/session/index.js",
-            "temp-analysis/express/examples/session/redis.js",
-            "temp-analysis/express/examples/static-files/index.js",
-            "temp-analysis/express/examples/vhost/index.js",
-            "temp-analysis/express/examples/view-constructor/github-view.js",
-            "temp-analysis/express/examples/view-constructor/index.js",
-            "temp-analysis/express/examples/view-locals/index.js",
-            "temp-analysis/express/examples/web-service/index.js",
-            "temp-analysis/express/test/acceptance/auth.js",
-            "temp-analysis/express/test/acceptance/content-negotiation.js",
-            "temp-analysis/express/test/acceptance/cookie-sessions.js",
-            "temp-analysis/express/test/acceptance/cookies.js",
-            "temp-analysis/express/test/acceptance/downloads.js",
-            "temp-analysis/express/test/acceptance/ejs.js",
-            "temp-analysis/express/test/acceptance/error-pages.js",
-            "temp-analysis/express/test/acceptance/error.js",
-            "temp-analysis/express/test/acceptance/hello-world.js",
-            "temp-analysis/express/test/acceptance/markdown.js",
-            "temp-analysis/express/test/acceptance/multi-router.js",
-            "temp-analysis/express/test/acceptance/mvc.js",
-            "temp-analysis/express/test/acceptance/params.js",
-            "temp-analysis/express/test/acceptance/resource.js",
-            "temp-analysis/express/test/acceptance/route-map.js",
-            "temp-analysis/express/test/acceptance/route-separation.js",
-            "temp-analysis/express/test/acceptance/vhost.js",
-            "temp-analysis/express/test/acceptance/web-service.js",
-            "temp-analysis/express/test/support/utils.js",
-            "temp-analysis/express/examples/multi-router/controllers/api_v1.js",
-            "temp-analysis/express/examples/multi-router/controllers/api_v2.js",
-            "temp-analysis/express/examples/mvc/lib/boot.js",
-            "temp-analysis/express/examples/mvc/controllers/user/index.js",
-            "temp-analysis/express/examples/mvc/controllers/user-pet/index.js",
-            "temp-analysis/express/examples/mvc/controllers/pet/index.js"
-          ],
-          "approach": "Identify common patterns, create utility functions, implement shared libraries",
-          "effortDays": 3,
-          "benefits": [
-            "Reduced maintenance overhead",
-            "Improved consistency across codebase",
-            "Smaller bundle size"
-          ],
-          "risks": [
-            "Over-abstraction risk",
-            "Potential breaking changes"
-          ]
-        },
-        {
-          "title": "Large File Decomposition",
-          "description": "Break down large files into smaller, focused modules",
-          "files": [
-            "temp-analysis/express/lib/response.js",
-            "temp-analysis/express/test/Router.js",
-            "temp-analysis/express/test/app.router.js",
-            "temp-analysis/express/test/app.use.js",
-            "temp-analysis/express/test/express.json.js",
-            "temp-analysis/express/test/express.raw.js",
-            "temp-analysis/express/test/express.static.js",
-            "temp-analysis/express/test/express.text.js",
-            "temp-analysis/express/test/express.urlencoded.js",
-            "temp-analysis/express/test/res.download.js",
-            "temp-analysis/express/test/res.send.js",
-            "temp-analysis/express/test/res.sendFile.js"
-          ],
-          "approach": "Apply Single Responsibility Principle, extract related functionality",
-          "effortDays": 3,
-          "benefits": [
-            "Better module organization",
-            "Improved testability",
-            "Reduced cognitive load"
-          ],
-          "risks": [
-            "Increased file count",
-            "Potential circular dependencies"
-          ]
-        },
-        {
-          "title": "Critical Path Optimization",
-          "description": "Refactor high-usage files to improve overall system performance",
-          "files": [
-            "temp-analysis/express/index.js",
-            "temp-analysis/express/benchmarks/middleware.js",
-            "temp-analysis/express/lib/application.js",
-            "temp-analysis/express/lib/express.js",
-            "temp-analysis/express/lib/request.js",
-            "temp-analysis/express/lib/response.js",
-            "temp-analysis/express/lib/utils.js",
-            "temp-analysis/express/lib/view.js",
-            "temp-analysis/express/test/Route.js",
-            "temp-analysis/express/test/Router.js",
-            "temp-analysis/express/test/app.all.js",
-            "temp-analysis/express/test/app.engine.js",
-            "temp-analysis/express/test/app.head.js",
-            "temp-analysis/express/test/app.js",
-            "temp-analysis/express/test/app.listen.js"
-          ],
-          "approach": "Incremental refactoring with comprehensive test coverage",
-          "effortDays": 5,
-          "benefits": [
-            "Improved system performance",
-            "Reduced coupling between modules",
-            "Better maintainability for core features"
-          ],
-          "risks": [
-            "Potential breaking changes in core functionality"
-          ]
-        }
-      ]
-    }
+    ]
   },
-  "duration": 1295
+  "duration": 833
 }

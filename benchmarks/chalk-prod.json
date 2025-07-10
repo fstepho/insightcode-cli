@@ -25,19 +25,18 @@
     "context": {
       "project": {
         "name": "chalk",
-        "path": "temp-analysis/chalk",
+        "path": ".",
         "version": "5.4.1"
       },
       "analysis": {
-        "timestamp": "2025-07-09T23:27:16.323Z",
-        "durationMs": 35,
+        "timestamp": "2025-07-10T17:30:31.753Z",
+        "durationMs": 5,
         "toolVersion": "0.6.0",
         "filesAnalyzed": 4
       }
     },
     "overview": {
-      "grade": "C",
-      "health": "fair",
+      "grade": "B",
       "statistics": {
         "totalFiles": 4,
         "totalLOC": 386,
@@ -45,10 +44,10 @@
         "avgLOC": 97
       },
       "scores": {
-        "complexity": 62,
-        "duplication": 81,
+        "complexity": 61,
+        "duplication": 100,
         "maintainability": 90,
-        "overall": 76
+        "overall": 81
       },
       "summary": "Good overall health with 1 file requiring attention"
     },
@@ -59,17 +58,15 @@
           "complexity": 1,
           "loc": 41,
           "functionCount": 12,
-          "duplication": 0.14
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 0,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 0,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 97,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "source/index.js",
@@ -77,36 +74,23 @@
           "complexity": 23,
           "loc": 169,
           "functionCount": 19,
-          "duplication": 0.03
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 1,
-          "usageRank": 67,
-          "isEntryPoint": true,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 33,
+          "isEntryPoint": true
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High complexity: 23 (recommended: < 20)",
-              "threshold": 20,
-              "excessRatio": 1.15,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Break down into smaller functions",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 1.15
           }
         ],
-        "healthScore": 59,
-        "isCritical": true
+        "healthScore": 60
       },
       {
         "file": "source/index.test-d.ts",
@@ -114,17 +98,15 @@
           "complexity": 3,
           "loc": 148,
           "functionCount": 0,
-          "duplication": 0.02
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 33,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 67,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "source/utilities.js",
@@ -132,70 +114,17 @@
           "complexity": 6,
           "loc": 28,
           "functionCount": 2,
-          "duplication": 0.13
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 1,
-          "usageRank": 100,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 100,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 98,
-        "isCritical": false
+        "healthScore": 100
       }
-    ],
-    "recommendations": {
-      "critical": [
-        {
-          "file": "temp-analysis/chalk/source/index.js",
-          "issue": "High complexity: 23 (recommended: < 20)",
-          "solution": "Break down into smaller functions",
-          "effortHours": 7,
-          "impact": "Improved readability and maintainability",
-          "priority": 10
-        }
-      ],
-      "quickWins": [],
-      "improvements": [
-        {
-          "title": "Critical Path Optimization",
-          "description": "Refactor high-usage files to improve overall system performance",
-          "files": [
-            "temp-analysis/chalk/source/index.js"
-          ],
-          "approach": "Incremental refactoring with comprehensive test coverage",
-          "effortDays": 1,
-          "benefits": [
-            "Improved system performance",
-            "Reduced coupling between modules",
-            "Better maintainability for core features"
-          ],
-          "risks": [
-            "Potential breaking changes in core functionality"
-          ]
-        },
-        {
-          "title": "Duplication Elimination",
-          "description": "Extract common code into reusable utilities and shared modules",
-          "files": [
-            "temp-analysis/chalk/benchmark.js",
-            "temp-analysis/chalk/source/utilities.js"
-          ],
-          "approach": "Identify common patterns, create utility functions, implement shared libraries",
-          "effortDays": 1,
-          "benefits": [
-            "Reduced maintenance overhead",
-            "Improved consistency across codebase",
-            "Smaller bundle size"
-          ],
-          "risks": [
-            "Over-abstraction risk",
-            "Potential breaking changes"
-          ]
-        }
-      ]
-    }
+    ]
   },
-  "duration": 729
+  "duration": 714
 }

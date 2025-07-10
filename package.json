@@ -12,8 +12,8 @@
     "build": "tsc",
     "test": "vitest",
     "prepublishOnly": "npm run build",
-    "benchmark": "tsx scripts/benchmark.ts",
-    "benchmark:production": "tsx scripts/benchmark.ts --exclude-utility",
+    "benchmark": "tsx src/benchmark.ts",
+    "benchmark:production": "tsx src/benchmark.ts --exclude-utility",
     "prepare": "husky"
   },
   "keywords": [

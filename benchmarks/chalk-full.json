@@ -25,19 +25,18 @@
     "context": {
       "project": {
         "name": "chalk",
-        "path": "temp-analysis/chalk",
+        "path": ".",
         "version": "5.4.1"
       },
       "analysis": {
-        "timestamp": "2025-07-09T23:19:58.640Z",
-        "durationMs": 214,
+        "timestamp": "2025-07-10T17:28:41.622Z",
+        "durationMs": 5,
         "toolVersion": "0.6.0",
         "filesAnalyzed": 15
       }
     },
     "overview": {
-      "grade": "C",
-      "health": "fair",
+      "grade": "B",
       "statistics": {
         "totalFiles": 15,
         "totalLOC": 978,
@@ -45,12 +44,12 @@
         "avgLOC": 65
       },
       "scores": {
-        "complexity": 59,
-        "duplication": 71,
+        "complexity": 58,
+        "duplication": 100,
         "maintainability": 96,
-        "overall": 74
+        "overall": 82
       },
-      "summary": "4 critical issues found in core modules"
+      "summary": "3 critical issues found in core modules"
     },
     "details": [
       {
@@ -59,17 +58,15 @@
           "complexity": 1,
           "loc": 41,
           "functionCount": 12,
-          "duplication": 0.14
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 0,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 0,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 97,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "examples/rainbow.js",
@@ -77,17 +74,15 @@
           "complexity": 6,
           "loc": 31,
           "functionCount": 2,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 7,
-          "isEntryPoint": false,
-          "isCriticalPath": true
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 7,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "examples/screenshot.js",
@@ -95,17 +90,15 @@
           "complexity": 10,
           "loc": 21,
           "functionCount": 0,
-          "duplication": 0.11
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 14,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 14,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 98,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "test/_fixture.js",
@@ -113,17 +106,15 @@
           "complexity": 1,
           "loc": 2,
           "functionCount": 0,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 21,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 21,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "test/chalk.js",
@@ -131,17 +122,15 @@
           "complexity": 3,
           "loc": 100,
           "functionCount": 22,
-          "duplication": 0.12
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 29,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 29,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 98,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "test/instance.js",
@@ -149,36 +138,15 @@
           "complexity": 1,
           "loc": 18,
           "functionCount": 4,
-          "duplication": 0.28
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 36,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 36,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 27.8% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.85,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 89,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/level.js",
@@ -186,36 +154,15 @@
           "complexity": 1,
           "loc": 38,
           "functionCount": 4,
-          "duplication": 0.3
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 43,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 43,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 29.6% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.98,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 89,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "test/no-color-support.js",
@@ -223,17 +170,15 @@
           "complexity": 1,
           "loc": 6,
           "functionCount": 1,
-          "duplication": 0
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 50,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 50,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "test/visible.js",
@@ -241,36 +186,15 @@
           "complexity": 1,
           "loc": 33,
           "functionCount": 3,
-          "duplication": 0.59
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 57,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 57,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High duplication: 59.1% (recommended: < 30%)",
-              "threshold": 0.3,
-              "excessRatio": 1.97,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Extract common code into shared utilities",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 4
-            }
-          }
-        ],
-        "healthScore": 78,
-        "isCritical": true
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "source/index.js",
@@ -278,36 +202,23 @@
           "complexity": 23,
           "loc": 169,
           "functionCount": 19,
-          "duplication": 0.03
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 64,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 64,
+          "isEntryPoint": true
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High complexity: 23 (recommended: < 20)",
-              "threshold": 20,
-              "excessRatio": 1.15,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Break down into smaller functions",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 1.15
           }
         ],
-        "healthScore": 59,
-        "isCritical": true
+        "healthScore": 60
       },
       {
         "file": "source/index.test-d.ts",
@@ -315,17 +226,15 @@
           "complexity": 3,
           "loc": 148,
           "functionCount": 0,
-          "duplication": 0.02
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 71,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 71,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 100,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "source/utilities.js",
@@ -333,17 +242,15 @@
           "complexity": 6,
           "loc": 28,
           "functionCount": 2,
-          "duplication": 0.13
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 79,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 79,
+          "isEntryPoint": false
         },
         "issues": [],
-        "healthScore": 98,
-        "isCritical": false
+        "healthScore": 100
       },
       {
         "file": "source/vendor/ansi-styles/index.js",
@@ -351,36 +258,23 @@
           "complexity": 14,
           "loc": 178,
           "functionCount": 14,
-          "duplication": 0.08
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 86,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 86,
+          "isEntryPoint": true
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium complexity: 14 (recommended: < 10)",
-              "threshold": 10,
-              "excessRatio": 1.4,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Refactor to reduce complexity",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 2
-            }
+            "line": 1,
+            "threshold": 10,
+            "excessRatio": 1.4
           }
         ],
-        "healthScore": 72,
-        "isCritical": true
+        "healthScore": 74
       },
       {
         "file": "source/vendor/supports-color/browser.js",
@@ -388,36 +282,15 @@
           "complexity": 7,
           "loc": 26,
           "functionCount": 2,
-          "duplication": 0.16
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 93,
-          "isEntryPoint": false,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 93,
+          "isEntryPoint": false
         },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "medium",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "Medium duplication: 16.0% (recommended: < 15%)",
-              "threshold": 0.15,
-              "excessRatio": 1.07,
-              "unit": "ratio"
-            },
-            "action": {
-              "description": "Consider extracting common patterns",
-              "impact": "Reduced maintenance overhead",
-              "effortHours": 2
-            }
-          }
-        ],
-        "healthScore": 92,
-        "isCritical": false
+        "issues": [],
+        "healthScore": 100
       },
       {
         "file": "source/vendor/supports-color/index.js",
@@ -425,164 +298,25 @@
           "complexity": 56,
           "loc": 139,
           "functionCount": 7,
-          "duplication": 0.13
+          "duplicationRatio": 0
         },
-        "importance": {
-          "usageCount": 0,
-          "usageRank": 100,
-          "isEntryPoint": true,
-          "isCriticalPath": false
+        "dependencies": {
+          "incomingCount": 0,
+          "percentile": 100,
+          "isEntryPoint": true
         },
         "issues": [
           {
             "type": "complexity",
             "severity": "high",
-            "location": {
-              "line": 1
-            },
-            "context": {
-              "message": "High complexity: 56 (recommended: < 20)",
-              "threshold": 20,
-              "excessRatio": 2.8,
-              "unit": "count"
-            },
-            "action": {
-              "description": "Break down into smaller functions",
-              "impact": "Improved readability and maintainability",
-              "effortHours": 4
-            }
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 2.8
           }
         ],
-        "healthScore": 57,
-        "isCritical": true
+        "healthScore": 60
       }
-    ],
-    "recommendations": {
-      "critical": [
-        {
-          "file": "temp-analysis/chalk/source/index.js",
-          "issue": "High complexity: 23 (recommended: < 20)",
-          "solution": "Break down into smaller functions",
-          "effortHours": 7,
-          "impact": "Improved readability and maintainability",
-          "priority": 7
-        },
-        {
-          "file": "temp-analysis/chalk/source/vendor/supports-color/index.js",
-          "issue": "High complexity: 56 (recommended: < 20)",
-          "solution": "Break down into smaller functions",
-          "effortHours": 10,
-          "impact": "Improved readability and maintainability",
-          "priority": 7
-        },
-        {
-          "file": "temp-analysis/chalk/test/visible.js",
-          "issue": "High duplication: 59.1% (recommended: < 30%)",
-          "solution": "Extract common code into shared utilities",
-          "effortHours": 6,
-          "impact": "Reduced maintenance overhead",
-          "priority": 6
-        },
-        {
-          "file": "temp-analysis/chalk/source/vendor/ansi-styles/index.js",
-          "issue": "Medium complexity: 14 (recommended: < 10)",
-          "solution": "Refactor to reduce complexity",
-          "effortHours": 4,
-          "impact": "Improved readability and maintainability",
-          "priority": 5
-        }
-      ],
-      "quickWins": [
-        {
-          "description": "Eliminate common code patterns in 3 files",
-          "files": [
-            "temp-analysis/chalk/test/instance.js",
-            "temp-analysis/chalk/test/level.js",
-            "temp-analysis/chalk/source/vendor/supports-color/browser.js"
-          ],
-          "effortMinutes": 45,
-          "scoreImprovement": 6
-        },
-        {
-          "description": "Quick fix: Medium duplication: 27.8% (recommended: < 15%)",
-          "files": [
-            "temp-analysis/chalk/test/instance.js"
-          ],
-          "effortMinutes": 30,
-          "scoreImprovement": 3
-        },
-        {
-          "description": "Quick fix: Medium duplication: 29.6% (recommended: < 15%)",
-          "files": [
-            "temp-analysis/chalk/test/level.js"
-          ],
-          "effortMinutes": 30,
-          "scoreImprovement": 3
-        },
-        {
-          "description": "Quick fix: Medium complexity: 14 (recommended: < 10)",
-          "files": [
-            "temp-analysis/chalk/source/vendor/ansi-styles/index.js"
-          ],
-          "effortMinutes": 30,
-          "scoreImprovement": 3
-        },
-        {
-          "description": "Quick fix: Medium duplication: 16.0% (recommended: < 15%)",
-          "files": [
-            "temp-analysis/chalk/source/vendor/supports-color/browser.js"
-          ],
-          "effortMinutes": 30,
-          "scoreImprovement": 3
-        }
-      ],
-      "improvements": [
-        {
-          "title": "Duplication Elimination",
-          "description": "Extract common code into reusable utilities and shared modules",
-          "files": [
-            "temp-analysis/chalk/benchmark.js",
-            "temp-analysis/chalk/examples/screenshot.js",
-            "temp-analysis/chalk/test/chalk.js",
-            "temp-analysis/chalk/test/instance.js",
-            "temp-analysis/chalk/test/level.js",
-            "temp-analysis/chalk/test/visible.js",
-            "temp-analysis/chalk/source/utilities.js",
-            "temp-analysis/chalk/source/vendor/supports-color/browser.js",
-            "temp-analysis/chalk/source/vendor/supports-color/index.js"
-          ],
-          "approach": "Identify common patterns, create utility functions, implement shared libraries",
-          "effortDays": 3,
-          "benefits": [
-            "Reduced maintenance overhead",
-            "Improved consistency across codebase",
-            "Smaller bundle size"
-          ],
-          "risks": [
-            "Over-abstraction risk",
-            "Potential breaking changes"
-          ]
-        },
-        {
-          "title": "Critical Path Optimization",
-          "description": "Refactor high-usage files to improve overall system performance",
-          "files": [
-            "temp-analysis/chalk/benchmark.js",
-            "temp-analysis/chalk/examples/rainbow.js"
-          ],
-          "approach": "Incremental refactoring with comprehensive test coverage",
-          "effortDays": 1,
-          "benefits": [
-            "Improved system performance",
-            "Reduced coupling between modules",
-            "Better maintainability for core features"
-          ],
-          "risks": [
-            "Potential breaking changes in core functionality"
-          ]
-        }
-      ]
-    }
+    ]
   },
-  "duration": 912
+  "duration": 706
 }
