@@ -110,7 +110,6 @@ describe('Analyzer v0.6.0', () => {
         
         // Check overview structure
         expect(result.overview).toHaveProperty('grade');
-        expect(result.overview).toHaveProperty('health');
         expect(result.overview).toHaveProperty('statistics');
         expect(result.overview).toHaveProperty('scores');
         expect(result.overview).toHaveProperty('summary');
@@ -139,7 +138,7 @@ describe('Analyzer v0.6.0', () => {
         expect(result.overview.scores.complexity).toBeGreaterThan(80);
         expect(result.overview.scores.duplication).toBeGreaterThan(80);
         expect(['A', 'B'].includes(result.overview.grade)).toBe(true);
-        expect(['excellent', 'good'].includes(result.overview.health)).toBe(true);
+        expect(['A', 'B'].includes(result.overview.grade)).toBe(true);
     });
 
     it('should return low scores for problematic files', () => {
@@ -156,7 +155,7 @@ describe('Analyzer v0.6.0', () => {
         expect(result.overview.scores.complexity).toBeLessThan(50);
         expect(result.overview.scores.duplication).toBeLessThan(80);
         expect(['D', 'F'].includes(result.overview.grade)).toBe(true);
-        expect(['poor', 'critical'].includes(result.overview.health)).toBe(true);
+        expect(['D', 'F'].includes(result.overview.grade)).toBe(true);
     });
 
     it('should correctly mark critical files', () => {
@@ -248,7 +247,7 @@ describe('Analyzer v0.6.0', () => {
         expect(result.overview.statistics.avgLOC).toBe(0);
         expect(result.overview.scores.overall).toBe(0);
         expect(result.overview.grade).toBe('F');
-        expect(result.overview.health).toBe('critical');
+        expect(result.overview.grade).toBe('F');
         expect(result.overview.summary).toBe('No files analyzed');
     });
 

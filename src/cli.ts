@@ -42,7 +42,6 @@ function outputSummaryFormat(results: AnalysisResult): void {
   console.log('InsightCode Analysis Summary');
   console.log('===========================');
   console.log(`Grade: ${results.overview.grade} (${results.overview.scores.overall}/100)`);
-  console.log(`Health: ${results.overview.health}`);
   console.log(`Files: ${results.overview.statistics.totalFiles}`);
   console.log(`Issues: ${results.details.reduce((total, file) => total + file.issues.length, 0)}`);
   

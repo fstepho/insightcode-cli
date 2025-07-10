@@ -42,19 +42,6 @@ function getGradeColor(grade: string): (text: string) => string {
   }
 }
 
-/**
- * Obtient la couleur appropriée pour le health status
- */
-function getHealthColor(health: string): (text: string) => string {
-  switch (health) {
-    case 'excellent': return chalk.green;
-    case 'good': return chalk.yellow;
-    case 'fair': return chalk.yellow;
-    case 'poor': return chalk.red;
-    case 'critical': return chalk.red.bold;
-    default: return chalk.gray;
-  }
-}
 
 /**
  * Affiche les résultats de l'analyse dans le terminal avec un design professionnel
@@ -87,10 +74,8 @@ export function reportToTerminal(result: AnalysisResult): void {
   printSectionHeader('Overall Code Quality Score');
   const gradeColor = getGradeColor(overview.grade);
   const scoreColor = getScoreColor(overview.scores.overall);
-  const healthColor = getHealthColor(overview.health);
   
   console.log(`  ${chalk.bold('Overall Score:')} ${scoreColor(overview.scores.overall + '/100')} ${gradeColor(` ${overview.grade} `)}`);
-  console.log(`  ${chalk.bold('Health Status:')} ${healthColor(overview.health.toUpperCase())}`);
   console.log(`  ${chalk.bold('Summary:')} ${chalk.italic(overview.summary)}`);
 
   // --- Détails des Scores ---

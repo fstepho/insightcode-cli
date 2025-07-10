@@ -59,16 +59,6 @@ function calculateUsageRank(file: FileDetail, allFiles: FileDetail[]): number {
   return isNaN(percentile) ? 0 : percentile;
 }
 
-/**
- * Maps overall score to health status
- */
-function getHealthStatus(overallScore: number): 'excellent' | 'good' | 'fair' | 'poor' | 'critical' {
-  if (overallScore >= 90) return 'excellent';
-  if (overallScore >= 80) return 'good';
-  if (overallScore >= 70) return 'fair';
-  if (overallScore >= 60) return 'poor';
-  return 'critical';
-}
 
 /**
  * Generates human-readable summary
@@ -160,7 +150,6 @@ function calculateOverview(details: FileDetail[]): Overview {
   if (details.length === 0) {
     return {
       grade: 'F',
-      health: 'critical',
       statistics: {
         totalFiles: 0,
         totalLOC: 0,
@@ -214,13 +203,11 @@ function calculateOverview(details: FileDetail[]): Overview {
   const overallScore = validateScore(calculateWeightedScore(complexityScore, duplicationScore, maintainabilityScore));
   
   const grade = getGrade(overallScore);
-  const health = getHealthStatus(overallScore);
   
   const criticalCount = details.filter(f => f.isCritical).length;
   
   const overview: Overview = {
     grade,
-    health,
     statistics: {
       totalFiles: details.length,
       totalLOC,

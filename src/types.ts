@@ -88,7 +88,6 @@ export interface Context {
  */
 export interface Overview {
   grade: 'A' | 'B' | 'C' | 'D' | 'F';
-  health: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
   
   statistics: {
     totalFiles: number;
