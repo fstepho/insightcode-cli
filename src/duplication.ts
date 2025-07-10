@@ -3,7 +3,7 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
-import { FileDetail, ThresholdConfig, Issue, IssueType, Severity } from './types';
+import { FileDetail, ThresholdConfig, IssueType, Severity } from './types';
 
 /**
  * Interface for files with optional content (used in tests)

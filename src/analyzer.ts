@@ -125,18 +125,12 @@ function processFileDetails(details: FileDetail[]): FileDetail[] {
   });
   
   // 5. Mark critical path files (top 10% by usage)
-  const sortedByUsage = [...filesWithDuplication].sort((a, b) => b.dependencies.incomingCount - a.dependencies.incomingCount);
-  const top10Percent = Math.ceil(filesWithDuplication.length * 0.1);
-  sortedByUsage.slice(0, top10Percent).forEach(file => {
-    // isCriticalPath is now calculated on demand based on top 10% usage
-  });
+  // Critical path calculation is now done on-demand in helper functions
   
   // 6. Calculate health scores
   filesWithDuplication.forEach(file => {
     file.healthScore = validateScore(calculateHealthScore(file));
   });
-  
-  // 7. Mark critical files
   
   return filesWithDuplication;
 }
