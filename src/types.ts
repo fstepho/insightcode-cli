@@ -133,14 +133,14 @@ export interface FileDetail {
 
 /**
  * Issues found in files - Simplified structure for v0.6.0
+ * No effortHours - too contextual to calculate automatically
  */
 export interface Issue {
   type: IssueType;
   severity: Severity;
   line: number;
   threshold: number;
-  excessRatio: number;    // How much over threshold
-  effortHours: number;
+  excessRatio: number;    // How much over threshold - used for ROI sorting
   
   // Optional enriched location for certain issue types
   endLine?: number;

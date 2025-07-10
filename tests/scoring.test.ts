@@ -205,8 +205,7 @@ describe('Scoring Algorithms', () => {
       severity,
       line: 1,
       threshold: 10,
-      excessRatio: 1.5,
-      effortHours: 1
+      excessRatio: 1.5
     });
 
     it('should return 100 for perfect files', () => {

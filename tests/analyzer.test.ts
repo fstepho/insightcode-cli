@@ -37,7 +37,6 @@ const createIssue = (overrides: Partial<Issue>): Issue => ({
     line: 1,
     threshold: 10,
     excessRatio: 2.0,
-    effortHours: 2,
     ...overrides,
 });
 

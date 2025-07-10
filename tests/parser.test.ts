@@ -202,8 +202,7 @@ switch (x) {              // +1 per case
         severity: 'high',
         line: 1,
         threshold: 300,
-        excessRatio: expect.any(Number),
-        effortHours: 6
+        excessRatio: expect.any(Number)
       });
     });
     

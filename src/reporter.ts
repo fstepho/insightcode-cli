@@ -129,28 +129,27 @@ export function reportToTerminal(result: AnalysisResult): void {
       if (file.issues.length > 0) {
         const worstIssue = file.issues.sort((a, b) => b.excessRatio - a.excessRatio)[0];
         console.log(`      ${chalk.bold('Main Issue:')} ${getIssueDescription(worstIssue)}`);
-        console.log(`      ${chalk.bold('Effort:')} ${worstIssue.effortHours}h`);
+        console.log(`      ${chalk.bold('Impact:')} ${worstIssue.excessRatio.toFixed(1)}x over threshold`);
       }
     });
   }
   
-  // Quick Wins: Issues with effort ≤ 1h, sorted by ROI
+  // Quick Wins: Issues sorted by excessRatio (highest impact first)
   const quickWins = result.details
     .flatMap(file => 
       file.issues
-        .filter(issue => issue.effortHours <= 1)
+        .filter(issue => issue.severity === 'medium') // Focus on medium issues as quick wins
         .map(issue => ({ file: file.file, ...issue }))
     )
-    .sort((a, b) => (b.excessRatio / b.effortHours) - (a.excessRatio / a.effortHours))
+    .sort((a, b) => b.excessRatio - a.excessRatio)
     .slice(0, 5);
   
   if (quickWins.length > 0) {
     printSectionHeader('Quick Wins');
     quickWins.forEach((win, index) => {
-      const roi = (win.excessRatio / win.effortHours).toFixed(1);
       console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.green(win.file)} - ${chalk.cyan(win.type)}`);
       console.log(`      ${chalk.bold('Issue:')} ${getIssueDescription(win)}`);
-      console.log(`      ${chalk.bold('Effort:')} ${win.effortHours}h | ${chalk.bold('ROI:')} ${roi}`);
+      console.log(`      ${chalk.bold('Impact:')} ${win.excessRatio.toFixed(1)}x over threshold`);
     });
   }
 

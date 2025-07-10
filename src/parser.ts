@@ -250,8 +250,7 @@ export function parseFile(filePath: string): FileDetail {
       severity: Severity.High,
       line: 1,
       threshold: complexityThresholds.high,
-      excessRatio: complexity / complexityThresholds.high,
-      effortHours: 4
+      excessRatio: complexity / complexityThresholds.high
     });
   } else if (complexity > complexityThresholds.medium) {
     issues.push({
@@ -259,8 +258,7 @@ export function parseFile(filePath: string): FileDetail {
       severity: Severity.Medium,
       line: 1,
       threshold: complexityThresholds.medium,
-      excessRatio: complexity / complexityThresholds.medium,
-      effortHours: 2
+      excessRatio: complexity / complexityThresholds.medium
     });
   }
   
@@ -270,8 +268,7 @@ export function parseFile(filePath: string): FileDetail {
       severity: Severity.High,
       line: 1,
       threshold: sizeThresholds.high,
-      excessRatio: loc / sizeThresholds.high,
-      effortHours: 6
+      excessRatio: loc / sizeThresholds.high
     });
   } else if (loc > sizeThresholds.medium) {
     issues.push({
@@ -279,8 +276,7 @@ export function parseFile(filePath: string): FileDetail {
       severity: Severity.Medium,
       line: 1,
       threshold: sizeThresholds.medium,
-      excessRatio: loc / sizeThresholds.medium,
-      effortHours: 3
+      excessRatio: loc / sizeThresholds.medium
     });
   }
   

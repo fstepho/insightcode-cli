@@ -153,8 +153,7 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
         severity: Severity.High,
         line: 1,
         threshold: duplicationThresholds.high / 100, // Store as ratio
-        excessRatio: duplicationRatio / (duplicationThresholds.high / 100),
-        effortHours: 4
+        excessRatio: duplicationRatio / (duplicationThresholds.high / 100)
       });
     } else if (duplicationRatio > duplicationThresholds.medium / 100) {
       updatedIssues.push({
@@ -162,8 +161,7 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
         severity: Severity.Medium,
         line: 1,
         threshold: duplicationThresholds.medium / 100, // Store as ratio
-        excessRatio: duplicationRatio / (duplicationThresholds.medium / 100),
-        effortHours: 2
+        excessRatio: duplicationRatio / (duplicationThresholds.medium / 100)
       });
     }
     
