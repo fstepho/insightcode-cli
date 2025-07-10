@@ -186,7 +186,7 @@ function calculateOverview(details: FileDetail[]): Overview {
       const criticismScore = (file.dependencies.incomingCount * 2.0) + (file.metrics.complexity * 1.0) + (file.issues.length * 0.5) + 1;
       const weight = criticismScore / totalCriticismScore;
       weightedComplexityScore += calculateComplexityScore(file.metrics.complexity) * weight;
-      weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio * 100) * weight; // Convert to percentage for scoring
+      weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio) * weight;
       weightedMaintainabilityScore += calculateMaintainabilityScore(file.metrics.loc, file.metrics.functionCount) * weight;
     }
   } else {

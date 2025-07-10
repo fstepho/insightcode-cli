@@ -54,14 +54,14 @@ describe('Scoring Algorithms', () => {
   describe('calculateDuplicationScore', () => {
     it('should return 100 for no duplication', () => {
       expect(calculateDuplicationScore(0)).toBe(100);
-      expect(calculateDuplicationScore(3)).toBe(100);
+      expect(calculateDuplicationScore(0.03)).toBe(100); // 3% as ratio
     });
 
     it('should return decreasing scores for higher duplication', () => {
-      const score8 = calculateDuplicationScore(8);
-      const score15 = calculateDuplicationScore(15);
-      const score30 = calculateDuplicationScore(30);
-      const score50 = calculateDuplicationScore(50);
+      const score8 = calculateDuplicationScore(0.08);  // 8% as ratio
+      const score15 = calculateDuplicationScore(0.15); // 15% as ratio
+      const score30 = calculateDuplicationScore(0.30); // 30% as ratio
+      const score50 = calculateDuplicationScore(0.50); // 50% as ratio
       
       // Scores should decrease as duplication increases
       expect(score8).toBeGreaterThan(score15);
@@ -76,14 +76,14 @@ describe('Scoring Algorithms', () => {
     });
 
     it('should handle extreme duplication values', () => {
-      const score = calculateDuplicationScore(100);
+      const score = calculateDuplicationScore(1.0); // 100% as ratio
       expect(score).toBeGreaterThanOrEqual(5);
       expect(score).toBeLessThan(20);
     });
 
     it('should be monotonically decreasing', () => {
       // Test that duplication score decreases as duplication increases
-      const duplications = [0, 3, 8, 15, 30, 50, 75, 100];
+      const duplications = [0, 0.03, 0.08, 0.15, 0.30, 0.50, 0.75, 1.0]; // As ratios
       for (let i = 1; i < duplications.length; i++) {
         const prevScore = calculateDuplicationScore(duplications[i - 1]);
         const currScore = calculateDuplicationScore(duplications[i]);

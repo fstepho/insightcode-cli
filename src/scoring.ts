@@ -52,16 +52,17 @@ export function calculateComplexityScore(complexity: number): number {
 }
 
 /**
- * Converts a raw duplication percentage into a 0-100 score.
+ * Converts a duplication ratio (0-1) into a 0-100 score.
  */
-export function calculateDuplicationScore(duplication: number): number {
-  if (duplication <= 3) return 100;  // Excellent
-  if (duplication <= 8) return 85;   // Good
-  if (duplication <= 15) return 65;  // Acceptable
-  if (duplication <= 30) return 40;  // Poor
-  if (duplication <= 50) return 20;  // Very Poor
+export function calculateDuplicationScore(duplicationRatio: number): number {
+  const percentage = duplicationRatio * 100; // Convert to percentage for thresholds
+  if (percentage <= 3) return 100;  // Excellent
+  if (percentage <= 8) return 85;   // Good
+  if (percentage <= 15) return 65;  // Acceptable
+  if (percentage <= 30) return 40;  // Poor
+  if (percentage <= 50) return 20;  // Very Poor
   // Gradual penalty for extreme values
-  return Math.max(5, 20 - (duplication - 50) / 10);
+  return Math.max(5, 20 - (percentage - 50) / 10);
 }
 
 /**
