@@ -246,9 +246,8 @@ switch (x) {              // +1 per case
       const fileDetail = parseFile(testFile);
       
       expect(fileDetail.dependencies.isEntryPoint).toBe(true);
-      expect(fileDetail.dependencies.usageCount).toBe(0);
-      expect(fileDetail.dependencies.usageRank).toBe(0);
-      expect(fileDetail.dependencies.isCriticalPath).toBe(false);
+      expect(fileDetail.dependencies.incomingCount).toBe(0);
+      expect(fileDetail.dependencies.percentile).toBe(0);
       expect(fileDetail.healthScore).toBe(0); // Will be calculated later
     });
   });

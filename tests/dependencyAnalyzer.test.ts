@@ -12,10 +12,10 @@ describe('Dependency Analyzer', () => {
       duplicationRatio: 0
     },
     dependencies: {
-      usageCount: 0,
-      usageRank: 0,
+      incomingCount: 0,
+      percentile: 0,
       isEntryPoint: false,
-      isCriticalPath: false
+      // isCriticalPath removed
     },
     issues: [],
     healthScore: 100,

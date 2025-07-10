@@ -35,13 +35,22 @@ function isCriticalFile(file: FileDetail): boolean {
 }
 
 /**
+ * Checks if a file is in the critical path (top 10% by usage)
+ */
+function isCriticalPath(file: FileDetail, allFiles: FileDetail[]): boolean {
+  const sortedByUsage = [...allFiles].sort((a, b) => b.dependencies.incomingCount - a.dependencies.incomingCount);
+  const topTenPercentCount = Math.ceil(sortedByUsage.length * 0.1);
+  return sortedByUsage.slice(0, topTenPercentCount).includes(file);
+}
+
+/**
  * Calculates usage rank percentile for a file
  */
 function calculateUsageRank(file: FileDetail, allFiles: FileDetail[]): number {
   if (allFiles.length <= 1) return 0;
   
-  // Sort all files by usageCount
-  const sorted = [...allFiles].sort((a, b) => a.dependencies.usageCount - b.dependencies.usageCount);
+  // Sort all files by incomingCount
+  const sorted = [...allFiles].sort((a, b) => a.dependencies.incomingCount - b.dependencies.incomingCount);
   
   // Find position of current file
   const position = sorted.findIndex(f => f.file === file.file);
@@ -109,19 +118,19 @@ function processFileDetails(details: FileDetail[]): FileDetail[] {
   
   // 3. Update usage counts from dependency analysis
   filesWithDuplication.forEach(file => {
-    file.dependencies.usageCount = dependencyMap.get(file.file) || 0;
+    file.dependencies.incomingCount = dependencyMap.get(file.file) || 0;
   });
   
   // 4. Calculate usage ranks
   filesWithDuplication.forEach(file => {
-    file.dependencies.usageRank = calculateUsageRank(file, filesWithDuplication);
+    file.dependencies.percentile = calculateUsageRank(file, filesWithDuplication);
   });
   
   // 5. Mark critical path files (top 10% by usage)
-  const sortedByUsage = [...filesWithDuplication].sort((a, b) => b.dependencies.usageCount - a.dependencies.usageCount);
+  const sortedByUsage = [...filesWithDuplication].sort((a, b) => b.dependencies.incomingCount - a.dependencies.incomingCount);
   const top10Percent = Math.ceil(filesWithDuplication.length * 0.1);
   sortedByUsage.slice(0, top10Percent).forEach(file => {
-    file.dependencies.isCriticalPath = true;
+    // isCriticalPath is now calculated on demand based on top 10% usage
   });
   
   // 6. Calculate health scores
@@ -167,7 +176,7 @@ function calculateOverview(details: FileDetail[]): Overview {
     const complexityWeight = 1.0;
     const impactWeight = 2.0;
     const issueWeight = 0.5;
-    return sum + (f.dependencies.usageCount * impactWeight) + (f.metrics.complexity * complexityWeight) + (f.issues.length * issueWeight) + 1;
+    return sum + (f.dependencies.incomingCount * impactWeight) + (f.metrics.complexity * complexityWeight) + (f.issues.length * issueWeight) + 1;
   }, 0);
   
   let weightedComplexityScore = 0;
@@ -176,7 +185,7 @@ function calculateOverview(details: FileDetail[]): Overview {
   
   if (totalCriticismScore > 0) {
     for (const file of details) {
-      const criticismScore = (file.dependencies.usageCount * 2.0) + (file.metrics.complexity * 1.0) + (file.issues.length * 0.5) + 1;
+      const criticismScore = (file.dependencies.incomingCount * 2.0) + (file.metrics.complexity * 1.0) + (file.issues.length * 0.5) + 1;
       const weight = criticismScore / totalCriticismScore;
       weightedComplexityScore += calculateComplexityScore(file.metrics.complexity) * weight;
       weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio * 100) * weight; // Convert to percentage for scoring

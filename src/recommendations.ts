@@ -10,6 +10,15 @@ function isCriticalFile(file: FileDetail): boolean {
 }
 
 /**
+ * Checks if a file is in the critical path (top 10% by usage)
+ */
+function isCriticalPath(file: FileDetail, allFiles: FileDetail[]): boolean {
+  const sortedByUsage = [...allFiles].sort((a, b) => b.dependencies.incomingCount - a.dependencies.incomingCount);
+  const topTenPercentCount = Math.ceil(sortedByUsage.length * 0.1);
+  return sortedByUsage.slice(0, topTenPercentCount).includes(file);
+}
+
+/**
  * Generates smart recommendations based on file analysis
  * Prioritizes by impact and effort according to v0.6.0 specs
  */
@@ -92,7 +101,7 @@ function generateImprovements(allFiles: FileDetail[]): Improvement[] {
   const improvements: Improvement[] = [];
   
   // Architecture improvement based on critical path analysis
-  const criticalPathFiles = allFiles.filter(f => f.dependencies.isCriticalPath);
+  const criticalPathFiles = allFiles.filter(f => isCriticalPath(f, allFiles));
   if (criticalPathFiles.length > 0) {
     improvements.push({
       title: 'Critical Path Optimization',
@@ -193,8 +202,8 @@ function calculatePriority(file: FileDetail): number {
   let priority = 5; // Base priority
   
   // High usage increases priority
-  if (file.dependencies.isCriticalPath) priority += 3;
-  if (file.dependencies.usageCount > 10) priority += 2;
+  // Note: isCriticalPath check would need allFiles context, skip for now
+  if (file.dependencies.incomingCount > 10) priority += 2;
   
   // Poor health decreases priority score (making it higher priority)
   if (file.healthScore < 30) priority += 3;

@@ -120,10 +120,9 @@ export interface FileDetail {
   };
   
   dependencies: {
-    usageCount: number;      // How many files import this
-    usageRank: number;       // Percentile 0-100
+    incomingCount: number;   // How many files import this
+    percentile: number;      // Percentile 0-100
     isEntryPoint: boolean;   // main.ts, index.ts, app.ts
-    isCriticalPath: boolean; // Top 10% by usage
   };
   
   issues: Issue[];

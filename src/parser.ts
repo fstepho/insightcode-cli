@@ -333,10 +333,9 @@ export function parseFile(filePath: string): FileDetail {
       duplicationRatio: 0  // Will be calculated later in duplication.ts
     },
     dependencies: {
-      usageCount: 0,  // Will be calculated later in dependencyAnalyzer.ts
-      usageRank: 0,   // Will be calculated later in analyzer.ts
-      isEntryPoint: isEntryPoint(filePath),
-      isCriticalPath: false  // Will be calculated later in analyzer.ts
+      incomingCount: 0,  // Will be calculated later in dependencyAnalyzer.ts
+      percentile: 0,   // Will be calculated later in analyzer.ts
+      isEntryPoint: isEntryPoint(filePath)
     },
     issues,
     healthScore: 0  // Will be calculated later in analyzer.ts

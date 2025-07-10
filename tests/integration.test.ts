@@ -413,7 +413,7 @@ processUsers(['test@example.com', 'invalid-email'], ['John', 'Jane']);
       
       // utils.ts should have high usage (used by both user.ts and main.ts)
       const utilsFile = results.details.find(f => f.file.includes('utils.ts'));
-      expect(utilsFile?.dependencies.usageCount).toBeGreaterThan(0);
+      expect(utilsFile?.dependencies.incomingCount).toBeGreaterThan(0);
       
       // Should have detected some complexity
       expect(results.overview.statistics.avgComplexity).toBeGreaterThan(1);
@@ -519,7 +519,7 @@ module.exports = {
       
       // Should have analyzed dependencies
       const appFile = results.details.find(f => f.file.includes('app.ts'));
-      expect(appFile?.dependencies.usageCount).toBeGreaterThan(0);
+      expect(appFile?.dependencies.incomingCount).toBeGreaterThan(0);
     });
 
     it('should handle projects with extreme metrics', async () => {

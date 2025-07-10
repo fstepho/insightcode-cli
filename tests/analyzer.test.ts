@@ -20,10 +20,10 @@ const createFileDetail = (overrides: Partial<FileDetail>): FileDetail => ({
         duplicationRatio: 0
     },
     dependencies: {
-        usageCount: 0,
-        usageRank: 0,
+        incomingCount: 0,
+        percentile: 0,
         isEntryPoint: false,
-        isCriticalPath: false
+        // isCriticalPath removed
     },
     issues: [],
     healthScore: 100,
@@ -297,11 +297,11 @@ describe('Analyzer v0.6.0', () => {
         const files: FileDetail[] = [
             createFileDetail({ 
                 file: 'low-usage.ts',
-                dependencies: { usageCount: 1, usageRank: 0, isEntryPoint: false, isCriticalPath: false }
+                dependencies: { incomingCount: 1, percentile: 0, isEntryPoint: false }
             }),
             createFileDetail({ 
                 file: 'high-usage.ts',
-                dependencies: { usageCount: 10, usageRank: 0, isEntryPoint: false, isCriticalPath: false }
+                dependencies: { incomingCount: 10, percentile: 0, isEntryPoint: false }
             }),
         ];
 
@@ -309,8 +309,8 @@ describe('Analyzer v0.6.0', () => {
 
         // Usage ranks should be calculated (0-100 percentile)
         result.details.forEach(file => {
-            expect(file.dependencies.usageRank).toBeGreaterThanOrEqual(0);
-            expect(file.dependencies.usageRank).toBeLessThanOrEqual(100);
+            expect(file.dependencies.percentile).toBeGreaterThanOrEqual(0);
+            expect(file.dependencies.percentile).toBeLessThanOrEqual(100);
         });
     });
 });

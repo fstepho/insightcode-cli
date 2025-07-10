@@ -109,7 +109,7 @@ export function reportToTerminal(result: AnalysisResult): void {
       const healthColor = file.healthScore < 50 ? chalk.red : file.healthScore < 70 ? chalk.yellow : chalk.green;
       console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.cyan(file.file)}`);
       console.log(`      ${chalk.bold('Health Score:')} ${healthColor(file.healthScore + '/100')}`);
-      console.log(`      ${chalk.bold('Complexity:')}   ${file.metrics.complexity} | ${chalk.bold('LOC:')} ${file.metrics.loc} | ${chalk.bold('Usage:')} ${file.dependencies.usageCount}`);
+      console.log(`      ${chalk.bold('Complexity:')}   ${file.metrics.complexity} | ${chalk.bold('LOC:')} ${file.metrics.loc} | ${chalk.bold('Usage:')} ${file.dependencies.incomingCount}`);
       
       if (file.issues.length > 0) {
         file.issues.forEach(issue => {
