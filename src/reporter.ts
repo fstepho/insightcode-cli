@@ -1,14 +1,25 @@
 // File: src/reporter.ts - v0.6.0 Complete Refactor
 
 import chalk from 'chalk';
-import { AnalysisResult, FileDetail } from './types';
+import { AnalysisResult, FileDetail, Issue, IssueType } from './types';
 
 /**
- * Checks if a file is critical based on health score
+ * Generate description for an issue based on type and threshold data
  */
-function isCriticalFile(file: FileDetail): boolean {
-  return file.healthScore < 80;
+function getIssueDescription(issue: Issue): string {
+  switch (issue.type) {
+    case IssueType.Complexity:
+      return `${issue.severity} complexity: Exceeds threshold by ${(issue.excessRatio * 100 - 100).toFixed(0)}%`;
+    case IssueType.Size:
+      return `${issue.severity} file size: Exceeds threshold by ${(issue.excessRatio * 100 - 100).toFixed(0)}%`;
+    case IssueType.Duplication:
+      return `${issue.severity} duplication: Exceeds threshold by ${(issue.excessRatio * 100 - 100).toFixed(0)}%`;
+    default:
+      return `${issue.severity} ${issue.type} issue`;
+  }
 }
+
+// isCriticalFile function removed - logic integrated into client-side calculations
 
 /**
  * Formate un nombre avec des espaces comme séparateurs de milliers
@@ -101,44 +112,45 @@ export function reportToTerminal(result: AnalysisResult): void {
   console.log(`  ${chalk.bold('Average Duplication:')} ${chalk.cyan(Math.round(avgDuplication * 100) + '%')}`);
   console.log(`  ${chalk.bold('Average Functions:')}   ${chalk.cyan(Math.round(avgFunctions))}`);
 
-  // --- Fichiers Critiques ---
-  const criticalFiles = details.filter(f => isCriticalFile(f));
+  // --- Critical Files section moved to recommendations below ---
+
+  // --- Recommendations v0.6.0 - Client-side calculation ---
+  
+  // Critical Files: Top 5 worst healthScore
+  const criticalFiles = result.details
+    .sort((a, b) => a.healthScore - b.healthScore)
+    .slice(0, 5)
+    .filter(f => f.healthScore < 80); // Only show truly critical files
+  
   if (criticalFiles.length > 0) {
-    printSectionHeader('Critical Files (Top Issues)');
+    printSectionHeader('Critical Files');
     criticalFiles.forEach((file, index) => {
-      const healthColor = file.healthScore < 50 ? chalk.red : file.healthScore < 70 ? chalk.yellow : chalk.green;
-      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.cyan(file.file)}`);
-      console.log(`      ${chalk.bold('Health Score:')} ${healthColor(file.healthScore + '/100')}`);
-      console.log(`      ${chalk.bold('Complexity:')}   ${file.metrics.complexity} | ${chalk.bold('LOC:')} ${file.metrics.loc} | ${chalk.bold('Usage:')} ${file.dependencies.incomingCount}`);
-      
+      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.red(file.file)} ${chalk.dim(`(health: ${file.healthScore}/100)`)}`);  
       if (file.issues.length > 0) {
-        file.issues.forEach(issue => {
-          const severityColor = issue.severity === 'critical' ? chalk.red.bold : 
-                               issue.severity === 'high' ? chalk.red : 
-                               issue.severity === 'medium' ? chalk.yellow : chalk.green;
-          console.log(`      ${severityColor('⚠')} ${severityColor(issue.severity.toUpperCase())}: ${issue.context.message}`);
-        });
+        const worstIssue = file.issues.sort((a, b) => b.excessRatio - a.excessRatio)[0];
+        console.log(`      ${chalk.bold('Main Issue:')} ${getIssueDescription(worstIssue)}`);
+        console.log(`      ${chalk.bold('Effort:')} ${worstIssue.effortHours}h`);
       }
     });
   }
-
-  // --- Recommandations ---
-  if (result.recommendations.critical.length > 0) {
-    printSectionHeader('Critical Recommendations');
-    result.recommendations.critical.forEach((action, index) => {
-      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.red(action.issue)}`);
-      console.log(`      ${chalk.bold('File:')} ${chalk.cyan(action.file)}`);
-      console.log(`      ${chalk.bold('Solution:')} ${action.solution}`);
-      console.log(`      ${chalk.bold('Effort:')} ${action.effortHours}h | ${chalk.bold('Priority:')} ${action.priority}/10`);
-    });
-  }
-
-  if (result.recommendations.quickWins.length > 0) {
+  
+  // Quick Wins: Issues with effort ≤ 1h, sorted by ROI
+  const quickWins = result.details
+    .flatMap(file => 
+      file.issues
+        .filter(issue => issue.effortHours <= 1)
+        .map(issue => ({ file: file.file, ...issue }))
+    )
+    .sort((a, b) => (b.excessRatio / b.effortHours) - (a.excessRatio / a.effortHours))
+    .slice(0, 5);
+  
+  if (quickWins.length > 0) {
     printSectionHeader('Quick Wins');
-    result.recommendations.quickWins.forEach((win, index) => {
-      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.green(win.description)}`);
-      console.log(`      ${chalk.bold('Files:')} ${win.files.join(', ')}`);
-      console.log(`      ${chalk.bold('Effort:')} ${win.effortMinutes}min | ${chalk.bold('Score Improvement:')} +${win.scoreImprovement}`);
+    quickWins.forEach((win, index) => {
+      const roi = (win.excessRatio / win.effortHours).toFixed(1);
+      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.green(win.file)} - ${chalk.cyan(win.type)}`);
+      console.log(`      ${chalk.bold('Issue:')} ${getIssueDescription(win)}`);
+      console.log(`      ${chalk.bold('Effort:')} ${win.effortHours}h | ${chalk.bold('ROI:')} ${roi}`);
     });
   }
 

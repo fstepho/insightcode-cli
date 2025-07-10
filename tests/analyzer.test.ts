@@ -86,8 +86,7 @@ describe('Analyzer v0.6.0', () => {
         expect(result).toHaveProperty('context');
         expect(result).toHaveProperty('overview');
         expect(result).toHaveProperty('details');
-        expect(result).toHaveProperty('recommendations');
-        
+
         // Check context structure
         expect(result.context).toHaveProperty('project');
         expect(result.context).toHaveProperty('analysis');
@@ -110,10 +109,7 @@ describe('Analyzer v0.6.0', () => {
         expect(result.overview.scores).toHaveProperty('maintainability');
         expect(result.overview.scores).toHaveProperty('overall');
         
-        // Check recommendations structure
-        expect(result.recommendations).toHaveProperty('critical');
-        expect(result.recommendations).toHaveProperty('quickWins');
-        expect(result.recommendations).toHaveProperty('improvements');
+        // Recommendations removed in v0.6.0 - calculable client-side
     });
 
     it('should return high scores for perfect files', () => {
@@ -238,7 +234,7 @@ describe('Analyzer v0.6.0', () => {
         expect(result.overview.summary).toBe('No files analyzed');
     });
 
-    it('should generate recommendations', () => {
+    it('should not generate recommendations in v0.6.0', () => {
         const files: FileDetail[] = [
             createFileDetail({ 
                 file: 'critical.ts',
@@ -253,10 +249,8 @@ describe('Analyzer v0.6.0', () => {
 
         const result = analyze(files, '.', MOCK_THRESHOLDS);
 
-        expect(result.recommendations).toBeDefined();
-        expect(Array.isArray(result.recommendations.critical)).toBe(true);
-        expect(Array.isArray(result.recommendations.quickWins)).toBe(true);
-        expect(Array.isArray(result.recommendations.improvements)).toBe(true);
+        // Recommendations removed in v0.6.0 - calculable client-side
+        expect(result).not.toHaveProperty('recommendations');
     });
 
     it('should calculate health scores correctly', () => {

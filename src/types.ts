@@ -31,7 +31,8 @@ export function validateRatio(value: number): Ratio {
  * Validates and returns a score (0-100)
  */
 export function validateScore(value: number): Score {
-  if (value < 0 || value > 100) {
+  // Check bounds first, then handle floating point errors
+  if (value < 0 || value > 100.00001) { // Small tolerance for floating point errors
     throw new Error(`Invalid score: ${value}`);
   }
   return Math.round(value) as Score;
@@ -55,13 +56,13 @@ export enum Severity {
 // ==================== CORE INTERFACES ====================
 
 /**
- * Root structure returned by analysis
+ * Root structure returned by analysis - v0.6.0 Pure Data
+ * No recommendations - 100% calculable client-side
  */
 export interface AnalysisResult {
   context: Context;
   overview: Overview;
   details: FileDetail[];
-  recommendations: Recommendations;
 }
 
 /**
@@ -147,42 +148,10 @@ export interface Issue {
   function?: string;
 }
 
-// ==================== RECOMMENDATIONS ====================
-
-/**
- * Recommendations - WHAT TO DO
- */
-export interface Recommendations {
-  critical: Action[];
-  quickWins: QuickWin[];
-  improvements: Improvement[];
-}
-
-export interface Action {
-  file: string;
-  issue: string;
-  solution: string;
-  effortHours: number;
-  impact: string;
-  priority: number;  // 1-10
-}
-
-export interface QuickWin {
-  description: string;
-  files: string[];
-  effortMinutes: number;  // Always < 60
-  scoreImprovement: number;
-}
-
-export interface Improvement {
-  title: string;
-  description: string;
-  files: string[];
-  approach: string;
-  effortDays: number;  // 1-5 days typically
-  benefits: string[];
-  risks?: string[];
-}
+// ==================== RECOMMENDATIONS REMOVED ====================
+// Recommendations removed in v0.6.0 - calculable client-side:
+// - criticalFiles = details.sort(healthScore).slice(0,5) 
+// - quickWins = details.flatMap(issues).filter(effortHours <= 1)
 
 // ==================== LEGACY SUPPORT ====================
 

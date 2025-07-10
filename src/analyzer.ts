@@ -21,7 +21,7 @@ import {
   getGrade,
   calculateHealthScore 
 } from './scoring';
-import { generateRecommendations } from './recommendations';
+// generateRecommendations removed in v0.6.0 - calculable client-side
 
 // ==================== V0.6.0 CORE FUNCTIONS ====================
 
@@ -94,14 +94,12 @@ export function analyze(files: FileDetail[], projectPath: string, _thresholds: T
   // 4. Generate context
   const context = generateContext(projectPath, processedDetails, startTime);
   
-  // 5. Generate recommendations
-  const recommendations = generateRecommendations(processedDetails);
+  // 5. Recommendations removed in v0.6.0 - calculable client-side
   
   return {
     context,
     overview,
-    details: processedDetails,
-    recommendations
+    details: processedDetails
   };
 }
 

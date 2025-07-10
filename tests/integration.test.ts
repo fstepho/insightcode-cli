@@ -345,7 +345,7 @@ export function add(a: number, b: number): number {
     expect(jsonResult).toHaveProperty('overview');
     expect(jsonResult).toHaveProperty('details');
     expect(jsonResult).toHaveProperty('context');
-    expect(jsonResult).toHaveProperty('recommendations');
+    // expect(jsonResult).toHaveProperty('recommendations'); // Removed in v0.6.0
     expect(jsonResult.overview).toHaveProperty('statistics');
     expect(jsonResult.overview.statistics).toHaveProperty('totalFiles', 1);
     expect(jsonResult.details).toHaveLength(1);
