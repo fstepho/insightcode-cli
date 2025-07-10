@@ -3,8 +3,13 @@ import { detectDuplication } from '../src/duplication';
 import { FileDetail } from '../src/types';
 import { DEFAULT_THRESHOLDS } from '../src/config';
 
+// Extended FileDetail for testing with content
+interface FileDetailWithContent extends FileDetail {
+  content: string;
+}
+
 describe('Duplication Detection', () => {
-  const createFileDetail = (file: string, content: string, loc: number = 10): FileDetail => ({
+  const createFileDetail = (file: string, content: string, loc: number = 10): FileDetailWithContent => ({
     file,
     metrics: {
       complexity: 1,
@@ -22,7 +27,7 @@ describe('Duplication Detection', () => {
     healthScore: 100,
     // Store the content for duplication detection
     content
-  } as any);
+  });
 
   it('should detect no duplication in unique files', () => {
     const files = [

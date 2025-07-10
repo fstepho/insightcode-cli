@@ -7,6 +7,13 @@ import { FileDetail } from './types';
 import { normalizePath } from './utils';
 
 /**
+ * Interface for files with optional content (used in tests)
+ */
+interface FileWithOptionalContent extends FileDetail {
+  content?: string;
+}
+
+/**
  * Analyse les dépendances d'un projet pour calculer l'impact de chaque fichier.
  * L'impact correspond au nombre de fois qu'un fichier est importé par d'autres.
  * Utilise ts-morph pour une analyse TypeScript native et robuste.
@@ -24,7 +31,7 @@ export function analyzeDependencies(files: FileDetail[]): Map<string, number> {
     compilerOptions: {
       target: ts.ScriptTarget.Latest,
       module: ts.ModuleKind.CommonJS,
-      moduleResolution: ts.ModuleResolutionKind.NodeJs,
+      moduleResolution: ts.ModuleResolutionKind.Node10,
       allowJs: true,
       allowSyntheticDefaultImports: true,
       esModuleInterop: true,
@@ -36,7 +43,9 @@ export function analyzeDependencies(files: FileDetail[]): Map<string, number> {
   // Ajouter tous les fichiers au projet avec chemins absolus
   for (const file of files) {
     try {
-      const content = (file as any).content || fs.readFileSync(file.file, 'utf8');
+      // Cast to FileWithOptionalContent for test compatibility
+      const fileWithContent = file as FileWithOptionalContent;
+      const content = fileWithContent.content || fs.readFileSync(file.file, 'utf8');
       // Utiliser chemin absolu pour ts-morph
       const absolutePath = path.resolve(file.file);
       project.createSourceFile(absolutePath, content);

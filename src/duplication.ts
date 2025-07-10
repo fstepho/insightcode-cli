@@ -6,6 +6,13 @@ import * as path from 'path';
 import { FileDetail, ThresholdConfig, Issue, IssueType, Severity } from './types';
 
 /**
+ * Interface for files with optional content (used in tests)
+ */
+interface FileWithOptionalContent extends FileDetail {
+  content?: string;
+}
+
+/**
  * Simple file reader. In a real app, this might be in a shared utils module.
  */
 function getFileContent(filepath: string): string | null {
@@ -98,7 +105,8 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
     // Try to read content from file object first (for tests), then from filesystem
     let content: string | null;
     try {
-      content = (file as any).content || getFileContent(file.file);
+      const fileWithContent = file as FileWithOptionalContent;
+      content = fileWithContent.content || getFileContent(file.file);
     } catch (error) {
       content = null;
     }

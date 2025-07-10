@@ -2,8 +2,13 @@ import { describe, it, expect } from 'vitest';
 import { analyzeDependencies } from '../src/dependencyAnalyzer';
 import { FileDetail } from '../src/types';
 
+// Extended FileDetail for testing with content
+interface FileDetailWithContent extends FileDetail {
+  content: string;
+}
+
 describe('Dependency Analyzer', () => {
-  const createFileDetail = (file: string, content: string): FileDetail => ({
+  const createFileDetail = (file: string, content: string): FileDetailWithContent => ({
     file,
     metrics: {
       complexity: 1,
@@ -21,7 +26,7 @@ describe('Dependency Analyzer', () => {
     healthScore: 100,
     // Store the content for dependency analysis
     content
-  } as any);
+  });
 
   it('should detect no dependencies for isolated files', () => {
     const files = [

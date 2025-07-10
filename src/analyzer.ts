@@ -239,7 +239,7 @@ function generateContext(projectPath: string, details: FileDetail[], startTime: 
       name: projectInfo.name,
       path: normalizeProjectPath(projectInfo.path),
       version: projectInfo.packageJson?.version,
-      repository: typeof (projectInfo.packageJson as any)?.repository === 'string' ? (projectInfo.packageJson as any).repository : undefined
+      repository: typeof projectInfo.packageJson?.repository === 'string' ? projectInfo.packageJson.repository : undefined
     },
     analysis: {
       timestamp: new Date().toISOString(),

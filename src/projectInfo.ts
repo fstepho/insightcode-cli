@@ -4,6 +4,16 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 /**
+ * Simplified interface for package.json fields we use
+ */
+interface PackageJson {
+  name?: string;
+  version?: string;
+  description?: string;
+  repository?: string | { type?: string; url?: string };
+}
+
+/**
  * Get project information from a given directory path.
  * Reads package.json to extract project name, version, and description.
  * @param projectPath The path to the project directory.
@@ -16,12 +26,12 @@ export function getProjectInfo(projectPath: string) {
   // Make path relative to current working directory for cleaner display
   const relativePath = path.relative(process.cwd(), absolutePath) || '.';
   
-  let packageJson;
+  let packageJson: PackageJson | undefined;
   try {
     const packagePath = path.join(absolutePath, 'package.json');
     if (fs.existsSync(packagePath)) {
       const packageContent = fs.readFileSync(packagePath, 'utf-8');
-      packageJson = JSON.parse(packageContent);
+      packageJson = JSON.parse(packageContent) as PackageJson;
     }
   } catch (error) {
     // Silently ignore package.json parsing errors
@@ -34,7 +44,8 @@ export function getProjectInfo(projectPath: string) {
     packageJson: packageJson ? {
       name: packageJson.name,
       version: packageJson.version,
-      description: packageJson.description
+      description: packageJson.description,
+      repository: packageJson.repository
     } : undefined
   };
 }
