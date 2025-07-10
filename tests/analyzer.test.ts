@@ -41,8 +41,7 @@ const createIssue = (overrides: Partial<Issue>): Issue => ({
     context: {
         message: 'Test issue',
         threshold: 10,
-        excessRatio: 2.0,
-        unit: 'count'
+        excessRatio: 2.0
     },
     action: {
         description: 'Fix this issue',
@@ -218,8 +217,7 @@ describe('Analyzer v0.6.0', () => {
             context: {
                 message: 'High complexity: 40',
                 threshold: 20,
-                excessRatio: 2.0,
-                unit: 'count'
+                excessRatio: 2.0
             }
         });
         

@@ -158,8 +158,7 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
         context: {
           message: `High duplication: ${duplicationPercentage.toFixed(1)}% (recommended: < ${duplicationThresholds.high}%)`,
           threshold: duplicationThresholds.high / 100, // Store as ratio
-          excessRatio: duplicationRatio / (duplicationThresholds.high / 100),
-          unit: 'ratio' as const
+          excessRatio: duplicationRatio / (duplicationThresholds.high / 100)
         },
         action: {
           description: 'Extract common code into shared utilities',
@@ -178,8 +177,7 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
         context: {
           message: `Medium duplication: ${duplicationPercentage.toFixed(1)}% (recommended: < ${duplicationThresholds.medium}%)`,
           threshold: duplicationThresholds.medium / 100, // Store as ratio
-          excessRatio: duplicationRatio / (duplicationThresholds.medium / 100),
-          unit: 'ratio' as const
+          excessRatio: duplicationRatio / (duplicationThresholds.medium / 100)
         },
         action: {
           description: 'Consider extracting common patterns',

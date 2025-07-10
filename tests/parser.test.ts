@@ -202,8 +202,7 @@ switch (x) {              // +1 per case
         severity: 'high',
         context: {
           message: expect.stringContaining('Large file'),
-          threshold: 300,
-          unit: 'lines'
+          threshold: 300
         },
         action: {
           description: 'Split into smaller, focused modules',

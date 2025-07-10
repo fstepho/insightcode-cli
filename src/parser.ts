@@ -255,8 +255,7 @@ export function parseFile(filePath: string): FileDetail {
       context: {
         message: `High complexity: ${complexity} (recommended: < ${complexityThresholds.high})`,
         threshold: complexityThresholds.high,
-        excessRatio: complexity / complexityThresholds.high,
-        unit: 'count'
+        excessRatio: complexity / complexityThresholds.high
       },
       action: {
         description: 'Break down into smaller functions',
@@ -275,8 +274,7 @@ export function parseFile(filePath: string): FileDetail {
       context: {
         message: `Medium complexity: ${complexity} (recommended: < ${complexityThresholds.medium})`,
         threshold: complexityThresholds.medium,
-        excessRatio: complexity / complexityThresholds.medium,
-        unit: 'count'
+        excessRatio: complexity / complexityThresholds.medium
       },
       action: {
         description: 'Refactor to reduce complexity',
@@ -297,8 +295,7 @@ export function parseFile(filePath: string): FileDetail {
       context: {
         message: `Large file: ${loc} lines (recommended: < ${sizeThresholds.high})`,
         threshold: sizeThresholds.high,
-        excessRatio: loc / sizeThresholds.high,
-        unit: 'lines'
+        excessRatio: loc / sizeThresholds.high
       },
       action: {
         description: 'Split into smaller, focused modules',
@@ -317,8 +314,7 @@ export function parseFile(filePath: string): FileDetail {
       context: {
         message: `File getting large: ${loc} lines (recommended: < ${sizeThresholds.medium})`,
         threshold: sizeThresholds.medium,
-        excessRatio: loc / sizeThresholds.medium,
-        unit: 'lines'
+        excessRatio: loc / sizeThresholds.medium
       },
       action: {
         description: 'Consider splitting into smaller modules',

@@ -204,7 +204,7 @@ describe('Scoring Algorithms', () => {
       type: IssueType.Complexity,
       severity,
       location: { line: 1 },
-      context: { message: 'test', threshold: 10, excessRatio: 1.5, unit: 'count' },
+      context: { message: 'test', threshold: 10, excessRatio: 1.5 },
       action: { description: 'test', impact: 'test', effortHours: 1 }
     });
 

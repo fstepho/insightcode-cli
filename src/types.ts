@@ -151,7 +151,6 @@ export interface Issue {
     message: string;
     threshold: number;
     excessRatio: number;    // How much over threshold
-    unit: 'count' | 'ratio' | 'lines';
   };
   
   action: {
