@@ -203,9 +203,10 @@ describe('Scoring Algorithms', () => {
     const createMockIssue = (severity: Severity): Issue => ({
       type: IssueType.Complexity,
       severity,
-      location: { line: 1 },
-      context: { message: 'test', threshold: 10, excessRatio: 1.5 },
-      action: { description: 'test', impact: 'test', effortHours: 1 }
+      line: 1,
+      threshold: 10,
+      excessRatio: 1.5,
+      effortHours: 1
     });
 
     it('should return 100 for perfect files', () => {

@@ -1,6 +1,54 @@
 // File: src/recommendations.ts - v0.6.0 Recommendations Engine
 
-import { FileDetail, Recommendations, Action, QuickWin, Improvement, Severity, IssueType } from './types';
+import { FileDetail, Recommendations, Action, QuickWin, Improvement, Severity, IssueType, Issue } from './types';
+
+/**
+ * Generate description for an issue based on type and threshold data
+ */
+function getIssueDescription(issue: Issue): string {
+  switch (issue.type) {
+    case IssueType.Complexity:
+      return `${issue.severity} complexity: Exceeds threshold by ${(issue.excessRatio * 100 - 100).toFixed(0)}%`;
+    case IssueType.Size:
+      return `${issue.severity} file size: Exceeds threshold by ${(issue.excessRatio * 100 - 100).toFixed(0)}%`;
+    case IssueType.Duplication:
+      return `${issue.severity} duplication: Exceeds threshold by ${(issue.excessRatio * 100 - 100).toFixed(0)}%`;
+    default:
+      return `${issue.severity} ${issue.type} issue`;
+  }
+}
+
+/**
+ * Generate solution for an issue based on type
+ */
+function getIssueSolution(issue: Issue): string {
+  switch (issue.type) {
+    case IssueType.Complexity:
+      return 'Break down into smaller functions';
+    case IssueType.Size:
+      return 'Split into smaller, focused modules';
+    case IssueType.Duplication:
+      return 'Extract common code into shared utilities';
+    default:
+      return 'Refactor to resolve issue';
+  }
+}
+
+/**
+ * Generate impact description for an issue based on type
+ */
+function getIssueImpact(issue: Issue): string {
+  switch (issue.type) {
+    case IssueType.Complexity:
+      return 'Improved readability and maintainability';
+    case IssueType.Size:
+      return 'Better module organization';
+    case IssueType.Duplication:
+      return 'Reduced maintenance overhead';
+    default:
+      return 'Improved code quality';
+  }
+}
 
 /**
  * Checks if a file is critical based on health score
@@ -44,10 +92,10 @@ function generateCriticalActions(criticalFiles: FileDetail[]): Action[] {
     
     return {
       file: file.file,
-      issue: worstIssue ? worstIssue.context.message : `Health score: ${file.healthScore}/100`,
-      solution: worstIssue ? worstIssue.action.description : 'Comprehensive refactoring needed',
+      issue: worstIssue ? getIssueDescription(worstIssue) : `Health score: ${file.healthScore}/100`,
+      solution: worstIssue ? getIssueSolution(worstIssue) : 'Comprehensive refactoring needed',
       effortHours: baseEffort,
-      impact: worstIssue ? worstIssue.action.impact : 'Significantly improved code quality',
+      impact: worstIssue ? getIssueImpact(worstIssue) : 'Significantly improved code quality',
       priority: calculatePriority(file)
     };
   }).sort((a, b) => b.priority - a.priority);
@@ -81,7 +129,7 @@ function generateQuickWins(mediumIssueFiles: FileDetail[]): QuickWin[] {
     if (file.issues.length === 1 && file.metrics.complexity < 15) {
       const issue = file.issues[0];
       quickWins.push({
-        description: `Quick fix: ${issue.context.message}`,
+        description: `Quick fix: ${getIssueDescription(issue)}`,
         files: [file.file],
         effortMinutes: 30,
         scoreImprovement: 3
@@ -192,7 +240,7 @@ function getWorstIssue(file: FileDetail) {
 
 function calculateEffortForFile(file: FileDetail): number {
   const baseEffort = Math.max(2, Math.ceil(file.metrics.complexity / 10));
-  const issueEffort = file.issues.reduce((sum, issue) => sum + issue.action.effortHours, 0);
+  const issueEffort = file.issues.reduce((sum, issue) => sum + issue.effortHours, 0);
   const sizeMultiplier = file.metrics.loc > 500 ? 1.5 : 1.0;
   
   return Math.min(Math.ceil((baseEffort + issueEffort) * sizeMultiplier), 16); // Max 16 hours

@@ -200,15 +200,10 @@ switch (x) {              // +1 per case
       expect(fileDetail.issues[0]).toMatchObject({
         type: 'size',
         severity: 'high',
-        context: {
-          message: expect.stringContaining('Large file'),
-          threshold: 300
-        },
-        action: {
-          description: 'Split into smaller, focused modules',
-          impact: 'Better module organization',
-          effortHours: 6
-        }
+        line: 1,
+        threshold: 300,
+        excessRatio: expect.any(Number),
+        effortHours: 6
       });
     });
     

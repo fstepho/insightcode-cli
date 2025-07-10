@@ -248,39 +248,19 @@ export function parseFile(filePath: string): FileDetail {
     issues.push({
       type: IssueType.Complexity,
       severity: Severity.High,
-      location: {
-        line: 1,
-        function: undefined
-      },
-      context: {
-        message: `High complexity: ${complexity} (recommended: < ${complexityThresholds.high})`,
-        threshold: complexityThresholds.high,
-        excessRatio: complexity / complexityThresholds.high
-      },
-      action: {
-        description: 'Break down into smaller functions',
-        impact: 'Improved readability and maintainability',
-        effortHours: 4
-      }
+      line: 1,
+      threshold: complexityThresholds.high,
+      excessRatio: complexity / complexityThresholds.high,
+      effortHours: 4
     });
   } else if (complexity > complexityThresholds.medium) {
     issues.push({
       type: IssueType.Complexity,
       severity: Severity.Medium,
-      location: {
-        line: 1,
-        function: undefined
-      },
-      context: {
-        message: `Medium complexity: ${complexity} (recommended: < ${complexityThresholds.medium})`,
-        threshold: complexityThresholds.medium,
-        excessRatio: complexity / complexityThresholds.medium
-      },
-      action: {
-        description: 'Refactor to reduce complexity',
-        impact: 'Improved readability and maintainability',
-        effortHours: 2
-      }
+      line: 1,
+      threshold: complexityThresholds.medium,
+      excessRatio: complexity / complexityThresholds.medium,
+      effortHours: 2
     });
   }
   
@@ -288,39 +268,19 @@ export function parseFile(filePath: string): FileDetail {
     issues.push({
       type: IssueType.Size,
       severity: Severity.High,
-      location: {
-        line: 1,
-        function: undefined
-      },
-      context: {
-        message: `Large file: ${loc} lines (recommended: < ${sizeThresholds.high})`,
-        threshold: sizeThresholds.high,
-        excessRatio: loc / sizeThresholds.high
-      },
-      action: {
-        description: 'Split into smaller, focused modules',
-        impact: 'Better module organization',
-        effortHours: 6
-      }
+      line: 1,
+      threshold: sizeThresholds.high,
+      excessRatio: loc / sizeThresholds.high,
+      effortHours: 6
     });
   } else if (loc > sizeThresholds.medium) {
     issues.push({
       type: IssueType.Size,
       severity: Severity.Medium,
-      location: {
-        line: 1,
-        function: undefined
-      },
-      context: {
-        message: `File getting large: ${loc} lines (recommended: < ${sizeThresholds.medium})`,
-        threshold: sizeThresholds.medium,
-        excessRatio: loc / sizeThresholds.medium
-      },
-      action: {
-        description: 'Consider splitting into smaller modules',
-        impact: 'Better module organization',
-        effortHours: 3
-      }
+      line: 1,
+      threshold: sizeThresholds.medium,
+      excessRatio: loc / sizeThresholds.medium,
+      effortHours: 3
     });
   }
   

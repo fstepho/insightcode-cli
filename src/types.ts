@@ -131,30 +131,20 @@ export interface FileDetail {
 }
 
 /**
- * Issues found in files
+ * Issues found in files - Simplified structure for v0.6.0
  */
 export interface Issue {
   type: IssueType;
   severity: Severity;
+  line: number;
+  threshold: number;
+  excessRatio: number;    // How much over threshold
+  effortHours: number;
   
-  location: {
-    line: number;
-    endLine?: number;
-    column?: number;
-    function?: string;
-  };
-  
-  context: {
-    message: string;
-    threshold: number;
-    excessRatio: number;    // How much over threshold
-  };
-  
-  action: {
-    description: string;
-    impact: string;
-    effortHours: number;
-  };
+  // Optional enriched location for certain issue types
+  endLine?: number;
+  column?: number;
+  function?: string;
 }
 
 // ==================== RECOMMENDATIONS ====================

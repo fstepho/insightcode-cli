@@ -151,39 +151,19 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
       updatedIssues.push({
         type: IssueType.Duplication,
         severity: Severity.High,
-        location: {
-          line: 1,
-          function: undefined
-        },
-        context: {
-          message: `High duplication: ${duplicationPercentage.toFixed(1)}% (recommended: < ${duplicationThresholds.high}%)`,
-          threshold: duplicationThresholds.high / 100, // Store as ratio
-          excessRatio: duplicationRatio / (duplicationThresholds.high / 100)
-        },
-        action: {
-          description: 'Extract common code into shared utilities',
-          impact: 'Reduced maintenance overhead',
-          effortHours: 4
-        }
+        line: 1,
+        threshold: duplicationThresholds.high / 100, // Store as ratio
+        excessRatio: duplicationRatio / (duplicationThresholds.high / 100),
+        effortHours: 4
       });
     } else if (duplicationRatio > duplicationThresholds.medium / 100) {
       updatedIssues.push({
         type: IssueType.Duplication,
         severity: Severity.Medium,
-        location: {
-          line: 1,
-          function: undefined
-        },
-        context: {
-          message: `Medium duplication: ${duplicationPercentage.toFixed(1)}% (recommended: < ${duplicationThresholds.medium}%)`,
-          threshold: duplicationThresholds.medium / 100, // Store as ratio
-          excessRatio: duplicationRatio / (duplicationThresholds.medium / 100)
-        },
-        action: {
-          description: 'Consider extracting common patterns',
-          impact: 'Reduced maintenance overhead',
-          effortHours: 2
-        }
+        line: 1,
+        threshold: duplicationThresholds.medium / 100, // Store as ratio
+        excessRatio: duplicationRatio / (duplicationThresholds.medium / 100),
+        effortHours: 2
       });
     }
     

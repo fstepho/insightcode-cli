@@ -34,19 +34,10 @@ const createFileDetail = (overrides: Partial<FileDetail>): FileDetail => ({
 const createIssue = (overrides: Partial<Issue>): Issue => ({
     type: IssueType.Complexity,
     severity: Severity.High,
-    location: {
-        line: 1
-    },
-    context: {
-        message: 'Test issue',
-        threshold: 10,
-        excessRatio: 2.0
-    },
-    action: {
-        description: 'Fix this issue',
-        impact: 'Better code quality',
-        effortHours: 2
-    },
+    line: 1,
+    threshold: 10,
+    excessRatio: 2.0,
+    effortHours: 2,
     ...overrides,
 });
 
@@ -212,11 +203,8 @@ describe('Analyzer v0.6.0', () => {
         const testIssue = createIssue({ 
             type: IssueType.Complexity,
             severity: Severity.High,
-            context: {
-                message: 'High complexity: 40',
-                threshold: 20,
-                excessRatio: 2.0
-            }
+            threshold: 20,
+            excessRatio: 2.0
         });
         
         const files: FileDetail[] = [
@@ -230,9 +218,9 @@ describe('Analyzer v0.6.0', () => {
         const result = analyze(files, '.', MOCK_THRESHOLDS);
 
         // Excess ratio should reflect how much the value exceeds the threshold
-    expect(result.details[0].issues[0].context.excessRatio).toBeGreaterThan(1.5);
-    expect(result.details[0].issues[0].context.excessRatio).toBeLessThan(2.5);
-        expect(result.details[0].issues[0].context.threshold).toBe(20);
+    expect(result.details[0].issues[0].excessRatio).toBeGreaterThan(1.5);
+    expect(result.details[0].issues[0].excessRatio).toBeLessThan(2.5);
+        expect(result.details[0].issues[0].threshold).toBe(20);
         expect(result.details[0].issues[0].type).toBe(IssueType.Complexity);
         expect(result.details[0].issues[0].severity).toBe(Severity.High);
     });
