@@ -27,433 +27,900 @@
     ]
   },
   "analysis": {
-    "files": [
-      {
-        "path": ".markdown-doctest-setup.js",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 0,
-        "loc": 8,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "lodash.js",
-        "complexity": 1659,
-        "duplication": 5,
-        "functionCount": 691,
-        "loc": 5970,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 1659 (recommended: < 20)",
-            "value": 1659,
-            "ratio": 82.95
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 5970 lines (recommended: < 300)",
-            "value": 5970,
-            "ratio": 19.9
-          }
-        ],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 1663
-      },
-      {
-        "path": "fp/_baseConvert.js",
-        "complexity": 86,
-        "duplication": 3,
-        "functionCount": 52,
-        "loc": 350,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 86 (recommended: < 20)",
-            "value": 86,
-            "ratio": 4.3
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 350 lines (recommended: < 300)",
-            "value": 350,
-            "ratio": 1.17
-          }
-        ],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 90
-      },
-      {
-        "path": "fp/_convertBrowser.js",
-        "complexity": 3,
-        "duplication": 0,
-        "functionCount": 1,
-        "loc": 8,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 4
-      },
-      {
-        "path": "fp/_mapping.js",
-        "complexity": 3,
-        "duplication": 23,
-        "functionCount": 1,
-        "loc": 328,
-        "issues": [
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 328 lines (recommended: < 300)",
-            "value": 328,
-            "ratio": 1.09
-          }
-        ],
-        "fileType": "production",
-        "impact": 2,
-        "criticismScore": 8.5
-      },
-      {
-        "path": "fp/placeholder.js",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 0,
-        "loc": 1,
-        "issues": [],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 4
-      },
-      {
-        "path": "perf/perf.js",
-        "complexity": 55,
-        "duplication": 6,
-        "functionCount": 14,
-        "loc": 1639,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 55 (recommended: < 20)",
-            "value": 55,
-            "ratio": 2.75
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 1639 lines (recommended: < 300)",
-            "value": 1639,
-            "ratio": 5.46
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 57
-      },
-      {
-        "path": "lib/common/file.js",
-        "complexity": 1,
-        "duplication": 7,
-        "functionCount": 5,
-        "loc": 27,
-        "issues": [],
-        "fileType": "production",
-        "impact": 5,
-        "criticismScore": 12
-      },
-      {
-        "path": "lib/common/mapping.js",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 0,
-        "loc": 5,
-        "issues": [],
-        "fileType": "production",
-        "impact": 2,
-        "criticismScore": 6
-      },
-      {
-        "path": "lib/common/minify.js",
-        "complexity": 5,
-        "duplication": 10,
-        "functionCount": 1,
-        "loc": 20,
-        "issues": [],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 8
-      },
-      {
-        "path": "lib/common/uglify.options.js",
-        "complexity": 1,
-        "duplication": 0,
-        "functionCount": 0,
-        "loc": 15,
-        "issues": [],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 4
-      },
-      {
-        "path": "lib/common/util.js",
-        "complexity": 4,
-        "duplication": 0,
-        "functionCount": 3,
-        "loc": 19,
-        "issues": [],
-        "fileType": "production",
-        "impact": 8,
-        "criticismScore": 21
-      },
-      {
-        "path": "lib/fp/build-dist.js",
-        "complexity": 1,
-        "duplication": 14,
-        "functionCount": 1,
-        "loc": 41,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "lib/fp/build-doc.js",
-        "complexity": 6,
-        "duplication": 7,
-        "functionCount": 5,
-        "loc": 44,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 7
-      },
-      {
-        "path": "lib/fp/build-modules.js",
-        "complexity": 5,
-        "duplication": 11,
-        "functionCount": 9,
-        "loc": 92,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 6
-      },
-      {
-        "path": "lib/main/build-dist.js",
-        "complexity": 1,
-        "duplication": 25,
-        "functionCount": 1,
-        "loc": 17,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "lib/main/build-doc.js",
-        "complexity": 2,
-        "duplication": 9,
-        "functionCount": 3,
-        "loc": 49,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 3
-      },
-      {
-        "path": "lib/main/build-modules.js",
-        "complexity": 1,
-        "duplication": 23,
-        "functionCount": 2,
-        "loc": 19,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "lib/main/build-site.js",
-        "complexity": 12,
-        "duplication": 8,
-        "functionCount": 18,
-        "loc": 142,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 12 (recommended: < 10)",
-            "value": 12,
-            "ratio": 0.6
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 13.5
-      },
-      {
-        "path": "perf/asset/perf-ui.js",
-        "complexity": 19,
-        "duplication": 5,
-        "functionCount": 7,
-        "loc": 85,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 19 (recommended: < 10)",
-            "value": 19,
-            "ratio": 0.95
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 20.5
-      }
-    ],
-    "topFiles": [
-      {
-        "path": "lodash.js",
-        "complexity": 1659,
-        "duplication": 5,
-        "functionCount": 691,
-        "loc": 5970,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 1659 (recommended: < 20)",
-            "value": 1659,
-            "ratio": 82.95
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 5970 lines (recommended: < 300)",
-            "value": 5970,
-            "ratio": 19.9
-          }
-        ],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 1663
-      },
-      {
-        "path": "fp/_baseConvert.js",
-        "complexity": 86,
-        "duplication": 3,
-        "functionCount": 52,
-        "loc": 350,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 86 (recommended: < 20)",
-            "value": 86,
-            "ratio": 4.3
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 350 lines (recommended: < 300)",
-            "value": 350,
-            "ratio": 1.17
-          }
-        ],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 90
-      },
-      {
-        "path": "perf/perf.js",
-        "complexity": 55,
-        "duplication": 6,
-        "functionCount": 14,
-        "loc": 1639,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 55 (recommended: < 20)",
-            "value": 55,
-            "ratio": 2.75
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "message": "Large file: 1639 lines (recommended: < 300)",
-            "value": 1639,
-            "ratio": 5.46
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 57
-      },
-      {
-        "path": "lib/common/util.js",
-        "complexity": 4,
-        "duplication": 0,
-        "functionCount": 3,
-        "loc": 19,
-        "issues": [],
-        "fileType": "production",
-        "impact": 8,
-        "criticismScore": 21
-      },
-      {
-        "path": "perf/asset/perf-ui.js",
-        "complexity": 19,
-        "duplication": 5,
-        "functionCount": 7,
-        "loc": 85,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "medium",
-            "message": "Medium complexity: 19 (recommended: < 10)",
-            "value": 19,
-            "ratio": 0.95
-          }
-        ],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 20.5
-      }
-    ],
-    "silentKillers": [],
-    "project": {
-      "name": "lodash",
-      "path": "temp-analysis/lodash",
-      "packageJson": {
+    "context": {
+      "project": {
         "name": "lodash",
+        "path": "temp-analysis/lodash",
         "version": "4.17.21"
+      },
+      "analysis": {
+        "timestamp": "2025-07-09T23:27:15.595Z",
+        "durationMs": 238,
+        "toolVersion": "0.6.0",
+        "filesAnalyzed": 20
       }
     },
-    "summary": {
-      "totalFiles": 20,
-      "totalLines": 8879,
-      "avgComplexity": 93.4,
-      "avgDuplication": 7.8,
-      "avgFunctions": 40.7,
-      "avgLoc": 444
+    "overview": {
+      "grade": "F",
+      "health": "critical",
+      "statistics": {
+        "totalFiles": 20,
+        "totalLOC": 8879,
+        "avgComplexity": 93.9,
+        "avgLOC": 444
+      },
+      "scores": {
+        "complexity": 12,
+        "duplication": 64,
+        "maintainability": 19,
+        "overall": 30
+      },
+      "summary": "5 critical issues found in core modules"
     },
-    "scores": {
-      "complexity": 12,
-      "duplication": 86,
-      "maintainability": 18,
-      "overall": 36
-    },
-    "complexityStdDev": 359.8,
-    "score": 36,
-    "grade": "F"
+    "details": [
+      {
+        "file": ".markdown-doctest-setup.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 8,
+          "functionCount": 0,
+          "duplication": 0
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 0,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [],
+        "healthScore": 100,
+        "isCritical": false
+      },
+      {
+        "file": "lodash.js",
+        "metrics": {
+          "complexity": 1666,
+          "loc": 5970,
+          "functionCount": 691,
+          "duplication": 0.11
+        },
+        "importance": {
+          "usageCount": 1,
+          "usageRank": 58,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "High complexity: 1666 (recommended: < 20)",
+              "threshold": 20,
+              "excessRatio": 83.3,
+              "unit": "count"
+            },
+            "action": {
+              "description": "Break down into smaller functions",
+              "impact": "Improved readability and maintainability",
+              "effortHours": 4
+            }
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "Large file: 5970 lines (recommended: < 300)",
+              "threshold": 300,
+              "excessRatio": 19.9,
+              "unit": "lines"
+            },
+            "action": {
+              "description": "Split into smaller, focused modules",
+              "impact": "Better module organization",
+              "effortHours": 6
+            }
+          }
+        ],
+        "healthScore": 28,
+        "isCritical": true
+      },
+      {
+        "file": "fp/_baseConvert.js",
+        "metrics": {
+          "complexity": 86,
+          "loc": 350,
+          "functionCount": 52,
+          "duplication": 0.11
+        },
+        "importance": {
+          "usageCount": 1,
+          "usageRank": 63,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "High complexity: 86 (recommended: < 20)",
+              "threshold": 20,
+              "excessRatio": 4.3,
+              "unit": "count"
+            },
+            "action": {
+              "description": "Break down into smaller functions",
+              "impact": "Improved readability and maintainability",
+              "effortHours": 4
+            }
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "Large file: 350 lines (recommended: < 300)",
+              "threshold": 300,
+              "excessRatio": 1.17,
+              "unit": "lines"
+            },
+            "action": {
+              "description": "Split into smaller, focused modules",
+              "impact": "Better module organization",
+              "effortHours": 6
+            }
+          }
+        ],
+        "healthScore": 28,
+        "isCritical": true
+      },
+      {
+        "file": "fp/_convertBrowser.js",
+        "metrics": {
+          "complexity": 3,
+          "loc": 8,
+          "functionCount": 1,
+          "duplication": 0.21
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 5,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "medium",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "Medium duplication: 21.4% (recommended: < 15%)",
+              "threshold": 0.15,
+              "excessRatio": 1.43,
+              "unit": "ratio"
+            },
+            "action": {
+              "description": "Consider extracting common patterns",
+              "impact": "Reduced maintenance overhead",
+              "effortHours": 2
+            }
+          }
+        ],
+        "healthScore": 91,
+        "isCritical": false
+      },
+      {
+        "file": "fp/_mapping.js",
+        "metrics": {
+          "complexity": 3,
+          "loc": 328,
+          "functionCount": 1,
+          "duplication": 0.41
+        },
+        "importance": {
+          "usageCount": 2,
+          "usageRank": 84,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "Large file: 328 lines (recommended: < 300)",
+              "threshold": 300,
+              "excessRatio": 1.09,
+              "unit": "lines"
+            },
+            "action": {
+              "description": "Split into smaller, focused modules",
+              "impact": "Better module organization",
+              "effortHours": 6
+            }
+          },
+          {
+            "type": "duplication",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "High duplication: 41.4% (recommended: < 30%)",
+              "threshold": 0.3,
+              "excessRatio": 1.38,
+              "unit": "ratio"
+            },
+            "action": {
+              "description": "Extract common code into shared utilities",
+              "impact": "Reduced maintenance overhead",
+              "effortHours": 4
+            }
+          }
+        ],
+        "healthScore": 52,
+        "isCritical": true
+      },
+      {
+        "file": "fp/placeholder.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplication": 0
+        },
+        "importance": {
+          "usageCount": 1,
+          "usageRank": 68,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [],
+        "healthScore": 100,
+        "isCritical": false
+      },
+      {
+        "file": "perf/perf.js",
+        "metrics": {
+          "complexity": 55,
+          "loc": 1639,
+          "functionCount": 14,
+          "duplication": 0.13
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 11,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "High complexity: 55 (recommended: < 20)",
+              "threshold": 20,
+              "excessRatio": 2.75,
+              "unit": "count"
+            },
+            "action": {
+              "description": "Break down into smaller functions",
+              "impact": "Improved readability and maintainability",
+              "effortHours": 4
+            }
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "Large file: 1639 lines (recommended: < 300)",
+              "threshold": 300,
+              "excessRatio": 5.46,
+              "unit": "lines"
+            },
+            "action": {
+              "description": "Split into smaller, focused modules",
+              "impact": "Better module organization",
+              "effortHours": 6
+            }
+          }
+        ],
+        "healthScore": 27,
+        "isCritical": true
+      },
+      {
+        "file": "lib/common/file.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 27,
+          "functionCount": 5,
+          "duplication": 0.11
+        },
+        "importance": {
+          "usageCount": 5,
+          "usageRank": 95,
+          "isEntryPoint": false,
+          "isCriticalPath": true
+        },
+        "issues": [],
+        "healthScore": 98,
+        "isCritical": false
+      },
+      {
+        "file": "lib/common/mapping.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 5,
+          "functionCount": 0,
+          "duplication": 0.25
+        },
+        "importance": {
+          "usageCount": 2,
+          "usageRank": 89,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "medium",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "Medium duplication: 25.0% (recommended: < 15%)",
+              "threshold": 0.15,
+              "excessRatio": 1.67,
+              "unit": "ratio"
+            },
+            "action": {
+              "description": "Consider extracting common patterns",
+              "impact": "Reduced maintenance overhead",
+              "effortHours": 2
+            }
+          }
+        ],
+        "healthScore": 90,
+        "isCritical": false
+      },
+      {
+        "file": "lib/common/minify.js",
+        "metrics": {
+          "complexity": 5,
+          "loc": 20,
+          "functionCount": 1,
+          "duplication": 0.13
+        },
+        "importance": {
+          "usageCount": 1,
+          "usageRank": 74,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [],
+        "healthScore": 97,
+        "isCritical": false
+      },
+      {
+        "file": "lib/common/uglify.options.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 15,
+          "functionCount": 0,
+          "duplication": 0.11
+        },
+        "importance": {
+          "usageCount": 1,
+          "usageRank": 79,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [],
+        "healthScore": 98,
+        "isCritical": false
+      },
+      {
+        "file": "lib/common/util.js",
+        "metrics": {
+          "complexity": 4,
+          "loc": 19,
+          "functionCount": 3,
+          "duplication": 0.03
+        },
+        "importance": {
+          "usageCount": 8,
+          "usageRank": 100,
+          "isEntryPoint": false,
+          "isCriticalPath": true
+        },
+        "issues": [],
+        "healthScore": 99,
+        "isCritical": false
+      },
+      {
+        "file": "lib/fp/build-dist.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 41,
+          "functionCount": 1,
+          "duplication": 0.33
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 16,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "High duplication: 33.3% (recommended: < 30%)",
+              "threshold": 0.3,
+              "excessRatio": 1.11,
+              "unit": "ratio"
+            },
+            "action": {
+              "description": "Extract common code into shared utilities",
+              "impact": "Reduced maintenance overhead",
+              "effortHours": 4
+            }
+          }
+        ],
+        "healthScore": 83,
+        "isCritical": false
+      },
+      {
+        "file": "lib/fp/build-doc.js",
+        "metrics": {
+          "complexity": 6,
+          "loc": 44,
+          "functionCount": 5,
+          "duplication": 0.1
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 21,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [],
+        "healthScore": 98,
+        "isCritical": false
+      },
+      {
+        "file": "lib/fp/build-modules.js",
+        "metrics": {
+          "complexity": 5,
+          "loc": 92,
+          "functionCount": 9,
+          "duplication": 0.19
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 26,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "medium",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "Medium duplication: 19.0% (recommended: < 15%)",
+              "threshold": 0.15,
+              "excessRatio": 1.27,
+              "unit": "ratio"
+            },
+            "action": {
+              "description": "Consider extracting common patterns",
+              "impact": "Reduced maintenance overhead",
+              "effortHours": 2
+            }
+          }
+        ],
+        "healthScore": 91,
+        "isCritical": false
+      },
+      {
+        "file": "lib/main/build-dist.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 17,
+          "functionCount": 1,
+          "duplication": 0.43
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 32,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "High duplication: 42.9% (recommended: < 30%)",
+              "threshold": 0.3,
+              "excessRatio": 1.43,
+              "unit": "ratio"
+            },
+            "action": {
+              "description": "Extract common code into shared utilities",
+              "impact": "Reduced maintenance overhead",
+              "effortHours": 4
+            }
+          }
+        ],
+        "healthScore": 81,
+        "isCritical": false
+      },
+      {
+        "file": "lib/main/build-doc.js",
+        "metrics": {
+          "complexity": 2,
+          "loc": 49,
+          "functionCount": 3,
+          "duplication": 0.19
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 37,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "medium",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "Medium duplication: 19.4% (recommended: < 15%)",
+              "threshold": 0.15,
+              "excessRatio": 1.29,
+              "unit": "ratio"
+            },
+            "action": {
+              "description": "Consider extracting common patterns",
+              "impact": "Reduced maintenance overhead",
+              "effortHours": 2
+            }
+          }
+        ],
+        "healthScore": 91,
+        "isCritical": false
+      },
+      {
+        "file": "lib/main/build-modules.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 19,
+          "functionCount": 2,
+          "duplication": 0.38
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 42,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "High duplication: 38.1% (recommended: < 30%)",
+              "threshold": 0.3,
+              "excessRatio": 1.27,
+              "unit": "ratio"
+            },
+            "action": {
+              "description": "Extract common code into shared utilities",
+              "impact": "Reduced maintenance overhead",
+              "effortHours": 4
+            }
+          }
+        ],
+        "healthScore": 82,
+        "isCritical": false
+      },
+      {
+        "file": "lib/main/build-site.js",
+        "metrics": {
+          "complexity": 12,
+          "loc": 142,
+          "functionCount": 18,
+          "duplication": 0.14
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 47,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "Medium complexity: 12 (recommended: < 10)",
+              "threshold": 10,
+              "excessRatio": 1.2,
+              "unit": "count"
+            },
+            "action": {
+              "description": "Refactor to reduce complexity",
+              "impact": "Improved readability and maintainability",
+              "effortHours": 2
+            }
+          }
+        ],
+        "healthScore": 74,
+        "isCritical": false
+      },
+      {
+        "file": "perf/asset/perf-ui.js",
+        "metrics": {
+          "complexity": 23,
+          "loc": 85,
+          "functionCount": 7,
+          "duplication": 0.15
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 53,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "High complexity: 23 (recommended: < 20)",
+              "threshold": 20,
+              "excessRatio": 1.15,
+              "unit": "count"
+            },
+            "action": {
+              "description": "Break down into smaller functions",
+              "impact": "Improved readability and maintainability",
+              "effortHours": 4
+            }
+          },
+          {
+            "type": "duplication",
+            "severity": "medium",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "Medium duplication: 15.4% (recommended: < 15%)",
+              "threshold": 0.15,
+              "excessRatio": 1.03,
+              "unit": "ratio"
+            },
+            "action": {
+              "description": "Consider extracting common patterns",
+              "impact": "Reduced maintenance overhead",
+              "effortHours": 2
+            }
+          }
+        ],
+        "healthScore": 52,
+        "isCritical": true
+      }
+    ],
+    "recommendations": {
+      "critical": [
+        {
+          "file": "temp-analysis/lodash/lodash.js",
+          "issue": "High complexity: 1666 (recommended: < 20)",
+          "solution": "Break down into smaller functions",
+          "effortHours": 16,
+          "impact": "Improved readability and maintainability",
+          "priority": 10
+        },
+        {
+          "file": "temp-analysis/lodash/fp/_baseConvert.js",
+          "issue": "High complexity: 86 (recommended: < 20)",
+          "solution": "Break down into smaller functions",
+          "effortHours": 16,
+          "impact": "Improved readability and maintainability",
+          "priority": 10
+        },
+        {
+          "file": "temp-analysis/lodash/perf/perf.js",
+          "issue": "High complexity: 55 (recommended: < 20)",
+          "solution": "Break down into smaller functions",
+          "effortHours": 16,
+          "impact": "Improved readability and maintainability",
+          "priority": 10
+        },
+        {
+          "file": "temp-analysis/lodash/fp/_mapping.js",
+          "issue": "Large file: 328 lines (recommended: < 300)",
+          "solution": "Split into smaller, focused modules",
+          "effortHours": 12,
+          "impact": "Better module organization",
+          "priority": 8
+        },
+        {
+          "file": "temp-analysis/lodash/perf/asset/perf-ui.js",
+          "issue": "High complexity: 23 (recommended: < 20)",
+          "solution": "Break down into smaller functions",
+          "effortHours": 9,
+          "impact": "Improved readability and maintainability",
+          "priority": 7
+        }
+      ],
+      "quickWins": [
+        {
+          "description": "Eliminate common code patterns in 5 files",
+          "files": [
+            "temp-analysis/lodash/fp/_convertBrowser.js",
+            "temp-analysis/lodash/lib/common/mapping.js",
+            "temp-analysis/lodash/lib/fp/build-modules.js",
+            "temp-analysis/lodash/lib/main/build-doc.js",
+            "temp-analysis/lodash/perf/asset/perf-ui.js"
+          ],
+          "effortMinutes": 45,
+          "scoreImprovement": 10
+        },
+        {
+          "description": "Reduce complexity in 2 files through method extraction",
+          "files": [
+            "temp-analysis/lodash/lib/main/build-site.js",
+            "temp-analysis/lodash/perf/asset/perf-ui.js"
+          ],
+          "effortMinutes": 30,
+          "scoreImprovement": 4
+        },
+        {
+          "description": "Quick fix: Medium duplication: 21.4% (recommended: < 15%)",
+          "files": [
+            "temp-analysis/lodash/fp/_convertBrowser.js"
+          ],
+          "effortMinutes": 30,
+          "scoreImprovement": 3
+        },
+        {
+          "description": "Quick fix: Medium duplication: 25.0% (recommended: < 15%)",
+          "files": [
+            "temp-analysis/lodash/lib/common/mapping.js"
+          ],
+          "effortMinutes": 30,
+          "scoreImprovement": 3
+        },
+        {
+          "description": "Quick fix: Medium duplication: 19.0% (recommended: < 15%)",
+          "files": [
+            "temp-analysis/lodash/lib/fp/build-modules.js"
+          ],
+          "effortMinutes": 30,
+          "scoreImprovement": 3
+        }
+      ],
+      "improvements": [
+        {
+          "title": "Duplication Elimination",
+          "description": "Extract common code into reusable utilities and shared modules",
+          "files": [
+            "temp-analysis/lodash/lodash.js",
+            "temp-analysis/lodash/fp/_baseConvert.js",
+            "temp-analysis/lodash/fp/_convertBrowser.js",
+            "temp-analysis/lodash/fp/_mapping.js",
+            "temp-analysis/lodash/perf/perf.js",
+            "temp-analysis/lodash/lib/common/file.js",
+            "temp-analysis/lodash/lib/common/mapping.js",
+            "temp-analysis/lodash/lib/common/minify.js",
+            "temp-analysis/lodash/lib/common/uglify.options.js",
+            "temp-analysis/lodash/lib/fp/build-dist.js",
+            "temp-analysis/lodash/lib/fp/build-modules.js",
+            "temp-analysis/lodash/lib/main/build-dist.js",
+            "temp-analysis/lodash/lib/main/build-doc.js",
+            "temp-analysis/lodash/lib/main/build-modules.js",
+            "temp-analysis/lodash/lib/main/build-site.js",
+            "temp-analysis/lodash/perf/asset/perf-ui.js"
+          ],
+          "approach": "Identify common patterns, create utility functions, implement shared libraries",
+          "effortDays": 3,
+          "benefits": [
+            "Reduced maintenance overhead",
+            "Improved consistency across codebase",
+            "Smaller bundle size"
+          ],
+          "risks": [
+            "Over-abstraction risk",
+            "Potential breaking changes"
+          ]
+        },
+        {
+          "title": "Critical Path Optimization",
+          "description": "Refactor high-usage files to improve overall system performance",
+          "files": [
+            "temp-analysis/lodash/lib/common/file.js",
+            "temp-analysis/lodash/lib/common/util.js"
+          ],
+          "approach": "Incremental refactoring with comprehensive test coverage",
+          "effortDays": 1,
+          "benefits": [
+            "Improved system performance",
+            "Reduced coupling between modules",
+            "Better maintainability for core features"
+          ],
+          "risks": [
+            "Potential breaking changes in core functionality"
+          ]
+        },
+        {
+          "title": "Complexity Reduction Initiative",
+          "description": "Systematic reduction of cyclomatic complexity across the codebase",
+          "files": [
+            "temp-analysis/lodash/lodash.js",
+            "temp-analysis/lodash/fp/_baseConvert.js",
+            "temp-analysis/lodash/perf/perf.js",
+            "temp-analysis/lodash/perf/asset/perf-ui.js"
+          ],
+          "approach": "Extract methods, apply SOLID principles, introduce design patterns",
+          "effortDays": 2,
+          "benefits": [
+            "Improved code readability",
+            "Reduced bug rate",
+            "Easier onboarding for new developers"
+          ],
+          "risks": [
+            "Time investment required",
+            "Potential for introducing new bugs during refactoring"
+          ]
+        }
+      ]
+    }
   },
-  "duration": 979
+  "duration": 1165
 }

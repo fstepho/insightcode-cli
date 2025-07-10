@@ -22,141 +22,180 @@
     ]
   },
   "analysis": {
-    "files": [
-      {
-        "path": "benchmark.js",
-        "complexity": 1,
-        "duplication": 5,
-        "functionCount": 12,
-        "loc": 41,
-        "issues": [],
-        "fileType": "utility",
-        "impact": 0,
-        "criticismScore": 2
-      },
-      {
-        "path": "source/index.js",
-        "complexity": 23,
-        "duplication": 1,
-        "functionCount": 19,
-        "loc": 169,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 23 (recommended: < 20)",
-            "value": 23,
-            "ratio": 1.15
-          }
-        ],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 26.5
-      },
-      {
-        "path": "source/index.test-d.ts",
-        "complexity": 3,
-        "duplication": 2,
-        "functionCount": 0,
-        "loc": 148,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 4
-      },
-      {
-        "path": "source/utilities.js",
-        "complexity": 6,
-        "duplication": 0,
-        "functionCount": 2,
-        "loc": 28,
-        "issues": [],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 9
-      }
-    ],
-    "topFiles": [
-      {
-        "path": "source/index.js",
-        "complexity": 23,
-        "duplication": 1,
-        "functionCount": 19,
-        "loc": 169,
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "message": "High complexity: 23 (recommended: < 20)",
-            "value": 23,
-            "ratio": 1.15
-          }
-        ],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 26.5
-      },
-      {
-        "path": "source/utilities.js",
-        "complexity": 6,
-        "duplication": 0,
-        "functionCount": 2,
-        "loc": 28,
-        "issues": [],
-        "fileType": "production",
-        "impact": 1,
-        "criticismScore": 9
-      },
-      {
-        "path": "source/index.test-d.ts",
-        "complexity": 3,
-        "duplication": 2,
-        "functionCount": 0,
-        "loc": 148,
-        "issues": [],
-        "fileType": "production",
-        "impact": 0,
-        "criticismScore": 4
-      },
-      {
-        "path": "benchmark.js",
-        "complexity": 1,
-        "duplication": 5,
-        "functionCount": 12,
-        "loc": 41,
-        "issues": [],
-        "fileType": "utility",
-        "impact": 0,
-        "criticismScore": 2
-      }
-    ],
-    "silentKillers": [],
-    "project": {
-      "name": "chalk",
-      "path": "temp-analysis/chalk",
-      "packageJson": {
+    "context": {
+      "project": {
         "name": "chalk",
-        "version": "5.4.1",
-        "description": "Terminal string styling done right"
+        "path": "temp-analysis/chalk",
+        "version": "5.4.1"
+      },
+      "analysis": {
+        "timestamp": "2025-07-09T23:27:16.323Z",
+        "durationMs": 35,
+        "toolVersion": "0.6.0",
+        "filesAnalyzed": 4
       }
     },
-    "summary": {
-      "totalFiles": 4,
-      "totalLines": 386,
-      "avgComplexity": 8.3,
-      "avgDuplication": 2,
-      "avgFunctions": 8.3,
-      "avgLoc": 97
+    "overview": {
+      "grade": "C",
+      "health": "fair",
+      "statistics": {
+        "totalFiles": 4,
+        "totalLOC": 386,
+        "avgComplexity": 8.3,
+        "avgLOC": 97
+      },
+      "scores": {
+        "complexity": 62,
+        "duplication": 81,
+        "maintainability": 90,
+        "overall": 76
+      },
+      "summary": "Good overall health with 1 file requiring attention"
     },
-    "scores": {
-      "complexity": 62,
-      "duplication": 99,
-      "maintainability": 90,
-      "overall": 82
-    },
-    "complexityStdDev": 8.7,
-    "score": 82,
-    "grade": "B"
+    "details": [
+      {
+        "file": "benchmark.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 41,
+          "functionCount": 12,
+          "duplication": 0.14
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 0,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [],
+        "healthScore": 97,
+        "isCritical": false
+      },
+      {
+        "file": "source/index.js",
+        "metrics": {
+          "complexity": 23,
+          "loc": 169,
+          "functionCount": 19,
+          "duplication": 0.03
+        },
+        "importance": {
+          "usageCount": 1,
+          "usageRank": 67,
+          "isEntryPoint": true,
+          "isCriticalPath": true
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "location": {
+              "line": 1
+            },
+            "context": {
+              "message": "High complexity: 23 (recommended: < 20)",
+              "threshold": 20,
+              "excessRatio": 1.15,
+              "unit": "count"
+            },
+            "action": {
+              "description": "Break down into smaller functions",
+              "impact": "Improved readability and maintainability",
+              "effortHours": 4
+            }
+          }
+        ],
+        "healthScore": 59,
+        "isCritical": true
+      },
+      {
+        "file": "source/index.test-d.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 148,
+          "functionCount": 0,
+          "duplication": 0.02
+        },
+        "importance": {
+          "usageCount": 0,
+          "usageRank": 33,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [],
+        "healthScore": 100,
+        "isCritical": false
+      },
+      {
+        "file": "source/utilities.js",
+        "metrics": {
+          "complexity": 6,
+          "loc": 28,
+          "functionCount": 2,
+          "duplication": 0.13
+        },
+        "importance": {
+          "usageCount": 1,
+          "usageRank": 100,
+          "isEntryPoint": false,
+          "isCriticalPath": false
+        },
+        "issues": [],
+        "healthScore": 98,
+        "isCritical": false
+      }
+    ],
+    "recommendations": {
+      "critical": [
+        {
+          "file": "temp-analysis/chalk/source/index.js",
+          "issue": "High complexity: 23 (recommended: < 20)",
+          "solution": "Break down into smaller functions",
+          "effortHours": 7,
+          "impact": "Improved readability and maintainability",
+          "priority": 10
+        }
+      ],
+      "quickWins": [],
+      "improvements": [
+        {
+          "title": "Critical Path Optimization",
+          "description": "Refactor high-usage files to improve overall system performance",
+          "files": [
+            "temp-analysis/chalk/source/index.js"
+          ],
+          "approach": "Incremental refactoring with comprehensive test coverage",
+          "effortDays": 1,
+          "benefits": [
+            "Improved system performance",
+            "Reduced coupling between modules",
+            "Better maintainability for core features"
+          ],
+          "risks": [
+            "Potential breaking changes in core functionality"
+          ]
+        },
+        {
+          "title": "Duplication Elimination",
+          "description": "Extract common code into reusable utilities and shared modules",
+          "files": [
+            "temp-analysis/chalk/benchmark.js",
+            "temp-analysis/chalk/source/utilities.js"
+          ],
+          "approach": "Identify common patterns, create utility functions, implement shared libraries",
+          "effortDays": 1,
+          "benefits": [
+            "Reduced maintenance overhead",
+            "Improved consistency across codebase",
+            "Smaller bundle size"
+          ],
+          "risks": [
+            "Over-abstraction risk",
+            "Potential breaking changes"
+          ]
+        }
+      ]
+    }
   },
-  "duration": 638
+  "duration": 729
 }
