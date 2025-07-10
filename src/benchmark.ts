@@ -42,7 +42,7 @@ interface BenchmarkResult {
   category: 'small' | 'medium' | 'large';
   emblematicFiles: EmblematicFiles;
   analysis: BenchmarkAnalysis;
-  duration: number;
+  durationMs: number;
   error?: string;
 }
 
@@ -431,7 +431,7 @@ async function analyzeProject(project: Project, index: number, total: number): P
       category: project.category,
       emblematicFiles: project.emblematicFiles,
       analysis,
-      duration,
+      durationMs: duration,
     };
   } catch (error) {
     const duration = Date.now() - startTime;
@@ -448,7 +448,7 @@ async function analyzeProject(project: Project, index: number, total: number): P
       category: project.category,
       emblematicFiles: project.emblematicFiles,
       analysis: {} as BenchmarkAnalysis,
-      duration,
+      durationMs: duration,
       error: errorMessage,
     };
   }
@@ -683,7 +683,7 @@ async function main(): Promise<void> {
     totalProjects: results.length,
     successfulAnalyses: successfulResults.length,
     failedAnalyses: results.filter(r => r.error).length,
-    totalDuration: results.reduce((sum, r) => sum + r.duration, 0),
+    totalDuration: results.reduce((sum, r) => sum + r.durationMs, 0),
     totalLines: successfulResults.reduce((sum, r) => sum + r.analysis.overview.statistics.totalLOC, 0),
     avgComplexity: successfulResults.reduce((sum, r) => sum + r.analysis.overview.statistics.avgComplexity, 0) / successfulResults.length,
     avgDuplication: successfulResults.reduce((sum, r) => sum + getAverageDuplication(r.analysis), 0) / successfulResults.length,
