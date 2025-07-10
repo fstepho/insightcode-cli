@@ -3,9 +3,9 @@
 import { execSync } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import { AnalysisResult, FileMetrics } from '../src/types';
+import { AnalysisResult, CodeContext, CodeContextSummary } from '../src/types';
 
-// --- INTERFACES (inchangées) ---
+// --- INTERFACES ---
 interface EmblematicFiles {
   coreFiles: string[];
   architecturalFiles: string[];
@@ -24,6 +24,14 @@ interface Project {
   emblematicFiles: EmblematicFiles;
 }
 
+// Extended interface for benchmark analysis with optional legacy codeContext
+interface BenchmarkAnalysis extends AnalysisResult {
+  codeContext?: {
+    contexts: CodeContext[];
+    summary: CodeContextSummary;
+  };
+}
+
 interface BenchmarkResult {
   project: string;
   repo: string;
@@ -33,7 +41,7 @@ interface BenchmarkResult {
   description: string;
   category: 'small' | 'medium' | 'large';
   emblematicFiles: EmblematicFiles;
-  analysis: AnalysisResult;
+  analysis: BenchmarkAnalysis;
   duration: number;
   error?: string;
 }
@@ -316,7 +324,8 @@ const RESULTS_DIR = path.join(projectRoot, 'benchmarks');
 const args = process.argv.slice(2);
 const excludeUtility = args.includes('--exclude-utility');
 const withContext = args.includes('--with-context');
-// --- FONCTIONS UTILITAIRES ---
+
+// --- UTILITY FUNCTIONS ---
 
 if (!fs.existsSync(RESULTS_DIR)) {
   fs.mkdirSync(RESULTS_DIR, { recursive: true });
@@ -336,18 +345,39 @@ function runCommand(command: string, cwd?: string): string {
     throw new Error(`Command failed: ${command}\n${errorMessage}`);
   }
 }
+
 /**
- * Formate un nombre pour l'affichage avec des virgules.
- * @param num Le nombre à formater.
- * @returns Le nombre formaté en chaîne de caractères.
+ * Format a number for display with commas.
  */
 function formatNumber(num: number): string {
   return num.toLocaleString();
 }
 
 /**
- * Analyse un projet de manière asynchrone.
- * Gère le cache, le clonage, l'analyse et le nettoyage.
+ * Calculate average duplication from analysis
+ */
+function getAverageDuplication(analysis: BenchmarkAnalysis): number {
+  if (analysis.details.length === 0) return 0;
+  const totalDup = analysis.details.reduce((sum, d) => sum + d.metrics.duplication, 0);
+  return totalDup / analysis.details.length;
+}
+
+/**
+ * Calculate complexity standard deviation
+ */
+function calculateComplexityStdDev(analysis: BenchmarkAnalysis): number {
+  if (analysis.details.length === 0) return 0;
+  const avg = analysis.overview.statistics.avgComplexity;
+  const variance = analysis.details.reduce((sum, d) => {
+    const diff = d.metrics.complexity - avg;
+    return sum + (diff * diff);
+  }, 0) / analysis.details.length;
+  return Math.sqrt(variance);
+}
+
+/**
+ * Analyze a project asynchronously.
+ * Handles caching, cloning, analysis, and cleanup.
  */
 async function analyzeProject(project: Project, index: number, total: number): Promise<BenchmarkResult> {
   const startTime = Date.now();
@@ -355,7 +385,7 @@ async function analyzeProject(project: Project, index: number, total: number): P
   console.log(`\n📊 [${index}/${total}] Analyzing ${project.name}...`);
 
   try {
-    // **AMÉLIORATION : GESTION DU CACHE**
+    // Cache management
     if (fs.existsSync(projectTempDir)) {
       console.log(`  🔄 Repository cache found. Fetching latest changes...`);
       runCommand(`git fetch`, projectTempDir);
@@ -363,7 +393,6 @@ async function analyzeProject(project: Project, index: number, total: number): P
       console.log(`  📥 Cloning repository (${project.stableVersion})...`);
       runCommand(`git clone --depth 1 --branch ${project.stableVersion} ${project.repo} "${projectTempDir}"`);
     }
-    // Pas besoin de `git checkout` ici si on clone directement la bonne branche/tag
 
     console.log(`  🔍 Running analysis...`);
     const flags = ['--json'];
@@ -375,20 +404,19 @@ async function analyzeProject(project: Project, index: number, total: number): P
     }
     const command = `node ${path.join(projectRoot, 'dist/cli.js')} analyze "${projectTempDir}" ${flags.join(' ')}`;
     const analysisOutput = runCommand(command, projectRoot);
-    const analysis: AnalysisResult = JSON.parse(analysisOutput);
+    const analysis: BenchmarkAnalysis = JSON.parse(analysisOutput);
 
-    // On calcule le chemin relatif du dossier temporaire par rapport à la racine du projet.
-    // Cela nous donne le préfixe exact à enlever (ex: "temp-analysis/react").
+    // Clean paths in the new v0.6.0 structure
     const prefixToRemove = path.relative(projectRoot, projectTempDir);
-
     const cleanPath = (p: string) => {
-        // On s'assure d'échapper les séparateurs de chemin pour la regex
         const escapedPrefix = prefixToRemove.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        return p.replace(new RegExp(`^${escapedPrefix}[\\\/]`), '');
+        return p.replace(new RegExp(`^${escapedPrefix}[\\/]`), '');
     };
-    analysis.files.forEach(file => (file.path = cleanPath(file.path)));
-    analysis.topFiles.forEach(file => (file.path = cleanPath(file.path)));
-    analysis.silentKillers.forEach(file => (file.path = cleanPath(file.path)));
+    
+    // Clean paths in details array
+    analysis.details.forEach(detail => {
+      detail.file = cleanPath(detail.file);
+    });
     
     const duration = Date.now() - startTime;
     console.log(`  ✅ [${index}/${total}] ${project.name} completed in ${(duration / 1000).toFixed(2)}s`);
@@ -419,7 +447,7 @@ async function analyzeProject(project: Project, index: number, total: number): P
       description: project.description,
       category: project.category,
       emblematicFiles: project.emblematicFiles,
-      analysis: {} as AnalysisResult,
+      analysis: {} as BenchmarkAnalysis,
       duration,
       error: errorMessage,
     };
@@ -450,24 +478,37 @@ function generateMarkdownReport(results: BenchmarkResult[], summary: Summary): s
     // --- 2. Leaderboard Section ---
     markdown += `\n## Benchmark Leaderboard\n\n`;
     markdown += `| Category | Champion 🏆 | Challenger ⚠️ | Metric |\n|---|---|---|---|\n`;
-    const sortedByScore = [...results].sort((a, b) => b.analysis.score - a.analysis.score);
-    const sortedByComplexity = [...results].sort((a, b) => a.analysis.summary.avgComplexity - b.analysis.summary.avgComplexity);
-    const sortedByDuplication = [...results].sort((a, b) => a.analysis.summary.avgDuplication - b.analysis.summary.avgDuplication);
-    markdown += `| **Best Score** | \`${sortedByScore[0].project}\` (${sortedByScore[0].analysis.score}/100) | \`${sortedByScore[sortedByScore.length - 1].project}\` (${sortedByScore[sortedByScore.length - 1].analysis.score}/100) | Overall Score |\n`;
-    markdown += `| **Lowest Complexity** | \`${sortedByComplexity[0].project}\` (${sortedByComplexity[0].analysis.summary.avgComplexity.toFixed(2)}) | \`${sortedByComplexity[sortedByComplexity.length - 1].project}\` (${sortedByComplexity[sortedByComplexity.length - 1].analysis.summary.avgComplexity.toFixed(2)}) | Avg. Complexity |\n`;
-    markdown += `| **Lowest Duplication** | \`${sortedByDuplication[0].project}\` (${sortedByDuplication[0].analysis.summary.avgDuplication.toFixed(2)}%) | \`${sortedByDuplication[sortedByDuplication.length - 1].project}\` (${sortedByDuplication[sortedByDuplication.length - 1].analysis.summary.avgDuplication.toFixed(2)}%) | Avg. Duplication |\n`;
+    const sortedByScore = [...results].sort((a, b) => b.analysis.overview.scores.overall - a.analysis.overview.scores.overall);
+    const sortedByComplexity = [...results].sort((a, b) => a.analysis.overview.statistics.avgComplexity - b.analysis.overview.statistics.avgComplexity);
+    const sortedByDuplication = [...results].sort((a, b) => {
+      const avgDupA = getAverageDuplication(a.analysis);
+      const avgDupB = getAverageDuplication(b.analysis);
+      return avgDupA - avgDupB;
+    });
+    markdown += `| **Best Score** | \`${sortedByScore[0].project}\` (${sortedByScore[0].analysis.overview.scores.overall}/100) | \`${sortedByScore[sortedByScore.length - 1].project}\` (${sortedByScore[sortedByScore.length - 1].analysis.overview.scores.overall}/100) | Overall Score |\n`;
+    markdown += `| **Lowest Complexity** | \`${sortedByComplexity[0].project}\` (${sortedByComplexity[0].analysis.overview.statistics.avgComplexity.toFixed(2)}) | \`${sortedByComplexity[sortedByComplexity.length - 1].project}\` (${sortedByComplexity[sortedByComplexity.length - 1].analysis.overview.statistics.avgComplexity.toFixed(2)}) | Avg. Complexity |\n`;
+    const avgDupLowest = getAverageDuplication(sortedByDuplication[0].analysis);
+    const avgDupHighest = getAverageDuplication(sortedByDuplication[sortedByDuplication.length - 1].analysis);
+    markdown += `| **Lowest Duplication** | \`${sortedByDuplication[0].project}\` (${(avgDupLowest * 100).toFixed(2)}%) | \`${sortedByDuplication[sortedByDuplication.length - 1].project}\` (${(avgDupHighest * 100).toFixed(2)}%) | Avg. Duplication |\n`;
 
     // --- 3. Complexity Distribution Section ---
     markdown += `\n## Complexity Distribution: The "Monolith" Indicator\n\n`;
     markdown += `A high Standard Deviation (StdDev) indicates that complexity is heavily concentrated in a few "monolith" files.\n\n`;
     markdown += `| Project | Avg Complexity | StdDev | Profile |\n|---|---|---|---|\n`;
-    results.sort((a, b) => b.analysis.complexityStdDev - a.analysis.complexityStdDev).forEach(r => {
-        const profile = r.analysis.complexityStdDev > r.analysis.summary.avgComplexity * 2 ? 'Concentrated 🌋' : 'Evenly Distributed';
-        markdown += `| \`${r.project}\` | ${r.analysis.summary.avgComplexity.toFixed(2)} | **${r.analysis.complexityStdDev.toFixed(2)}** | ${profile} |\n`;
+    
+    // Calculate standard deviation for each project and sort
+    const resultsWithStdDev = results.map(r => ({
+      ...r,
+      stdDev: calculateComplexityStdDev(r.analysis)
+    }));
+    
+    resultsWithStdDev.sort((a, b) => b.stdDev - a.stdDev).forEach(r => {
+        const profile = r.stdDev > r.analysis.overview.statistics.avgComplexity * 2 ? 'Concentrated 🌋' : 'Evenly Distributed';
+        markdown += `| \`${r.project}\` | ${r.analysis.overview.statistics.avgComplexity.toFixed(2)} | **${r.stdDev.toFixed(2)}** | ${profile} |\n`;
     });
 
     // --- 4. Code Context Section ---
-    // Add new Code Context Insights section if available
+    // Legacy codeContext support if available
     if (withContext && results.some(r => r.analysis.codeContext)) {
         markdown += `\n## Code Context Insights for LLM Analysis\n\n`;
         
@@ -524,11 +565,14 @@ function generateMarkdownReport(results: BenchmarkResult[], summary: Summary): s
         if (result.error) continue;
         const analysis = result.analysis;
         
-        markdown += `### ${result.project} (⭐ ${result.stars}) - Grade: ${analysis.grade} (${analysis.score}/100)\n\n`;
+        const stdDev = calculateComplexityStdDev(analysis);
+        const avgDup = getAverageDuplication(analysis);
+        
+        markdown += `### ${result.project} (⭐ ${result.stars}) - Grade: ${analysis.overview.grade} (${analysis.overview.scores.overall}/100)\n\n`;
         markdown += `- **Description**: ${result.description}\n`;
-        markdown += `- **Files**: ${formatNumber(analysis.summary.totalFiles)} files, ${formatNumber(analysis.summary.totalLines)} lines\n`;
-        markdown += `- **Avg Complexity**: ${analysis.summary.avgComplexity.toFixed(2)} (StdDev: ${analysis.complexityStdDev.toFixed(2)})\n`;
-        markdown += `- **Avg Duplication**: ${analysis.summary.avgDuplication.toFixed(2)}%\n\n`;
+        markdown += `- **Files**: ${formatNumber(analysis.overview.statistics.totalFiles)} files, ${formatNumber(analysis.overview.statistics.totalLOC)} lines\n`;
+        markdown += `- **Avg Complexity**: ${analysis.overview.statistics.avgComplexity.toFixed(2)} (StdDev: ${stdDev.toFixed(2)})\n`;
+        markdown += `- **Avg Duplication**: ${(avgDup * 100).toFixed(2)}%\n\n`;
 
          // Add code context summary if available
         if (withContext && analysis.codeContext) {
@@ -547,27 +591,43 @@ function generateMarkdownReport(results: BenchmarkResult[], summary: Summary): s
         // --- 5a. Emblematic Files Validation ---
         if (result.emblematicFiles) {
             markdown += `- **Emblematic Files Validation**:\n`;
-            const topFilePaths = new Set(analysis.topFiles.map(f => f.path));
+            // Get critical files from details
+            const criticalFiles = analysis.details
+                .map(d => d.file);
+            const topFilePaths = new Set(criticalFiles);
             let foundCount = 0;
             for (const [category, files] of Object.entries(result.emblematicFiles)) {
                 for (const emblematicFile of files) {
                     if (topFilePaths.has(emblematicFile)) {
                         const categoryName = category.replace('Files', '');
-                        markdown += `  - ✅ \`${emblematicFile}\` (found in Top 5, expected as ${categoryName})\n`;
+                        markdown += `  - ✅ Found emblematic file in ${categoryName}: \`${emblematicFile}\`\n`;
+                        markdown += `    - **File Path**: ${emblematicFile}\n`;
+                        markdown += `    - **Category**: ${categoryName}\n`;
+                        markdown += `    - **Usage Count**: ${analysis.details.find(d => d.file === emblematicFile)?.importance.usageCount || 0}\n`;
+                        markdown += `    - **Health Score**: ${analysis.details.find(d => d.file === emblematicFile)?.healthScore || 'N/A'}\n`;
+                        markdown += `    - **Issues**: ${analysis.details.find(d => d.file === emblematicFile)?.issues.length || 0}\n`;
+                        markdown += `    - **Complexity**: ${analysis.details.find(d => d.file === emblematicFile)?.metrics.complexity || 'N/A'}\n`;
+                        markdown += `    - **Duplication**: ${(analysis.details.find(d => d.file === emblematicFile)?.metrics.duplication || 0) * 100}%\n`;
                         foundCount++;
                     }
                 }
             }
             if (foundCount === 0) {
-                markdown += `  - ℹ️ No emblematic files were found in the Top 5 critical files list.\n`;
+                markdown += `  - ℹ️ No emblematic files were found in the critical files list.\n`;
             }
         }
 
-        // --- 4b. Silent Killers Section ---
-        if (analysis.silentKillers.length > 0) {
-            markdown += `- **Architectural Risks (Silent Killers)**:\n`;
-            analysis.silentKillers.forEach(file => {
-                markdown += `  - \`${file.path}\` (Impact: ${file.impact}, Complexity: ${file.complexity})\n`;
+        // --- 4b. Architectural Risks Section ---
+        // Find files with high importance but low health score
+        const architecturalRisks = analysis.details
+            .filter(d => d.importance.isCriticalPath && d.healthScore < 70)
+            .sort((a, b) => a.healthScore - b.healthScore)
+            .slice(0, 5);
+            
+        if (architecturalRisks.length > 0) {
+            markdown += `- **Architectural Risks (High Impact, Low Health)**:\n`;
+            architecturalRisks.forEach(file => {
+                markdown += `  - \`${file.file}\` (Usage Count: ${file.importance.usageCount}, Health Score: ${file.healthScore})\n`;
             });
         }
         markdown += `\n---\n`;
@@ -590,28 +650,28 @@ async function main(): Promise<void> {
 
   console.log(`📁 Results will be saved to: ${RESULTS_DIR}\n`);
 
-  // **AMÉLIORATION : Exécution en parallèle**
+  // Parallel execution
   const analysisPromises = PROJECTS.map((project, index) => analyzeProject(project, index + 1, PROJECTS.length));
 
-  // Utiliser Promise.allSettled pour continuer même si une analyse échoue
+  // Use Promise.allSettled to continue even if one analysis fails
   const settledResults = await Promise.allSettled(analysisPromises);
 
   const results: BenchmarkResult[] = settledResults.map(res => {
     if (res.status === 'fulfilled') {
       return res.value;
     }
-    // Si la promesse a été rejetée, on log l'erreur et on retourne un objet d'erreur
+    // If promise was rejected, log error and return error object
     console.error(`❌ A critical error occurred during analysis:`, res.reason);
-    // On doit reconstruire un objet BenchmarkResult partiel pour le rapport
+    // Reconstruct a partial BenchmarkResult object for the report
     return { project: 'Unknown', error: 'Critical failure in promise',} as BenchmarkResult;
   });
 
-  // Sauvegarder les résultats individuels
+  // Save individual results
   results.forEach(result => {
     if(!result.project || result.project === 'Unknown') return;
     const resultFilename = `${result.project}-${excludeUtility ? 'prod' : 'full'}.json`;
     fs.writeFileSync(path.join(RESULTS_DIR, resultFilename), 
-    JSON.stringify(result, function(key, val) {
+    JSON.stringify(result, function(_key, val) {
       return val.toFixed ? Number(val.toFixed(2)) : val;
     }, 2));
   });
@@ -624,11 +684,11 @@ async function main(): Promise<void> {
     successfulAnalyses: successfulResults.length,
     failedAnalyses: results.filter(r => r.error).length,
     totalDuration: results.reduce((sum, r) => sum + r.duration, 0),
-    totalLines: successfulResults.reduce((sum, r) => sum + r.analysis.summary.totalLines, 0),
-    avgComplexity: successfulResults.reduce((sum, r) => sum + r.analysis.summary.avgComplexity, 0) / successfulResults.length,
-    avgDuplication: (successfulResults.reduce((sum, r) => sum + r.analysis.summary.avgDuplication, 0) / successfulResults.length),
+    totalLines: successfulResults.reduce((sum, r) => sum + r.analysis.overview.statistics.totalLOC, 0),
+    avgComplexity: successfulResults.reduce((sum, r) => sum + r.analysis.overview.statistics.avgComplexity, 0) / successfulResults.length,
+    avgDuplication: successfulResults.reduce((sum, r) => sum + getAverageDuplication(r.analysis), 0) / successfulResults.length,
     gradeDistribution: successfulResults.reduce((dist, r) => {
-      dist[r.analysis.grade] = (dist[r.analysis.grade] || 0) + 1;
+      dist[r.analysis.overview.grade] = (dist[r.analysis.overview.grade] || 0) + 1;
       return dist;
     }, {} as Record<string, number>),
     modeCategory: excludeUtility ? 'production' : 'full'
@@ -638,7 +698,7 @@ async function main(): Promise<void> {
   const summaryFilename = excludeUtility ? 'benchmark-summary-production.json' : 'benchmark-summary.json';
   fs.writeFileSync(
     path.join(RESULTS_DIR, summaryFilename),
-    JSON.stringify(summary, function(key, val) {
+    JSON.stringify(summary, function(_key, val) {
       return val.toFixed ? Number(val.toFixed(2)) : val;
     }, 2)
   );
@@ -663,7 +723,7 @@ async function main(): Promise<void> {
   console.log(`  - Total lines analyzed: ${formatNumber(summary.totalLines)}`);
   console.log(`  - Analysis speed: ${formatNumber(Math.round(summary.totalLines / (summary.totalDuration / 1000)))} lines/second`);
   console.log(`  - Average complexity: ${summary.avgComplexity.toFixed(2)}`);
-  console.log(`  - Average duplication: ${summary.avgDuplication.toFixed(2)}%`);
+  console.log(`  - Average duplication: ${(summary.avgDuplication * 100).toFixed(2)}%`);
   console.log(`  - Grade distribution: ${Object.entries(summary.gradeDistribution).map(([g, c]) => `${g}:${c}`).join(', ')}`);
   console.log(`\n📁 Results saved to: ${RESULTS_DIR}`);
 }

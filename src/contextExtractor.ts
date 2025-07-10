@@ -3,13 +3,13 @@
 import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as path from 'path';
-import { FileMetrics, AnalysisResult, ThresholdConfig, CodeContext, CodeContextSummary } from './types';
+import { FileDetail, AnalysisResult, ThresholdConfig, CodeContext, CodeContextSummary } from './types';
 import { analyze } from './analyzer';
 
 /**
  * Extract rich context from a TypeScript/JavaScript file for LLM analysis
  */
-export function extractCodeContext(filePath: string, metrics: FileMetrics): CodeContext {
+export function extractCodeContext(filePath: string, metrics: FileDetail): CodeContext {
   const absolutePath = path.isAbsolute(filePath) 
     ? filePath 
     : path.join(process.cwd(), filePath);
@@ -18,8 +18,8 @@ export function extractCodeContext(filePath: string, metrics: FileMetrics): Code
   const sourceFile = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true);
   
   const context: CodeContext = {
-    path: metrics.path,
-    complexity: metrics.complexity,
+    path: metrics.file,
+    complexity: metrics.metrics.complexity,
     structure: {
       imports: [],
       exports: [],
@@ -530,7 +530,7 @@ function getCountedItems(items: string[], limit: number): Array<{ name: string; 
  * Analyze files with optional code context extraction
  */
 export function analyzeWithContext(
-  files: FileMetrics[], 
+  files: FileDetail[], 
   projectPath: string, 
   thresholds: ThresholdConfig,
   withContext: boolean = false
@@ -542,14 +542,14 @@ export function analyzeWithContext(
     return baseAnalysis;
   }
   
-  // Extract context for top files and silent killers
-  const criticalFiles = [...baseAnalysis.topFiles, ...baseAnalysis.silentKillers];
-  const uniquePaths = new Set(criticalFiles.map(f => f.path));
+  // Extract context for critical files
+  const criticalFiles = baseAnalysis.details.filter(f => f.isCritical);
+  const uniquePaths = new Set(criticalFiles.map(f => f.file));
   
   const contexts: CodeContext[] = [];
   
   for (const filePath of uniquePaths) {
-    const fileMetrics = files.find(f => f.path === filePath);
+    const fileMetrics = files.find(f => f.file === filePath);
     if (fileMetrics) {
       try {
         const context = extractCodeContext(filePath, fileMetrics);
@@ -560,13 +560,16 @@ export function analyzeWithContext(
     }
   }
   
-  // Add code context to the result
-  baseAnalysis.codeContext = {
-    contexts,
-    summary: summarizeCodeContexts(contexts)
+  // Add code context to the result (legacy format)
+  const analysisWithContext: AnalysisResult & { codeContext?: { contexts: CodeContext[], summary: CodeContextSummary } } = {
+    ...baseAnalysis,
+    codeContext: {
+      contexts,
+      summary: summarizeCodeContexts(contexts)
+    }
   };
   
-  return baseAnalysis;
+  return analysisWithContext;
 }
 
 function getMostFrequent(items: string[]): string[] {

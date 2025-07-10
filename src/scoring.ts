@@ -1,5 +1,7 @@
 // File: src/scoring.ts
 
+import { Issue } from './types';
+
 /**
  * Contains pure, self-contained functions for calculating scores from raw metrics.
  * The thresholds used here are based on academic and empirical research and are not user-configurable.
@@ -148,4 +150,37 @@ export function getSeverityColorLevel(ratio: number): 'green' | 'yellow' | 'red'
   if (ratio >= 5) return 'red';       // High
   if (ratio >= 2.5) return 'yellow';  // Medium
   return 'green';                     // Low
+}
+
+/**
+ * Calculates health score for a file according to v0.6.0 specifications.
+ * Formula: 100 - (complexity + duplication + size + issues penalties)
+ * 
+ * @param file FileDetail object with metrics and issues
+ * @returns Health score between 0-100 (100 = perfect health)
+ */
+export function calculateHealthScore(file: { 
+  metrics: { 
+    complexity: number; 
+    loc: number; 
+    duplication: number; // Ratio 0-1
+  }; 
+  issues: Issue[]; 
+}): number {
+  // Use thresholds consistent with other scoring functions
+  const complexityPenalty = file.metrics.complexity <= 10 ? 0 : Math.min((file.metrics.complexity / 20) * 30, 30);
+  const duplicationPenalty = file.metrics.duplication <= 0.03 ? 0 : file.metrics.duplication * 20; // 3% threshold
+  const sizePenalty = file.metrics.loc <= 200 ? 0 : Math.min((file.metrics.loc / 300) * 20, 20);
+  const issuesPenalty = Math.min(file.issues.reduce((penalty, issue) => {
+    switch (issue.severity) {
+      case 'critical': return penalty + 15;
+      case 'high': return penalty + 10;
+      case 'medium': return penalty + 5;
+      case 'low': return penalty + 2;
+      default: return penalty + 5;
+    }
+  }, 0), 30);
+  
+  const totalPenalty = complexityPenalty + duplicationPenalty + sizePenalty + issuesPenalty;
+  return Math.max(0, Math.round(100 - totalPenalty));
 }

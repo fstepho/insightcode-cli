@@ -45,7 +45,7 @@ export function getConfig(): ThresholdConfig {
       const content = fs.readFileSync(configPath, 'utf-8');
       const userConfig = JSON.parse(content);
       // Fusionne en profondeur la configuration utilisateur avec celle par défaut
-      config = deepMerge(DEFAULT_THRESHOLDS, userConfig.thresholds || {});
+      config = deepMerge(DEFAULT_THRESHOLDS as unknown as Record<string, unknown>, userConfig.thresholds || {}) as unknown as ThresholdConfig;
     } else {
       config = DEFAULT_THRESHOLDS;
     }

@@ -8,19 +8,22 @@
  * @param source The source object to merge from.
  * @returns The merged object.
  */
-export function deepMerge(target: any, source: any): any {
+export function deepMerge<T extends Record<string, unknown>>(target: T, source: Partial<T>): T {
   const output = { ...target };
 
   if (isObject(target) && isObject(source)) {
     Object.keys(source).forEach(key => {
-      if (isObject(source[key])) {
+      const sourceValue = source[key];
+      const targetValue = target[key];
+      
+      if (isObject(sourceValue)) {
         if (!(key in target)) {
-          Object.assign(output, { [key]: source[key] });
+          (output as Record<string, unknown>)[key] = sourceValue;
         } else {
-          output[key] = deepMerge(target[key], source[key]);
+          (output as Record<string, unknown>)[key] = deepMerge(targetValue as Record<string, unknown>, sourceValue as Partial<Record<string, unknown>>);
         }
       } else {
-        Object.assign(output, { [key]: source[key] });
+        (output as Record<string, unknown>)[key] = sourceValue;
       }
     });
   }
@@ -31,8 +34,8 @@ export function deepMerge(target: any, source: any): any {
 /**
  * Helper function to check if a variable is a non-null object.
  */
-function isObject(item: any): boolean {
-  return (item && typeof item === 'object' && !Array.isArray(item));
+function isObject(item: unknown): item is Record<string, unknown> {
+  return Boolean(item && typeof item === 'object' && !Array.isArray(item));
 }
 
 /**

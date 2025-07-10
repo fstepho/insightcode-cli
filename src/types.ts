@@ -311,60 +311,8 @@ export interface CodeContextSummary {
 
 // ==================== DEPRECATED INTERFACES ====================
 
-/**
- * @deprecated Use FileDetail instead
- */
-export interface FileMetrics {
-  path: string;
-  complexity: number;
-  duplication: number;
-  functionCount: number; 
-  loc: number;
-  fileType?: 'production' | 'test' | 'example' | 'utility' | 'config';
-  issues: Issue[];
-  impact: number;
-  criticismScore: number;
-  context?: CodeContext;
-}
+// FileMetrics interface removed in v0.6.0 - use FileDetail instead
 
-/**
- * @deprecated Use new AnalysisResult structure instead
- */
-export interface AnalysisResultV4 {
-  project: {
-    name: string;
-    path: string;
-    packageJson?: {
-      name?: string;
-      version?: string;
-      description?: string;
-    };
-  };
-  summary: {
-    totalFiles: number;
-    totalLines: number;
-    avgComplexity: number;
-    avgDuplication: number;
-    avgFunctions: number;
-    avgLoc: number;
-  };
-  scores: {
-    complexity: number;
-    duplication: number;
-    maintainability: number;
-    overall: number;
-  };
-  score: number;
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';
-  complexityStdDev: number;
-  silentKillers: FileMetrics[];
-  files: FileMetrics[];
-  topFiles: FileMetrics[];
-  codeContext?: {
-    contexts: CodeContext[];
-    summary: CodeContextSummary;
-  };
-}
 
 // ==================== CLI & CONFIGURATION ====================
 

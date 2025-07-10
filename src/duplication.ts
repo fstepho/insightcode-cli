@@ -3,7 +3,7 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
-import { FileMetrics, ThresholdConfig, Issue } from './types';
+import { FileDetail, ThresholdConfig, Issue, IssueType, Severity } from './types';
 
 /**
  * Simple file reader. In a real app, this might be in a shared utils module.
@@ -66,7 +66,7 @@ function normalizeBlock(block: string): string {
  * Detect code duplication using pragmatic block-based hashing
  * 
  * ALGORITHM:
- * 1. Sliding window of 5 consecutive non-empty lines
+ * 1. Sliding window of 3 consecutive non-empty lines
  * 2. Normalize each block to handle syntax variations
  * 3. Hash normalized blocks with MD5
  * 4. Count blocks that appear more than once
@@ -88,17 +88,23 @@ function normalizeBlock(block: string): string {
  * @param thresholds Configuration thresholds
  * @returns Files with duplication percentages
  */
-export function detectDuplication(files: FileMetrics[], thresholds: ThresholdConfig): FileMetrics[] {
-  const blockSize = 5; // Optimal size for catching meaningful duplications
+export function detectDuplication(files: FileDetail[], thresholds: ThresholdConfig): FileDetail[] {
+  const blockSize = 3; // Optimal size for catching meaningful duplications
   const allBlocks = new Map<string, { count: number }>(); 
   const fileBlocks = new Map<string, Set<string>>();
   
   // First pass: collect all blocks and their hashes from all files
   for (const file of files) {
-    const content = getFileContent(file.path);
+    // Try to read content from file object first (for tests), then from filesystem
+    let content: string | null;
+    try {
+      content = (file as any).content || getFileContent(file.file);
+    } catch (error) {
+      content = null;
+    }
     if (!content) continue;
     
-    const lines = content.split('\n').filter(line => line.trim().length > 0);
+    const lines = content.split(/\r?\n|\r/).filter(line => line.trim().length > 0);
     const blocksInThisFile = new Set<string>();
     
     if (lines.length < blockSize) continue;
@@ -107,7 +113,7 @@ export function detectDuplication(files: FileMetrics[], thresholds: ThresholdCon
       const block = lines.slice(i, i + blockSize).join('\n');
       const normalizedBlock = normalizeBlock(block);
       
-      if (normalizedBlock.length < 20 || normalizedBlock.split(' ').length < 5) {
+      if (normalizedBlock.length < 10 || normalizedBlock.split(' ').length < 3) {
         continue;
       }
       
@@ -118,14 +124,14 @@ export function detectDuplication(files: FileMetrics[], thresholds: ThresholdCon
       allBlocks.set(hash, { count: existing.count + 1 });
     }
     
-    fileBlocks.set(file.path, blocksInThisFile);
+    fileBlocks.set(file.file, blocksInThisFile);
   }
   
   // Second pass: calculate duplication percentage for each file
   return files.map(file => {
-    const blocks = fileBlocks.get(file.path);
+    const blocks = fileBlocks.get(file.file);
     if (!blocks || blocks.size === 0) {
-      return { ...file, duplication: 0 };
+      return { ...file, metrics: { ...file.metrics, duplication: 0 } };
     }
     
     const duplicatedBlockCount = Array.from(blocks).filter(hash => 
@@ -133,10 +139,63 @@ export function detectDuplication(files: FileMetrics[], thresholds: ThresholdCon
     ).length;
     
     const duplicationPercentage = (duplicatedBlockCount / blocks.size) * 100;
+    const duplicationRatio = duplicationPercentage / 100; // Convert to ratio for v0.6.0
+    
+    // Generate duplication issues according to v0.6.0 specs
+    // For now, we'll assume 'production' type - this could be enhanced to detect file type
+    const duplicationThresholds = thresholds.duplication.production;
+    
+    const updatedIssues = [...file.issues];
+    
+    if (duplicationRatio > duplicationThresholds.high / 100) {
+      updatedIssues.push({
+        type: IssueType.Duplication,
+        severity: Severity.High,
+        location: {
+          line: 1,
+          function: undefined
+        },
+        context: {
+          message: `High duplication: ${duplicationPercentage.toFixed(1)}% (recommended: < ${duplicationThresholds.high}%)`,
+          threshold: duplicationThresholds.high / 100, // Store as ratio
+          excessRatio: duplicationRatio / (duplicationThresholds.high / 100),
+          unit: 'ratio' as const
+        },
+        action: {
+          description: 'Extract common code into shared utilities',
+          impact: 'Reduced maintenance overhead',
+          effortHours: 4
+        }
+      });
+    } else if (duplicationRatio > duplicationThresholds.medium / 100) {
+      updatedIssues.push({
+        type: IssueType.Duplication,
+        severity: Severity.Medium,
+        location: {
+          line: 1,
+          function: undefined
+        },
+        context: {
+          message: `Medium duplication: ${duplicationPercentage.toFixed(1)}% (recommended: < ${duplicationThresholds.medium}%)`,
+          threshold: duplicationThresholds.medium / 100, // Store as ratio
+          excessRatio: duplicationRatio / (duplicationThresholds.medium / 100),
+          unit: 'ratio' as const
+        },
+        action: {
+          description: 'Consider extracting common patterns',
+          impact: 'Reduced maintenance overhead',
+          effortHours: 2
+        }
+      });
+    }
     
     return {
       ...file,
-      duplication: Math.round(duplicationPercentage),
+      metrics: { 
+        ...file.metrics, 
+        duplication: duplicationRatio // Store as ratio (0-1) for v0.6.0
+      },
+      issues: updatedIssues
     };
   });
 }

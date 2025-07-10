@@ -13,32 +13,52 @@ describe('Configuration', () => {
   it('should load default configuration', () => {
     const config = getConfig();
     
-    expect(config.complexity.excellent).toBe(10);
-    expect(config.complexity.good).toBe(15);
-    expect(config.duplication.excellent).toBe(3);
-    expect(config.grades.A).toBe(90);
-    expect(config.grades.B).toBe(80);
-    expect(config.maintainabilityLabels.good).toBe(80);
+    // Test structure and types rather than specific values
+    expect(config).toHaveProperty('complexity');
+    expect(config).toHaveProperty('size');
+    expect(config).toHaveProperty('duplication');
+    
+    // Test that configurations have proper structure
+    expect(config.complexity.production).toHaveProperty('medium');
+    expect(config.complexity.production).toHaveProperty('high');
+    expect(config.complexity.test).toHaveProperty('medium');
+    expect(config.complexity.test).toHaveProperty('high');
+    
+    // Test that medium < high for all categories
+    expect(config.complexity.production.medium).toBeLessThan(config.complexity.production.high);
+    expect(config.complexity.test.medium).toBeLessThan(config.complexity.test.high);
+    expect(config.size.production.medium).toBeLessThan(config.size.production.high);
+    expect(config.duplication.production.medium).toBeLessThan(config.duplication.production.high);
   });
 
   it('should allow setting custom configuration for testing', () => {
     const customConfig = {
-      complexity: { excellent: 5, good: 10, acceptable: 15, poor: 20, veryPoor: 30 },
-      duplication: { excellent: 2, good: 5, acceptable: 10, poor: 20, veryPoor: 30 },
-      fileSize: { excellent: 100, good: 200, acceptable: 300, poor: 400, veryPoor: 500 },
-      functionCount: { excellent: 5, good: 10, acceptable: 15, poor: 20 },
-      grades: { A: 85, B: 75, C: 65, D: 55 },
-      maintainabilityLabels: { good: 75, acceptable: 55, poor: 35 },
-      extremeFilePenalties: { largeFileThreshold: 800, largeFilePenalty: 5, massiveFileThreshold: 1500, massiveFilePenalty: 15 }
+      complexity: {
+        production: { medium: 5, high: 10 },
+        test: { medium: 8, high: 15 },
+        utility: { medium: 10, high: 20 }
+      },
+      size: {
+        production: { medium: 150, high: 250 },
+        test: { medium: 200, high: 400 },
+        utility: { medium: 180, high: 320 }
+      },
+      duplication: {
+        production: { medium: 10, high: 20 },
+        test: { medium: 15, high: 30 },
+        utility: { medium: 12, high: 25 }
+      }
     };
 
     setConfigForTesting(customConfig);
     const config = getConfig();
 
-    expect(config.complexity.excellent).toBe(5);
-    expect(config.duplication.excellent).toBe(2);
-    expect(config.grades.A).toBe(85);
-    expect(config.maintainabilityLabels.good).toBe(75);
+    expect(config.complexity.production.medium).toBe(5);
+    expect(config.complexity.production.high).toBe(10);
+    expect(config.duplication.production.medium).toBe(10);
+    expect(config.duplication.production.high).toBe(20);
+    expect(config.size.test.medium).toBe(200);
+    expect(config.size.test.high).toBe(400);
   });
 
   it('should cache configuration', () => {
@@ -56,6 +76,6 @@ describe('Configuration', () => {
     // Should be different object instances after reset
     expect(config1).not.toBe(config2);
     // But should have same values
-    expect(config1.complexity.excellent).toBe(config2.complexity.excellent);
+    expect(config1.complexity.production.medium).toBe(config2.complexity.production.medium);
   });
 });

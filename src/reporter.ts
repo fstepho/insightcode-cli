@@ -1,69 +1,66 @@
-// File: src/reporter.ts
+// File: src/reporter.ts - v0.6.0 Complete Refactor
 
 import chalk from 'chalk';
-import * as process from 'process';
 import { AnalysisResult } from './types';
-import { 
-  getComplexityLabel, 
-  getDuplicationLabel, 
-  getMaintainabilityLabel,
-  getComplexityColorLevel,
-  getDuplicationColorLevel,
-  getMaintainabilityColorLevel,
-  getSeverityColorLevel
-} from './scoring';
-import { getConfig } from './config';
-
-// --- Fonctions d'aide pour l'UI ---
 
 /**
- * Crée un en-tête de section stylisé.
- * @param title Le titre de la section.
+ * Formate un nombre avec des espaces comme séparateurs de milliers
  */
-function printSectionHeader(title: string): void {
-  console.log(chalk.gray(`\n╭─ ${chalk.bold.cyan(title)} ` + '─'.repeat(Math.max(0, 50 - title.length))));
+function formatNumber(num: number): string {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 }
 
 /**
- * Convertit un niveau de couleur en fonction chalk.
+ * Affiche un en-tête de section stylisé
  */
-function getChalkColor(colorLevel: 'green' | 'yellow' | 'red' | 'redBold') {
-  switch (colorLevel) {
-    case 'green': return chalk.green;
-    case 'yellow': return chalk.yellow;
-    case 'red': return chalk.red;
-    case 'redBold': return chalk.red.bold;
+function printSectionHeader(title: string): void {
+  console.log(`\n${chalk.bold.underline(title)}`);
+  console.log(chalk.dim('─'.repeat(title.length + 10)));
+}
+
+/**
+ * Obtient la couleur appropriée pour un score
+ */
+function getScoreColor(score: number): (text: string) => string {
+  if (score >= 90) return chalk.green;
+  if (score >= 80) return chalk.yellow;
+  if (score >= 70) return chalk.yellow;
+  return chalk.red;
+}
+
+/**
+ * Obtient la couleur appropriée pour un grade
+ */
+function getGradeColor(grade: string): (text: string) => string {
+  switch (grade) {
+    case 'A': return chalk.bgGreen.black;
+    case 'B': return chalk.bgYellow.black;
+    case 'C': return chalk.bgYellow.black;
+    case 'D': return chalk.bgRed.white;
+    case 'F': return chalk.bgRed.bold.white;
+    default: return chalk.gray;
   }
 }
 
 /**
- * Générateur de barre de progression avec des couleurs dynamiques.
- * @param percentage Le pourcentage à afficher.
- * @param width La largeur de la barre.
- * @param colorLevel Le niveau de couleur pour la barre.
+ * Obtient la couleur appropriée pour le health status
  */
-function progressBar(percentage: number, width: number = 20, colorLevel: 'green' | 'yellow' | 'red' | 'redBold'): string {
-  const filledCount = Math.round((percentage / 100) * width);
-  const emptyCount = width - filledCount;
-  const filledBar = '█'.repeat(filledCount);
-  const emptyBar = chalk.gray('░'.repeat(emptyCount));
-  
-  const colorFunc = getChalkColor(colorLevel);
-  return `${colorFunc(filledBar)}${emptyBar}`;
+function getHealthColor(health: string): (text: string) => string {
+  switch (health) {
+    case 'excellent': return chalk.green;
+    case 'good': return chalk.yellow;
+    case 'fair': return chalk.yellow;
+    case 'poor': return chalk.red;
+    case 'critical': return chalk.red.bold;
+    default: return chalk.gray;
+  }
 }
 
 /**
- * Formate les grands nombres avec des séparateurs de milliers.
- */
-function formatNumber(num: number): string {
-  return num.toLocaleString('en-US');
-}
-
-/**
- * Affiche les résultats de l'analyse dans le terminal avec un design professionnel.
+ * Affiche les résultats de l'analyse dans le terminal avec un design professionnel
  */
 export function reportToTerminal(result: AnalysisResult): void {
-  const { summary, score, grade, project, topFiles } = result;
+  const { context, overview, details } = result;
 
   // --- En-tête Principal ---
   console.log(chalk.cyanBright(`
@@ -76,126 +73,113 @@ export function reportToTerminal(result: AnalysisResult): void {
 
   // --- Infos du Projet ---
   printSectionHeader('Project Overview');
-  console.log(`  ${chalk.bold('Project:')}     ${chalk.cyan(project.name)}`);
-  if (project.packageJson?.version) {
-    console.log(`  ${chalk.bold('Version:')}     ${chalk.cyan(project.packageJson.version)}`);
+  console.log(`  ${chalk.bold('Project:')}     ${chalk.cyan(context.project.name)}`);
+  if (context.project.version) {
+    console.log(`  ${chalk.bold('Version:')}     ${chalk.cyan(context.project.version)}`);
   }
-  console.log(`  ${chalk.bold('Path:')}        ${chalk.dim(project.path)}`);
-  console.log(`  ${chalk.bold('Files:')}       ${chalk.cyan(summary.totalFiles)}`);
-  console.log(`  ${chalk.bold('Total Lines:')} ${chalk.cyan(formatNumber(summary.totalLines))}`);
+  console.log(`  ${chalk.bold('Path:')}        ${chalk.dim(context.project.path)}`);
+  console.log(`  ${chalk.bold('Files:')}       ${chalk.cyan(overview.statistics.totalFiles)}`);
+  console.log(`  ${chalk.bold('Total Lines:')} ${chalk.cyan(formatNumber(overview.statistics.totalLOC))}`);
+  console.log(`  ${chalk.bold('Analyzed:')}    ${chalk.dim(new Date(context.analysis.timestamp).toLocaleString())}`);
+  console.log(`  ${chalk.bold('Duration:')}    ${chalk.dim(context.analysis.durationMs + 'ms')}`);
 
   // --- Score Global ---
   printSectionHeader('Overall Code Quality Score');
-  const gradeColor = score >= 90 ? chalk.bgGreen.black :
-                     score >= 80 ? chalk.bgYellow.black :
-                     chalk.bgRed.white;
-                     
-  console.log(`\n  ${gradeColor.bold(`  ${grade}  `)} ${chalk.bold(score.toFixed(1))}${chalk.dim('/100')}\n`);
-
-
-  // --- Métriques Détaillées ---
-  printSectionHeader('Core Metrics');
+  const gradeColor = getGradeColor(overview.grade);
+  const scoreColor = getScoreColor(overview.scores.overall);
+  const healthColor = getHealthColor(overview.health);
   
-  // Complexité
-  const complexityScore = result.scores.complexity;
-  const complexityColor = getComplexityColorLevel(summary.avgComplexity);
-  console.log(
-    `  ${chalk.bold('Complexity:')}      ${progressBar(complexityScore, 20, complexityColor)}  ${getChalkColor(complexityColor)(`${summary.avgComplexity.toFixed(1)} (${getComplexityLabel(summary.avgComplexity)})`)}`
-  );
+  console.log(`  ${chalk.bold('Overall Score:')} ${scoreColor(overview.scores.overall + '/100')} ${gradeColor(` ${overview.grade} `)}`);
+  console.log(`  ${chalk.bold('Health Status:')} ${healthColor(overview.health.toUpperCase())}`);
+  console.log(`  ${chalk.bold('Summary:')} ${chalk.italic(overview.summary)}`);
 
-  // Duplication
-  const duplicationScore = result.scores.duplication;
-  const duplicationColor = getDuplicationColorLevel(summary.avgDuplication);
-  console.log(
-    `  ${chalk.bold('Duplication:')}     ${progressBar(duplicationScore, 20, duplicationColor)}  ${getChalkColor(duplicationColor)(`${summary.avgDuplication.toFixed(1)}% (${getDuplicationLabel(summary.avgDuplication)})`)}`
-  );
+  // --- Détails des Scores ---
+  printSectionHeader('Score Breakdown');
+  console.log(`  ${chalk.bold('Complexity:')}      ${getScoreColor(overview.scores.complexity)(overview.scores.complexity + '/100')}`);
+  console.log(`  ${chalk.bold('Duplication:')}     ${getScoreColor(overview.scores.duplication)(overview.scores.duplication + '/100')}`);
+  console.log(`  ${chalk.bold('Maintainability:')} ${getScoreColor(overview.scores.maintainability)(overview.scores.maintainability + '/100')}`);
 
-  // Maintenabilité
-  const maintainabilityScore = result.scores.maintainability;
-  const maintainabilityColor = getMaintainabilityColorLevel(maintainabilityScore);
-  console.log(
-    `  ${chalk.bold('Maintainability:')} ${progressBar(maintainabilityScore, 20, maintainabilityColor)}  ${getChalkColor(maintainabilityColor)(`${maintainabilityScore.toFixed(0)}/100 (${getMaintainabilityLabel(maintainabilityScore)})`)}`
-  );
-
+  // --- Statistiques ---
+  printSectionHeader('Project Statistics');
+  console.log(`  ${chalk.bold('Average Complexity:')} ${chalk.cyan(overview.statistics.avgComplexity)}`);
+  console.log(`  ${chalk.bold('Average LOC:')}        ${chalk.cyan(overview.statistics.avgLOC)}`);
+  
+  const avgDuplication = details.reduce((sum, f) => sum + f.metrics.duplication, 0) / details.length;
+  const avgFunctions = details.reduce((sum, f) => sum + f.metrics.functionCount, 0) / details.length;
+  console.log(`  ${chalk.bold('Average Duplication:')} ${chalk.cyan(Math.round(avgDuplication * 100) + '%')}`);
+  console.log(`  ${chalk.bold('Average Functions:')}   ${chalk.cyan(Math.round(avgFunctions))}`);
 
   // --- Fichiers Critiques ---
-  if (topFiles.length > 0) {
-    printSectionHeader('⚠️ Top 5 Critical Files to Address');
-    
-    topFiles.forEach((file, index) => {
-      const cleanPath = file.path.replace(process.cwd() + '/', '');
-      console.log(`\n  ${chalk.bold(`${index + 1}.`)} ${chalk.underline.white(cleanPath)}`);
+  const criticalFiles = details.filter(f => f.isCritical);
+  if (criticalFiles.length > 0) {
+    printSectionHeader('Critical Files (Top Issues)');
+    criticalFiles.forEach((file, index) => {
+      const healthColor = file.healthScore < 50 ? chalk.red : file.healthScore < 70 ? chalk.yellow : chalk.green;
+      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.cyan(file.file)}`);
+      console.log(`      ${chalk.bold('Health Score:')} ${healthColor(file.healthScore + '/100')}`);
+      console.log(`      ${chalk.bold('Complexity:')}   ${file.metrics.complexity} | ${chalk.bold('LOC:')} ${file.metrics.loc} | ${chalk.bold('Usage:')} ${file.importance.usageCount}`);
       
-      // -- AJOUT : AFFICHER LA RAISON DE LA CRITICITÉ --
-      const criticismInfo = `    ${chalk.magenta('Criticity Score:')} ${chalk.bold(file.criticismScore.toFixed(0))}  ${chalk.dim('|')}  ${chalk.blue('Impact:')} ${file.impact} dependents`;
-      console.log(criticismInfo);
-      
-      file.issues.forEach(issue => {
-        let icon: string;
-        let colorFunc: chalk.Chalk;
-        
-        if (issue.type === 'complexity' && issue.ratio) {
-            const color = getSeverityColorLevel(issue.ratio);
-            colorFunc = getChalkColor(color);
-            icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
-            // Indentation ajustée pour l'alignement
-            console.log(`      ${icon} ${colorFunc(`High Complexity: ${formatNumber(issue.value)} (${issue.ratio.toFixed(0)}x above limit)`)}`);
-        } else if (issue.type === 'size' && issue.ratio) {
-            const color = getSeverityColorLevel(issue.ratio);
-            colorFunc = getChalkColor(color);
-            icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
-            console.log(`      ${icon} ${colorFunc(`Very Large File: ${formatNumber(issue.value)} lines (${issue.ratio.toFixed(0)}x above limit)`)}`);
-        } else if (issue.type === 'duplication') {
-            const color = getDuplicationColorLevel(issue.value);
-            colorFunc = getChalkColor(color);
-            icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
-            console.log(`      ${icon} ${colorFunc(`High Duplication: ${issue.value.toFixed(1)}% detected`)}`);
-        }
-      });
+      if (file.issues.length > 0) {
+        file.issues.forEach(issue => {
+          const severityColor = issue.severity === 'critical' ? chalk.red.bold : 
+                               issue.severity === 'high' ? chalk.red : 
+                               issue.severity === 'medium' ? chalk.yellow : chalk.green;
+          console.log(`      ${severityColor('⚠')} ${severityColor(issue.severity.toUpperCase())}: ${issue.context.message}`);
+        });
+      }
     });
   }
 
-  // --- Plans d'action ---
- if (score < 90 && topFiles.length > 0) {
-    printSectionHeader('💡 Quick Wins to Improve Score');
-    
-    const improvements: string[] = [];
-
-    // CORRECTION : On cherche le ratio dans le tableau `issues` de chaque fichier.
-    const extremeComplexityFiles = result.files.filter(f => 
-        f.issues.some(issue => issue.type === 'complexity' && issue.ratio && issue.ratio >= 2.5) // Seuil plus réaliste
-    );
-    const veryLargeFiles = result.files.filter(f => 
-        f.issues.some(issue => issue.type === 'size' && issue.ratio && issue.ratio >= 2.0)
-    );
-    const highDuplicationFiles = result.files.filter(f => 
-        f.issues.some(issue => issue.type === 'duplication' && issue.value >= 25)
-    );
-
-    if (extremeComplexityFiles.length > 0) {
-      const gain = Math.min(10, Math.round(extremeComplexityFiles.length * 1.5));
-      improvements.push(`Refactor the ${extremeComplexityFiles.length} most complex file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
-    }
-    if (veryLargeFiles.length > 0) {
-      const gain = Math.min(8, Math.round(veryLargeFiles.length * 1.0));
-      improvements.push(`Split the ${veryLargeFiles.length} largest file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
-    }
-    if (highDuplicationFiles.length > 0) {
-      const gain = Math.min(6, highDuplicationFiles.length);
-      improvements.push(`Abstract repeated code in ${highDuplicationFiles.length} file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
-    }
-
-    if (improvements.length > 0) {
-        improvements.slice(0, 3).forEach(improvement => {
-          console.log(`  ${chalk.cyan('›')} ${chalk.gray(improvement)}`);
-        });
-    } else {
-        console.log(chalk.gray('  › No obvious quick wins found. Focus on the critical files above.'));
-    }
+  // --- Recommandations ---
+  if (result.recommendations.critical.length > 0) {
+    printSectionHeader('Critical Recommendations');
+    result.recommendations.critical.forEach((action, index) => {
+      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.red(action.issue)}`);
+      console.log(`      ${chalk.bold('File:')} ${chalk.cyan(action.file)}`);
+      console.log(`      ${chalk.bold('Solution:')} ${action.solution}`);
+      console.log(`      ${chalk.bold('Effort:')} ${action.effortHours}h | ${chalk.bold('Priority:')} ${action.priority}/10`);
+    });
   }
-  
+
+  if (result.recommendations.quickWins.length > 0) {
+    printSectionHeader('Quick Wins');
+    result.recommendations.quickWins.forEach((win, index) => {
+      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.green(win.description)}`);
+      console.log(`      ${chalk.bold('Files:')} ${win.files.join(', ')}`);
+      console.log(`      ${chalk.bold('Effort:')} ${win.effortMinutes}min | ${chalk.bold('Score Improvement:')} +${win.scoreImprovement}`);
+    });
+  }
+
+  // --- Résumé des Issues ---
+  const allIssues = details.flatMap(f => f.issues);
+  if (allIssues.length > 0) {
+    printSectionHeader('Issues Summary');
+    
+    const issuesBySeverity = allIssues.reduce((acc, issue) => {
+      acc[issue.severity] = (acc[issue.severity] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const issuesByType = allIssues.reduce((acc, issue) => {
+      acc[issue.type] = (acc[issue.type] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    console.log(`  ${chalk.bold('By Severity:')}`);
+    Object.entries(issuesBySeverity).forEach(([severity, count]) => {
+      const color = severity === 'critical' ? chalk.red.bold : 
+                   severity === 'high' ? chalk.red : 
+                   severity === 'medium' ? chalk.yellow : chalk.green;
+      console.log(`    ${color(severity.toUpperCase())}: ${count}`);
+    });
+
+    console.log(`  ${chalk.bold('By Type:')}`);
+    Object.entries(issuesByType).forEach(([type, count]) => {
+      console.log(`    ${chalk.cyan(type)}: ${count}`);
+    });
+  }
+
   // --- Pied de page ---
-  console.log(chalk.gray('\n\n' + '─'.repeat(58)));
-  console.log(`  ✅ ${chalk.bold('Analysis complete!')} Run regularly to maintain code quality.`);
-  console.log(chalk.dim(`     Report generated on ${new Date().toLocaleString()}\n`));
+  console.log(chalk.dim(`\n  Analysis completed with InsightCode v${context.analysis.toolVersion}`));
+  console.log(chalk.dim(`  For detailed JSON output, use: insightcode analyze --json`));
 }

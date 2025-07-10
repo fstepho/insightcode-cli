@@ -4,8 +4,22 @@ import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as path from 'path';
 import glob from 'fast-glob';
-import { FileMetrics, Issue, ThresholdConfig } from './types';
+import { FileDetail, Issue, IssueType, Severity, ThresholdConfig } from './types';
+import { normalizePath } from './utils';
 import { getConfig } from './config';
+
+/**
+ * Checks if a file is an entry point
+ */
+function isEntryPoint(filePath: string): boolean {
+  const normalizedPath = normalizePath(filePath);
+  return normalizedPath.includes('main.ts') || 
+         normalizedPath.includes('index.ts') || 
+         normalizedPath.includes('app.ts') ||
+         normalizedPath.endsWith('main.js') ||
+         normalizedPath.endsWith('index.js') ||
+         normalizedPath.endsWith('app.js');
+}
 
 // Default patterns to exclude
 const DEFAULT_EXCLUDE = [
@@ -67,7 +81,7 @@ export async function findFiles(targetPath: string, exclude: string[] = [], excl
 /**
  * Classify file type based on its path
  */
-function classifyFileType(filePath: string): FileMetrics['fileType'] {
+function classifyFileType(filePath: string): 'production' | 'test' | 'example' | 'utility' | 'config' {
   const relativePath = path.relative(process.cwd(), filePath).toLowerCase();
   
   if (relativePath.includes('/test/') || relativePath.includes('/tests/') || relativePath.includes('/__tests__/') || relativePath.includes('/spec/') || relativePath.includes('.test.') || relativePath.includes('.spec.') || relativePath.includes('.bench.')) {
@@ -116,6 +130,7 @@ function calculateComplexity(sourceFile: ts.SourceFile): number {
       case ts.SyntaxKind.ForOfStatement:
       case ts.SyntaxKind.WhileStatement:
       case ts.SyntaxKind.DoStatement:
+      case ts.SyntaxKind.SwitchStatement:
         complexity++;
         break;
       case ts.SyntaxKind.BinaryExpression:
@@ -138,16 +153,51 @@ function calculateComplexity(sourceFile: ts.SourceFile): number {
  * Count lines of code (excluding comments and blank lines)
  */
 function countLinesOfCode(content: string): number {
-  return content
-    .split('\n')
-    .filter(line => {
-      const trimmed = line.trim();
-      return trimmed.length > 0 && 
-             !trimmed.startsWith('//') &&
-             !trimmed.startsWith('/*') &&
-             !trimmed.startsWith('*');
-    })
-    .length;
+  const lines = content.split('\n');
+  let inMultiLineComment = false;
+  let codeLines = 0;
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    
+    // Skip empty lines
+    if (trimmed.length === 0) continue;
+    
+    // Handle multi-line comments
+    if (trimmed.includes('/*') && trimmed.includes('*/')) {
+      // Single line comment /* ... */ - skip if it's the only content
+      const beforeComment = trimmed.substring(0, trimmed.indexOf('/*')).trim();
+      const afterComment = trimmed.substring(trimmed.indexOf('*/') + 2).trim();
+      if (beforeComment.length > 0 || afterComment.length > 0) {
+        codeLines++;
+      }
+      continue;
+    }
+    
+    if (trimmed.includes('/*')) {
+      inMultiLineComment = true;
+    }
+    if (trimmed.includes('*/')) {
+      inMultiLineComment = false;
+      // If there's code after */, count this line
+      const afterComment = trimmed.substring(trimmed.indexOf('*/') + 2).trim();
+      if (afterComment.length > 0) {
+        codeLines++;
+      }
+      continue;
+    }
+    
+    // Skip lines inside multi-line comments
+    if (inMultiLineComment) continue;
+    
+    // Skip single-line comments
+    if (trimmed.startsWith('//')) continue;
+    
+    // Count as code line
+    codeLines++;
+  }
+  
+  return codeLines;
 }
 
 /**
@@ -178,7 +228,7 @@ function countFunctions(sourceFile: ts.SourceFile): number {
 /**
  * Parse a single file and extract metrics.
  */
-export function parseFile(filePath: string): FileMetrics {
+export function parseFile(filePath: string): FileDetail {
   // FIX: Get thresholds from the single source of truth.
   const thresholds = getConfig();
   
@@ -191,51 +241,110 @@ export function parseFile(filePath: string): FileMetrics {
   const fileType = classifyFileType(filePath) || 'production';
   const issues: Issue[] = [];
   
-  const complexityThresholds = thresholds.complexity[fileType] || thresholds.complexity.production;
-  const sizeThresholds = thresholds.size[fileType] || thresholds.size.production;
+  const complexityThresholds = thresholds.complexity[fileType as keyof typeof thresholds.complexity] || thresholds.complexity.production;
+  const sizeThresholds = thresholds.size[fileType as keyof typeof thresholds.size] || thresholds.size.production;
   
   if (complexity > complexityThresholds.high) {
     issues.push({
-      type: 'complexity',
-      severity: 'high',
-      message: `High complexity: ${complexity} (recommended: < ${complexityThresholds.high})`,
-      value: complexity
+      type: IssueType.Complexity,
+      severity: Severity.High,
+      location: {
+        line: 1,
+        function: undefined
+      },
+      context: {
+        message: `High complexity: ${complexity} (recommended: < ${complexityThresholds.high})`,
+        threshold: complexityThresholds.high,
+        excessRatio: complexity / complexityThresholds.high,
+        unit: 'count'
+      },
+      action: {
+        description: 'Break down into smaller functions',
+        impact: 'Improved readability and maintainability',
+        effortHours: 4
+      }
     });
   } else if (complexity > complexityThresholds.medium) {
     issues.push({
-      type: 'complexity',
-      severity: 'medium',
-      message: `Medium complexity: ${complexity} (recommended: < ${complexityThresholds.medium})`,
-      value: complexity
+      type: IssueType.Complexity,
+      severity: Severity.Medium,
+      location: {
+        line: 1,
+        function: undefined
+      },
+      context: {
+        message: `Medium complexity: ${complexity} (recommended: < ${complexityThresholds.medium})`,
+        threshold: complexityThresholds.medium,
+        excessRatio: complexity / complexityThresholds.medium,
+        unit: 'count'
+      },
+      action: {
+        description: 'Refactor to reduce complexity',
+        impact: 'Improved readability and maintainability',
+        effortHours: 2
+      }
     });
   }
   
   if (loc > sizeThresholds.high) {
     issues.push({
-      type: 'size',
-      severity: 'high',
-      message: `Large file: ${loc} lines (recommended: < ${sizeThresholds.high})`,
-      value: loc
+      type: IssueType.Size,
+      severity: Severity.High,
+      location: {
+        line: 1,
+        function: undefined
+      },
+      context: {
+        message: `Large file: ${loc} lines (recommended: < ${sizeThresholds.high})`,
+        threshold: sizeThresholds.high,
+        excessRatio: loc / sizeThresholds.high,
+        unit: 'lines'
+      },
+      action: {
+        description: 'Split into smaller, focused modules',
+        impact: 'Better module organization',
+        effortHours: 6
+      }
     });
   } else if (loc > sizeThresholds.medium) {
     issues.push({
-      type: 'size',
-      severity: 'medium',
-      message: `File getting large: ${loc} lines`,
-      value: loc
+      type: IssueType.Size,
+      severity: Severity.Medium,
+      location: {
+        line: 1,
+        function: undefined
+      },
+      context: {
+        message: `File getting large: ${loc} lines (recommended: < ${sizeThresholds.medium})`,
+        threshold: sizeThresholds.medium,
+        excessRatio: loc / sizeThresholds.medium,
+        unit: 'lines'
+      },
+      action: {
+        description: 'Consider splitting into smaller modules',
+        impact: 'Better module organization',
+        effortHours: 3
+      }
     });
   }
   
   return {
-    path: path.relative(process.cwd(), filePath),
-    complexity,
-    duplication: 0,
-    functionCount,
-    loc,
+    file: normalizePath(path.relative(process.cwd(), filePath)),
+    metrics: {
+      complexity,
+      loc,
+      functionCount,
+      duplication: 0  // Will be calculated later in duplication.ts
+    },
+    importance: {
+      usageCount: 0,  // Will be calculated later in dependencyAnalyzer.ts
+      usageRank: 0,   // Will be calculated later in analyzer.ts
+      isEntryPoint: isEntryPoint(filePath),
+      isCriticalPath: false  // Will be calculated later in analyzer.ts
+    },
     issues,
-    fileType,
-    impact: 0,
-    criticismScore: 0,
+    healthScore: 0,  // Will be calculated later in analyzer.ts
+    isCritical: false  // Will be calculated later in analyzer.ts
   };
 }
 
@@ -246,7 +355,7 @@ export async function parseDirectory(
   targetPath: string, 
   exclude: string[] = [], 
   excludeUtility: boolean = false
-): Promise<FileMetrics[]> {
+): Promise<FileDetail[]> {
   // FIX: The `thresholds` parameter is removed as it's no longer needed.
   // `parseFile` will get it from `getConfig()`.
 
@@ -267,12 +376,12 @@ export async function parseDirectory(
     throw new Error('No TypeScript/JavaScript files found');
   }
   
-  const results: FileMetrics[] = [];
+  const results: FileDetail[] = [];
   
   for (const file of filesToAnalyze) {
     try {
-      const metrics = parseFile(file); // No longer needs to pass thresholds
-      results.push(metrics);
+      const fileDetail = parseFile(file);
+      results.push(fileDetail);
     } catch (error) {
       console.warn(`Warning: Could not parse ${file}:`, error);
     }

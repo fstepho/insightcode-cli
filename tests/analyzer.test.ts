@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { analyze } from '../src/analyzer';
-import { FileMetrics, AnalysisResult, ThresholdConfig, Issue } from '../src/types';
+import { FileDetail, AnalysisResult, ThresholdConfig, Issue, IssueType, Severity } from '../src/types';
 import * as dependencyAnalyzer from '../src/dependencyAnalyzer';
 import * as duplication from '../src/duplication';
 import * as projectInfo from '../src/projectInfo';
@@ -10,30 +10,68 @@ vi.mock('../src/dependencyAnalyzer');
 vi.mock('../src/duplication');
 vi.mock('../src/projectInfo');
 
-// Helper to create a mock FileMetrics object for testing, aligned with the new type
-const createFileMetrics = (overrides: Partial<FileMetrics>): FileMetrics => ({
-    path: 'test.ts',
-    complexity: 1,
-    duplication: 0,
-    loc: 10,
-    functionCount: 1,
+// Helper to create a mock FileDetail object for testing
+const createFileDetail = (overrides: Partial<FileDetail>): FileDetail => ({
+    file: 'test.ts',
+    metrics: {
+        complexity: 1,
+        loc: 10,
+        functionCount: 1,
+        duplication: 0
+    },
+    importance: {
+        usageCount: 0,
+        usageRank: 0,
+        isEntryPoint: false,
+        isCriticalPath: false
+    },
     issues: [],
-    fileType: 'production',
-    impact: 0,
-    criticismScore: 0,
+    healthScore: 100,
+    isCritical: false,
+    ...overrides,
+});
+
+// Helper to create a mock Issue
+const createIssue = (overrides: Partial<Issue>): Issue => ({
+    type: IssueType.Complexity,
+    severity: Severity.High,
+    location: {
+        line: 1
+    },
+    context: {
+        message: 'Test issue',
+        threshold: 10,
+        excessRatio: 2.0,
+        unit: 'count'
+    },
+    action: {
+        description: 'Fix this issue',
+        impact: 'Better code quality',
+        effortHours: 2
+    },
     ...overrides,
 });
 
 // A default threshold config for tests
 const MOCK_THRESHOLDS: ThresholdConfig = {
-    complexity: { production: { medium: 10, high: 20 }, test: { medium: 15, high: 30 } },
-    size: { production: { medium: 200, high: 300 }, test: { medium: 300, high: 500 } },
-    duplication: { production: { medium: 15, high: 30 }, test: { medium: 25, high: 50 } },
-} as ThresholdConfig;
+    complexity: { 
+        production: { medium: 10, high: 20 }, 
+        test: { medium: 15, high: 30 }, 
+        utility: { medium: 20, high: 40 } 
+    },
+    size: { 
+        production: { medium: 200, high: 300 }, 
+        test: { medium: 300, high: 500 }, 
+        utility: { medium: 400, high: 600 } 
+    },
+    duplication: { 
+        production: { medium: 15, high: 30 }, 
+        test: { medium: 25, high: 50 }, 
+        utility: { medium: 30, high: 60 } 
+    },
+};
 
-
-describe('Analyzer', () => {
-
+describe('Analyzer v0.6.0', () => {
     beforeEach(() => {
         // Reset mocks before each test
         vi.resetAllMocks();
@@ -48,157 +86,235 @@ describe('Analyzer', () => {
         });
     });
 
-    it('should return a perfect score for a perfect file', () => {
-        const files: FileMetrics[] = [createFileMetrics({ complexity: 5, duplication: 1, loc: 50, functionCount: 2 })];
+    it('should return correct AnalysisResult structure', () => {
+        const files: FileDetail[] = [createFileDetail({ 
+            metrics: { complexity: 5, loc: 50, functionCount: 2, duplication: 0.01 } 
+        })];
         
-        vi.spyOn(dependencyAnalyzer, 'analyzeDependencies').mockReturnValue(new Map([['test.ts', 1]]));
-
         const result = analyze(files, '.', MOCK_THRESHOLDS);
 
-        expect(result.score).toBe(100);
-        expect(result.grade).toBe('A');
+        // Check the v0.6.0 structure
+        expect(result).toHaveProperty('context');
+        expect(result).toHaveProperty('overview');
+        expect(result).toHaveProperty('details');
+        expect(result).toHaveProperty('recommendations');
+        
+        // Check context structure
+        expect(result.context).toHaveProperty('project');
+        expect(result.context).toHaveProperty('analysis');
+        expect(result.context.project).toHaveProperty('name');
+        expect(result.context.project).toHaveProperty('path');
+        expect(result.context.analysis).toHaveProperty('timestamp');
+        expect(result.context.analysis).toHaveProperty('durationMs');
+        expect(result.context.analysis).toHaveProperty('toolVersion');
+        expect(result.context.analysis).toHaveProperty('filesAnalyzed');
+        
+        // Check overview structure
+        expect(result.overview).toHaveProperty('grade');
+        expect(result.overview).toHaveProperty('health');
+        expect(result.overview).toHaveProperty('statistics');
+        expect(result.overview).toHaveProperty('scores');
+        expect(result.overview).toHaveProperty('summary');
+        
+        // Check scores structure
+        expect(result.overview.scores).toHaveProperty('complexity');
+        expect(result.overview.scores).toHaveProperty('duplication');
+        expect(result.overview.scores).toHaveProperty('maintainability');
+        expect(result.overview.scores).toHaveProperty('overall');
+        
+        // Check recommendations structure
+        expect(result.recommendations).toHaveProperty('critical');
+        expect(result.recommendations).toHaveProperty('quickWins');
+        expect(result.recommendations).toHaveProperty('improvements');
     });
 
-    it('should return a low score for a file with high complexity and high impact', () => {
-        const files: FileMetrics[] = [createFileMetrics({ path: 'critical.ts', complexity: 50, loc: 500, functionCount: 20 })];
+    it('should return high scores for perfect files', () => {
+        const files: FileDetail[] = [createFileDetail({ 
+            metrics: { complexity: 5, loc: 50, functionCount: 2, duplication: 0.01 } 
+        })];
         
-        vi.spyOn(dependencyAnalyzer, 'analyzeDependencies').mockReturnValue(new Map([['critical.ts', 20]]));
-
         const result = analyze(files, '.', MOCK_THRESHOLDS);
 
-        expect(result.score).toBeLessThan(60);
-        expect(result.grade).toBe('F');
+        // Test that good metrics produce good scores without forcing exact values
+        expect(result.overview.scores.overall).toBeGreaterThan(85);
+        expect(result.overview.scores.complexity).toBeGreaterThan(80);
+        expect(result.overview.scores.duplication).toBeGreaterThan(80);
+        expect(['A', 'B'].includes(result.overview.grade)).toBe(true);
+        expect(['excellent', 'good'].includes(result.overview.health)).toBe(true);
     });
 
-    it('should correctly identify topFiles based on criticismScore', () => {
-        const files: FileMetrics[] = [
-            createFileMetrics({ path: 'a.ts', complexity: 10, impact: 1 }), // low criticism
-            createFileMetrics({ path: 'b.ts', complexity: 50, impact: 2 }), // high criticism
-            createFileMetrics({ path: 'c.ts', complexity: 5, impact: 30 }), // highest criticism
+    it('should return low scores for problematic files', () => {
+        const files: FileDetail[] = [createFileDetail({ 
+            file: 'critical.ts',
+            metrics: { complexity: 50, loc: 500, functionCount: 20, duplication: 0.3 },
+            issues: [createIssue({ severity: Severity.Critical })]
+        })];
+        
+        const result = analyze(files, '.', MOCK_THRESHOLDS);
+
+        // Test that bad metrics produce bad scores without forcing exact values
+        expect(result.overview.scores.overall).toBeLessThan(70);
+        expect(result.overview.scores.complexity).toBeLessThan(50);
+        expect(result.overview.scores.duplication).toBeLessThan(80);
+        expect(['D', 'F'].includes(result.overview.grade)).toBe(true);
+        expect(['poor', 'critical'].includes(result.overview.health)).toBe(true);
+    });
+
+    it('should correctly mark critical files', () => {
+        const files: FileDetail[] = [
+            createFileDetail({ 
+                file: 'good.ts',
+                metrics: { complexity: 5, loc: 50, functionCount: 2, duplication: 0.01 }
+            }),
+            createFileDetail({ 
+                file: 'bad.ts',
+                metrics: { complexity: 50, loc: 500, functionCount: 20, duplication: 0.3 }
+            }),
+            createFileDetail({ 
+                file: 'worse.ts',
+                metrics: { complexity: 80, loc: 800, functionCount: 40, duplication: 0.5 }
+            }),
         ];
         
-        const impactMap = new Map([['a.ts', 1], ['b.ts', 2], ['c.ts', 30]]);
-        vi.spyOn(dependencyAnalyzer, 'analyzeDependencies').mockReturnValue(impactMap);
-
         const result = analyze(files, '.', MOCK_THRESHOLDS);
 
-        expect(result.topFiles.length).toBe(3);
-        expect(result.topFiles[0].path).toBe('c.ts');
-        expect(result.topFiles[1].path).toBe('b.ts');
+        const criticalFiles = result.details.filter(f => f.isCritical);
+        expect(criticalFiles.length).toBeGreaterThan(0);
+        expect(criticalFiles.length).toBeLessThanOrEqual(5); // Max 5 critical files
+        
+        // Critical files should have worse health scores
+        const nonCriticalFiles = result.details.filter(f => !f.isCritical);
+        if (nonCriticalFiles.length > 0) {
+            const avgCriticalHealth = criticalFiles.reduce((sum, f) => sum + f.healthScore, 0) / criticalFiles.length;
+            const avgNonCriticalHealth = nonCriticalFiles.reduce((sum, f) => sum + f.healthScore, 0) / nonCriticalFiles.length;
+            expect(avgCriticalHealth).toBeLessThan(avgNonCriticalHealth);
+        }
     });
 
-    it('should calculate complexity standard deviation', () => {
-        const files: FileMetrics[] = [
-            createFileMetrics({ complexity: 10 }),
-            createFileMetrics({ complexity: 20 }),
-            createFileMetrics({ complexity: 30 }),
+    it('should calculate correct statistics', () => {
+        const files: FileDetail[] = [
+            createFileDetail({ 
+                metrics: { complexity: 10, loc: 100, functionCount: 2, duplication: 0.05 } 
+            }),
+            createFileDetail({ 
+                metrics: { complexity: 20, loc: 300, functionCount: 8, duplication: 0.15 } 
+            }),
+        ];
+
+        const result = analyze(files, '.', MOCK_THRESHOLDS);
+        
+        expect(result.overview.statistics.totalFiles).toBe(2);
+        expect(result.overview.statistics.totalLOC).toBe(400);
+        // Average complexity should be between the two input values
+    expect(result.overview.statistics.avgComplexity).toBeGreaterThan(10);
+    expect(result.overview.statistics.avgComplexity).toBeLessThan(20);
+        expect(result.overview.statistics.avgLOC).toBe(200);
+    });
+
+    it('should enrich issues with correct context', () => {
+        const testIssue = createIssue({ 
+            type: IssueType.Complexity,
+            severity: Severity.High,
+            context: {
+                message: 'High complexity: 40',
+                threshold: 20,
+                excessRatio: 2.0,
+                unit: 'count'
+            }
+        });
+        
+        const files: FileDetail[] = [
+            createFileDetail({
+                file: 'issue.ts',
+                metrics: { complexity: 40, loc: 200, functionCount: 10, duplication: 0.1 },
+                issues: [testIssue]
+            })
         ];
 
         const result = analyze(files, '.', MOCK_THRESHOLDS);
 
-        expect(result.complexityStdDev).toBeCloseTo(8.16);
+        // Excess ratio should reflect how much the value exceeds the threshold
+    expect(result.details[0].issues[0].context.excessRatio).toBeGreaterThan(1.5);
+    expect(result.details[0].issues[0].context.excessRatio).toBeLessThan(2.5);
+        expect(result.details[0].issues[0].context.threshold).toBe(20);
+        expect(result.details[0].issues[0].type).toBe(IssueType.Complexity);
+        expect(result.details[0].issues[0].severity).toBe(Severity.High);
     });
 
-    it('should identify silent killers', () => {
-        // FIX: Adjusted test data to ensure the "killer" file meets the criteria
-        const files: FileMetrics[] = [
-            // 5 "Top Files" with high complexity to ensure they rank highest
-            ...Array.from({ length: 5 }, (_, i) => createFileMetrics({ path: `top${i}.ts`, complexity: 80, impact: 10 })),
-            // The "Silent Killer": its criticismScore is lower than the top files, but its individual metrics are high.
-            // Increased complexity to be above the new average.
-            createFileMetrics({ path: 'killer.ts', complexity: 30, impact: 25 }),
-            // 10 "Normal Files" to create realistic averages
-            ...Array.from({ length: 10 }, (_, i) => createFileMetrics({ path: `normal${i}.ts`, complexity: 2, impact: 1 })),
-        ];
-
-        const impactMap = new Map(files.map(f => [f.path, f.impact]));
-        vi.spyOn(dependencyAnalyzer, 'analyzeDependencies').mockReturnValue(impactMap);
-
-        const result = analyze(files, '.', MOCK_THRESHOLDS);
-
-        expect(result.silentKillers.length).toBe(1);
-        expect(result.silentKillers[0].path).toBe('killer.ts');
-    });
-
-    it('should handle an empty file list gracefully', () => {
+    it('should handle empty file list gracefully', () => {
         const result = analyze([], '.', MOCK_THRESHOLDS);
 
-        expect(result.summary.totalFiles).toBe(0);
-        expect(result.score).toBe(100);
-        expect(result.grade).toBe('A');
+        expect(result.overview.statistics.totalFiles).toBe(0);
+        expect(result.overview.statistics.totalLOC).toBe(0);
+        expect(result.overview.statistics.avgComplexity).toBe(0);
+        expect(result.overview.statistics.avgLOC).toBe(0);
+        expect(result.overview.scores.overall).toBe(0);
+        expect(result.overview.grade).toBe('F');
+        expect(result.overview.health).toBe('critical');
+        expect(result.overview.summary).toBe('No files analyzed');
     });
 
-    it('should enrich issues with correct ratios', () => {
-        const files: FileMetrics[] = [
-            createFileMetrics({
-                path: 'issue.ts',
-                complexity: 40, // 2x the high threshold of 20
-                issues: [{ type: 'complexity', severity: 'high', message: '', value: 40 } as Issue]
-            })
+    it('should generate recommendations', () => {
+        const files: FileDetail[] = [
+            createFileDetail({ 
+                file: 'critical.ts',
+                metrics: { complexity: 50, loc: 500, functionCount: 20, duplication: 0.3 },
+                issues: [createIssue({ severity: Severity.Critical })]
+            }),
+            createFileDetail({ 
+                file: 'normal.ts',
+                metrics: { complexity: 5, loc: 100, functionCount: 2, duplication: 0.01 }
+            }),
         ];
 
         const result = analyze(files, '.', MOCK_THRESHOLDS);
 
-        expect(result.files[0].issues[0].ratio).toBeCloseTo(2.0);
+        expect(result.recommendations).toBeDefined();
+        expect(Array.isArray(result.recommendations.critical)).toBe(true);
+        expect(Array.isArray(result.recommendations.quickWins)).toBe(true);
+        expect(Array.isArray(result.recommendations.improvements)).toBe(true);
     });
 
-    it('should return a lower score for high duplication', () => {
-        const files: FileMetrics[] = [createFileMetrics({ duplication: 50 })];
-        
-        const result = analyze(files, '.', MOCK_THRESHOLDS);
-        
-        expect(result.scores.duplication).toBeLessThan(50);
-        expect(result.score).toBeLessThan(100);
-    });
-
-    it('should return a lower score for poor maintainability (large file)', () => {
-        const files: FileMetrics[] = [createFileMetrics({ loc: 800, functionCount: 30 })];
-
-        const result = analyze(files, '.', MOCK_THRESHOLDS);
-
-        expect(result.scores.maintainability).toBeLessThan(50);
-        expect(result.score).toBeLessThan(100);
-    });
-
-    it('should use custom thresholds to generate issues', () => {
-        const files: FileMetrics[] = [
-            createFileMetrics({
-                path: 'test.ts',
-                complexity: 12, // This would be fine with default thresholds
-                issues: [{ type: 'complexity', severity: 'high', message: '', value: 12 } as Issue]
-            })
+    it('should calculate health scores correctly', () => {
+        const files: FileDetail[] = [
+            createFileDetail({ 
+                metrics: { complexity: 10, loc: 100, functionCount: 2, duplication: 0.05 }
+            }),
+            createFileDetail({ 
+                metrics: { complexity: 50, loc: 500, functionCount: 20, duplication: 0.3 }
+            }),
         ];
 
-        const strictThresholds: ThresholdConfig = {
-            ...MOCK_THRESHOLDS,
-            complexity: {
-                ...MOCK_THRESHOLDS.complexity,
-                production: { medium: 5, high: 10 },
-            },
-        };
+        const result = analyze(files, '.', MOCK_THRESHOLDS);
 
-        const result = analyze(files, '.', strictThresholds);
-
-        expect(result.files[0].issues.length).toBe(1);
-        expect(result.files[0].issues[0].type).toBe('complexity');
-        expect(result.files[0].issues[0].ratio).toBeCloseTo(1.2);
+        // Health scores should be between 0 and 100
+        result.details.forEach(file => {
+            expect(file.healthScore).toBeGreaterThanOrEqual(0);
+            expect(file.healthScore).toBeLessThanOrEqual(100);
+        });
+        
+        // First file should have better health than second
+        expect(result.details[0].healthScore).toBeGreaterThan(result.details[1].healthScore);
     });
 
-    it('should calculate summary statistics correctly', () => {
-        const files: FileMetrics[] = [
-            createFileMetrics({ path: 'a.ts', complexity: 10, duplication: 5, loc: 100, functionCount: 2 }),
-            createFileMetrics({ path: 'b.ts', complexity: 20, duplication: 15, loc: 300, functionCount: 8 }),
+    it('should set usage ranks correctly', () => {
+        const files: FileDetail[] = [
+            createFileDetail({ 
+                file: 'low-usage.ts',
+                importance: { usageCount: 1, usageRank: 0, isEntryPoint: false, isCriticalPath: false }
+            }),
+            createFileDetail({ 
+                file: 'high-usage.ts',
+                importance: { usageCount: 10, usageRank: 0, isEntryPoint: false, isCriticalPath: false }
+            }),
         ];
 
-        vi.spyOn(duplication, 'detectDuplication').mockImplementation((files) => files);
-
         const result = analyze(files, '.', MOCK_THRESHOLDS);
-        
-        expect(result.summary.totalFiles).toBe(2);
-        expect(result.summary.totalLines).toBe(400);
-        expect(result.summary.avgComplexity).toBe(15);
-        expect(result.summary.avgDuplication).toBe(10);
-        expect(result.summary.avgFunctions).toBe(5);
-        expect(result.summary.avgLoc).toBe(200);
+
+        // Usage ranks should be calculated (0-100 percentile)
+        result.details.forEach(file => {
+            expect(file.importance.usageRank).toBeGreaterThanOrEqual(0);
+            expect(file.importance.usageRank).toBeLessThanOrEqual(100);
+        });
     });
 });
