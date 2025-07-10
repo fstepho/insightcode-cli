@@ -3,11 +3,18 @@
 import { FileDetail, Recommendations, Action, QuickWin, Improvement, Severity, IssueType } from './types';
 
 /**
+ * Checks if a file is critical based on health score
+ */
+function isCriticalFile(file: FileDetail): boolean {
+  return file.healthScore < 80;
+}
+
+/**
  * Generates smart recommendations based on file analysis
  * Prioritizes by impact and effort according to v0.6.0 specs
  */
 export function generateRecommendations(details: FileDetail[]): Recommendations {
-  const criticalFiles = details.filter(f => f.isCritical);
+  const criticalFiles = details.filter(f => isCriticalFile(f));
   // Filter files with high/critical issues for potential use
   const mediumIssueFiles = details.filter(f => f.issues.some(i => i.severity === Severity.Medium));
   
@@ -85,7 +92,7 @@ function generateImprovements(allFiles: FileDetail[]): Improvement[] {
   const improvements: Improvement[] = [];
   
   // Architecture improvement based on critical path analysis
-  const criticalPathFiles = allFiles.filter(f => f.importance.isCriticalPath);
+  const criticalPathFiles = allFiles.filter(f => f.dependencies.isCriticalPath);
   if (criticalPathFiles.length > 0) {
     improvements.push({
       title: 'Critical Path Optimization',
@@ -121,7 +128,7 @@ function generateImprovements(allFiles: FileDetail[]): Improvement[] {
   }
   
   // Duplication elimination improvement
-  const duplicatedFiles = allFiles.filter(f => f.metrics.duplication > 0.1);
+  const duplicatedFiles = allFiles.filter(f => f.metrics.duplicationRatio > 0.1);
   if (duplicatedFiles.length > 1) {
     improvements.push({
       title: 'Duplication Elimination',
@@ -186,8 +193,8 @@ function calculatePriority(file: FileDetail): number {
   let priority = 5; // Base priority
   
   // High usage increases priority
-  if (file.importance.isCriticalPath) priority += 3;
-  if (file.importance.usageCount > 10) priority += 2;
+  if (file.dependencies.isCriticalPath) priority += 3;
+  if (file.dependencies.usageCount > 10) priority += 2;
   
   // Poor health decreases priority score (making it higher priority)
   if (file.healthScore < 30) priority += 3;

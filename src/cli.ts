@@ -2,12 +2,19 @@
 // File: src/cli.ts
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { CliOptions, AnalysisResult } from './types';
+import { CliOptions, AnalysisResult, FileDetail } from './types';
 import { parseDirectory } from './parser';
 import { analyze } from './analyzer';
 import { reportToTerminal } from './reporter';
 import { getConfig } from './config';
 import { analyzeWithContext } from './contextExtractor';
+
+/**
+ * Checks if a file is critical based on health score
+ */
+function isCriticalFile(file: FileDetail): boolean {
+  return file.healthScore < 80;
+}
 
 const program = new Command();
 
@@ -18,7 +25,7 @@ function outputCiFormat(results: AnalysisResult): void {
     grade: results.overview.grade,
     score: results.overview.scores.overall,
     issues: results.details.reduce((total, file) => total + file.issues.length, 0),
-    critical: results.details.filter(f => f.isCritical).length
+    critical: results.details.filter(f => isCriticalFile(f)).length
   };
   
   console.log(JSON.stringify(ciResult, null, 2));
@@ -32,7 +39,7 @@ function outputCiFormat(results: AnalysisResult): void {
 function outputCriticalFormat(results: AnalysisResult): void {
   const criticalResult = {
     ...results,
-    details: results.details.filter(f => f.isCritical)
+    details: results.details.filter(f => isCriticalFile(f))
   };
   
   console.log(JSON.stringify(criticalResult, null, 2));
@@ -45,7 +52,7 @@ function outputSummaryFormat(results: AnalysisResult): void {
   console.log(`Files: ${results.overview.statistics.totalFiles}`);
   console.log(`Issues: ${results.details.reduce((total, file) => total + file.issues.length, 0)}`);
   
-  const criticalFiles = results.details.filter(f => f.isCritical);
+  const criticalFiles = results.details.filter(f => isCriticalFile(f));
   if (criticalFiles.length > 0) {
     console.log('\nCritical Files:');
     criticalFiles.forEach((file, index) => {

@@ -116,10 +116,10 @@ export interface FileDetail {
     complexity: number;     // Cyclomatic complexity
     loc: number;           // Lines of code
     functionCount: number;  // Number of functions
-    duplication: Ratio;    // Ratio 0-1 (not percentage!)
+    duplicationRatio: Ratio;    // Ratio 0-1 (not percentage!)
   };
   
-  importance: {
+  dependencies: {
     usageCount: number;      // How many files import this
     usageRank: number;       // Percentile 0-100
     isEntryPoint: boolean;   // main.ts, index.ts, app.ts
@@ -129,7 +129,6 @@ export interface FileDetail {
   issues: Issue[];
   
   healthScore: Score;   // 0-100 (100 = perfect)
-  isCritical: boolean;  // Top 5 problematic files
 }
 
 /**

@@ -43,7 +43,7 @@ describe('Configuration', () => {
         test: { medium: 200, high: 400 },
         utility: { medium: 180, high: 320 }
       },
-      duplication: {
+      duplicationRatio: {
         production: { medium: 10, high: 20 },
         test: { medium: 15, high: 30 },
         utility: { medium: 12, high: 25 }
@@ -55,8 +55,8 @@ describe('Configuration', () => {
 
     expect(config.complexity.production.medium).toBe(5);
     expect(config.complexity.production.high).toBe(10);
-    expect(config.duplication.production.medium).toBe(10);
-    expect(config.duplication.production.high).toBe(20);
+    expect(config.duplicationRatio.production.medium).toBe(10);
+    expect(config.duplicationRatio.production.high).toBe(20);
     expect(config.size.test.medium).toBe(200);
     expect(config.size.test.high).toBe(400);
   });

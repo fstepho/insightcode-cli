@@ -163,13 +163,13 @@ export function calculateHealthScore(file: {
   metrics: { 
     complexity: number; 
     loc: number; 
-    duplication: number; // Ratio 0-1
+    duplicationRatio: number; // Ratio 0-1
   }; 
   issues: Issue[]; 
 }): number {
   // Use thresholds consistent with other scoring functions
   const complexityPenalty = file.metrics.complexity <= 10 ? 0 : Math.min((file.metrics.complexity / 20) * 30, 30);
-  const duplicationPenalty = file.metrics.duplication <= 0.03 ? 0 : file.metrics.duplication * 20; // 3% threshold
+  const duplicationPenalty = file.metrics.duplicationRatio <= 0.03 ? 0 : file.metrics.duplicationRatio * 20; // 3% threshold
   const sizePenalty = file.metrics.loc <= 200 ? 0 : Math.min((file.metrics.loc / 300) * 20, 20);
   const issuesPenalty = Math.min(file.issues.reduce((penalty, issue) => {
     switch (issue.severity) {

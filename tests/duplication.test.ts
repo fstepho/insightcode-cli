@@ -10,9 +10,9 @@ describe('Duplication Detection', () => {
       complexity: 1,
       loc,
       functionCount: 1,
-      duplication: 0
+      duplicationRatio: 0
     },
-    importance: {
+    dependencies: {
       usageCount: 0,
       usageRank: 0,
       isEntryPoint: false,
@@ -20,7 +20,6 @@ describe('Duplication Detection', () => {
     },
     issues: [],
     healthScore: 100,
-    isCritical: false,
     // Store the content for duplication detection
     content
   } as any);
@@ -35,7 +34,7 @@ describe('Duplication Detection', () => {
     const result = detectDuplication(files, DEFAULT_THRESHOLDS);
 
     result.forEach(file => {
-      expect(file.metrics.duplication).toBe(0);
+      expect(file.metrics.duplicationRatio).toBe(0);
     });
   });
 
@@ -59,8 +58,8 @@ describe('Duplication Detection', () => {
 
     // Identical files should have high duplication
     result.forEach(file => {
-      expect(file.metrics.duplication).toBeGreaterThan(0); // Should detect duplication
-      expect(file.metrics.duplication).toBeLessThanOrEqual(1); // Valid range
+      expect(file.metrics.duplicationRatio).toBeGreaterThan(0); // Should detect duplication
+      expect(file.metrics.duplicationRatio).toBeLessThanOrEqual(1); // Valid range
     });
   });
 
@@ -79,8 +78,8 @@ describe('Duplication Detection', () => {
     const result = detectDuplication(files, DEFAULT_THRESHOLDS);
 
     result.forEach(file => {
-      expect(file.metrics.duplication).toBeGreaterThan(0);
-      expect(file.metrics.duplication).toBeLessThan(1);
+      expect(file.metrics.duplicationRatio).toBeGreaterThan(0);
+      expect(file.metrics.duplicationRatio).toBeLessThan(1);
     });
   });
 
@@ -93,7 +92,7 @@ describe('Duplication Detection', () => {
     const result = detectDuplication(files, DEFAULT_THRESHOLDS);
 
     result.forEach(file => {
-      expect(file.metrics.duplication).toBe(0);
+      expect(file.metrics.duplicationRatio).toBe(0);
     });
   });
 
@@ -104,7 +103,7 @@ describe('Duplication Detection', () => {
 
     const result = detectDuplication(files, DEFAULT_THRESHOLDS);
 
-    expect(result[0].metrics.duplication).toBe(0);
+    expect(result[0].metrics.duplicationRatio).toBe(0);
   });
 
   it('should ignore small files in duplication detection', () => {
@@ -119,7 +118,7 @@ describe('Duplication Detection', () => {
 
     // Small files should not be considered for duplication
     result.forEach(file => {
-      expect(file.metrics.duplication).toBe(0);
+      expect(file.metrics.duplicationRatio).toBe(0);
     });
   });
 
@@ -138,7 +137,7 @@ describe('Duplication Detection', () => {
 
     // Should detect duplication despite different line endings
     result.forEach(file => {
-      expect(file.metrics.duplication).toBeGreaterThan(0); // Should detect duplication
+      expect(file.metrics.duplicationRatio).toBeGreaterThan(0); // Should detect duplication
     });
   });
 
@@ -157,7 +156,7 @@ describe('Duplication Detection', () => {
 
     // Should detect duplication despite different whitespace
     result.forEach(file => {
-      expect(file.metrics.duplication).toBeGreaterThan(0); // Should detect duplication
+      expect(file.metrics.duplicationRatio).toBeGreaterThan(0); // Should detect duplication
     });
   });
 
@@ -179,7 +178,7 @@ describe('Duplication Detection', () => {
     const result = detectDuplication(files, DEFAULT_THRESHOLDS);
 
     result.forEach(file => {
-      expect(file.metrics.duplication).toBeGreaterThan(0.15); // Above production threshold
+      expect(file.metrics.duplicationRatio).toBeGreaterThan(0.15); // Above production threshold
       expect(file.issues.some(issue => issue.type === 'duplication')).toBe(true);
     });
   });
@@ -201,10 +200,10 @@ describe('Duplication Detection', () => {
     const result = detectDuplication(files, DEFAULT_THRESHOLDS);
 
     // First 3 files should have duplication, last one should not
-    expect(result[0].metrics.duplication).toBeGreaterThan(0);
-    expect(result[1].metrics.duplication).toBeGreaterThan(0);
-    expect(result[2].metrics.duplication).toBeGreaterThan(0);
-    expect(result[3].metrics.duplication).toBe(0);
+    expect(result[0].metrics.duplicationRatio).toBeGreaterThan(0);
+    expect(result[1].metrics.duplicationRatio).toBeGreaterThan(0);
+    expect(result[2].metrics.duplicationRatio).toBeGreaterThan(0);
+    expect(result[3].metrics.duplicationRatio).toBe(0);
   });
 
   it('should handle files with comments correctly', () => {
@@ -231,7 +230,7 @@ describe('Duplication Detection', () => {
 
     // Should detect duplication in code despite different comments
     result.forEach(file => {
-      expect(file.metrics.duplication).toBeGreaterThan(0); // Should detect duplication
+      expect(file.metrics.duplicationRatio).toBeGreaterThan(0); // Should detect duplication
     });
   });
 });

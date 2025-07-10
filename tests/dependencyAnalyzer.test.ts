@@ -9,9 +9,9 @@ describe('Dependency Analyzer', () => {
       complexity: 1,
       loc: 10,
       functionCount: 1,
-      duplication: 0
+      duplicationRatio: 0
     },
-    importance: {
+    dependencies: {
       usageCount: 0,
       usageRank: 0,
       isEntryPoint: false,
@@ -19,7 +19,6 @@ describe('Dependency Analyzer', () => {
     },
     issues: [],
     healthScore: 100,
-    isCritical: false,
     // Store the content for dependency analysis
     content
   } as any);

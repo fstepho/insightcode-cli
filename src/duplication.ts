@@ -131,7 +131,7 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
   return files.map(file => {
     const blocks = fileBlocks.get(file.file);
     if (!blocks || blocks.size === 0) {
-      return { ...file, metrics: { ...file.metrics, duplication: 0 } };
+      return { ...file, metrics: { ...file.metrics, duplicationRatio: 0 } };
     }
     
     const duplicatedBlockCount = Array.from(blocks).filter(hash => 
@@ -191,7 +191,7 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
       ...file,
       metrics: { 
         ...file.metrics, 
-        duplication: duplicationRatio // Store as ratio (0-1) for v0.6.0
+        duplicationRatio: duplicationRatio // Store as ratio (0-1) for v0.6.0
       },
       issues: updatedIssues
     };

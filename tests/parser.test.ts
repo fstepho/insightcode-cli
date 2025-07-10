@@ -87,7 +87,7 @@ describe('Parser v0.6.0', () => {
       expect(fileDetail.metrics.loc).toBe(3);
       expect(fileDetail.file).toBe(path.relative(process.cwd(), testFile));
       expect(fileDetail.metrics.functionCount).toBe(1);
-      expect(fileDetail.metrics.duplication).toBe(0);
+      expect(fileDetail.metrics.duplicationRatio).toBe(0);
       expect(fileDetail.issues).toHaveLength(0);
     });
     
@@ -245,12 +245,11 @@ switch (x) {              // +1 per case
       
       const fileDetail = parseFile(testFile);
       
-      expect(fileDetail.importance.isEntryPoint).toBe(true);
-      expect(fileDetail.importance.usageCount).toBe(0);
-      expect(fileDetail.importance.usageRank).toBe(0);
-      expect(fileDetail.importance.isCriticalPath).toBe(false);
+      expect(fileDetail.dependencies.isEntryPoint).toBe(true);
+      expect(fileDetail.dependencies.usageCount).toBe(0);
+      expect(fileDetail.dependencies.usageRank).toBe(0);
+      expect(fileDetail.dependencies.isCriticalPath).toBe(false);
       expect(fileDetail.healthScore).toBe(0); // Will be calculated later
-      expect(fileDetail.isCritical).toBe(false); // Will be calculated later
     });
   });
   

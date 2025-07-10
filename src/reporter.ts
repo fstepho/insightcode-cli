@@ -1,7 +1,14 @@
 // File: src/reporter.ts - v0.6.0 Complete Refactor
 
 import chalk from 'chalk';
-import { AnalysisResult } from './types';
+import { AnalysisResult, FileDetail } from './types';
+
+/**
+ * Checks if a file is critical based on health score
+ */
+function isCriticalFile(file: FileDetail): boolean {
+  return file.healthScore < 80;
+}
 
 /**
  * Formate un nombre avec des espaces comme séparateurs de milliers
@@ -89,20 +96,20 @@ export function reportToTerminal(result: AnalysisResult): void {
   console.log(`  ${chalk.bold('Average Complexity:')} ${chalk.cyan(overview.statistics.avgComplexity)}`);
   console.log(`  ${chalk.bold('Average LOC:')}        ${chalk.cyan(overview.statistics.avgLOC)}`);
   
-  const avgDuplication = details.reduce((sum, f) => sum + f.metrics.duplication, 0) / details.length;
+  const avgDuplication = details.reduce((sum, f) => sum + f.metrics.duplicationRatio, 0) / details.length;
   const avgFunctions = details.reduce((sum, f) => sum + f.metrics.functionCount, 0) / details.length;
   console.log(`  ${chalk.bold('Average Duplication:')} ${chalk.cyan(Math.round(avgDuplication * 100) + '%')}`);
   console.log(`  ${chalk.bold('Average Functions:')}   ${chalk.cyan(Math.round(avgFunctions))}`);
 
   // --- Fichiers Critiques ---
-  const criticalFiles = details.filter(f => f.isCritical);
+  const criticalFiles = details.filter(f => isCriticalFile(f));
   if (criticalFiles.length > 0) {
     printSectionHeader('Critical Files (Top Issues)');
     criticalFiles.forEach((file, index) => {
       const healthColor = file.healthScore < 50 ? chalk.red : file.healthScore < 70 ? chalk.yellow : chalk.green;
       console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.cyan(file.file)}`);
       console.log(`      ${chalk.bold('Health Score:')} ${healthColor(file.healthScore + '/100')}`);
-      console.log(`      ${chalk.bold('Complexity:')}   ${file.metrics.complexity} | ${chalk.bold('LOC:')} ${file.metrics.loc} | ${chalk.bold('Usage:')} ${file.importance.usageCount}`);
+      console.log(`      ${chalk.bold('Complexity:')}   ${file.metrics.complexity} | ${chalk.bold('LOC:')} ${file.metrics.loc} | ${chalk.bold('Usage:')} ${file.dependencies.usageCount}`);
       
       if (file.issues.length > 0) {
         file.issues.forEach(issue => {

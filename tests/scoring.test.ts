@@ -210,7 +210,7 @@ describe('Scoring Algorithms', () => {
 
     it('should return 100 for perfect files', () => {
       const file = {
-        metrics: { complexity: 1, loc: 10, duplication: 0 },
+        metrics: { complexity: 1, loc: 10, duplicationRatio: 0 },
         issues: []
       };
       const score = calculateHealthScore(file);
@@ -219,19 +219,19 @@ describe('Scoring Algorithms', () => {
 
     it('should penalize files with issues', () => {
       const noIssues = calculateHealthScore({
-        metrics: { complexity: 10, loc: 50, duplication: 0.05 },
+        metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: []
       });
       const withCritical = calculateHealthScore({
-        metrics: { complexity: 10, loc: 50, duplication: 0.05 },
+        metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: [createMockIssue(Severity.Critical)]
       });
       const withHigh = calculateHealthScore({
-        metrics: { complexity: 10, loc: 50, duplication: 0.05 },
+        metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: [createMockIssue(Severity.High)]
       });
       const withMedium = calculateHealthScore({
-        metrics: { complexity: 10, loc: 50, duplication: 0.05 },
+        metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: [createMockIssue(Severity.Medium)]
       });
       
@@ -244,11 +244,11 @@ describe('Scoring Algorithms', () => {
 
     it('should handle multiple issues', () => {
       const singleIssue = calculateHealthScore({
-        metrics: { complexity: 10, loc: 50, duplication: 0.05 },
+        metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: [createMockIssue(Severity.High)]
       });
       const multipleIssues = calculateHealthScore({
-        metrics: { complexity: 10, loc: 50, duplication: 0.05 },
+        metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: [
           createMockIssue(Severity.High),
           createMockIssue(Severity.Medium),
@@ -261,19 +261,19 @@ describe('Scoring Algorithms', () => {
 
     it('should consider complexity, size, and duplication', () => {
       const baseline = calculateHealthScore({
-        metrics: { complexity: 10, loc: 100, duplication: 0.05 },
+        metrics: { complexity: 10, loc: 100, duplicationRatio: 0.05 },
         issues: []
       });
       const highComplexity = calculateHealthScore({
-        metrics: { complexity: 50, loc: 100, duplication: 0.05 },
+        metrics: { complexity: 50, loc: 100, duplicationRatio: 0.05 },
         issues: []
       });
       const largeFile = calculateHealthScore({
-        metrics: { complexity: 10, loc: 1000, duplication: 0.05 },
+        metrics: { complexity: 10, loc: 1000, duplicationRatio: 0.05 },
         issues: []
       });
       const highDuplication = calculateHealthScore({
-        metrics: { complexity: 10, loc: 100, duplication: 0.5 },
+        metrics: { complexity: 10, loc: 100, duplicationRatio: 0.5 },
         issues: []
       });
       

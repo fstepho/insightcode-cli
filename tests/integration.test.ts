@@ -352,7 +352,7 @@ export function add(a: number, b: number): number {
     expect(jsonResult.details[0]).toHaveProperty('file');
     expect(jsonResult.details[0]).toHaveProperty('metrics');
     expect(jsonResult.details[0].metrics).toHaveProperty('complexity');
-    expect(jsonResult.details[0].metrics).toHaveProperty('duplication');
+    expect(jsonResult.details[0].metrics).toHaveProperty('duplicationRatio');
     expect(jsonResult.details[0].metrics).toHaveProperty('loc');
   });
 
@@ -413,7 +413,7 @@ processUsers(['test@example.com', 'invalid-email'], ['John', 'Jane']);
       
       // utils.ts should have high usage (used by both user.ts and main.ts)
       const utilsFile = results.details.find(f => f.file.includes('utils.ts'));
-      expect(utilsFile?.importance.usageCount).toBeGreaterThan(0);
+      expect(utilsFile?.dependencies.usageCount).toBeGreaterThan(0);
       
       // Should have detected some complexity
       expect(results.overview.statistics.avgComplexity).toBeGreaterThan(1);
@@ -519,7 +519,7 @@ module.exports = {
       
       // Should have analyzed dependencies
       const appFile = results.details.find(f => f.file.includes('app.ts'));
-      expect(appFile?.importance.usageCount).toBeGreaterThan(0);
+      expect(appFile?.dependencies.usageCount).toBeGreaterThan(0);
     });
 
     it('should handle projects with extreme metrics', async () => {
@@ -587,7 +587,7 @@ ${Array.from({ length: 600 }, (_, i) => `const var${i} = ${i};`).join('\n')}
       expect(results.details.length).toBe(2);
       
       // Should have identified critical files
-      const criticalFiles = results.details.filter(f => f.isCritical);
+      const criticalFiles = results.details.filter(f => f.healthScore < 80);
       expect(criticalFiles.length).toBeGreaterThan(0);
       
       // Critical files should have lower health scores

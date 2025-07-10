@@ -330,17 +330,16 @@ export function parseFile(filePath: string): FileDetail {
       complexity,
       loc,
       functionCount,
-      duplication: 0  // Will be calculated later in duplication.ts
+      duplicationRatio: 0  // Will be calculated later in duplication.ts
     },
-    importance: {
+    dependencies: {
       usageCount: 0,  // Will be calculated later in dependencyAnalyzer.ts
       usageRank: 0,   // Will be calculated later in analyzer.ts
       isEntryPoint: isEntryPoint(filePath),
       isCriticalPath: false  // Will be calculated later in analyzer.ts
     },
     issues,
-    healthScore: 0,  // Will be calculated later in analyzer.ts
-    isCritical: false  // Will be calculated later in analyzer.ts
+    healthScore: 0  // Will be calculated later in analyzer.ts
   };
 }
 

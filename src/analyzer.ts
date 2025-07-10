@@ -28,18 +28,10 @@ import { generateRecommendations } from './recommendations';
 // Health score calculation moved to scoring.ts
 
 /**
- * Marks the top 5 problematic files as critical
+ * Checks if a file is critical based on health score
  */
-function markCriticalFiles(details: FileDetail[]): void {
-  // Sort by health score (worst first)
-  const sorted = [...details].sort((a, b) => a.healthScore - b.healthScore);
-  
-  // Mark top 5 as critical, but only files with health score < 80
-  sorted.slice(0, 5).forEach(file => {
-    if (file.healthScore < 80) {
-      file.isCritical = true;
-    }
-  });
+function isCriticalFile(file: FileDetail): boolean {
+  return file.healthScore < 80;
 }
 
 /**
@@ -49,7 +41,7 @@ function calculateUsageRank(file: FileDetail, allFiles: FileDetail[]): number {
   if (allFiles.length <= 1) return 0;
   
   // Sort all files by usageCount
-  const sorted = [...allFiles].sort((a, b) => a.importance.usageCount - b.importance.usageCount);
+  const sorted = [...allFiles].sort((a, b) => a.dependencies.usageCount - b.dependencies.usageCount);
   
   // Find position of current file
   const position = sorted.findIndex(f => f.file === file.file);
@@ -117,19 +109,19 @@ function processFileDetails(details: FileDetail[]): FileDetail[] {
   
   // 3. Update usage counts from dependency analysis
   filesWithDuplication.forEach(file => {
-    file.importance.usageCount = dependencyMap.get(file.file) || 0;
+    file.dependencies.usageCount = dependencyMap.get(file.file) || 0;
   });
   
   // 4. Calculate usage ranks
   filesWithDuplication.forEach(file => {
-    file.importance.usageRank = calculateUsageRank(file, filesWithDuplication);
+    file.dependencies.usageRank = calculateUsageRank(file, filesWithDuplication);
   });
   
   // 5. Mark critical path files (top 10% by usage)
-  const sortedByUsage = [...filesWithDuplication].sort((a, b) => b.importance.usageCount - a.importance.usageCount);
+  const sortedByUsage = [...filesWithDuplication].sort((a, b) => b.dependencies.usageCount - a.dependencies.usageCount);
   const top10Percent = Math.ceil(filesWithDuplication.length * 0.1);
   sortedByUsage.slice(0, top10Percent).forEach(file => {
-    file.importance.isCriticalPath = true;
+    file.dependencies.isCriticalPath = true;
   });
   
   // 6. Calculate health scores
@@ -138,7 +130,6 @@ function processFileDetails(details: FileDetail[]): FileDetail[] {
   });
   
   // 7. Mark critical files
-  markCriticalFiles(filesWithDuplication);
   
   return filesWithDuplication;
 }
@@ -176,7 +167,7 @@ function calculateOverview(details: FileDetail[]): Overview {
     const complexityWeight = 1.0;
     const impactWeight = 2.0;
     const issueWeight = 0.5;
-    return sum + (f.importance.usageCount * impactWeight) + (f.metrics.complexity * complexityWeight) + (f.issues.length * issueWeight) + 1;
+    return sum + (f.dependencies.usageCount * impactWeight) + (f.metrics.complexity * complexityWeight) + (f.issues.length * issueWeight) + 1;
   }, 0);
   
   let weightedComplexityScore = 0;
@@ -185,10 +176,10 @@ function calculateOverview(details: FileDetail[]): Overview {
   
   if (totalCriticismScore > 0) {
     for (const file of details) {
-      const criticismScore = (file.importance.usageCount * 2.0) + (file.metrics.complexity * 1.0) + (file.issues.length * 0.5) + 1;
+      const criticismScore = (file.dependencies.usageCount * 2.0) + (file.metrics.complexity * 1.0) + (file.issues.length * 0.5) + 1;
       const weight = criticismScore / totalCriticismScore;
       weightedComplexityScore += calculateComplexityScore(file.metrics.complexity) * weight;
-      weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplication * 100) * weight; // Convert to percentage for scoring
+      weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio * 100) * weight; // Convert to percentage for scoring
       weightedMaintainabilityScore += calculateMaintainabilityScore(file.metrics.loc, file.metrics.functionCount) * weight;
     }
   } else {
@@ -204,7 +195,7 @@ function calculateOverview(details: FileDetail[]): Overview {
   
   const grade = getGrade(overallScore);
   
-  const criticalCount = details.filter(f => f.isCritical).length;
+  const criticalCount = details.filter(f => isCriticalFile(f)).length;
   
   const overview: Overview = {
     grade,

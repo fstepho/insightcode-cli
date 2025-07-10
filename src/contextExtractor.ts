@@ -8,6 +8,13 @@ import { analyze } from './analyzer';
 import { normalizePath } from './utils';
 
 /**
+ * Checks if a file is critical based on health score
+ */
+function isCriticalFile(file: FileDetail): boolean {
+  return file.healthScore < 80;
+}
+
+/**
  * Extract rich context from a TypeScript/JavaScript file for LLM analysis
  */
 export function extractCodeContext(filePath: string, metrics: FileDetail): CodeContext {
@@ -544,7 +551,7 @@ export function analyzeWithContext(
   }
   
   // Extract context for critical files
-  const criticalFiles = baseAnalysis.details.filter(f => f.isCritical);
+  const criticalFiles = baseAnalysis.details.filter(f => isCriticalFile(f));
   const uniquePaths = new Set(criticalFiles.map(f => f.file));
   
   const contexts: CodeContext[] = [];

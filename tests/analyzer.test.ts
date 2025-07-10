@@ -17,9 +17,9 @@ const createFileDetail = (overrides: Partial<FileDetail>): FileDetail => ({
         complexity: 1,
         loc: 10,
         functionCount: 1,
-        duplication: 0
+        duplicationRatio: 0
     },
-    importance: {
+    dependencies: {
         usageCount: 0,
         usageRank: 0,
         isEntryPoint: false,
@@ -27,7 +27,6 @@ const createFileDetail = (overrides: Partial<FileDetail>): FileDetail => ({
     },
     issues: [],
     healthScore: 100,
-    isCritical: false,
     ...overrides,
 });
 
@@ -87,7 +86,7 @@ describe('Analyzer v0.6.0', () => {
 
     it('should return correct AnalysisResult structure', () => {
         const files: FileDetail[] = [createFileDetail({ 
-            metrics: { complexity: 5, loc: 50, functionCount: 2, duplication: 0.01 } 
+            metrics: { complexity: 5, loc: 50, functionCount: 2, duplicationRatio: 0.01 } 
         })];
         
         const result = analyze(files, '.', MOCK_THRESHOLDS);
@@ -128,7 +127,7 @@ describe('Analyzer v0.6.0', () => {
 
     it('should return high scores for perfect files', () => {
         const files: FileDetail[] = [createFileDetail({ 
-            metrics: { complexity: 5, loc: 50, functionCount: 2, duplication: 0.01 } 
+            metrics: { complexity: 5, loc: 50, functionCount: 2, duplicationRatio: 0.01 } 
         })];
         
         const result = analyze(files, '.', MOCK_THRESHOLDS);
@@ -144,7 +143,7 @@ describe('Analyzer v0.6.0', () => {
     it('should return low scores for problematic files', () => {
         const files: FileDetail[] = [createFileDetail({ 
             file: 'critical.ts',
-            metrics: { complexity: 50, loc: 500, functionCount: 20, duplication: 0.3 },
+            metrics: { complexity: 50, loc: 500, functionCount: 20, duplicationRatio: 0.3 },
             issues: [createIssue({ severity: Severity.Critical })]
         })];
         
@@ -162,26 +161,26 @@ describe('Analyzer v0.6.0', () => {
         const files: FileDetail[] = [
             createFileDetail({ 
                 file: 'good.ts',
-                metrics: { complexity: 5, loc: 50, functionCount: 2, duplication: 0.01 }
+                metrics: { complexity: 5, loc: 50, functionCount: 2, duplicationRatio: 0.01 }
             }),
             createFileDetail({ 
                 file: 'bad.ts',
-                metrics: { complexity: 50, loc: 500, functionCount: 20, duplication: 0.3 }
+                metrics: { complexity: 50, loc: 500, functionCount: 20, duplicationRatio: 0.3 }
             }),
             createFileDetail({ 
                 file: 'worse.ts',
-                metrics: { complexity: 80, loc: 800, functionCount: 40, duplication: 0.5 }
+                metrics: { complexity: 80, loc: 800, functionCount: 40, duplicationRatio: 0.5 }
             }),
         ];
         
         const result = analyze(files, '.', MOCK_THRESHOLDS);
 
-        const criticalFiles = result.details.filter(f => f.isCritical);
+        const criticalFiles = result.details.filter(f => f.healthScore < 80);
         expect(criticalFiles.length).toBeGreaterThan(0);
         expect(criticalFiles.length).toBeLessThanOrEqual(5); // Max 5 critical files
         
         // Critical files should have worse health scores
-        const nonCriticalFiles = result.details.filter(f => !f.isCritical);
+        const nonCriticalFiles = result.details.filter(f => f.healthScore >= 80);
         if (nonCriticalFiles.length > 0) {
             const avgCriticalHealth = criticalFiles.reduce((sum, f) => sum + f.healthScore, 0) / criticalFiles.length;
             const avgNonCriticalHealth = nonCriticalFiles.reduce((sum, f) => sum + f.healthScore, 0) / nonCriticalFiles.length;
@@ -192,10 +191,10 @@ describe('Analyzer v0.6.0', () => {
     it('should calculate correct statistics', () => {
         const files: FileDetail[] = [
             createFileDetail({ 
-                metrics: { complexity: 10, loc: 100, functionCount: 2, duplication: 0.05 } 
+                metrics: { complexity: 10, loc: 100, functionCount: 2, duplicationRatio: 0.05 } 
             }),
             createFileDetail({ 
-                metrics: { complexity: 20, loc: 300, functionCount: 8, duplication: 0.15 } 
+                metrics: { complexity: 20, loc: 300, functionCount: 8, duplicationRatio: 0.15 } 
             }),
         ];
 
@@ -223,7 +222,7 @@ describe('Analyzer v0.6.0', () => {
         const files: FileDetail[] = [
             createFileDetail({
                 file: 'issue.ts',
-                metrics: { complexity: 40, loc: 200, functionCount: 10, duplication: 0.1 },
+                metrics: { complexity: 40, loc: 200, functionCount: 10, duplicationRatio: 0.1 },
                 issues: [testIssue]
             })
         ];
@@ -255,12 +254,12 @@ describe('Analyzer v0.6.0', () => {
         const files: FileDetail[] = [
             createFileDetail({ 
                 file: 'critical.ts',
-                metrics: { complexity: 50, loc: 500, functionCount: 20, duplication: 0.3 },
+                metrics: { complexity: 50, loc: 500, functionCount: 20, duplicationRatio: 0.3 },
                 issues: [createIssue({ severity: Severity.Critical })]
             }),
             createFileDetail({ 
                 file: 'normal.ts',
-                metrics: { complexity: 5, loc: 100, functionCount: 2, duplication: 0.01 }
+                metrics: { complexity: 5, loc: 100, functionCount: 2, duplicationRatio: 0.01 }
             }),
         ];
 
@@ -275,10 +274,10 @@ describe('Analyzer v0.6.0', () => {
     it('should calculate health scores correctly', () => {
         const files: FileDetail[] = [
             createFileDetail({ 
-                metrics: { complexity: 10, loc: 100, functionCount: 2, duplication: 0.05 }
+                metrics: { complexity: 10, loc: 100, functionCount: 2, duplicationRatio: 0.05 }
             }),
             createFileDetail({ 
-                metrics: { complexity: 50, loc: 500, functionCount: 20, duplication: 0.3 }
+                metrics: { complexity: 50, loc: 500, functionCount: 20, duplicationRatio: 0.3 }
             }),
         ];
 
@@ -298,11 +297,11 @@ describe('Analyzer v0.6.0', () => {
         const files: FileDetail[] = [
             createFileDetail({ 
                 file: 'low-usage.ts',
-                importance: { usageCount: 1, usageRank: 0, isEntryPoint: false, isCriticalPath: false }
+                dependencies: { usageCount: 1, usageRank: 0, isEntryPoint: false, isCriticalPath: false }
             }),
             createFileDetail({ 
                 file: 'high-usage.ts',
-                importance: { usageCount: 10, usageRank: 0, isEntryPoint: false, isCriticalPath: false }
+                dependencies: { usageCount: 10, usageRank: 0, isEntryPoint: false, isCriticalPath: false }
             }),
         ];
 
@@ -310,8 +309,8 @@ describe('Analyzer v0.6.0', () => {
 
         // Usage ranks should be calculated (0-100 percentile)
         result.details.forEach(file => {
-            expect(file.importance.usageRank).toBeGreaterThanOrEqual(0);
-            expect(file.importance.usageRank).toBeLessThanOrEqual(100);
+            expect(file.dependencies.usageRank).toBeGreaterThanOrEqual(0);
+            expect(file.dependencies.usageRank).toBeLessThanOrEqual(100);
         });
     });
 });
