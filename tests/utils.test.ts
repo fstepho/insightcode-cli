@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { deepMerge, normalizePath } from '../src/utils';
+import { deepMerge, normalizePath, normalizeProjectPath } from '../src/utils';
 
 describe('Utils', () => {
   describe('deepMerge', () => {
@@ -146,6 +146,12 @@ describe('Utils', () => {
       expect(normalizePath('/src/utils/helper.ts')).toBe('src/utils/helper.ts');
     });
 
+    it('should remove temporary analysis prefixes', () => {
+      expect(normalizePath('temp-analysis/uuid123/src/parser.ts')).toBe('src/parser.ts');
+      expect(normalizePath('temp-analysis/abc-def/utils/index.ts')).toBe('utils/index.ts');
+      expect(normalizePath('temp-analysis/test-id/file.ts')).toBe('file.ts');
+    });
+
     it('should handle complex paths with multiple issues', () => {
       expect(normalizePath('./src\\utils\\index.ts/')).toBe('src/utils/index.ts');
       expect(normalizePath('/src\\parser\\file.ts')).toBe('src/parser/file.ts');
@@ -177,6 +183,26 @@ describe('Utils', () => {
       expect(normalizePath('./src/config.test.ts')).toBe('src/config.test.ts');
       expect(normalizePath('./src/types.d.ts')).toBe('src/types.d.ts');
       expect(normalizePath('./src/file.min.js')).toBe('src/file.min.js');
+    });
+  });
+
+  describe('normalizeProjectPath', () => {
+    it('should return "." for temporary analysis paths', () => {
+      expect(normalizeProjectPath('temp-analysis/uuid123')).toBe('.');
+      expect(normalizeProjectPath('/Users/test/temp-analysis/project-id')).toBe('.');
+      expect(normalizeProjectPath('C:\\temp-analysis\\abc-def')).toBe('.');
+    });
+
+    it('should extract project name from full paths', () => {
+      expect(normalizeProjectPath('/Users/test/myproject')).toBe('myproject');
+      expect(normalizeProjectPath('C:\\Users\\test\\myapp')).toBe('myapp');
+      expect(normalizeProjectPath('/home/user/awesome-project')).toBe('awesome-project');
+    });
+
+    it('should handle edge cases', () => {
+      expect(normalizeProjectPath('')).toBe('.');
+      expect(normalizeProjectPath('.')).toBe('.');
+      expect(normalizeProjectPath('project')).toBe('project');
     });
   });
 });

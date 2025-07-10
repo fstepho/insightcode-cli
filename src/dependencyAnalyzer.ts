@@ -4,6 +4,7 @@ import { Project, SourceFile, SyntaxKind, ts } from 'ts-morph';
 import * as path from 'path';
 import * as fs from 'fs';
 import { FileDetail } from './types';
+import { normalizePath } from './utils';
 
 /**
  * Analyse les dépendances d'un projet pour calculer l'impact de chaque fichier.
@@ -67,7 +68,7 @@ export function analyzeDependencies(files: FileDetail[]): Map<string, number> {
  * Normalise le chemin du fichier pour correspondre aux chemins de FileDetail
  */
 function normalizeProjectPath(filePath: string): string {
-  return path.relative(process.cwd(), filePath).replace(/\\/g, '/');
+  return normalizePath(path.relative(process.cwd(), filePath));
 }
 
 /**
@@ -205,8 +206,7 @@ function resolveAndIncrementImpact(
   
   const importingDir = path.dirname(importingFile);
   let resolvedPath = path.resolve(importingDir, importPath);
-  resolvedPath = path.relative(process.cwd(), resolvedPath);
-  resolvedPath = resolvedPath.replace(/\\/g, '/');
+  resolvedPath = normalizePath(path.relative(process.cwd(), resolvedPath));
   
   // Try exact match first
   if (filePaths.has(resolvedPath)) {

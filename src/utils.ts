@@ -56,20 +56,51 @@ export function normalizePath(filePath: string): string {
   // 1. Convert Windows backslashes to forward slashes
   let normalized = filePath.replace(/\\/g, '/');
   
-  // 2. Remove leading './' if present
+  // 2. Remove temporary analysis prefixes (temp-analysis/uuid/)
+  const tempAnalysisMatch = normalized.match(/^temp-analysis\/[^\/]+\/(.+)$/);
+  if (tempAnalysisMatch) {
+    normalized = tempAnalysisMatch[1];
+  }
+  
+  // 3. Remove leading './' if present
   if (normalized.startsWith('./')) {
     normalized = normalized.substring(2);
   }
   
-  // 3. Remove trailing slashes
+  // 4. Remove trailing slashes
   if (normalized.endsWith('/')) {
     normalized = normalized.slice(0, -1);
   }
   
-  // 4. Ensure relative path (no leading /)
+  // 5. Ensure relative path (no leading /)
   if (normalized.startsWith('/')) {
     normalized = normalized.substring(1);
   }
   
   return normalized;
+}
+
+/**
+ * Normalizes project paths by removing temporary analysis prefixes
+ * Examples:
+ * normalizeProjectPath("temp-analysis/uuid") → "."
+ * normalizeProjectPath("/Users/x/temp-analysis/uuid") → "."
+ * normalizeProjectPath("/Users/x/myproject") → "myproject"
+ */
+export function normalizeProjectPath(projectPath: string): string {
+  // 1. Convert Windows backslashes to forward slashes
+  let normalized = projectPath.replace(/\\/g, '/');
+  
+  // 2. Handle temporary analysis directories
+  if (normalized.includes('temp-analysis')) {
+    // If it's a temp-analysis path, return "." to indicate current directory
+    return '.';
+  }
+  
+  // 3. Extract just the project name from full paths
+  const pathParts = normalized.split('/');
+  const projectName = pathParts[pathParts.length - 1];
+  
+  // 4. Return "." for current directory, otherwise return project name
+  return projectName || '.';
 }

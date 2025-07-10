@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { FileDetail, AnalysisResult, ThresholdConfig, CodeContext, CodeContextSummary } from './types';
 import { analyze } from './analyzer';
+import { normalizePath } from './utils';
 
 /**
  * Extract rich context from a TypeScript/JavaScript file for LLM analysis
@@ -18,7 +19,7 @@ export function extractCodeContext(filePath: string, metrics: FileDetail): CodeC
   const sourceFile = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true);
   
   const context: CodeContext = {
-    path: metrics.file,
+    path: normalizePath(metrics.file),
     complexity: metrics.metrics.complexity,
     structure: {
       imports: [],
@@ -440,7 +441,7 @@ export function summarizeCodeContexts(contexts: CodeContext[]): CodeContextSumma
   // Calculate complexity metrics
   const allFunctions = contexts.flatMap(c => 
     c.complexityBreakdown.functions.map(f => ({
-      file: c.path,
+      file: normalizePath(c.path),
       ...f
     }))
   );

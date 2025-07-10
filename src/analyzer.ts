@@ -12,6 +12,7 @@ import { analyzeDependencies } from './dependencyAnalyzer';
 import { detectDuplication } from './duplication';
 import { getProjectInfo } from './projectInfo';
 import { getConfig } from './config';
+import { normalizeProjectPath } from './utils';
 import { 
   calculateComplexityScore, 
   calculateDuplicationScore, 
@@ -251,7 +252,7 @@ function generateContext(projectPath: string, details: FileDetail[], startTime: 
   return {
     project: {
       name: projectInfo.name,
-      path: projectInfo.path,
+      path: normalizeProjectPath(projectInfo.path),
       version: projectInfo.packageJson?.version,
       repository: typeof (projectInfo.packageJson as any)?.repository === 'string' ? (projectInfo.packageJson as any).repository : undefined
     },
