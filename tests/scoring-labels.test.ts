@@ -15,11 +15,11 @@ describe('Scoring Labels and Colors', () => {
       expect(getComplexityLabel(1)).toBe('Low');
       expect(getComplexityLabel(10)).toBe('Low');
       expect(getComplexityLabel(15)).toBe('Medium');
-      expect(getComplexityLabel(20)).toBe('Medium');
-      expect(getComplexityLabel(30)).toBe('High');
-      expect(getComplexityLabel(50)).toBe('High');
-      expect(getComplexityLabel(100)).toBe('Very High');
-      expect(getComplexityLabel(200)).toBe('Very High');
+      expect(getComplexityLabel(20)).toBe('High');
+      expect(getComplexityLabel(30)).toBe('Very High');
+      expect(getComplexityLabel(50)).toBe('Very High');
+      expect(getComplexityLabel(100)).toBe('Extreme');
+      expect(getComplexityLabel(200)).toBe('Extreme');
       expect(getComplexityLabel(300)).toBe('Extreme');
     });
 
@@ -34,17 +34,19 @@ describe('Scoring Labels and Colors', () => {
     it('should return correct labels for duplication ranges', () => {
       expect(getDuplicationLabel(0)).toBe('Low');
       expect(getDuplicationLabel(3)).toBe('Low');
-      expect(getDuplicationLabel(5)).toBe('Medium');
-      expect(getDuplicationLabel(8)).toBe('Medium');
-      expect(getDuplicationLabel(10)).toBe('High');
-      expect(getDuplicationLabel(15)).toBe('High');
-      expect(getDuplicationLabel(20)).toBe('Very High');
-      expect(getDuplicationLabel(50)).toBe('Very High');
+      expect(getDuplicationLabel(5)).toBe('Low');
+      expect(getDuplicationLabel(8)).toBe('Low');
+      expect(getDuplicationLabel(10)).toBe('Low');
+      expect(getDuplicationLabel(15)).toBe('Low');
+      expect(getDuplicationLabel(20)).toBe('Medium');
+      expect(getDuplicationLabel(30)).toBe('Medium');
+      expect(getDuplicationLabel(40)).toBe('High');
+      expect(getDuplicationLabel(50)).toBe('High');
     });
 
     it('should handle edge cases', () => {
       expect(getDuplicationLabel(-1)).toBe('Low');
-      expect(getDuplicationLabel(3.5)).toBe('Medium');
+      expect(getDuplicationLabel(3.5)).toBe('Low');
     });
   });
 
@@ -72,16 +74,16 @@ describe('Scoring Labels and Colors', () => {
       expect(getComplexityColorLevel(1)).toBe('green');
       expect(getComplexityColorLevel(10)).toBe('green');
       expect(getComplexityColorLevel(15)).toBe('yellow');
-      expect(getComplexityColorLevel(20)).toBe('yellow');
-      expect(getComplexityColorLevel(30)).toBe('red');
-      expect(getComplexityColorLevel(50)).toBe('red');
+      expect(getComplexityColorLevel(20)).toBe('red');
+      expect(getComplexityColorLevel(30)).toBe('redBold');
+      expect(getComplexityColorLevel(50)).toBe('redBold');
       expect(getComplexityColorLevel(100)).toBe('redBold');
     });
 
     it('should handle edge cases', () => {
       expect(getComplexityColorLevel(0)).toBe('green');
       expect(getComplexityColorLevel(10.5)).toBe('yellow');
-      expect(getComplexityColorLevel(20.5)).toBe('red');
+      expect(getComplexityColorLevel(20.5)).toBe('redBold');
     });
   });
 
@@ -89,16 +91,19 @@ describe('Scoring Labels and Colors', () => {
     it('should return correct colors for duplication ranges', () => {
       expect(getDuplicationColorLevel(0)).toBe('green');
       expect(getDuplicationColorLevel(3)).toBe('green');
-      expect(getDuplicationColorLevel(5)).toBe('yellow');
-      expect(getDuplicationColorLevel(8)).toBe('yellow');
-      expect(getDuplicationColorLevel(10)).toBe('red');
-      expect(getDuplicationColorLevel(15)).toBe('red');
-      expect(getDuplicationColorLevel(20)).toBe('redBold');
+      expect(getDuplicationColorLevel(5)).toBe('green');
+      expect(getDuplicationColorLevel(8)).toBe('green');
+      expect(getDuplicationColorLevel(10)).toBe('green');
+      expect(getDuplicationColorLevel(15)).toBe('green');
+      expect(getDuplicationColorLevel(20)).toBe('yellow');
+      expect(getDuplicationColorLevel(30)).toBe('yellow');
+      expect(getDuplicationColorLevel(40)).toBe('red');
+      expect(getDuplicationColorLevel(60)).toBe('redBold');
     });
 
     it('should handle edge cases', () => {
       expect(getDuplicationColorLevel(-1)).toBe('green');
-      expect(getDuplicationColorLevel(3.5)).toBe('yellow');
+      expect(getDuplicationColorLevel(3.5)).toBe('green');
     });
   });
 
@@ -150,8 +155,8 @@ describe('Scoring Labels and Colors', () => {
       expect(getComplexityLabel(15)).toBe('Medium');
       
       // Red should correspond to High
-      expect(getComplexityColorLevel(30)).toBe('red');
-      expect(getComplexityLabel(30)).toBe('High');
+      expect(getComplexityColorLevel(20)).toBe('red');
+      expect(getComplexityLabel(20)).toBe('High');
     });
 
     it('should have consistent duplication thresholds', () => {
@@ -160,12 +165,12 @@ describe('Scoring Labels and Colors', () => {
       expect(getDuplicationLabel(2)).toBe('Low');
       
       // Yellow should correspond to Medium
-      expect(getDuplicationColorLevel(5)).toBe('yellow');
-      expect(getDuplicationLabel(5)).toBe('Medium');
+      expect(getDuplicationColorLevel(25)).toBe('yellow');
+      expect(getDuplicationLabel(25)).toBe('Medium');
       
       // Red should correspond to High
-      expect(getDuplicationColorLevel(10)).toBe('red');
-      expect(getDuplicationLabel(10)).toBe('High');
+      expect(getDuplicationColorLevel(40)).toBe('red');
+      expect(getDuplicationLabel(40)).toBe('High');
     });
 
     it('should have consistent maintainability thresholds', () => {

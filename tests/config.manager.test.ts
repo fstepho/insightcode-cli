@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { getConfig, resetConfig, setConfigForTesting } from '../src/config';
+import { getConfig, resetConfig, setConfigForTesting } from '../src/config.manager';
 
-describe('Configuration', () => {
+describe('Configuration Manager', () => {
   beforeEach(() => {
     resetConfig();
   });
@@ -34,19 +34,25 @@ describe('Configuration', () => {
   it('should allow setting custom configuration for testing', () => {
     const customConfig = {
       complexity: {
-        production: { medium: 5, high: 10 },
-        test: { medium: 8, high: 15 },
-        utility: { medium: 10, high: 20 }
+        production: { medium: 5, high: 10, critical: 15 },
+        test: { medium: 8, high: 15, critical: 20 },
+        utility: { medium: 10, high: 20, critical: 25 },
+        example: { medium: 15, high: 25, critical: 30 },
+        config: { medium: 12, high: 22, critical: 27 }
       },
       size: {
-        production: { medium: 150, high: 250 },
-        test: { medium: 200, high: 400 },
-        utility: { medium: 180, high: 320 }
+        production: { medium: 150, high: 250, critical: 500 },
+        test: { medium: 200, high: 400, critical: 800 },
+        utility: { medium: 180, high: 320, critical: 640 },
+        example: { medium: 120, high: 200, critical: 400 },
+        config: { medium: 250, high: 450, critical: 900 }
       },
-      duplicationRatio: {
-        production: { medium: 10, high: 20 },
-        test: { medium: 15, high: 30 },
-        utility: { medium: 12, high: 25 }
+      duplication: {
+        production: { medium: 10, high: 20, critical: 40 },
+        test: { medium: 15, high: 30, critical: 60 },
+        utility: { medium: 12, high: 25, critical: 50 },
+        example: { medium: 40, high: 70, critical: 85 },
+        config: { medium: 20, high: 50, critical: 75 }
       }
     };
 
@@ -55,8 +61,8 @@ describe('Configuration', () => {
 
     expect(config.complexity.production.medium).toBe(5);
     expect(config.complexity.production.high).toBe(10);
-    expect(config.duplicationRatio.production.medium).toBe(10);
-    expect(config.duplicationRatio.production.high).toBe(20);
+    expect(config.duplication.production.medium).toBe(10);
+    expect(config.duplication.production.high).toBe(20);
     expect(config.size.test.medium).toBe(200);
     expect(config.size.test.high).toBe(400);
   });

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { detectDuplication } from '../src/duplication';
 import { FileDetail } from '../src/types';
-import { DEFAULT_THRESHOLDS } from '../src/config';
+import { DEFAULT_THRESHOLDS } from '../src/thresholds.constants';
 
 // Extended FileDetail for testing with content
 interface FileDetailWithContent extends FileDetail {
@@ -18,10 +18,12 @@ describe('Duplication Detection', () => {
       duplicationRatio: 0
     },
     dependencies: {
-      incomingCount: 0,
-      percentile: 0,
-      isEntryPoint: false,
-      // isCriticalPath removed
+      outgoingDependencies: 0,
+      incomingDependencies: 0,
+      cohesionScore: 0,
+      instability: 0,
+      percentileUsageRank: 0,
+      isInCycle: false
     },
     issues: [],
     healthScore: 100,
@@ -36,7 +38,7 @@ describe('Duplication Detection', () => {
       createFileDetail('file3.ts', 'const z = 3; console.log(z);')
     ];
 
-    const result = detectDuplication(files, DEFAULT_THRESHOLDS);
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
 
     result.forEach(file => {
       expect(file.metrics.duplicationRatio).toBe(0);
@@ -50,16 +52,20 @@ describe('Duplication Detection', () => {
         if (!email) return false;
         if (email.length > 255) return false;
         if (!emailRegex.test(email)) return false;
+        const parts = email.split('@');
+        if (parts.length !== 2) return false;
+        const domain = parts[1];
+        if (!domain.includes('.')) return false;
         return true;
       }
     `;
 
     const files = [
-      createFileDetail('file1.ts', duplicatedContent, 8),
-      createFileDetail('file2.ts', duplicatedContent, 8)
+      createFileDetail('file1.ts', duplicatedContent, 11),
+      createFileDetail('file2.ts', duplicatedContent, 11)
     ];
 
-    const result = detectDuplication(files, DEFAULT_THRESHOLDS);
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
 
     // Identical files should have high duplication
     result.forEach(file => {
@@ -71,16 +77,22 @@ describe('Duplication Detection', () => {
   it('should detect partial duplication', () => {
     const sharedBlock = `
       function processData(data: any[]): any[] {
-        return data.filter(item => item !== null);
+        if (!data) return [];
+        const filtered = data.filter(item => item !== null);
+        const mapped = filtered.map(item => item.value);
+        const sorted = mapped.sort();
+        const validated = sorted.filter(item => item !== undefined);
+        const processed = validated.map(item => item.toString());
+        return processed;
       }
     `;
 
     const files = [
-      createFileDetail('file1.ts', sharedBlock + '\nconst extra1 = true;', 5),
-      createFileDetail('file2.ts', sharedBlock + '\nconst extra2 = false;', 5)
+      createFileDetail('file1.ts', sharedBlock + '\nconst extra1 = true;\nconst extra2 = false;\nconst extra3 = null;', 12),
+      createFileDetail('file2.ts', sharedBlock + '\nconst different1 = false;\nconst different2 = true;\nconst different3 = {};', 12)
     ];
 
-    const result = detectDuplication(files, DEFAULT_THRESHOLDS);
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
 
     result.forEach(file => {
       expect(file.metrics.duplicationRatio).toBeGreaterThan(0);
@@ -94,7 +106,7 @@ describe('Duplication Detection', () => {
       createFileDetail('empty2.ts', '', 0)
     ];
 
-    const result = detectDuplication(files, DEFAULT_THRESHOLDS);
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
 
     result.forEach(file => {
       expect(file.metrics.duplicationRatio).toBe(0);
@@ -106,7 +118,7 @@ describe('Duplication Detection', () => {
       createFileDetail('single.ts', 'const x = 1;', 1)
     ];
 
-    const result = detectDuplication(files, DEFAULT_THRESHOLDS);
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
 
     expect(result[0].metrics.duplicationRatio).toBe(0);
   });
@@ -119,7 +131,7 @@ describe('Duplication Detection', () => {
       createFileDetail('small2.ts', smallContent, 1)
     ];
 
-    const result = detectDuplication(files, DEFAULT_THRESHOLDS);
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
 
     // Small files should not be considered for duplication
     result.forEach(file => {
@@ -128,17 +140,17 @@ describe('Duplication Detection', () => {
   });
 
   it('should handle files with different line endings', () => {
-    const content1 = 'function test() {\n  return true;\n}';
-    const content2 = 'function test() {\r\n  return true;\r\n}';
-    const content3 = 'function test() {\r  return true;\r}';
+    const content1 = 'function test() {\n  const a = 1;\n  const b = 2;\n  const c = 3;\n  const d = 4;\n  const e = 5;\n  const f = 6;\n  return true;\n}';
+    const content2 = 'function test() {\r\n  const a = 1;\r\n  const b = 2;\r\n  const c = 3;\r\n  const d = 4;\r\n  const e = 5;\r\n  const f = 6;\r\n  return true;\r\n}';
+    const content3 = 'function test() {\r  const a = 1;\r  const b = 2;\r  const c = 3;\r  const d = 4;\r  const e = 5;\r  const f = 6;\r  return true;\r}';
 
     const files = [
-      createFileDetail('unix.ts', content1, 3),
-      createFileDetail('windows.ts', content2, 3),
-      createFileDetail('mac.ts', content3, 3)
+      createFileDetail('unix.ts', content1, 10),
+      createFileDetail('windows.ts', content2, 10),
+      createFileDetail('mac.ts', content3, 10)
     ];
 
-    const result = detectDuplication(files, DEFAULT_THRESHOLDS);
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
 
     // Should detect duplication despite different line endings
     result.forEach(file => {
@@ -147,17 +159,27 @@ describe('Duplication Detection', () => {
   });
 
   it('should handle files with different whitespace', () => {
-    const content1 = 'function test() {\n  return true;\n}';
-    const content2 = 'function test() {\n    return true;\n}';
-    const content3 = 'function test() {\n\treturn true;\n}';
+    const content1 = `function test() {
+  const a = 1;
+  const b = 2;
+  const c = 3;
+  const d = 4;
+  const e = 5;
+  const f = 6;
+  const g = 7;
+  const h = 8;
+  return true;
+}`;
+    const content2 = content1.replace(/  /g, '    ');
+    const content3 = content1.replace(/  /g, '\t');
 
     const files = [
-      createFileDetail('spaces2.ts', content1, 3),
-      createFileDetail('spaces4.ts', content2, 3),
-      createFileDetail('tabs.ts', content3, 3)
+      createFileDetail('spaces2.ts', content1, 10),
+      createFileDetail('spaces4.ts', content2, 10),
+      createFileDetail('tabs.ts', content3, 10)
     ];
 
-    const result = detectDuplication(files, DEFAULT_THRESHOLDS);
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
 
     // Should detect duplication despite different whitespace
     result.forEach(file => {
@@ -171,16 +193,19 @@ describe('Duplication Detection', () => {
         const processed = input.trim().toLowerCase();
         const validated = processed.length > 0 ? processed : 'default';
         const formatted = validated.charAt(0).toUpperCase() + validated.slice(1);
-        return formatted;
+        const sanitized = formatted.replace(/[^a-zA-Z0-9]/g, '');
+        const finalized = sanitized.length > 0 ? sanitized : 'empty';
+        const result = finalized.substring(0, 50);
+        return result;
       }
     `;
 
     const files = [
-      createFileDetail('file1.ts', duplicatedContent, 6),
-      createFileDetail('file2.ts', duplicatedContent, 6)
+      createFileDetail('file1.ts', duplicatedContent, 11),
+      createFileDetail('file2.ts', duplicatedContent, 11)
     ];
 
-    const result = detectDuplication(files, DEFAULT_THRESHOLDS);
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
 
     result.forEach(file => {
       expect(file.metrics.duplicationRatio).toBeGreaterThan(0.15); // Above production threshold
@@ -191,18 +216,24 @@ describe('Duplication Detection', () => {
   it('should handle complex duplication patterns', () => {
     const commonUtility = `
       function formatDate(date: Date): string {
-        return date.toISOString().split('T')[0];
+        const isoString = date.toISOString();
+        const parts = isoString.split('T');
+        const datePart = parts[0];
+        const formatted = datePart.replace(/-/g, '/');
+        const validated = formatted.length === 10 ? formatted : 'invalid';
+        const result = validated.substring(0, 10);
+        return result;
       }
     `;
 
     const files = [
-      createFileDetail('utils1.ts', commonUtility + '\nconst CONSTANT1 = "value1";', 4),
-      createFileDetail('utils2.ts', commonUtility + '\nconst CONSTANT2 = "value2";', 4),
-      createFileDetail('utils3.ts', commonUtility + '\nconst CONSTANT3 = "value3";', 4),
+      createFileDetail('utils1.ts', commonUtility + '\nconst CONSTANT1 = "value1";\nconst A = 1;\nconst B = 2;\nconst C = 3;', 8),
+      createFileDetail('utils2.ts', commonUtility + '\nconst CONSTANT2 = "value2";\nconst D = 4;\nconst E = 5;\nconst F = 6;', 8),
+      createFileDetail('utils3.ts', commonUtility + '\nconst CONSTANT3 = "value3";\nconst G = 7;\nconst H = 8;\nconst I = 9;', 8),
       createFileDetail('unique.ts', 'function uniqueFunction() { return "unique"; }', 1)
     ];
 
-    const result = detectDuplication(files, DEFAULT_THRESHOLDS);
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
 
     // First 3 files should have duplication, last one should not
     expect(result[0].metrics.duplicationRatio).toBeGreaterThan(0);
@@ -215,23 +246,33 @@ describe('Duplication Detection', () => {
     const content1 = `
       // This is a comment
       function test() {
-        return true;
+        const x = 1;
+        const y = 2;
+        const z = 3;
+        const result = x + y + z;
+        console.log(result);
+        return result > 5;
       }
     `;
 
     const content2 = `
       // This is a different comment
       function test() {
-        return true;
+        const x = 1;
+        const y = 2;
+        const z = 3;
+        const result = x + y + z;
+        console.log(result);
+        return result > 5;
       }
     `;
 
     const files = [
-      createFileDetail('file1.ts', content1, 4),
-      createFileDetail('file2.ts', content2, 4)
+      createFileDetail('file1.ts', content1, 10),
+      createFileDetail('file2.ts', content2, 10)
     ];
 
-    const result = detectDuplication(files, DEFAULT_THRESHOLDS);
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
 
     // Should detect duplication in code despite different comments
     result.forEach(file => {

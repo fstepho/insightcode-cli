@@ -233,15 +233,19 @@ switch (x) {              // +1 per case
       expect(fileDetail.metrics.complexity).toBeGreaterThan(1);
     });
 
-    it('should set correct importance flags', () => {
+    it('should set correct dependency defaults', () => {
       const testFile = path.join(tempDir, 'index.ts');
       fs.writeFileSync(testFile, 'export const main = true;');
       
       const fileDetail = parseFile(testFile);
       
-      expect(fileDetail.dependencies.isEntryPoint).toBe(true);
-      expect(fileDetail.dependencies.incomingCount).toBe(0);
-      expect(fileDetail.dependencies.percentile).toBe(0);
+      // Verify that dependencies are initialized with default values
+      expect(fileDetail.dependencies.incomingDependencies).toBe(0);
+      expect(fileDetail.dependencies.outgoingDependencies).toBe(0);
+      expect(fileDetail.dependencies.instability).toBe(0);
+      expect(fileDetail.dependencies.cohesionScore).toBe(0);
+      expect(fileDetail.dependencies.percentileUsageRank).toBe(0);
+      expect(fileDetail.dependencies.isInCycle).toBe(false);
       expect(fileDetail.healthScore).toBe(0); // Will be calculated later
     });
   });
