@@ -1,582 +1,486 @@
-// File: src/codeContextExtractor.ts
+// File: src/contextExtractor.ts
 
 import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as path from 'path';
-import { FileMetrics, AnalysisResult, ThresholdConfig, CodeContext, CodeContextSummary } from './types';
-import { analyze } from './analyzer';
+import { FileDetail, CodeContext, FunctionContext, FilePatterns, QualityIssue } from './types';
+import { normalizePath } from './utils';
+import { DEFAULT_THRESHOLDS, CONTEXT_EXTRACTION_THRESHOLDS } from './thresholds.constants';
+import { isCriticalFile } from './scoring.utils';
+
+// Protection contre les stack overflow pour les fichiers de test TypeScript
+const MAX_RECURSION_DEPTH = 1000;
 
 /**
- * Extract rich context from a TypeScript/JavaScript file for LLM analysis
+ * Wrapper sécurisé pour les fonctions récursives AST
  */
-export function extractCodeContext(filePath: string, metrics: FileMetrics): CodeContext {
-  const absolutePath = path.isAbsolute(filePath) 
-    ? filePath 
-    : path.join(process.cwd(), filePath);
+function safeVisit(node: ts.Node, visitor: (node: ts.Node, depth: number) => void, depth = 0) {
+  if (depth > MAX_RECURSION_DEPTH) {
+    console.warn(`Max recursion depth reached in context extraction, skipping deeper nodes`);
+    return;
+  }
+  
+  visitor(node, depth);
+  
+  try {
+    ts.forEachChild(node, child => safeVisit(child, visitor, depth + 1));
+  } catch (error) {
+    if (error instanceof RangeError && error.message.includes('Maximum call stack size')) {
+      console.warn(`Stack overflow detected in context extraction, skipping subtree`);
+    } else {
+      throw error;
+    }
+  }
+}
+
+/**
+ * Mapping déclaratif des patterns vers leurs catégories
+ * Cette approche sépare la détection de la catégorisation et facilite l'ajout de nouveaux patterns
+ */
+const PATTERN_CATEGORIES: { [key: string]: keyof FilePatterns } = {
+  // Quality patterns
+  'deep-nesting': 'quality',
+  'long-function': 'quality',
+  'high-complexity': 'quality',
+  'too-many-params': 'quality',
+  
+  // Architecture patterns
+  'async-heavy': 'architecture',
+  'error-handling': 'architecture',
+  'type-safe': 'architecture',
+  
+  // Performance patterns
+  'io-heavy': 'performance',
+  'caching': 'performance',
+  
+  // Security patterns
+  'input-validation': 'security',
+  'auth-check': 'security',
+  
+  // Testing patterns
+  'test-file': 'testing',
+  'mock-heavy': 'testing',
+} as const;
+
+/**
+ * Enriches analysis results with context for critical files
+ * Usage: enrichWithContext(analysisResult, projectPath)
+ */
+export function enrichWithContext(files: FileDetail[], projectPath: string): CodeContext[] {
+  const criticalFiles = files.filter(f => isCriticalFile(f.healthScore));
+  const contexts: CodeContext[] = [];
+
+  for (const file of criticalFiles) {
+    try {
+      const context = extractCodeContext(file.file, file, projectPath);
+      contexts.push(context);
+    } catch (error) {
+      console.warn(`Could not extract context for ${file.file}:`, error);
+    }
+  }
+  
+  return contexts;
+}
+
+/**
+ * Extract context focused on critical functions and patterns
+ * This enriches existing analysis results instead of calling analysis
+ */
+export function extractCodeContext(filePath: string, metrics: FileDetail, projectPath: string): CodeContext {
+  // Resolve filePath: try projectPath first, then process.cwd() as fallback
+  let absolutePath: string;
+  
+  if (path.isAbsolute(filePath)) {
+    absolutePath = filePath;
+  } else {
+    // Try resolving from process.cwd() first (most common case)
+    const fromCwd = path.resolve(process.cwd(), filePath);
+    if (fs.existsSync(fromCwd)) {
+      absolutePath = fromCwd;
+    } else {
+      // Fallback to projectPath
+      const fromProject = path.resolve(projectPath, filePath);
+      if (fs.existsSync(fromProject)) {
+        absolutePath = fromProject;
+      } else {
+        // If file doesn't exist in either location, throw a descriptive error
+        throw new Error(`File not found: ${filePath} (tried ${fromCwd} and ${fromProject})`);
+      }
+    }
+  }
     
   const content = fs.readFileSync(absolutePath, 'utf-8');
   const sourceFile = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true);
   
-  const context: CodeContext = {
-    path: metrics.path,
-    complexity: metrics.complexity,
-    structure: {
-      imports: [],
-      exports: [],
-      classes: [],
-      functions: [],
-      interfaces: [],
-      types: [],
-      enums: [],
-      constants: []
-    },
-    patterns: {
-      hasAsyncFunctions: false,
-      hasGenerators: false,
-      hasDecorators: false,
-      hasJSX: false,
-      usesTypeScript: filePath.endsWith('.ts') || filePath.endsWith('.tsx'),
-      hasErrorHandling: false,
-      hasTests: false
-    },
-    complexityBreakdown: {
-      functions: [],
-      highestComplexityFunction: '',
-      deepestNesting: 0
-    },
-    dependencies: {
-      internal: [],
-      external: [],
-      mostImportedFrom: []
-    },
-    samples: {
-      complexFunctions: []
-    }
+  const criticalFunctions = extractCriticalFunctions(sourceFile, content);
+  const patterns = detectFilePatterns(sourceFile, content, filePath);
+  
+  return {
+    file: normalizePath(metrics.file),
+    criticalFunctions,
+    patterns
   };
+}
+
+/**
+ * Extract only critical functions (high complexity, long, or problematic)
+ */
+function extractCriticalFunctions(sourceFile: ts.SourceFile, content: string): FunctionContext[] {
+  const functions: FunctionContext[] = [];
   
-  let currentNestingLevel = 0;
-  let maxNesting = 0;
-  
-  // Main visitor function
-  function visit(node: ts.Node, nestingLevel: number = 0) {
-    currentNestingLevel = nestingLevel;
-    maxNesting = Math.max(maxNesting, nestingLevel);
-    
-    switch (node.kind) {
-      case ts.SyntaxKind.ImportDeclaration:
-        extractImport(node as ts.ImportDeclaration);
-        break;
-        
-      case ts.SyntaxKind.ExportDeclaration:
-      case ts.SyntaxKind.ExportAssignment:
-        context.structure.exports.push(getNodeName(node));
-        break;
-        
-      case ts.SyntaxKind.ClassDeclaration:
-        if ((node as ts.ClassDeclaration).name) {
-          context.structure.classes.push((node as ts.ClassDeclaration).name!.text);
-        }
-        break;
-        
-      case ts.SyntaxKind.FunctionDeclaration:
-      case ts.SyntaxKind.MethodDeclaration:
-      case ts.SyntaxKind.ArrowFunction:
-      case ts.SyntaxKind.FunctionExpression:
-        extractFunction(node);
-        break;
-        
-      case ts.SyntaxKind.InterfaceDeclaration:
-        if ((node as ts.InterfaceDeclaration).name) {
-          context.structure.interfaces.push((node as ts.InterfaceDeclaration).name!.text);
-        }
-        break;
-        
-      case ts.SyntaxKind.TypeAliasDeclaration:
-        if ((node as ts.TypeAliasDeclaration).name) {
-          context.structure.types.push((node as ts.TypeAliasDeclaration).name!.text);
-        }
-        break;
-        
-      case ts.SyntaxKind.EnumDeclaration:
-        if ((node as ts.EnumDeclaration).name) {
-          context.structure.enums.push((node as ts.EnumDeclaration).name!.text);
-        }
-        break;
-        
-      case ts.SyntaxKind.VariableDeclaration:
-        extractConstant(node as ts.VariableDeclaration);
-        break;
-        
-      case ts.SyntaxKind.TryStatement:
-      case ts.SyntaxKind.CatchClause:
-        context.patterns.hasErrorHandling = true;
-        break;
-        
-      case ts.SyntaxKind.JsxElement:
-      case ts.SyntaxKind.JsxSelfClosingElement:
-        context.patterns.hasJSX = true;
-        break;
-        
-      case ts.SyntaxKind.Decorator:
-        context.patterns.hasDecorators = true;
-        break;
-        
-      case ts.SyntaxKind.YieldExpression:
-        context.patterns.hasGenerators = true;
-        break;
-    }
-    
-    // Increment nesting for block-like structures
-    if (node.kind === ts.SyntaxKind.Block || 
-        node.kind === ts.SyntaxKind.IfStatement ||
-        node.kind === ts.SyntaxKind.ForStatement ||
-        node.kind === ts.SyntaxKind.WhileStatement) {
-      ts.forEachChild(node, child => visit(child, nestingLevel + 1));
-    } else {
-      ts.forEachChild(node, child => visit(child, nestingLevel));
-    }
-  }
-  
-  function extractImport(node: ts.ImportDeclaration) {
-    if (node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
-      const importPath = node.moduleSpecifier.text;
-      context.structure.imports.push(importPath);
+  function visit(node: ts.Node) {
+    if (ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node) || 
+        ts.isArrowFunction(node) || ts.isFunctionExpression(node)) {
       
-      if (importPath.startsWith('.') || importPath.startsWith('/')) {
-        context.dependencies.internal.push(importPath);
-      } else {
-        context.dependencies.external.push(importPath);
-      }
-    }
-  }
-  
-  function extractFunction(node: ts.Node) {
-    const name = getFunctionName(node);
-    const complexity = calculateFunctionComplexity(node);
-    const lineCount = getLineCount(node);
-    const parameters = getParameterCount(node);
-    const isAsync = hasAsyncModifier(node);
-    const hasErrorHandling = containsErrorHandling(node);
-    
-    if (name) {
-      context.structure.functions.push(name);
-      context.complexityBreakdown.functions.push({
-        name,
-        complexity,
-        lineCount,
-        parameters,
-        isAsync,
-        hasErrorHandling
-      });
+      const name = getFunctionName(node);
+      const complexity = calculateFunctionComplexity(node);
+      const lineCount = getFunctionLineCount(node);
+      const parameterCount = getFunctionParameterCount(node);
       
-      if (isAsync) {
-        context.patterns.hasAsyncFunctions = true;
-      }
-      
-      // Track highest complexity function
-      if (!context.complexityBreakdown.highestComplexityFunction ||
-          complexity > (context.complexityBreakdown.functions.find(
-            f => f.name === context.complexityBreakdown.highestComplexityFunction
-          )?.complexity || 0)) {
-        context.complexityBreakdown.highestComplexityFunction = name;
-      }
-      
-      // Extract complex function samples (complexity > 10)
-      if (complexity > 10 && context.samples.complexFunctions.length < 3) {
-        const snippet = extractFunctionSnippet(node, content);
-        context.samples.complexFunctions.push({
+      // Only include critical functions based on industry standards
+      if (complexity > (DEFAULT_THRESHOLDS.complexity.production.high || 15) || 
+          lineCount > CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES || 
+          parameterCount > CONTEXT_EXTRACTION_THRESHOLDS.PARAMETER_COUNT) {
+        const snippet = extractCleanSnippet(node, content);
+        const issues = identifyFunctionIssues(node, complexity, lineCount, parameterCount);
+        
+        functions.push({
           name,
           complexity,
-          snippet
+          lineCount,
+          parameterCount,
+          snippet,
+          issues
         });
       }
     }
-  }
-  
-  function extractConstant(node: ts.VariableDeclaration) {
-    if (node.name && ts.isIdentifier(node.name)) {
-      const name = node.name.text;
-      const parent = node.parent.parent;
-      if (parent && ts.isVariableStatement(parent)) {
-        const isConst = parent.declarationList.flags & ts.NodeFlags.Const;
-        const isUpperCase = name === name.toUpperCase();
-        if (isConst && isUpperCase) {
-          context.structure.constants.push(name);
-        }
-      }
-    }
-  }
-  
-  function calculateFunctionComplexity(node: ts.Node): number {
-    let complexity = 1;
     
-    function visitForComplexity(n: ts.Node) {
-      switch (n.kind) {
-        case ts.SyntaxKind.IfStatement:
-        case ts.SyntaxKind.ConditionalExpression:
-        case ts.SyntaxKind.CaseClause:
-        case ts.SyntaxKind.CatchClause:
-        case ts.SyntaxKind.ForStatement:
-        case ts.SyntaxKind.ForInStatement:
-        case ts.SyntaxKind.ForOfStatement:
-        case ts.SyntaxKind.WhileStatement:
-        case ts.SyntaxKind.DoStatement:
-          complexity++;
-          break;
-        case ts.SyntaxKind.BinaryExpression:
-          const op = (n as ts.BinaryExpression).operatorToken.kind;
-          if (op === ts.SyntaxKind.AmpersandAmpersandToken || 
-              op === ts.SyntaxKind.BarBarToken) {
-            complexity++;
-          }
-          break;
-      }
-      ts.forEachChild(n, visitForComplexity);
-    }
-    
-    visitForComplexity(node);
-    return complexity;
+    ts.forEachChild(node, visit);
   }
   
-  function containsErrorHandling(node: ts.Node): boolean {
-    let hasErrorHandling = false;
-    
-    function checkErrorHandling(n: ts.Node) {
-      if (n.kind === ts.SyntaxKind.TryStatement || 
-          n.kind === ts.SyntaxKind.CatchClause) {
-        hasErrorHandling = true;
-      }
-      if (!hasErrorHandling) {
-        ts.forEachChild(n, checkErrorHandling);
-      }
-    }
-    
-    checkErrorHandling(node);
-    return hasErrorHandling;
-  }
-  
-  function extractFunctionSnippet(node: ts.Node, fullContent: string): string {
-    const start = node.getStart();
-    const end = node.getEnd();
-    const snippet = fullContent.substring(start, end);
-    
-    // Limit to first 10 lines for readability
-    const lines = snippet.split('\n').slice(0, 10);
-    if (snippet.split('\n').length > 10) {
-      lines.push('    // ... more code ...');
-    }
-    
-    return lines.join('\n');
-  }
-  
-  // Helper functions
-  function getFunctionName(node: ts.Node): string {
-    // Type-safe way to check for name property
-    if (ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node)) {
-      if (node.name && ts.isIdentifier(node.name)) {
-        return node.name.text;
-      }
-    }
-    
-    // For arrow functions and function expressions
-    if (ts.isArrowFunction(node) || ts.isFunctionExpression(node)) {
-      if (node.name && ts.isIdentifier(node.name)) {
-        return node.name.text;
-      }
-      
-      // Try to get name from variable declaration
-      const parent = node.parent;
-      if (parent && ts.isVariableDeclaration(parent) && ts.isIdentifier(parent.name)) {
-        return parent.name.text;
-      }
-      if (parent && ts.isPropertyAssignment(parent) && ts.isIdentifier(parent.name)) {
-        return parent.name.text;
-      }
-    }
-    
-    return '<anonymous>';
-  }
-  
-  function getNodeName(node: ts.Node): string {
-    // Type-safe checks for different node types
-    if (ts.isClassDeclaration(node) || ts.isInterfaceDeclaration(node) || 
-        ts.isEnumDeclaration(node) || ts.isTypeAliasDeclaration(node)) {
-      if (node.name && ts.isIdentifier(node.name)) {
-        return node.name.text;
-      }
-    }
-    
-    if (ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node)) {
-      if (node.name && ts.isIdentifier(node.name)) {
-        return node.name.text;
-      }
-    }
-    
-    return '<unnamed>';
-  }
-  
-  function getLineCount(node: ts.Node): number {
-    const sourceFile = node.getSourceFile();
-    const start = sourceFile.getLineAndCharacterOfPosition(node.getStart());
-    const end = sourceFile.getLineAndCharacterOfPosition(node.getEnd());
-    return end.line - start.line + 1;
-  }
-  
-  function getParameterCount(node: ts.Node): number {
-    if (ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node) || 
-        ts.isArrowFunction(node) || ts.isFunctionExpression(node) || 
-        ts.isConstructorDeclaration(node)) {
-      return node.parameters.length;
-    }
-    return 0;
-  }
-  
-  function hasAsyncModifier(node: ts.Node): boolean {
-    if (ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node) || 
-        ts.isArrowFunction(node) || ts.isFunctionExpression(node)) {
-      return node.modifiers?.some(m => m.kind === ts.SyntaxKind.AsyncKeyword) || false;
-    }
-    return false;
-  }
-  
-  // Check for test patterns
-  if (filePath.includes('.test.') || filePath.includes('.spec.') || 
-      content.includes('describe(') || content.includes('it(') || 
-      content.includes('test(')) {
-    context.patterns.hasTests = true;
-  }
-  
-  // Visit the AST
   visit(sourceFile);
   
-  context.complexityBreakdown.deepestNesting = maxNesting;
-  
-  // Sort functions by complexity
-  context.complexityBreakdown.functions.sort((a, b) => b.complexity - a.complexity);
-  
-  // Identify most imported from (top 3)
-  const importCounts = context.dependencies.internal.reduce((acc, imp) => {
-    const cleanPath = imp.replace(/^\.\//, '').replace(/\.[jt]sx?$/, '');
-    acc[cleanPath] = (acc[cleanPath] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-  
-  context.dependencies.mostImportedFrom = Object.entries(importCounts)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 3)
-    .map(([path]) => path);
-  
-  return context;
+  // Sort by complexity and limit to top N critical functions
+  return functions
+    .sort((a, b) => b.complexity - a.complexity)
+    .slice(0, CONTEXT_EXTRACTION_THRESHOLDS.MAX_CRITICAL_FUNCTIONS);
 }
 
 /**
- * Generate a summary of code contexts for LLM analysis
+ * Detect file-level patterns organized by category in a single AST pass
  */
-export function summarizeCodeContexts(contexts: CodeContext[]): CodeContextSummary {
-  if (contexts.length === 0) {
-    return {
-      totalFiles: 0,
-      patterns: {
-        asyncUsage: 0,
-        errorHandling: 0,
-        typeScriptUsage: 0,
-        jsxUsage: 0,
-        testFiles: 0,
-        decoratorUsage: 0,
-        generatorUsage: 0
-      },
-      architecture: {
-        totalClasses: 0,
-        totalFunctions: 0,
-        totalInterfaces: 0,
-        totalTypes: 0,
-        totalEnums: 0,
-        avgFunctionsPerFile: 0,
-        avgImportsPerFile: 0
-      },
-      complexity: {
-        filesWithHighComplexity: 0,
-        deepestNesting: 0,
-        avgComplexityPerFunction: 0,
-        mostComplexFunctions: []
-      },
-      dependencies: {
-        mostUsedExternal: [],
-        mostImportedInternal: [],
-        avgExternalDepsPerFile: 0,
-        avgInternalDepsPerFile: 0
-      },
-      codeQuality: {
-        avgFunctionLength: 0,
-        avgParametersPerFunction: 0,
-        percentAsyncFunctions: 0,
-        percentFunctionsWithErrorHandling: 0
+function detectFilePatterns(sourceFile: ts.SourceFile, content: string, filePath: string): FilePatterns {
+  const patterns = new Set<string>();
+  let maxNestingDepth = 0;
+  let currentNestingDepth = 0;
+  
+  function visit(node: ts.Node) {
+    // Track nesting depth for blocks and control structures
+    if (ts.isBlock(node) || ts.isIfStatement(node) || ts.isForStatement(node) || ts.isWhileStatement(node)) {
+      currentNestingDepth++;
+      maxNestingDepth = Math.max(maxNestingDepth, currentNestingDepth);
+    }
+    
+    // Detect function-related patterns
+    if (ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node) || 
+        ts.isArrowFunction(node) || ts.isFunctionExpression(node)) {
+      
+      // Quality patterns
+      if (getFunctionLineCount(node) > CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES) patterns.add('long-function');
+      if (calculateFunctionComplexity(node) > (DEFAULT_THRESHOLDS.complexity.production.high || 15)) patterns.add('high-complexity');
+      if (getFunctionParameterCount(node) > CONTEXT_EXTRACTION_THRESHOLDS.PARAMETER_COUNT) patterns.add('too-many-params');
+      
+      // Architecture patterns
+      if (node.modifiers?.some(m => m.kind === ts.SyntaxKind.AsyncKeyword)) {
+        patterns.add('async-heavy');
       }
-    };
-  }
-  
-  // Calculate pattern usage
-  const patterns = {
-    asyncUsage: contexts.filter(c => c.patterns.hasAsyncFunctions).length,
-    errorHandling: contexts.filter(c => c.patterns.hasErrorHandling).length,
-    typeScriptUsage: contexts.filter(c => c.patterns.usesTypeScript).length,
-    jsxUsage: contexts.filter(c => c.patterns.hasJSX).length,
-    testFiles: contexts.filter(c => c.patterns.hasTests).length,
-    decoratorUsage: contexts.filter(c => c.patterns.hasDecorators).length,
-    generatorUsage: contexts.filter(c => c.patterns.hasGenerators).length
-  };
-  
-  // Calculate architecture metrics
-  const architecture = {
-    totalClasses: contexts.reduce((sum, c) => sum + c.structure.classes.length, 0),
-    totalFunctions: contexts.reduce((sum, c) => sum + c.structure.functions.length, 0),
-    totalInterfaces: contexts.reduce((sum, c) => sum + c.structure.interfaces.length, 0),
-    totalTypes: contexts.reduce((sum, c) => sum + c.structure.types.length, 0),
-    totalEnums: contexts.reduce((sum, c) => sum + c.structure.enums.length, 0),
-    avgFunctionsPerFile: contexts.reduce((sum, c) => sum + c.structure.functions.length, 0) / contexts.length,
-    avgImportsPerFile: contexts.reduce((sum, c) => sum + c.structure.imports.length, 0) / contexts.length
-  };
-  
-  // Calculate complexity metrics
-  const allFunctions = contexts.flatMap(c => 
-    c.complexityBreakdown.functions.map(f => ({
-      file: c.path,
-      ...f
-    }))
-  );
-  
-  const totalComplexity = allFunctions.reduce((sum, f) => sum + f.complexity, 0);
-  const avgComplexityPerFunction = allFunctions.length > 0 ? totalComplexity / allFunctions.length : 0;
-  
-  const complexity = {
-    filesWithHighComplexity: contexts.filter(c => c.complexity > 20).length,
-    deepestNesting: Math.max(...contexts.map(c => c.complexityBreakdown.deepestNesting), 0),
-    avgComplexityPerFunction: Math.round(avgComplexityPerFunction * 10) / 10,
-    mostComplexFunctions: allFunctions
-      .sort((a, b) => b.complexity - a.complexity)
-      .slice(0, 10)
-      .map(f => ({
-        file: f.file,
-        name: f.name,
-        complexity: f.complexity,
-        lineCount: f.lineCount
-      }))
-  };
-  
-  // Calculate dependencies metrics
-  const externalDeps = contexts.flatMap(c => c.dependencies.external);
-  const internalDeps = contexts.flatMap(c => c.dependencies.internal);
-  
-  const dependencies = {
-    mostUsedExternal: getCountedItems(externalDeps, 10),
-    mostImportedInternal: getCountedItems(
-      contexts.flatMap(c => c.dependencies.mostImportedFrom),
-      10
-    ),
-    avgExternalDepsPerFile: Math.round((externalDeps.length / contexts.length) * 10) / 10,
-    avgInternalDepsPerFile: Math.round((internalDeps.length / contexts.length) * 10) / 10
-  };
-  
-  // Calculate code quality metrics
-  const totalFunctionLength = allFunctions.reduce((sum, f) => sum + f.lineCount, 0);
-  const totalParameters = allFunctions.reduce((sum, f) => sum + f.parameters, 0);
-  const asyncFunctions = allFunctions.filter(f => f.isAsync).length;
-  const functionsWithErrorHandling = allFunctions.filter(f => f.hasErrorHandling).length;
-  
-  const codeQuality = {
-    avgFunctionLength: allFunctions.length > 0 
-      ? Math.round(totalFunctionLength / allFunctions.length) 
-      : 0,
-    avgParametersPerFunction: allFunctions.length > 0
-      ? Math.round((totalParameters / allFunctions.length) * 10) / 10
-      : 0,
-    percentAsyncFunctions: allFunctions.length > 0
-      ? Math.round((asyncFunctions / allFunctions.length) * 100)
-      : 0,
-    percentFunctionsWithErrorHandling: allFunctions.length > 0
-      ? Math.round((functionsWithErrorHandling / allFunctions.length) * 100)
-      : 0
-  };
-  
-  return {
-    totalFiles: contexts.length,
-    patterns,
-    architecture,
-    complexity,
-    dependencies,
-    codeQuality
-  };
-}
-
-/**
- * Count occurrences of items and return sorted list with counts
- */
-function getCountedItems(items: string[], limit: number): Array<{ name: string; count: number }> {
-  const counts = items.reduce((acc, item) => {
-    acc[item] = (acc[item] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-  
-  return Object.entries(counts)
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, limit);
-}
-  
-/**
- * Enriched analysis result with code context for LLM analysis
- */
-/**
- * Analyze files with optional code context extraction
- */
-export function analyzeWithContext(
-  files: FileMetrics[], 
-  projectPath: string, 
-  thresholds: ThresholdConfig,
-  withContext: boolean = false
-): AnalysisResult {
-  // Get base analysis
-  const baseAnalysis = analyze(files, projectPath, thresholds);
-  
-  if (!withContext) {
-    return baseAnalysis;
-  }
-  
-  // Extract context for top files and silent killers
-  const criticalFiles = [...baseAnalysis.topFiles, ...baseAnalysis.silentKillers];
-  const uniquePaths = new Set(criticalFiles.map(f => f.path));
-  
-  const contexts: CodeContext[] = [];
-  
-  for (const filePath of uniquePaths) {
-    const fileMetrics = files.find(f => f.path === filePath);
-    if (fileMetrics) {
-      try {
-        const context = extractCodeContext(filePath, fileMetrics);
-        contexts.push(context);
-      } catch (error) {
-        console.warn(`Could not extract context for ${filePath}:`, error);
-      }
+    }
+    
+    // Architecture patterns
+    if (ts.isTryStatement(node) || ts.isCatchClause(node)) {
+      patterns.add('error-handling');
+    }
+    
+    // Continue visiting children
+    ts.forEachChild(node, visit);
+    
+    // Decrement nesting depth when exiting blocks
+    if (ts.isBlock(node) || ts.isIfStatement(node) || ts.isForStatement(node) || ts.isWhileStatement(node)) {
+      currentNestingDepth--;
     }
   }
   
-  // Add code context to the result
-  baseAnalysis.codeContext = {
-    contexts,
-    summary: summarizeCodeContexts(contexts)
+  // Single AST traversal
+  visit(sourceFile);
+  
+  // Add deep-nesting pattern based on calculated depth
+  if (maxNestingDepth > CONTEXT_EXTRACTION_THRESHOLDS.NESTING_DEPTH) patterns.add('deep-nesting');
+  
+  // Content-based patterns (no AST traversal needed)
+  if (isTypeScriptFile(filePath)) patterns.add('type-safe');
+  if (hasIOOperations(content)) patterns.add('io-heavy');
+  if (hasCaching(content)) patterns.add('caching');
+  if (hasInputValidation(content)) patterns.add('input-validation');
+  if (hasAuthChecks(content)) patterns.add('auth-check');
+  if (isTestFile(filePath, content)) patterns.add('test-file');
+  if (hasMocks(content)) patterns.add('mock-heavy');
+  
+  // Organize patterns by category
+  const categorizedPatterns: FilePatterns = {
+    quality: [],
+    architecture: [],
+    performance: [],
+    security: [],
+    testing: []
   };
   
-  return baseAnalysis;
+  // Map patterns to categories using declarative mapping
+  patterns.forEach(pattern => {
+    const category = PATTERN_CATEGORIES[pattern];
+    if (category) {
+      // Type assertion nécessaire car TypeScript ne peut pas inférer le type exact
+      (categorizedPatterns[category] as string[]).push(pattern);
+    }
+  });
+  
+  return categorizedPatterns;
 }
 
-function getMostFrequent(items: string[]): string[] {
-  const counts = items.reduce((acc, item) => {
-    acc[item] = (acc[item] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+/**
+ * Extract a clean, focused snippet of a function
+ */
+function extractCleanSnippet(node: ts.Node, content: string): string {
+  const start = node.getStart();
+  const end = node.getEnd();
+  const fullSnippet = content.substring(start, end);
   
-  return Object.entries(counts)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 5)
-    .map(([item]) => item);
+  // Get first N meaningful lines (skip empty lines and comments)
+  const lines = fullSnippet.split('\n')
+    .filter(line => line.trim() && !line.trim().startsWith('//'))
+    .slice(0, CONTEXT_EXTRACTION_THRESHOLDS.SNIPPET_LINES);
+  
+  if (fullSnippet.split('\n').length > CONTEXT_EXTRACTION_THRESHOLDS.SNIPPET_THRESHOLD) {
+    lines.push('  // ... more code ...');
+  }
+  
+  return lines.join('\n');
+}
+
+/**
+ * Identify specific issues with a function
+ */
+function identifyFunctionIssues(node: ts.Node, complexity: number, lineCount: number, parameterCount: number): QualityIssue[] {
+  const issues: QualityIssue[] = [];
+  
+  if (complexity > (DEFAULT_THRESHOLDS.complexity.production.critical || 20)) {
+    issues.push({
+      type: 'high-complexity',
+      severity: 'high',
+      description: `Complexity ${complexity} exceeds recommended threshold of ${DEFAULT_THRESHOLDS.complexity.production.high || 15}`
+    });
+  }
+  
+  if (lineCount > CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES) {
+    issues.push({
+      type: 'long-function',
+      severity: 'medium',
+      description: `Function has ${lineCount} lines, consider splitting`
+    });
+  }
+  
+  if (parameterCount > CONTEXT_EXTRACTION_THRESHOLDS.PARAMETER_COUNT) {
+    issues.push({
+      type: 'too-many-params',
+      severity: 'medium',
+      description: `${parameterCount} parameters, consider using object parameter`
+    });
+  }
+  
+  if (hasDeepNestingInFunction(node)) {
+    issues.push({
+      type: 'deep-nesting',
+      severity: 'medium',
+      description: 'Deep nesting detected, consider extracting sub-functions'
+    });
+  }
+  
+  return issues;
+}
+
+// Content-based pattern detection helpers (no AST traversal)
+//
+// APPROCHE ACTUELLE : Détection par expressions régulières
+// 
+// AVANTAGES :
+// - Rapide et simple à implémenter
+// - Efficace pour la majorité des cas d'usage
+// - Pas de complexité supplémentaire
+//
+// LIMITATIONS CONNUES :
+// - Faux positifs : mots-clés dans les strings/commentaires (partiellement résolu)
+// - Faux négatifs : abstractions custom (myFetch wrappant axios)
+// - Pas d'analyse sémantique des types ou de la portée
+//
+// ALTERNATIVES FUTURES :
+// - Analyse AST : détecter imports/appels de fonction
+// - TypeChecker : analyse sémantique complète des types
+// - Heuristiques mixtes : combiner regex + AST pour certains patterns
+
+/**
+ * Removes comments from code content to reduce false positives in pattern detection
+ */
+function removeComments(content: string): string {
+  return content
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')  // Multi-line comments
+    .replace(/\/\/.*$/gm, ' ')          // Single-line comments
+    .replace(/\/\*.*$/gm, ' ')          // Unclosed multi-line comments at end
+    .replace(/^.*\*\//gm, ' ');         // Unclosed multi-line comments at start
+}
+
+function hasDeepNestingInFunction(node: ts.Node): boolean {
+  let depth = 0;
+  let maxDepth = 0;
+  
+  function visit(n: ts.Node) {
+    if (ts.isBlock(n) || ts.isIfStatement(n) || ts.isForStatement(n) || ts.isWhileStatement(n)) {
+      depth++;
+      maxDepth = Math.max(maxDepth, depth);
+    }
+    ts.forEachChild(n, visit);
+    if (ts.isBlock(n) || ts.isIfStatement(n) || ts.isForStatement(n) || ts.isWhileStatement(n)) {
+      depth--;
+    }
+  }
+  
+  visit(node);
+  return maxDepth > CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_NESTING_DEPTH;
+}
+
+function isTypeScriptFile(filePath: string): boolean {
+  return filePath.endsWith('.ts') || filePath.endsWith('.tsx');
+}
+
+/**
+ * Détecte les opérations I/O via regex sur le contenu.
+ * LIMITATIONS : 
+ * - Peut donner des faux positifs (mots dans strings)
+ * - Peut manquer des abstractions (myFetch wrapping axios)
+ * - Pour plus de précision, utiliser l'analyse AST/sémantique
+ */
+function hasIOOperations(content: string): boolean {
+  const codeOnly = removeComments(content);
+  return /\b(readFile|writeFile|readFileSync|writeFileSync|fetch|axios|request|query|exec)\b/.test(codeOnly);
+}
+
+/**
+ * Détecte les patterns de cache/memoization.
+ * LIMITATIONS : Peut manquer les abstractions customs ou donner des faux positifs
+ */
+function hasCaching(content: string): boolean {
+  const codeOnly = removeComments(content);
+  return /\b(cache|memoize|redis|localStorage|sessionStorage|Map|WeakMap|Set|WeakSet)\b/i.test(codeOnly);
+}
+
+/**
+ * Détecte les patterns de validation d'input.
+ * LIMITATIONS : Peut manquer les validations customs ou donner des faux positifs
+ */
+function hasInputValidation(content: string): boolean {
+  const codeOnly = removeComments(content);
+  return /\b(validate|sanitize|escape|trim|filter)\b/i.test(codeOnly);
+}
+
+/**
+ * Détecte les patterns d'authentification/autorisation.
+ * LIMITATIONS : Peut manquer les implémentations customs ou donner des faux positifs
+ */
+function hasAuthChecks(content: string): boolean {
+  const codeOnly = removeComments(content);
+  return /\b(auth|login|token|permission|role|access)\b/i.test(codeOnly);
+}
+
+function isTestFile(filePath: string, content: string): boolean {
+  return filePath.includes('.test.') || filePath.includes('.spec.') || 
+         /\b(describe|it|test|expect|jest|mocha)\b/.test(content);
+}
+
+/**
+ * Détecte les patterns de mocking dans les tests.
+ * LIMITATIONS : Peut manquer les frameworks de mock customs
+ */
+function hasMocks(content: string): boolean {
+  const codeOnly = removeComments(content);
+  return /\b(mock|stub|spy|sinon|jest\.fn)\b/i.test(codeOnly);
+}
+
+// Helper functions for function analysis
+function getFunctionName(node: ts.Node): string {
+  if (ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node)) {
+    if (node.name && ts.isIdentifier(node.name)) {
+      return node.name.text;
+    }
+  }
+  
+  if (ts.isArrowFunction(node) || ts.isFunctionExpression(node)) {
+    if (node.name && ts.isIdentifier(node.name)) {
+      return node.name.text;
+    }
+    
+    const parent = node.parent;
+    if (parent && ts.isVariableDeclaration(parent) && ts.isIdentifier(parent.name)) {
+      return parent.name.text;
+    }
+    if (parent && ts.isPropertyAssignment(parent) && ts.isIdentifier(parent.name)) {
+      return parent.name.text;
+    }
+  }
+  
+  return '<anonymous>';
+}
+
+function calculateFunctionComplexity(node: ts.Node): number {
+  let complexity = 1;
+  
+  function visitForComplexity(n: ts.Node) {
+    switch (n.kind) {
+      case ts.SyntaxKind.IfStatement:
+      case ts.SyntaxKind.ConditionalExpression:
+      case ts.SyntaxKind.CaseClause:
+      case ts.SyntaxKind.CatchClause:
+      case ts.SyntaxKind.ForStatement:
+      case ts.SyntaxKind.ForInStatement:
+      case ts.SyntaxKind.ForOfStatement:
+      case ts.SyntaxKind.WhileStatement:
+      case ts.SyntaxKind.DoStatement:
+        complexity++;
+        break;
+      case ts.SyntaxKind.BinaryExpression:
+        const op = (n as ts.BinaryExpression).operatorToken.kind;
+        if (op === ts.SyntaxKind.AmpersandAmpersandToken || 
+            op === ts.SyntaxKind.BarBarToken) {
+          complexity++;
+        }
+        break;
+    }
+    ts.forEachChild(n, visitForComplexity);
+  }
+  
+  visitForComplexity(node);
+  return complexity;
+}
+
+function getFunctionLineCount(node: ts.Node): number {
+  const sourceFile = node.getSourceFile();
+  const start = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+  const end = sourceFile.getLineAndCharacterOfPosition(node.getEnd());
+  return end.line - start.line + 1;
+}
+
+function getFunctionParameterCount(node: ts.Node): number {
+  if (ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node) || 
+      ts.isArrowFunction(node) || ts.isFunctionExpression(node) || 
+      ts.isConstructorDeclaration(node)) {
+    return node.parameters.length;
+  }
+  return 0;
 }

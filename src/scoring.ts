@@ -1,34 +1,45 @@
 // File: src/scoring.ts
 
-/**
- * Contains pure, self-contained functions for calculating scores from raw metrics.
- * The thresholds used here are based on academic and empirical research and are not user-configurable.
- */
+import { Issue } from './types';
+import {
+  SCORING_WEIGHTS,
+  DUPLICATION_SCORING_THRESHOLDS,
+  MAINTAINABILITY_SCORING_THRESHOLDS,
+  COMPLEXITY_LABEL_THRESHOLDS,
+  DUPLICATION_LABEL_THRESHOLDS,
+  COMPLEXITY_COLOR_THRESHOLDS,
+  DUPLICATION_COLOR_THRESHOLDS,
+  HEALTH_PENALTY_CONSTANTS,
+  MAINTAINABILITY_COLOR_THRESHOLDS,
+  SEVERITY_COLOR_THRESHOLDS
+} from './thresholds.constants';
+import { percentageToRatio, ratioToPercentage } from './scoring.utils';
 
 /**
- * Get human-readable label for complexity values.
+ * Pure and autonomous functions for calculating scores from raw metrics.
+ * v0.6.0 formulas use progressive curves (linear then exponential) 
+ * without artificial caps for realistic evaluation of critical problems.
  */
+
+// --- Labeling functions (aligned with McCabe thresholds) ---
+
 export function getComplexityLabel(complexity: number): string {
-  if (complexity <= 10) return 'Low';
-  if (complexity <= 20) return 'Medium';
-  if (complexity <= 50) return 'High';
-  if (complexity <= 200) return 'Very High';
+  // Aligned with McCabe research-based thresholds in constants.ts
+  if (complexity <= COMPLEXITY_LABEL_THRESHOLDS.LOW) return 'Low';
+  if (complexity <= COMPLEXITY_LABEL_THRESHOLDS.MEDIUM) return 'Medium';
+  if (complexity <= COMPLEXITY_LABEL_THRESHOLDS.HIGH) return 'High';
+  if (complexity <= COMPLEXITY_LABEL_THRESHOLDS.VERY_HIGH) return 'Very High';
   return 'Extreme';
 }
 
-/**
- * Get human-readable label for duplication values.
- */
 export function getDuplicationLabel(duplication: number): string {
-  if (duplication <= 3) return 'Low';
-  if (duplication <= 8) return 'Medium';
-  if (duplication <= 15) return 'High';
+  // Aligned with constants.ts thresholds (15/30/50)
+  if (duplication <= DUPLICATION_LABEL_THRESHOLDS.LOW) return 'Low';
+  if (duplication <= DUPLICATION_LABEL_THRESHOLDS.MEDIUM) return 'Medium';
+  if (duplication <= DUPLICATION_LABEL_THRESHOLDS.HIGH) return 'High';
   return 'Very High';
 }
 
-/**
- * Get human-readable label for maintainability scores.
- */
 export function getMaintainabilityLabel(score: number): string {
   if (score >= 80) return 'Good';
   if (score >= 60) return 'Acceptable';
@@ -36,116 +47,269 @@ export function getMaintainabilityLabel(score: number): string {
   return 'Very Poor';
 }
 
+// --- Dimension scoring functions (without artificial caps) ---
+
 /**
- * Converts a raw cyclomatic complexity value into a 0-100 score.
+ * Converts cyclomatic complexity to a score from 0 to 100 according to industry best practices.
+ * Uses progressive degradation following the gold standard: Linear → Quadratic → Exponential.
+ * 
+ * RESEARCH BASIS: 
+ * - McCabe (1976): complexity <= 10 for good code
+ * - ISO/IEC 25010: Extreme complexity violates maintainability principles
+ * - Fowler Technical Debt: Must be visible and quantified, not masked
+ * 
+ * METHODOLOGY (Rules of the Art):
+ * - Phase 1 (≤10): Excellent (100 points)
+ * - Phase 2 (10-20): Linear degradation (100 → 70 points)  
+ * - Phase 3 (20-50): Quadratic penalty (70 → 30 points)
+ * - Phase 4 (>50): Exponential penalty (30 → 0 points)
+ * 
+ * This ensures extreme complexity (16,000+) receives catastrophic scores,
+ * respecting the Pareto principle and making technical debt visible.
  */
 export function calculateComplexityScore(complexity: number): number {
-  if (complexity <= 10) return 100; // Excellent
-  if (complexity <= 15) return 85;  // Good
-  if (complexity <= 20) return 65;  // Acceptable
-  if (complexity <= 30) return 40;  // Poor
-  if (complexity <= 50) return 20;  // Very Poor
-  // Gradual penalty for extreme values
-  return Math.max(5, 20 - (complexity - 50) / 20);
+  // Phase 1: McCabe "good" threshold - excellent code
+  if (complexity <= 10) return 100;
+  
+  // Phase 2: Linear degradation (industry standard for moderate complexity)
+  if (complexity <= 20) {
+    return Math.round(100 - (complexity - 10) * 3); // 3 points per unit (100 → 70)
+  }
+  
+  // Phase 3: Quadratic penalty (reflects exponentially growing maintenance burden)
+  if (complexity <= 50) {
+    const base = 70;
+    const range = complexity - 20; // 0-30 range
+    const quadraticPenalty = Math.pow(range / 30, 2) * 40; // Up to 40 points penalty
+    return Math.round(base - quadraticPenalty);
+  }
+  
+  // Phase 4: Exponential penalty (extreme complexity = extreme penalties)
+  // Ensures functions with complexity 100+ get near-zero scores
+  // and complexity 1000+ get zero scores (following Pareto principle)
+  const base = 30;
+  const range = complexity - 50;
+  const exponentialPenalty = Math.pow(range / 50, 1.8) * 30;
+  const score = base - exponentialPenalty;
+  
+  return Math.max(0, Math.round(score));
 }
 
 /**
- * Converts a raw duplication percentage into a 0-100 score.
+ * Converts duplication ratio to a score from 0 to 100 according to industry standards.
+ * 
+ * RESEARCH BASIS: Config alignment - ≤15% duplication is acceptable,
+ * >30% is concerning, >50% requires immediate attention.
  */
-export function calculateDuplicationScore(duplication: number): number {
-  if (duplication <= 3) return 100;  // Excellent
-  if (duplication <= 8) return 85;   // Good
-  if (duplication <= 15) return 65;  // Acceptable
-  if (duplication <= 30) return 40;  // Poor
-  if (duplication <= 50) return 20;  // Very Poor
-  // Gradual penalty for extreme values
-  return Math.max(5, 20 - (duplication - 50) / 10);
+export function calculateDuplicationScore(duplicationRatio: number): number {
+  const percentage = ratioToPercentage(duplicationRatio);
+  
+  // Config threshold: <= 15% duplication is considered acceptable  
+  if (percentage <= DUPLICATION_SCORING_THRESHOLDS.EXCELLENT) return 100;
+  
+  // Exponential decay beyond 15%, calibrated for 30% (high) and 50% (critical)
+  // At 30%: ~70 score, at 50%: ~30 score
+  const score = 100 * Math.exp(
+    -DUPLICATION_SCORING_THRESHOLDS.EXPONENTIAL_MULTIPLIER * 
+    Math.pow(percentage - DUPLICATION_SCORING_THRESHOLDS.EXCELLENT, DUPLICATION_SCORING_THRESHOLDS.EXPONENTIAL_POWER)
+  );
+  return Math.max(0, Math.round(score));
 }
 
 /**
- * Calculates a 0-100 maintainability score based on file size and function count.
+ * Calcule un score de maintenabilité de 0 à 100 basé sur les métriques de taille.
+ * 
+ * RESEARCH BASIS: Martin (2008) Clean Code suggests files should be small.
+ * Industry consensus: < 200 LOC is good, 300+ becomes harder to maintain.
  */
 export function calculateMaintainabilityScore(fileLoc: number, fileFunctionCount: number): number {
-  // Score based on file size (Lines of Code)
-  let sizeScore: number;
-  if (fileLoc <= 200) sizeScore = 100;       // Excellent
-  else if (fileLoc <= 300) sizeScore = 85;  // Good
-  else if (fileLoc <= 400) sizeScore = 70;  // Acceptable
-  else if (fileLoc <= 500) sizeScore = 50;  // Poor
-  else if (fileLoc <= 750) sizeScore = 30;  // Very Poor
-  else sizeScore = Math.max(10, 30 - (fileLoc - 750) / 50);
+  // Martin Clean Code threshold: <= 200 LOC is considered maintainable
+  const sizeScore = fileLoc <= MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FILE_SIZE
+    ? 100 
+    : 100 * Math.exp(
+        -MAINTAINABILITY_SCORING_THRESHOLDS.SIZE_PENALTY_MULTIPLIER * 
+        Math.pow(fileLoc - MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FILE_SIZE, MAINTAINABILITY_SCORING_THRESHOLDS.SIZE_PENALTY_POWER)
+      );
 
-  // Score based on number of functions per file
-  let functionScore: number;
-  if (fileFunctionCount <= 10) functionScore = 100;      // Excellent
-  else if (fileFunctionCount <= 15) functionScore = 85; // Good
-  else if (fileFunctionCount <= 20) functionScore = 70; // Acceptable
-  else if (fileFunctionCount <= 30) functionScore = 50; // Poor
-  else functionScore = Math.max(10, 50 - (fileFunctionCount - 30) * 2);
-
-  // The maintainability score is an average of the size and function scores.
-  return Math.max(0, (sizeScore + functionScore) / 2);
+  // Score basé sur le nombre de fonctions
+  const functionScore = fileFunctionCount <= MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FUNCTION_COUNT
+    ? 100
+    : 100 * Math.exp(
+        -MAINTAINABILITY_SCORING_THRESHOLDS.FUNCTION_PENALTY_MULTIPLIER * 
+        Math.pow(fileFunctionCount - MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FUNCTION_COUNT, MAINTAINABILITY_SCORING_THRESHOLDS.FUNCTION_PENALTY_POWER)
+      );
+  
+  return Math.max(0, Math.round((sizeScore + functionScore) / 2));
 }
 
+// --- Fonctions de scoring global et de grade (poids académiques) ---
+
 /**
- * Calculates the final weighted score from the three component scores.
- * This defines the 40/30/30 philosophy of the tool.
+ * Calcule le score final pondéré selon les standards académiques.
+ * 
+ * WEIGHTS BASED ON EMPIRICAL RESEARCH:
+ * - 45% Complexity: McCabe (1976) - Strong correlation with defect rate
+ * - 30% Maintainability: Martin (2008) - Code structure impact on evolution
+ * - 25% Duplication: Fowler (1999) - Refactoring debt indicator
+ * 
+ * These weights align with SonarQube methodology and ISO/IEC 25010 standards.
  */
 export function calculateWeightedScore(
   complexityScore: number,
   duplicationScore: number, 
   maintainabilityScore: number
 ): number {
-  return (complexityScore * 0.4) + (duplicationScore * 0.3) + (maintainabilityScore * 0.3);
+  return (complexityScore * SCORING_WEIGHTS.COMPLEXITY) + 
+         (maintainabilityScore * SCORING_WEIGHTS.MAINTAINABILITY) + 
+         (duplicationScore * SCORING_WEIGHTS.DUPLICATION);
 }
 
-/**
- * Gets a letter grade from a final score.
- */
-export function getGrade(score: number): 'A' | 'B' | 'C' | 'D' | 'F' {
-  if (score >= 90) return 'A';
-  if (score >= 80) return 'B';
-  if (score >= 70) return 'C';
-  if (score >= 60) return 'D';
-  return 'F';
-}
 
-/**
- * Gets a color level for complexity values, used for consistent terminal reporting.
- */
+// --- Fonctions de coloration (alignées sur les seuils recherche) ---
+
 export function getComplexityColorLevel(complexity: number): 'green' | 'yellow' | 'red' | 'redBold' {
-  if (complexity <= 10) return 'green';
-  if (complexity <= 20) return 'yellow';
-  if (complexity <= 50) return 'red';
-  return 'redBold';
+    // Aligned with McCabe research thresholds
+    if (complexity <= COMPLEXITY_COLOR_THRESHOLDS.GREEN) return 'green';
+    if (complexity <= COMPLEXITY_COLOR_THRESHOLDS.YELLOW) return 'yellow';
+    if (complexity <= COMPLEXITY_COLOR_THRESHOLDS.RED) return 'red';
+    return 'redBold';
 }
 
-/**
- * Gets a color level for duplication values.
- */
 export function getDuplicationColorLevel(duplication: number): 'green' | 'yellow' | 'red' | 'redBold' {
-  if (duplication <= 3) return 'green';
-  if (duplication <= 8) return 'yellow';
-  if (duplication <= 15) return 'red';
-  return 'redBold';
+    // Aligned with constants.ts thresholds (15/30/50)
+    if (duplication <= DUPLICATION_COLOR_THRESHOLDS.GREEN) return 'green';
+    if (duplication <= DUPLICATION_COLOR_THRESHOLDS.YELLOW) return 'yellow';
+    if (duplication <= DUPLICATION_COLOR_THRESHOLDS.RED) return 'red';
+    return 'redBold';
 }
 
-/**
- * Gets a color level for maintainability scores.
- */
 export function getMaintainabilityColorLevel(score: number): 'green' | 'yellow' | 'red' | 'redBold' {
-  if (score >= 80) return 'green';
-  if (score >= 60) return 'yellow';
-  if (score >= 40) return 'red';
-  return 'redBold';
+    if (score >= MAINTAINABILITY_COLOR_THRESHOLDS.GREEN) return 'green';
+    if (score >= MAINTAINABILITY_COLOR_THRESHOLDS.YELLOW) return 'yellow';
+    if (score >= MAINTAINABILITY_COLOR_THRESHOLDS.RED) return 'red';
+    return 'redBold';
+}
+
+export function getSeverityColorLevel(ratio: number): 'green' | 'yellow' | 'red' | 'redBold' {
+    if (ratio >= SEVERITY_COLOR_THRESHOLDS.RED_BOLD) return 'redBold';
+    if (ratio >= SEVERITY_COLOR_THRESHOLDS.RED) return 'red';
+    if (ratio >= SEVERITY_COLOR_THRESHOLDS.YELLOW) return 'yellow';
+    return 'green';
+}
+
+// --- Calcul du Score de Santé (sans caps de pénalité) ---
+
+/**
+ * Fonctions de pénalité individuelles progressives sans plafonds artificiels.
+ * Suivent le principe de Pareto : les valeurs extrêmes doivent dominer le calcul.
+ */
+
+function getComplexityPenalty(complexity: number): number {
+  // Convert complexity score to penalty using the same industry-standard curve
+  // This ensures consistency between scoring and health calculation
+  const score = calculateComplexityScore(complexity);
+  
+  // Base penalty from score (0-100 score becomes 100-0 penalty)
+  const basePenalty = 100 - score;
+  
+  // For extreme complexity (>100), add catastrophic penalties to emphasize technical debt
+  // This makes complexity 1000+ clearly distinguishable from complexity 100
+  if (complexity > 100) {
+    const extremePenalty = Math.pow((complexity - 100) / 100, 1.5) * 50;
+    return basePenalty + extremePenalty;
+  }
+  
+  return basePenalty;
+}
+
+function getDuplicationPenalty(duplicationRatio: number): number {
+  const constants = HEALTH_PENALTY_CONSTANTS.DUPLICATION;
+  
+  // Aligned with constants.ts threshold of 15%
+  if (duplicationRatio <= percentageToRatio(constants.EXCELLENT_THRESHOLD)) return 0;
+  
+  // Progressive penalty without artificial caps
+  const percentage = ratioToPercentage(duplicationRatio);
+  
+  if (percentage <= constants.HIGH_THRESHOLD) {
+    // Linear penalty up to 30%
+    return (percentage - constants.EXCELLENT_THRESHOLD) * constants.LINEAR_MULTIPLIER;
+  }
+  
+  // Exponential penalty beyond 30% - NO CAP!
+  // High duplication should devastate the score
+  const basePenalty = constants.LINEAR_MAX_PENALTY;
+  const exponentialPenalty = Math.pow(
+    (percentage - constants.HIGH_THRESHOLD) / constants.EXPONENTIAL_DENOMINATOR, 
+    constants.EXPONENTIAL_POWER
+  ) * constants.EXPONENTIAL_MULTIPLIER;
+  
+  return basePenalty + exponentialPenalty; // Can exceed 50+ for extreme duplication
+}
+
+function getSizePenalty(loc: number): number {
+  const constants = HEALTH_PENALTY_CONSTANTS.SIZE;
+  
+  if (loc <= constants.EXCELLENT_THRESHOLD) return 0;
+  
+  // Progressive penalty following Clean Code principles
+  if (loc <= constants.HIGH_THRESHOLD) {
+    // Linear penalty up to 500 LOC
+    return (loc - constants.EXCELLENT_THRESHOLD) / constants.LINEAR_DIVISOR;
+  }
+  
+  // Exponential penalty for massive files - NO CAP!
+  // Files with 5000+ LOC should be severely penalized
+  const basePenalty = constants.LINEAR_MAX_PENALTY;
+  const exponentialPenalty = Math.pow(
+    (loc - constants.HIGH_THRESHOLD) / constants.EXPONENTIAL_DENOMINATOR, 
+    constants.EXPONENTIAL_POWER
+  ) * constants.EXPONENTIAL_MULTIPLIER;
+  
+  return basePenalty + exponentialPenalty; // Can exceed 40+ for massive files
+}
+
+function getIssuesPenalty(issues: Issue[]): number {
+  const constants = HEALTH_PENALTY_CONSTANTS.ISSUES;
+  
+  // Issues penalty without artificial caps - following Pareto principle
+  const penalty = issues.reduce((currentPenalty, issue) => {
+    switch (issue.severity) {
+      case 'critical': return currentPenalty + constants.CRITICAL_PENALTY;
+      case 'high': return currentPenalty + constants.HIGH_PENALTY;
+      case 'medium': return currentPenalty + constants.MEDIUM_PENALTY;
+      case 'low': return currentPenalty + constants.LOW_PENALTY;
+      default: return currentPenalty + constants.DEFAULT_PENALTY;
+    }
+  }, 0);
+  
+  // NO CAP! Files with many critical issues should score very low
+  return penalty;
 }
 
 /**
- * Gets a color level for severity ratios, used for displaying issues.
+ * Calcule le score de santé en utilisant des pénalités progressives SANS CAPS.
+ * Formule : 100 - Somme des Pénalités (sans plafonds artificiels).
+ * Les valeurs extrêmes reçoivent des pénalités extrêmes conformes aux règles de l'art.
+ * 
+ * @param file Objet contenant les métriques et issues du fichier.
+ * @returns Score de santé de 0 à 100.
  */
-export function getSeverityColorLevel(ratio: number): 'green' | 'yellow' | 'red' | 'redBold' {
-  if (ratio >= 10) return 'redBold';  // Extreme (e.g., 10x the limit)
-  if (ratio >= 5) return 'red';       // High
-  if (ratio >= 2.5) return 'yellow';  // Medium
-  return 'green';                     // Low
+export function calculateHealthScore(file: { 
+  metrics: { 
+    complexity: number; 
+    loc: number; 
+    duplicationRatio: number;
+  }; 
+  issues: Issue[]; 
+}): number {
+  
+  const complexityPenalty = getComplexityPenalty(file.metrics.complexity);
+  const duplicationPenalty = getDuplicationPenalty(file.metrics.duplicationRatio);
+  const sizePenalty = getSizePenalty(file.metrics.loc);
+  const issuesPenalty = getIssuesPenalty(file.issues);
+  
+  const totalPenalty = complexityPenalty + duplicationPenalty + sizePenalty + issuesPenalty;
+  
+  return Math.max(0, Math.round(100 - totalPenalty));
 }

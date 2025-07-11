@@ -31,7 +31,8 @@ export function validateRatio(value: number): Ratio {
  * Validates and returns a score (0-100)
  */
 export function validateScore(value: number): Score {
-  if (value < 0 || value > 100) {
+  // Check bounds first, then handle floating point errors
+  if (value < 0 || value > 100.00001) { // Small tolerance for floating point errors
     throw new Error(`Invalid score: ${value}`);
   }
   return Math.round(value) as Score;
@@ -55,13 +56,14 @@ export enum Severity {
 // ==================== CORE INTERFACES ====================
 
 /**
- * Root structure returned by analysis
+ * Root structure returned by analysis - v0.6.0 Pure Data
+ * No recommendations - 100% calculable client-side
  */
 export interface AnalysisResult {
   context: Context;
   overview: Overview;
   details: FileDetail[];
-  recommendations: Recommendations;
+  codeContext?: CodeContext[];
 }
 
 /**
@@ -88,13 +90,13 @@ export interface Context {
  */
 export interface Overview {
   grade: 'A' | 'B' | 'C' | 'D' | 'F';
-  health: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
   
   statistics: {
     totalFiles: number;
     totalLOC: number;
     avgComplexity: number;
     avgLOC: number;
+    avgDuplicationRatio?: number; // Average duplication ratio (0-1)
   };
   
   scores: {
@@ -117,254 +119,114 @@ export interface FileDetail {
     complexity: number;     // Cyclomatic complexity
     loc: number;           // Lines of code
     functionCount: number;  // Number of functions
-    duplication: Ratio;    // Ratio 0-1 (not percentage!)
+    duplicationRatio: Ratio;    // Ratio 0-1 (not percentage!)
   };
   
-  importance: {
-    usageCount: number;      // How many files import this
-    usageRank: number;       // Percentile 0-100
-    isEntryPoint: boolean;   // main.ts, index.ts, app.ts
-    isCriticalPath: boolean; // Top 10% by usage
-  };
+  dependencies: FileDependencyAnalysis
   
   issues: Issue[];
   
   healthScore: Score;   // 0-100 (100 = perfect)
-  isCritical: boolean;  // Top 5 problematic files
 }
 
 /**
- * Issues found in files
+ * Issues found in files - Simplified structure for v0.6.0
+ * No effortHours - too contextual to calculate automatically
  */
 export interface Issue {
   type: IssueType;
   severity: Severity;
+  line: number;
+  threshold: number;
+  excessRatio: number;    // How much over threshold - used for ROI sorting
   
-  location: {
-    line: number;
-    endLine?: number;
-    column?: number;
-    function?: string;
-  };
-  
-  context: {
-    message: string;
-    threshold: number;
-    excessRatio: number;    // How much over threshold
-    unit: 'count' | 'ratio' | 'lines';
-  };
-  
-  action: {
-    description: string;
-    impact: string;
-    effortHours: number;
-  };
+  // Optional enriched location for certain issue types
+  endLine?: number;
+  column?: number;
+  function?: string;
 }
 
-// ==================== RECOMMENDATIONS ====================
+// ==================== RECOMMENDATIONS REMOVED ====================
+// Recommendations removed in v0.6.0 - calculable client-side:
+// - criticalFiles = details.sort(healthScore).slice(0,5) 
+// - quickWins = details.flatMap(issues).filter(effortHours <= 1)
+
 
 /**
- * Recommendations - WHAT TO DO
- */
-export interface Recommendations {
-  critical: Action[];
-  quickWins: QuickWin[];
-  improvements: Improvement[];
-}
-
-export interface Action {
-  file: string;
-  issue: string;
-  solution: string;
-  effortHours: number;
-  impact: string;
-  priority: number;  // 1-10
-}
-
-export interface QuickWin {
-  description: string;
-  files: string[];
-  effortMinutes: number;  // Always < 60
-  scoreImprovement: number;
-}
-
-export interface Improvement {
-  title: string;
-  description: string;
-  files: string[];
-  approach: string;
-  effortDays: number;  // 1-5 days typically
-  benefits: string[];
-  risks?: string[];
-}
-
-// ==================== LEGACY SUPPORT ====================
-
-/**
- * Legacy CodeContext for backward compatibility
+ * Code context focused on critical functions and patterns
  */
 export interface CodeContext {
-  path: string;
-  complexity: number;
-  
-  // File structure overview
-  structure: {
-    imports: string[];
-    exports: string[];
-    classes: string[];
-    functions: string[];
-    interfaces: string[];
-    types: string[];
-    enums: string[];
-    constants: string[];
-  };
-  
-  // Key patterns detected
-  patterns: {
-    hasAsyncFunctions: boolean;
-    hasGenerators: boolean;
-    hasDecorators: boolean;
-    hasJSX: boolean;
-    usesTypeScript: boolean;
-    hasErrorHandling: boolean;
-    hasTests: boolean;
-  };
-  
-  // Complexity breakdown
-  complexityBreakdown: {
-    functions: Array<{
-      name: string;
-      complexity: number;
-      lineCount: number;
-      parameters: number;
-      isAsync: boolean;
-      hasErrorHandling: boolean;
-    }>;
-    highestComplexityFunction: string;
-    deepestNesting: number;
-  };
-  
-  // Dependencies analysis
-  dependencies: {
-    internal: string[];
-    external: string[];
-    mostImportedFrom: string[];
-  };
-  
-  // Code snippet samples (for LLM understanding)
-  samples: {
-    complexFunctions: Array<{
-      name: string;
-      complexity: number;
-      snippet: string;
-    }>;
-  };
+  file: string;
+  criticalFunctions: FunctionContext[];
+  patterns: FilePatterns;
 }
 
-/**
- * Legacy CodeContextSummary for backward compatibility
- */
-export interface CodeContextSummary {
-  totalFiles: number;
-  patterns: {
-    asyncUsage: number;
-    errorHandling: number;
-    typeScriptUsage: number;
-    jsxUsage: number;
-    testFiles: number;
-    decoratorUsage: number;
-    generatorUsage: number;
-  };
-  architecture: {
-    totalClasses: number;
-    totalFunctions: number;
-    totalInterfaces: number;
-    totalTypes: number;
-    totalEnums: number;
-    avgFunctionsPerFile: number;
-    avgImportsPerFile: number;
-  };
-  complexity: {
-    filesWithHighComplexity: number;
-    deepestNesting: number;
-    avgComplexityPerFunction: number;
-    mostComplexFunctions: Array<{
-      file: string;
-      name: string;
-      complexity: number;
-      lineCount: number;
-    }>;
-  };
-  dependencies: {
-    mostUsedExternal: Array<{ name: string; count: number }>;
-    mostImportedInternal: Array<{ name: string; count: number }>;
-    avgExternalDepsPerFile: number;
-    avgInternalDepsPerFile: number;
-  };
-  codeQuality: {
-    avgFunctionLength: number;
-    avgParametersPerFunction: number;
-    percentAsyncFunctions: number;
-    percentFunctionsWithErrorHandling: number;
-  };
+export interface FunctionContext {
+  name: string;
+  complexity: number;
+  lineCount: number;
+  parameterCount: number;
+  snippet: string;
+  issues: QualityIssue[];
 }
+
+export interface FilePatterns {
+  quality: QualityPattern[];
+  architecture: ArchitecturePattern[];
+  performance: PerformancePattern[];
+  security: SecurityPattern[];
+  testing: TestingPattern[];
+}
+
+export type QualityPattern = 
+  | 'deep-nesting'
+  | 'long-function' 
+  | 'high-complexity'
+  | 'too-many-params'
+  | 'god-function'
+  | 'single-responsibility'
+  | 'pure-function'
+  | 'well-named';
+
+export type ArchitecturePattern =
+  | 'async-heavy'
+  | 'error-handling'
+  | 'type-safe'
+  | 'dependency-injection'
+  | 'factory-pattern'
+  | 'observer-pattern';
+
+export type PerformancePattern =
+  | 'memory-intensive'
+  | 'cpu-intensive'
+  | 'io-heavy'
+  | 'caching'
+  | 'lazy-loading';
+
+export type SecurityPattern =
+  | 'input-validation'
+  | 'sql-injection-risk'
+  | 'xss-risk'
+  | 'auth-check'
+  | 'sanitization';
+
+export type TestingPattern =
+  | 'test-file'
+  | 'mock-heavy'
+  | 'integration-test'
+  | 'unit-test';
+
+export interface QualityIssue {
+  type: QualityPattern;
+  severity: 'low' | 'medium' | 'high';
+  description: string;
+}
+
 
 // ==================== DEPRECATED INTERFACES ====================
 
-/**
- * @deprecated Use FileDetail instead
- */
-export interface FileMetrics {
-  path: string;
-  complexity: number;
-  duplication: number;
-  functionCount: number; 
-  loc: number;
-  fileType?: 'production' | 'test' | 'example' | 'utility' | 'config';
-  issues: Issue[];
-  impact: number;
-  criticismScore: number;
-  context?: CodeContext;
-}
+// FileMetrics interface removed in v0.6.0 - use FileDetail instead
 
-/**
- * @deprecated Use new AnalysisResult structure instead
- */
-export interface AnalysisResultV4 {
-  project: {
-    name: string;
-    path: string;
-    packageJson?: {
-      name?: string;
-      version?: string;
-      description?: string;
-    };
-  };
-  summary: {
-    totalFiles: number;
-    totalLines: number;
-    avgComplexity: number;
-    avgDuplication: number;
-    avgFunctions: number;
-    avgLoc: number;
-  };
-  scores: {
-    complexity: number;
-    duplication: number;
-    maintainability: number;
-    overall: number;
-  };
-  score: number;
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';
-  complexityStdDev: number;
-  silentKillers: FileMetrics[];
-  files: FileMetrics[];
-  topFiles: FileMetrics[];
-  codeContext?: {
-    contexts: CodeContext[];
-    summary: CodeContextSummary;
-  };
-}
 
 // ==================== CLI & CONFIGURATION ====================
 
@@ -374,7 +236,7 @@ export interface CliOptions {
   exclude?: string[];
   excludeUtility?: boolean;
   withContext?: boolean;
-  format?: 'json' | 'ci' | 'critical' | 'summary';
+  format?: 'json' | 'ci' | 'critical' | 'summary' | 'report';
 }
 
 /**
@@ -382,25 +244,25 @@ export interface CliOptions {
  */
 export interface ThresholdConfig {
   complexity: {
-    production: { medium: number; high: number };
-    test: { medium: number; high: number };
-    utility: { medium: number; high: number };
-    example?: { medium: number; high: number };
-    config?: { medium: number; high: number };
+    production: { medium: number; high: number; critical?: number };
+    test: { medium: number; high: number; critical?: number };
+    utility: { medium: number; high: number; critical?: number };
+    example?: { medium: number; high: number; critical?: number };
+    config?: { medium: number; high: number; critical?: number };
   };
   size: {
-    production: { medium: number; high: number };
-    test: { medium: number; high: number };
-    utility: { medium: number; high: number };
-    example?: { medium: number; high: number };
-    config?: { medium: number; high: number };
+    production: { medium: number; high: number; critical?: number };
+    test: { medium: number; high: number; critical?: number };
+    utility: { medium: number; high: number; critical?: number };
+    example?: { medium: number; high: number; critical?: number };
+    config?: { medium: number; high: number; critical?: number };
   };
   duplication: {
-    production: { medium: number; high: number };
-    test: { medium: number; high: number };
-    utility: { medium: number; high: number };
-    example?: { medium: number; high: number };
-    config?: { medium: number; high: number };
+    production: { medium: number; high: number; critical?: number };
+    test: { medium: number; high: number; critical?: number };
+    utility: { medium: number; high: number; critical?: number };
+    example?: { medium: number; high: number; critical?: number };
+    config?: { medium: number; high: number; critical?: number };
   };
 }
 
@@ -414,4 +276,117 @@ export interface CiFormat {
   grade: 'A' | 'B' | 'C' | 'D' | 'F';
   score: Score;
   criticalCount: number;
+}
+
+
+
+/**
+ * Configuration pour l'analyse universelle de dépendances.
+ */
+export interface DependencyAnalyzerConfig {
+  projectRoot?: string; // Chemin racine du projet absolu
+  extensions?: string[];
+  indexFiles?: string[];
+  aliases?: Record<string, string>;
+  frameworkHints?: FrameworkHint[];
+  analyzeCircularDependencies?: boolean;
+  analyzeDynamicImports?: boolean;
+  followSymlinks?: boolean;
+  maxFileSize?: number;
+  maxDepth?: number;
+  timeout?: number;
+  cache?: boolean;
+  hubFileThreshold?: number; // Seuil d'impact pour qu'un fichier soit considéré comme un "hub"
+  logResolutionErrors?: boolean; // Log des erreurs de résolution d'import
+}
+
+export interface FrameworkHint {
+  name: 'vue' | 'react' | 'angular' | 'svelte' | 'next' | 'nuxt' | 'gatsby' | 'custom';
+  importPatterns?: RegExp[];
+  filePatterns?: RegExp[];
+  resolver?: (importPath: string, context: ResolverContext) => string | null;
+}
+
+export interface ResolverContext {
+  importingFile: string;
+  projectRoot: string;
+}
+
+export interface DependencyAnalysisResult {
+  incomingDependencyCount: Map<string, number>;
+  dependencyGraph: Map<string, Set<string>>;
+  circularDependencies: string[][];
+  errors: AnalysisError[];
+  statistics: DependencyStatistics;
+}
+
+export interface AnalysisError {
+  file: string;
+  error: string;
+  phase: 'read' | 'parse' | 'analyze' | 'config';
+}
+
+export interface DependencyStatistics {
+  totalFiles: number;
+  totalImports: number;
+  averageImportsPerFile: number;
+  maxImports: { file: string; count: number };
+  isolatedFiles: string[];
+  hubFiles: string[];
+}
+/**
+ * Contient les métriques et analyses détaillées pour un seul fichier.
+ */
+export interface FileDependencyAnalysis {
+  outgoingDependencies: number; // Dépendances sortantes (efferent coupling)
+  incomingDependencies: number; // Dépendances entrantes (afferent coupling / impact)
+  cohesionScore: number; // Cohésion (0 = faible, 1 = forte) score de cohésion basé sur la proximité des dépendances.
+  instability: number;          // Instabilité (0 = stable, 1 = instable). I = outgoing / (incoming + outgoing) - Principe de Robert C. Martin
+  percentileUsageRank: number;  // Rang d'utilisation (percentile 0-100)
+  isInCycle: boolean;           // Indique si le fichier fait partie d'un cycle
+}
+
+/**
+ * Le résultat complet de l'analyse, maintenant avec les métriques par fichier.
+ */
+export interface DependencyAnalysisResult {
+  incomingDependencyCount: Map<string, number>;
+  dependencyGraph: Map<string, Set<string>>;
+  circularDependencies: string[][];
+  errors: AnalysisError[];
+  statistics: DependencyStatistics;
+  fileAnalyses: Map<string, FileDependencyAnalysis>; // ✅ Nouvelle propriété
+}
+export interface EmblematicFiles {
+  coreFiles: string[];
+  architecturalFiles: string[];
+  performanceCriticalFiles: string[];
+  complexAlgorithmFiles: string[];
+}
+export interface ReportResult {
+  project: string;
+  repo: string;
+  type: string;
+  stars: string;
+  stableVersion: string;
+  description: string;
+  category: 'small' | 'medium' | 'large';
+  emblematicFiles?: EmblematicFiles;
+  analysis: AnalysisResult;
+  durationMs: number;
+  error?: string;
+}
+
+
+export interface ReportSummary {
+  totalProjects: number;
+  successfulAnalyses: number;
+  failedAnalyses: number;
+  totalDuration: number; // Temps cumulé (pour les stats)
+  realDuration: number;  // Temps réel d'exécution parallèle
+  totalLines: number;
+  avgComplexity: number;
+  avgDuplication: number;
+  gradeDistribution: Record<string, number>;
+  modeCategory: 'production' | 'full';
 }

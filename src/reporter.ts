@@ -1,69 +1,79 @@
-// File: src/reporter.ts
+// File: src/reporter.ts - v0.6.0 Complete Refactor
 
 import chalk from 'chalk';
-import * as process from 'process';
-import { AnalysisResult } from './types';
-import { 
-  getComplexityLabel, 
-  getDuplicationLabel, 
-  getMaintainabilityLabel,
-  getComplexityColorLevel,
-  getDuplicationColorLevel,
-  getMaintainabilityColorLevel,
-  getSeverityColorLevel
-} from './scoring';
-import { getConfig } from './config';
-
-// --- Fonctions d'aide pour l'UI ---
+import { AnalysisResult, FileDetail, Issue, IssueType } from './types';
+import { calculateExcessPercentage, formatPercentage, getGrade, ratioToPercentage } from './scoring.utils';
+import { CRITICAL_HEALTH_SCORE } from './thresholds.constants';
 
 /**
- * Crée un en-tête de section stylisé.
- * @param title Le titre de la section.
+ * Generate description for an issue based on type and threshold data
  */
-function printSectionHeader(title: string): void {
-  console.log(chalk.gray(`\n╭─ ${chalk.bold.cyan(title)} ` + '─'.repeat(Math.max(0, 50 - title.length))));
+function getIssueDescription(issue: Issue): string {
+  switch (issue.type) {
+    case IssueType.Complexity:
+      return `${issue.severity} complexity: Exceeds threshold by ${calculateExcessPercentage(issue.excessRatio).toFixed(0)}%`;
+    case IssueType.Size:
+      return `${issue.severity} file size: Exceeds threshold by ${calculateExcessPercentage(issue.excessRatio).toFixed(0)}%`;
+    case IssueType.Duplication:
+      return `${issue.severity} duplication: Exceeds threshold by ${calculateExcessPercentage(issue.excessRatio).toFixed(0)}%`;
+    default:
+      return `${issue.severity} ${issue.type} issue`;
+  }
+}
+
+// isCriticalFile function removed - logic integrated into client-side calculations
+
+/**
+ * Format number with spaces as thousands separators
+ */
+function formatNumber(num: number): string {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 }
 
 /**
- * Convertit un niveau de couleur en fonction chalk.
+ * Display styled section header
  */
-function getChalkColor(colorLevel: 'green' | 'yellow' | 'red' | 'redBold') {
-  switch (colorLevel) {
-    case 'green': return chalk.green;
-    case 'yellow': return chalk.yellow;
-    case 'red': return chalk.red;
-    case 'redBold': return chalk.red.bold;
+function printSectionHeader(title: string): void {
+  console.log(`\n${chalk.bold.underline(title)}`);
+  console.log(chalk.dim('─'.repeat(title.length + 10)));
+}
+
+/**
+ * Get appropriate color for score based on v0.6.0 grading system
+ * Uses centralized grade thresholds from constants.ts
+ */
+function getScoreColor(score: number): (text: string) => string {
+  const grade = getGrade(score);
+  switch (grade) {
+    case 'A': return chalk.green;        // Grade A - Excellent
+    case 'B': return chalk.greenBright;  // Grade B - Good
+    case 'C': return chalk.yellow;       // Grade C - Acceptable
+    case 'D': return chalk.yellowBright; // Grade D - Poor
+    case 'F': return chalk.red;          // Grade F - Critical
   }
 }
 
 /**
- * Générateur de barre de progression avec des couleurs dynamiques.
- * @param percentage Le pourcentage à afficher.
- * @param width La largeur de la barre.
- * @param colorLevel Le niveau de couleur pour la barre.
+ * Get appropriate color for grade letter based on v0.6.0 system
  */
-function progressBar(percentage: number, width: number = 20, colorLevel: 'green' | 'yellow' | 'red' | 'redBold'): string {
-  const filledCount = Math.round((percentage / 100) * width);
-  const emptyCount = width - filledCount;
-  const filledBar = '█'.repeat(filledCount);
-  const emptyBar = chalk.gray('░'.repeat(emptyCount));
-  
-  const colorFunc = getChalkColor(colorLevel);
-  return `${colorFunc(filledBar)}${emptyBar}`;
+function getGradeColor(grade: string): (text: string) => string {
+  switch (grade) {
+    case 'A': return chalk.bgGreen.black;
+    case 'B': return chalk.bgYellow.black;
+    case 'C': return chalk.bgYellow.black;
+    case 'D': return chalk.bgRed.white;
+    case 'F': return chalk.bgRed.bold.white;
+    default: return chalk.gray;
+  }
 }
 
-/**
- * Formate les grands nombres avec des séparateurs de milliers.
- */
-function formatNumber(num: number): string {
-  return num.toLocaleString('en-US');
-}
 
 /**
- * Affiche les résultats de l'analyse dans le terminal avec un design professionnel.
+ * Display analysis results in terminal with professional design
+ * Uses v0.6.0 methodology with McCabe thresholds, progressive penalties, and no artificial caps
  */
 export function reportToTerminal(result: AnalysisResult): void {
-  const { summary, score, grade, project, topFiles } = result;
+  const { context, overview, details } = result;
 
   // --- En-tête Principal ---
   console.log(chalk.cyanBright(`
@@ -76,126 +86,117 @@ export function reportToTerminal(result: AnalysisResult): void {
 
   // --- Infos du Projet ---
   printSectionHeader('Project Overview');
-  console.log(`  ${chalk.bold('Project:')}     ${chalk.cyan(project.name)}`);
-  if (project.packageJson?.version) {
-    console.log(`  ${chalk.bold('Version:')}     ${chalk.cyan(project.packageJson.version)}`);
+  console.log(`  ${chalk.bold('Project:')}     ${chalk.cyan(context.project.name)}`);
+  if (context.project.version) {
+    console.log(`  ${chalk.bold('Version:')}     ${chalk.cyan(context.project.version)}`);
   }
-  console.log(`  ${chalk.bold('Path:')}        ${chalk.dim(project.path)}`);
-  console.log(`  ${chalk.bold('Files:')}       ${chalk.cyan(summary.totalFiles)}`);
-  console.log(`  ${chalk.bold('Total Lines:')} ${chalk.cyan(formatNumber(summary.totalLines))}`);
+  console.log(`  ${chalk.bold('Path:')}        ${chalk.dim(context.project.path)}`);
+  console.log(`  ${chalk.bold('Files:')}       ${chalk.cyan(overview.statistics.totalFiles)}`);
+  console.log(`  ${chalk.bold('Total Lines:')} ${chalk.cyan(formatNumber(overview.statistics.totalLOC))}`);
+  console.log(`  ${chalk.bold('Analyzed:')}    ${chalk.dim(new Date(context.analysis.timestamp).toLocaleString())}`);
+  console.log(`  ${chalk.bold('Duration:')}    ${chalk.dim(context.analysis.durationMs + 'ms')}`);
 
   // --- Score Global ---
   printSectionHeader('Overall Code Quality Score');
-  const gradeColor = score >= 90 ? chalk.bgGreen.black :
-                     score >= 80 ? chalk.bgYellow.black :
-                     chalk.bgRed.white;
-                     
-  console.log(`\n  ${gradeColor.bold(`  ${grade}  `)} ${chalk.bold(score.toFixed(1))}${chalk.dim('/100')}\n`);
-
-
-  // --- Métriques Détaillées ---
-  printSectionHeader('Core Metrics');
+  const gradeColor = getGradeColor(overview.grade);
+  const scoreColor = getScoreColor(overview.scores.overall);
   
-  // Complexité
-  const complexityScore = result.scores.complexity;
-  const complexityColor = getComplexityColorLevel(summary.avgComplexity);
-  console.log(
-    `  ${chalk.bold('Complexity:')}      ${progressBar(complexityScore, 20, complexityColor)}  ${getChalkColor(complexityColor)(`${summary.avgComplexity.toFixed(1)} (${getComplexityLabel(summary.avgComplexity)})`)}`
-  );
+  console.log(`  ${chalk.bold('Overall Score:')} ${scoreColor(overview.scores.overall + '/100')} ${gradeColor(` ${overview.grade} `)}`);
+  console.log(`  ${chalk.bold('Summary:')} ${chalk.italic(overview.summary)}`);
 
-  // Duplication
-  const duplicationScore = result.scores.duplication;
-  const duplicationColor = getDuplicationColorLevel(summary.avgDuplication);
-  console.log(
-    `  ${chalk.bold('Duplication:')}     ${progressBar(duplicationScore, 20, duplicationColor)}  ${getChalkColor(duplicationColor)(`${summary.avgDuplication.toFixed(1)}% (${getDuplicationLabel(summary.avgDuplication)})`)}`
-  );
+  // --- Détails des Scores ---
+  printSectionHeader('Score Breakdown');
+  console.log(`  ${chalk.bold('Complexity:')}      ${getScoreColor(overview.scores.complexity)(overview.scores.complexity + '/100')}`);
+  const duplicationPercentage = overview.statistics.avgDuplicationRatio !== undefined 
+    ? formatPercentage(overview.statistics.avgDuplicationRatio) 
+    : '0.0%';
+  console.log(`  ${chalk.bold('Duplication:')}     ${getScoreColor(overview.scores.duplication)(overview.scores.duplication + '/100')} ${chalk.gray(`(${duplicationPercentage}% detected)`)}`);
+  console.log(`  ${chalk.bold('Maintainability:')} ${getScoreColor(overview.scores.maintainability)(overview.scores.maintainability + '/100')}`);
 
-  // Maintenabilité
-  const maintainabilityScore = result.scores.maintainability;
-  const maintainabilityColor = getMaintainabilityColorLevel(maintainabilityScore);
-  console.log(
-    `  ${chalk.bold('Maintainability:')} ${progressBar(maintainabilityScore, 20, maintainabilityColor)}  ${getChalkColor(maintainabilityColor)(`${maintainabilityScore.toFixed(0)}/100 (${getMaintainabilityLabel(maintainabilityScore)})`)}`
-  );
+  // --- Statistiques ---
+  printSectionHeader('Project Statistics');
+  console.log(`  ${chalk.bold('Average Complexity:')} ${chalk.cyan(overview.statistics.avgComplexity)}`);
+  console.log(`  ${chalk.bold('Average LOC:')}        ${chalk.cyan(overview.statistics.avgLOC)}`);
+  
+  const avgDuplication = details.reduce((sum, f) => sum + f.metrics.duplicationRatio, 0) / details.length;
+  const avgFunctions = details.reduce((sum, f) => sum + f.metrics.functionCount, 0) / details.length;
+  console.log(`  ${chalk.bold('Average Duplication:')} ${chalk.cyan(Math.round(ratioToPercentage(avgDuplication)) + '%')}`);
+  console.log(`  ${chalk.bold('Average Functions:')}   ${chalk.cyan(Math.round(avgFunctions))}`);
 
+  // --- Critical Files section moved to recommendations below ---
 
-  // --- Fichiers Critiques ---
-  if (topFiles.length > 0) {
-    printSectionHeader('⚠️ Top 5 Critical Files to Address');
-    
-    topFiles.forEach((file, index) => {
-      const cleanPath = file.path.replace(process.cwd() + '/', '');
-      console.log(`\n  ${chalk.bold(`${index + 1}.`)} ${chalk.underline.white(cleanPath)}`);
-      
-      // -- AJOUT : AFFICHER LA RAISON DE LA CRITICITÉ --
-      const criticismInfo = `    ${chalk.magenta('Criticity Score:')} ${chalk.bold(file.criticismScore.toFixed(0))}  ${chalk.dim('|')}  ${chalk.blue('Impact:')} ${file.impact} dependents`;
-      console.log(criticismInfo);
-      
-      file.issues.forEach(issue => {
-        let icon: string;
-        let colorFunc: chalk.Chalk;
-        
-        if (issue.type === 'complexity' && issue.ratio) {
-            const color = getSeverityColorLevel(issue.ratio);
-            colorFunc = getChalkColor(color);
-            icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
-            // Indentation ajustée pour l'alignement
-            console.log(`      ${icon} ${colorFunc(`High Complexity: ${formatNumber(issue.value)} (${issue.ratio.toFixed(0)}x above limit)`)}`);
-        } else if (issue.type === 'size' && issue.ratio) {
-            const color = getSeverityColorLevel(issue.ratio);
-            colorFunc = getChalkColor(color);
-            icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
-            console.log(`      ${icon} ${colorFunc(`Very Large File: ${formatNumber(issue.value)} lines (${issue.ratio.toFixed(0)}x above limit)`)}`);
-        } else if (issue.type === 'duplication') {
-            const color = getDuplicationColorLevel(issue.value);
-            colorFunc = getChalkColor(color);
-            icon = color === 'redBold' ? '🔴' : color === 'red' ? '🟠' : '🟡';
-            console.log(`      ${icon} ${colorFunc(`High Duplication: ${issue.value.toFixed(1)}% detected`)}`);
-        }
-      });
+  // --- Recommendations v0.6.0 - Client-side calculation ---
+  
+  // Critical Files: Top 5 worst healthScore
+  const criticalFiles = result.details
+    .sort((a, b) => a.healthScore - b.healthScore)
+    .slice(0, 5)
+    .filter(f => f.healthScore < CRITICAL_HEALTH_SCORE); // Only show truly critical files
+  
+  if (criticalFiles.length > 0) {
+    printSectionHeader('Critical Files');
+    criticalFiles.forEach((file, index) => {
+      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.red(file.file)} ${chalk.dim(`(health: ${file.healthScore}/100)`)}`);  
+      if (file.issues.length > 0) {
+        const worstIssue = file.issues.sort((a, b) => b.excessRatio - a.excessRatio)[0];
+        console.log(`      ${chalk.bold('Main Issue:')} ${getIssueDescription(worstIssue)}`);
+        console.log(`      ${chalk.bold('Impact:')} ${worstIssue.excessRatio.toFixed(1)}x over threshold`);
+      }
+    });
+  }
+  
+  // Quick Wins: Issues sorted by excessRatio (highest impact first)
+  const quickWins = result.details
+    .flatMap(file => 
+      file.issues
+        .filter(issue => issue.severity === 'medium') // Focus on medium issues as quick wins
+        .map(issue => ({ file: file.file, ...issue }))
+    )
+    .sort((a, b) => b.excessRatio - a.excessRatio)
+    .slice(0, 5);
+  
+  if (quickWins.length > 0) {
+    printSectionHeader('Quick Wins');
+    quickWins.forEach((win, index) => {
+      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.green(win.file)} - ${chalk.cyan(win.type)}`);
+      console.log(`      ${chalk.bold('Issue:')} ${getIssueDescription(win)}`);
+      console.log(`      ${chalk.bold('Impact:')} ${win.excessRatio.toFixed(1)}x over threshold`);
     });
   }
 
-  // --- Plans d'action ---
- if (score < 90 && topFiles.length > 0) {
-    printSectionHeader('💡 Quick Wins to Improve Score');
+  // --- Résumé des Issues ---
+  const allIssues = details.flatMap(f => f.issues);
+  if (allIssues.length > 0) {
+    printSectionHeader('Issues Summary');
     
-    const improvements: string[] = [];
+    const issuesBySeverity = allIssues.reduce((acc, issue) => {
+      acc[issue.severity] = (acc[issue.severity] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
 
-    // CORRECTION : On cherche le ratio dans le tableau `issues` de chaque fichier.
-    const extremeComplexityFiles = result.files.filter(f => 
-        f.issues.some(issue => issue.type === 'complexity' && issue.ratio && issue.ratio >= 2.5) // Seuil plus réaliste
-    );
-    const veryLargeFiles = result.files.filter(f => 
-        f.issues.some(issue => issue.type === 'size' && issue.ratio && issue.ratio >= 2.0)
-    );
-    const highDuplicationFiles = result.files.filter(f => 
-        f.issues.some(issue => issue.type === 'duplication' && issue.value >= 25)
-    );
+    const issuesByType = allIssues.reduce((acc, issue) => {
+      acc[issue.type] = (acc[issue.type] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
 
-    if (extremeComplexityFiles.length > 0) {
-      const gain = Math.min(10, Math.round(extremeComplexityFiles.length * 1.5));
-      improvements.push(`Refactor the ${extremeComplexityFiles.length} most complex file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
-    }
-    if (veryLargeFiles.length > 0) {
-      const gain = Math.min(8, Math.round(veryLargeFiles.length * 1.0));
-      improvements.push(`Split the ${veryLargeFiles.length} largest file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
-    }
-    if (highDuplicationFiles.length > 0) {
-      const gain = Math.min(6, highDuplicationFiles.length);
-      improvements.push(`Abstract repeated code in ${highDuplicationFiles.length} file(s) for a potential gain of ~${chalk.green.bold(`+${gain} pts`)}.`);
-    }
+    console.log(`  ${chalk.bold('By Severity:')}`);
+    Object.entries(issuesBySeverity).forEach(([severity, count]) => {
+      const color = severity === 'critical' ? chalk.red.bold : 
+                   severity === 'high' ? chalk.red : 
+                   severity === 'medium' ? chalk.yellow : chalk.green;
+      console.log(`    ${color(severity.toUpperCase())}: ${count}`);
+    });
 
-    if (improvements.length > 0) {
-        improvements.slice(0, 3).forEach(improvement => {
-          console.log(`  ${chalk.cyan('›')} ${chalk.gray(improvement)}`);
-        });
-    } else {
-        console.log(chalk.gray('  › No obvious quick wins found. Focus on the critical files above.'));
-    }
+    console.log(`  ${chalk.bold('By Type:')}`);
+    Object.entries(issuesByType).forEach(([type, count]) => {
+      console.log(`    ${chalk.cyan(type)}: ${count}`);
+    });
   }
-  
+
   // --- Pied de page ---
-  console.log(chalk.gray('\n\n' + '─'.repeat(58)));
-  console.log(`  ✅ ${chalk.bold('Analysis complete!')} Run regularly to maintain code quality.`);
-  console.log(chalk.dim(`     Report generated on ${new Date().toLocaleString()}\n`));
+  console.log(chalk.dim(`\n  Analysis completed with InsightCode v${context.analysis.toolVersion}`));
+  console.log(chalk.dim(`  Note: v0.6.0 methodology uses McCabe-based thresholds (≤10 low, >20 critical) with progressive penalties (no caps)`));
+  console.log(chalk.dim(`  Weights: Complexity 45% (McCabe research), Maintainability 30% (Martin Clean Code), Duplication 25% (Fowler)`));
+  console.log(chalk.dim(`  Duplication: 8-line literal pattern matching, cross-file exact matches only (not structural similarity)`));
+  console.log(chalk.dim(`  For detailed JSON output, use: insightcode analyze --json`));
 }

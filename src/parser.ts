@@ -4,15 +4,41 @@ import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as path from 'path';
 import glob from 'fast-glob';
-import { FileMetrics, Issue, ThresholdConfig } from './types';
-import { getConfig } from './config';
+import { FileDetail, Issue, IssueType, Severity, ThresholdConfig } from './types';
+import { normalizePath } from './utils';
+import { getConfig } from './config.manager';
+
+// Protection contre les stack overflow pour les fichiers de test TypeScript
+const MAX_RECURSION_DEPTH = 1000;
+
+/**
+ * Wrapper sécurisé pour les fonctions récursives AST
+ */
+function safeVisit(node: ts.Node, visitor: (node: ts.Node, depth: number) => void, depth = 0) {
+  if (depth > MAX_RECURSION_DEPTH) {
+    console.warn(`Max recursion depth reached, skipping deeper nodes`);
+    return;
+  }
+  
+  visitor(node, depth);
+  
+  try {
+    ts.forEachChild(node, child => safeVisit(child, visitor, depth + 1));
+  } catch (error) {
+    if (error instanceof RangeError && error.message.includes('Maximum call stack size')) {
+      console.warn(`Stack overflow detected, skipping subtree`);
+    } else {
+      throw error;
+    }
+  }
+}
+
 
 // Default patterns to exclude
 const DEFAULT_EXCLUDE = [
   '**/node_modules/**',
   '**/dist/**',
   '**/build/**',
-  '**/*.d.ts',
   '**/coverage/**',
   '**/.git/**'
 ];
@@ -39,7 +65,12 @@ const UTILITY_PATTERNS = [
   '**/benchmarks/**',
   '**/coverage/**',
   "**/vendor/**",
-  "**/temp-analysis/**"
+  "**/temp-analysis/**",
+  // Fichiers de test problématiques causant des stack overflow/memory issues
+  "**/binderBinaryExpressionStress*",
+  "**/binderBinaryExpressionStressJs*",
+  "**/stress*",
+  "**/fourslash*"
 ];
 
 /**
@@ -67,7 +98,7 @@ export async function findFiles(targetPath: string, exclude: string[] = [], excl
 /**
  * Classify file type based on its path
  */
-function classifyFileType(filePath: string): FileMetrics['fileType'] {
+function classifyFileType(filePath: string): 'production' | 'test' | 'example' | 'utility' | 'config' {
   const relativePath = path.relative(process.cwd(), filePath).toLowerCase();
   
   if (relativePath.includes('/test/') || relativePath.includes('/tests/') || relativePath.includes('/__tests__/') || relativePath.includes('/spec/') || relativePath.includes('.test.') || relativePath.includes('.spec.') || relativePath.includes('.bench.')) {
@@ -104,7 +135,7 @@ function classifyFileType(filePath: string): FileMetrics['fileType'] {
 function calculateComplexity(sourceFile: ts.SourceFile): number {
   let complexity = 1; // Base complexity
   
-  function visit(node: ts.Node) {
+  const visitor = (node: ts.Node) => {
     // Add +1 for each decision point
     switch (node.kind) {
       case ts.SyntaxKind.IfStatement:
@@ -116,6 +147,7 @@ function calculateComplexity(sourceFile: ts.SourceFile): number {
       case ts.SyntaxKind.ForOfStatement:
       case ts.SyntaxKind.WhileStatement:
       case ts.SyntaxKind.DoStatement:
+      case ts.SyntaxKind.SwitchStatement:
         complexity++;
         break;
       case ts.SyntaxKind.BinaryExpression:
@@ -126,10 +158,9 @@ function calculateComplexity(sourceFile: ts.SourceFile): number {
         }
         break;
     }
-    ts.forEachChild(node, visit);
-  }
+  };
   
-  visit(sourceFile);
+  safeVisit(sourceFile, visitor);
   return complexity;
 }
 
@@ -138,16 +169,51 @@ function calculateComplexity(sourceFile: ts.SourceFile): number {
  * Count lines of code (excluding comments and blank lines)
  */
 function countLinesOfCode(content: string): number {
-  return content
-    .split('\n')
-    .filter(line => {
-      const trimmed = line.trim();
-      return trimmed.length > 0 && 
-             !trimmed.startsWith('//') &&
-             !trimmed.startsWith('/*') &&
-             !trimmed.startsWith('*');
-    })
-    .length;
+  const lines = content.split('\n');
+  let inMultiLineComment = false;
+  let codeLines = 0;
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    
+    // Skip empty lines
+    if (trimmed.length === 0) continue;
+    
+    // Handle multi-line comments
+    if (trimmed.includes('/*') && trimmed.includes('*/')) {
+      // Single line comment /* ... */ - skip if it's the only content
+      const beforeComment = trimmed.substring(0, trimmed.indexOf('/*')).trim();
+      const afterComment = trimmed.substring(trimmed.indexOf('*/') + 2).trim();
+      if (beforeComment.length > 0 || afterComment.length > 0) {
+        codeLines++;
+      }
+      continue;
+    }
+    
+    if (trimmed.includes('/*')) {
+      inMultiLineComment = true;
+    }
+    if (trimmed.includes('*/')) {
+      inMultiLineComment = false;
+      // If there's code after */, count this line
+      const afterComment = trimmed.substring(trimmed.indexOf('*/') + 2).trim();
+      if (afterComment.length > 0) {
+        codeLines++;
+      }
+      continue;
+    }
+    
+    // Skip lines inside multi-line comments
+    if (inMultiLineComment) continue;
+    
+    // Skip single-line comments
+    if (trimmed.startsWith('//')) continue;
+    
+    // Count as code line
+    codeLines++;
+  }
+  
+  return codeLines;
 }
 
 /**
@@ -156,7 +222,7 @@ function countLinesOfCode(content: string): number {
 function countFunctions(sourceFile: ts.SourceFile): number {
   let functionCount = 0;
 
-  function visit(node: ts.Node) {
+  const visitor = (node: ts.Node) => {
     switch (node.kind) {
       case ts.SyntaxKind.FunctionDeclaration:
       case ts.SyntaxKind.MethodDeclaration:
@@ -168,17 +234,16 @@ function countFunctions(sourceFile: ts.SourceFile): number {
         functionCount++;
         break;
     }
-    ts.forEachChild(node, visit);
-  }
+  };
   
-  visit(sourceFile);
+  safeVisit(sourceFile, visitor);
   return functionCount;
 }
 
 /**
  * Parse a single file and extract metrics.
  */
-export function parseFile(filePath: string): FileMetrics {
+export function parseFile(filePath: string): FileDetail {
   // FIX: Get thresholds from the single source of truth.
   const thresholds = getConfig();
   
@@ -191,51 +256,79 @@ export function parseFile(filePath: string): FileMetrics {
   const fileType = classifyFileType(filePath) || 'production';
   const issues: Issue[] = [];
   
-  const complexityThresholds = thresholds.complexity[fileType] || thresholds.complexity.production;
-  const sizeThresholds = thresholds.size[fileType] || thresholds.size.production;
+  const complexityThresholds = thresholds.complexity[fileType as keyof typeof thresholds.complexity] || thresholds.complexity.production;
+  const sizeThresholds = thresholds.size[fileType as keyof typeof thresholds.size] || thresholds.size.production;
   
-  if (complexity > complexityThresholds.high) {
+  if (complexityThresholds.critical && complexity > complexityThresholds.critical) {
     issues.push({
-      type: 'complexity',
-      severity: 'high',
-      message: `High complexity: ${complexity} (recommended: < ${complexityThresholds.high})`,
-      value: complexity
+      type: IssueType.Complexity,
+      severity: Severity.Critical,
+      line: 1,
+      threshold: complexityThresholds.critical,
+      excessRatio: complexity / complexityThresholds.critical
+    });
+  } else if (complexity > complexityThresholds.high) {
+    issues.push({
+      type: IssueType.Complexity,
+      severity: Severity.High,
+      line: 1,
+      threshold: complexityThresholds.high,
+      excessRatio: complexity / complexityThresholds.high
     });
   } else if (complexity > complexityThresholds.medium) {
     issues.push({
-      type: 'complexity',
-      severity: 'medium',
-      message: `Medium complexity: ${complexity} (recommended: < ${complexityThresholds.medium})`,
-      value: complexity
+      type: IssueType.Complexity,
+      severity: Severity.Medium,
+      line: 1,
+      threshold: complexityThresholds.medium,
+      excessRatio: complexity / complexityThresholds.medium
     });
   }
   
-  if (loc > sizeThresholds.high) {
+  if (sizeThresholds.critical && loc > sizeThresholds.critical) {
     issues.push({
-      type: 'size',
-      severity: 'high',
-      message: `Large file: ${loc} lines (recommended: < ${sizeThresholds.high})`,
-      value: loc
+      type: IssueType.Size,
+      severity: Severity.Critical,
+      line: 1,
+      threshold: sizeThresholds.critical,
+      excessRatio: loc / sizeThresholds.critical
+    });
+  } else if (loc > sizeThresholds.high) {
+    issues.push({
+      type: IssueType.Size,
+      severity: Severity.High,
+      line: 1,
+      threshold: sizeThresholds.high,
+      excessRatio: loc / sizeThresholds.high
     });
   } else if (loc > sizeThresholds.medium) {
     issues.push({
-      type: 'size',
-      severity: 'medium',
-      message: `File getting large: ${loc} lines`,
-      value: loc
+      type: IssueType.Size,
+      severity: Severity.Medium,
+      line: 1,
+      threshold: sizeThresholds.medium,
+      excessRatio: loc / sizeThresholds.medium
     });
   }
   
   return {
-    path: path.relative(process.cwd(), filePath),
-    complexity,
-    duplication: 0,
-    functionCount,
-    loc,
+    file: normalizePath(path.relative(process.cwd(), filePath)),
+    metrics: {
+      complexity,
+      loc,
+      functionCount,
+      duplicationRatio: 0  // Will be calculated later in duplication.ts
+    },
+    dependencies: {
+      instability: 0, // Will be calculated later in analyzer.ts
+      cohesionScore: 0, // Will be calculated later in analyzer.ts
+      incomingDependencies: 0, // Will be calculated later in analyzer.ts
+      outgoingDependencies: 0, // Will be calculated later in analyzer.ts
+      percentileUsageRank: 0, // Will be calculated later in analyzer.ts
+      isInCycle: false, // Will be calculated later in analyzer.ts
+    },
     issues,
-    fileType,
-    impact: 0,
-    criticismScore: 0,
+    healthScore: 0  // Will be calculated later in analyzer.ts
   };
 }
 
@@ -246,7 +339,7 @@ export async function parseDirectory(
   targetPath: string, 
   exclude: string[] = [], 
   excludeUtility: boolean = false
-): Promise<FileMetrics[]> {
+): Promise<FileDetail[]> {
   // FIX: The `thresholds` parameter is removed as it's no longer needed.
   // `parseFile` will get it from `getConfig()`.
 
@@ -267,12 +360,19 @@ export async function parseDirectory(
     throw new Error('No TypeScript/JavaScript files found');
   }
   
-  const results: FileMetrics[] = [];
+  const results: FileDetail[] = [];
   
   for (const file of filesToAnalyze) {
     try {
-      const metrics = parseFile(file); // No longer needs to pass thresholds
-      results.push(metrics);
+      // Skip files that are too large to prevent memory issues
+      const stats = fs.statSync(file);
+      if (stats.size > 5 * 1024 * 1024) { // 5MB limit
+        console.warn(`Warning: Skipping large file (${(stats.size / 1024 / 1024).toFixed(1)}MB): ${file}`);
+        continue;
+      }
+      
+      const fileDetail = parseFile(file);
+      results.push(fileDetail);
     } catch (error) {
       console.warn(`Warning: Could not parse ${file}:`, error);
     }
