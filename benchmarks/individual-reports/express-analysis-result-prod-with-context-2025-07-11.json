@@ -1,0 +1,451 @@
+{
+  "project": "express",
+  "repo": "https://github.com/expressjs/express.git",
+  "type": "web framework",
+  "stars": "66.2k",
+  "stableVersion": "v5.1.0",
+  "description": "Fast web framework for Node.js",
+  "category": "medium",
+  "emblematicFiles": {
+    "coreFiles": [
+      "lib/application.js",
+      "lib/express.js",
+      "lib/router/index.js"
+    ],
+    "architecturalFiles": [
+      "lib/middleware/init.js",
+      "lib/view.js"
+    ],
+    "performanceCriticalFiles": [
+      "lib/router/layer.js",
+      "lib/router/route.js"
+    ],
+    "complexAlgorithmFiles": [
+      "lib/utils.js",
+      "lib/request.js",
+      "lib/response.js"
+    ]
+  },
+  "analysis": {
+    "context": {
+      "project": {
+        "name": "express",
+        "path": ".",
+        "version": "5.1.0",
+        "repository": "expressjs/express"
+      },
+      "analysis": {
+        "timestamp": "2025-07-11T18:26:13.616Z",
+        "durationMs": 14170,
+        "toolVersion": "0.6.0",
+        "filesAnalyzed": 7
+      }
+    },
+    "overview": {
+      "grade": "F",
+      "statistics": {
+        "totalFiles": 7,
+        "totalLOC": 1130,
+        "avgComplexity": 33,
+        "avgLOC": 161,
+        "avgDuplicationRatio": 0.01
+      },
+      "scores": {
+        "complexity": 36,
+        "duplication": 100,
+        "maintainability": 46,
+        "overall": 55
+      },
+      "summary": "5 critical files found requiring attention"
+    },
+    "details": [
+      {
+        "file": "index.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 2,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "issues": [],
+        "healthScore": 100
+      },
+      {
+        "file": "lib/application.js",
+        "metrics": {
+          "complexity": 42,
+          "loc": 262,
+          "functionCount": 25,
+          "duplicationRatio": 0.01
+        },
+        "dependencies": {
+          "outgoingDependencies": 2,
+          "incomingDependencies": 1,
+          "instability": 0.67,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 17,
+          "isInCycle": false
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 2.1
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "line": 1,
+            "threshold": 200,
+            "excessRatio": 1.31
+          }
+        ],
+        "healthScore": 18
+      },
+      {
+        "file": "lib/express.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 34,
+          "functionCount": 2,
+          "duplicationRatio": 0.04
+        },
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 1,
+          "instability": 0.75,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 17,
+          "isInCycle": false
+        },
+        "issues": [],
+        "healthScore": 100
+      },
+      {
+        "file": "lib/request.js",
+        "metrics": {
+          "complexity": 30,
+          "loc": 155,
+          "functionCount": 20,
+          "duplicationRatio": 0.01
+        },
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 17,
+          "isInCycle": false
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 1.5
+          }
+        ],
+        "healthScore": 46
+      },
+      {
+        "file": "lib/response.js",
+        "metrics": {
+          "complexity": 111,
+          "loc": 468,
+          "functionCount": 41,
+          "duplicationRatio": 0
+        },
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 17,
+          "isInCycle": false
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 5.55
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "line": 1,
+            "threshold": 300,
+            "excessRatio": 1.56
+          }
+        ],
+        "healthScore": 0
+      },
+      {
+        "file": "lib/utils.js",
+        "metrics": {
+          "complexity": 29,
+          "loc": 119,
+          "functionCount": 14,
+          "duplicationRatio": 0.01
+        },
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 2,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 100,
+          "isInCycle": false
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 1.45
+          }
+        ],
+        "healthScore": 46
+      },
+      {
+        "file": "lib/view.js",
+        "metrics": {
+          "complexity": 17,
+          "loc": 90,
+          "functionCount": 7,
+          "duplicationRatio": 0.03
+        },
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 17,
+          "isInCycle": false
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 1,
+            "threshold": 15,
+            "excessRatio": 1.13
+          }
+        ],
+        "healthScore": 67
+      }
+    ],
+    "codeContext": [
+      {
+        "file": "lib/application.js",
+        "criticalFunctions": [
+          {
+            "name": "use",
+            "complexity": 9,
+            "lineCount": 55,
+            "parameterCount": 1,
+            "snippet": "function use(fn) {\n  var offset = 0;\n  var path = '/';\n  if (typeof fn !== 'function') {\n    var arg = fn;\n    while (Array.isArray(arg) && arg.length !== 0) {\n      arg = arg[0];\n    }\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "description": "Function has 55 lines, consider splitting"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          },
+          {
+            "name": "render",
+            "complexity": 9,
+            "lineCount": 54,
+            "parameterCount": 3,
+            "snippet": "function render(name, options, callback) {\n  var cache = this.cache;\n  var done = callback;\n  var engines = this.engines;\n  var opts = options;\n  var view;\n  if (typeof options === 'function') {\n    done = options;\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "description": "Function has 54 lines, consider splitting"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          },
+          {
+            "name": "defaultConfiguration",
+            "complexity": 5,
+            "lineCount": 52,
+            "parameterCount": 0,
+            "snippet": "function defaultConfiguration() {\n  var env = process.env.NODE_ENV || 'development';\n  this.enable('x-powered-by');\n  this.set('etag', 'weak');\n  this.set('env', env);\n  this.set('query parser', 'simple')\n  this.set('subdomain offset', 2);\n  this.set('trust proxy', false);\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "description": "Function has 52 lines, consider splitting"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          }
+        ],
+        "patterns": {
+          "quality": [
+            "long-function",
+            "deep-nesting"
+          ],
+          "architecture": [
+            "error-handling"
+          ],
+          "performance": [
+            "io-heavy",
+            "caching"
+          ],
+          "security": [],
+          "testing": [
+            "test-file"
+          ]
+        }
+      },
+      {
+        "file": "lib/request.js",
+        "criticalFunctions": [],
+        "patterns": {
+          "quality": [
+            "deep-nesting"
+          ],
+          "architecture": [],
+          "performance": [
+            "io-heavy"
+          ],
+          "security": [
+            "input-validation"
+          ],
+          "testing": [
+            "test-file"
+          ]
+        }
+      },
+      {
+        "file": "lib/response.js",
+        "criticalFunctions": [
+          {
+            "name": "send",
+            "complexity": 24,
+            "lineCount": 101,
+            "parameterCount": 1,
+            "snippet": "function send(body) {\n  var chunk = body;\n  var encoding;\n  var req = this.req;\n  var type;\n  var app = this.app;\n  switch (typeof chunk) {\n    case 'string':\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "high-complexity",
+                "severity": "high",
+                "description": "Complexity 24 exceeds recommended threshold of 15"
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "description": "Function has 101 lines, consider splitting"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          },
+          {
+            "name": "sendfile",
+            "complexity": 14,
+            "lineCount": 89,
+            "parameterCount": 4,
+            "snippet": "function sendfile(res, file, options, callback) {\n  var done = false;\n  var streaming;\n  function onaborted() {\n    if (done) return;\n    done = true;\n    var err = new Error('Request aborted');\n    err.code = 'ECONNABORTED';\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "description": "Function has 89 lines, consider splitting"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          }
+        ],
+        "patterns": {
+          "quality": [
+            "long-function",
+            "high-complexity",
+            "deep-nesting"
+          ],
+          "architecture": [],
+          "performance": [
+            "io-heavy",
+            "caching"
+          ],
+          "security": [
+            "input-validation"
+          ],
+          "testing": [
+            "test-file"
+          ]
+        }
+      },
+      {
+        "file": "lib/utils.js",
+        "criticalFunctions": [],
+        "patterns": {
+          "quality": [
+            "deep-nesting"
+          ],
+          "architecture": [],
+          "performance": [
+            "io-heavy",
+            "caching"
+          ],
+          "security": [
+            "input-validation"
+          ],
+          "testing": []
+        }
+      },
+      {
+        "file": "lib/view.js",
+        "criticalFunctions": [],
+        "patterns": {
+          "quality": [
+            "deep-nesting"
+          ],
+          "architecture": [
+            "error-handling"
+          ],
+          "performance": [],
+          "security": [],
+          "testing": []
+        }
+      }
+    ]
+  },
+  "durationMs": 14315
+}
