@@ -127,11 +127,33 @@ export function reportToTerminal(result: AnalysisResult): void {
 
   // --- Recommendations v0.6.0 - Client-side calculation ---
   
-  // Critical Files: Top 5 worst healthScore
+  // Critical Files: Top 5 sorted by severity, impact, then health score
   const criticalFiles = result.details
-    .sort((a, b) => a.healthScore - b.healthScore)
-    .slice(0, 5)
-    .filter(f => f.healthScore < CRITICAL_HEALTH_SCORE); // Only show truly critical files
+    .filter(f => f.healthScore < CRITICAL_HEALTH_SCORE) // Only show truly critical files
+    .sort((a, b) => {
+      // 1. Sort by worst issue severity first
+      const aWorstIssue = a.issues.length > 0 ? a.issues.sort((x, y) => y.excessRatio - x.excessRatio)[0] : null;
+      const bWorstIssue = b.issues.length > 0 ? b.issues.sort((x, y) => y.excessRatio - x.excessRatio)[0] : null;
+      
+      if (aWorstIssue && bWorstIssue) {
+        // Compare by severity priority (critical=3, high=2, medium=1)
+        const aSeverityScore = aWorstIssue.severity === 'critical' ? 3 : aWorstIssue.severity === 'high' ? 2 : 1;
+        const bSeverityScore = bWorstIssue.severity === 'critical' ? 3 : bWorstIssue.severity === 'high' ? 2 : 1;
+        
+        if (aSeverityScore !== bSeverityScore) {
+          return bSeverityScore - aSeverityScore; // Higher severity first
+        }
+        
+        // 2. If same severity, sort by impact (excessRatio)
+        if (Math.abs(aWorstIssue.excessRatio - bWorstIssue.excessRatio) > 0.1) {
+          return bWorstIssue.excessRatio - aWorstIssue.excessRatio; // Higher impact first
+        }
+      }
+      
+      // 3. Finally sort by health score (lower = worse)
+      return a.healthScore - b.healthScore;
+    })
+    .slice(0, 5);
   
   if (criticalFiles.length > 0) {
     printSectionHeader('Critical Files');

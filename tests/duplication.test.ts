@@ -45,6 +45,88 @@ describe('Duplication Detection', () => {
     });
   });
 
+  it('should exclude configuration files from duplication detection', () => {
+    const karmaConfig1 = `
+module.exports = function (config) {
+  config.set({
+    basePath: '',
+    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    plugins: [
+      require('karma-jasmine'),
+      require('karma-chrome-launcher'),
+    ],
+    port: 9876,
+    browsers: ['ChromeHeadlessNoSandbox'],
+  });
+};`;
+
+    const karmaConfig2 = `
+module.exports = function (config) {
+  config.set({
+    basePath: '',
+    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    plugins: [
+      require('karma-jasmine'),
+      require('karma-chrome-launcher'),
+    ],
+    port: 9876,
+    browsers: ['ChromeHeadlessNoSandbox'],
+  });
+};`;
+
+    const files = [
+      createFileDetail('karma1.conf.js', karmaConfig1, 15),
+      createFileDetail('karma2.conf.js', karmaConfig2, 15)
+    ];
+
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
+
+    // Configuration files should not be counted as duplication
+    result.forEach(file => {
+      expect(file.metrics.duplicationRatio).toBeLessThan(0.1);
+    });
+  });
+
+  it('should exclude license headers from duplication detection', () => {
+    const licenseHeader = `
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.dev/license
+ */
+
+export function someFunction(): void {
+  console.log('unique implementation 1');
+}`;
+
+    const anotherFileWithSameLicense = `
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.dev/license
+ */
+
+export function anotherFunction(): void {
+  console.log('unique implementation 2');
+}`;
+
+    const files = [
+      createFileDetail('file1.ts', licenseHeader, 15),
+      createFileDetail('file2.ts', anotherFileWithSameLicense, 15)
+    ];
+
+    const result = detectDuplication(files, DEFAULT_THRESHOLDS, undefined);
+
+    // License headers should not be counted as duplication
+    result.forEach(file => {
+      expect(file.metrics.duplicationRatio).toBeLessThan(0.5); // Should be much lower than before
+    });
+  });
+
   it('should detect high duplication in identical files', () => {
     const duplicatedContent = `
       function validateEmail(email: string): boolean {

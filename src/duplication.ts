@@ -47,6 +47,14 @@ function hasSignificantCode(normalizedBlock: string): boolean {
   // Must have some meaningful length
   if (content.length < DUPLICATION_DETECTION_CONSTANTS.MIN_CONTENT_LENGTH) return false;
   
+  // Check for license headers and copyright notices - exclude them
+  const isLicenseHeader = /\b(license|copyright|permission|granted|mit\s|apache|bsd)\b/i.test(content);
+  if (isLicenseHeader) return false;
+  
+  // Check for configuration file patterns - exclude standard config boilerplate
+  const isConfigPattern = /\b(karma|webpack|babel|eslint|prettier|jest|jasmine|config\.set|module\.exports)\b/i.test(content);
+  if (isConfigPattern) return false;
+  
   // Check for code patterns (functions, conditionals, assignments, etc.)
   const codePatterns = [
     /\bfunction\b|\bclass\b|\bif\b|\bfor\b|\bwhile\b/, // Keywords
@@ -142,6 +150,15 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
   
   // First pass: collect all blocks and their hashes from all files
   for (const file of files) {
+    // Skip configuration files entirely from duplication analysis
+    if (/\.(conf|config)\.js$|karma\.conf\.js$|webpack\.config\.js$|babel\.config\.js$/i.test(file.file)) {
+      continue;
+    }
+    
+    // Skip test integration files that are mostly imports/exports
+    if (file.file.includes('include-all.ts') || file.file.includes('typings_test')) {
+      continue;
+    }
     // Try to read content from file object first (for tests), then from filesystem
     let content: string | null;
     try {
@@ -178,6 +195,33 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
 
     for (let i = 0; i <= lines.length - blockSize; i++) {
       const block = lines.slice(i, i + blockSize).join('\n');
+      
+      // Quick pre-checks to avoid expensive regex on most blocks
+      const blockLower = block.toLowerCase();
+      
+      // Check for configuration patterns (simple string includes first)
+      if (blockLower.includes('config.set') || blockLower.includes('module.exports') || 
+          blockLower.includes('karma') || blockLower.includes('webpack')) {
+        continue;
+      }
+      
+      // Check for barrel exports (simple pattern first)
+      if (block.includes('export *') || block.includes('export {')) {
+        const lines = block.split('\n').filter(line => line.trim());
+        const codeLines = lines.filter(line => !line.trim().startsWith('//') && !line.trim().startsWith('/*'));
+        if (codeLines.length > 0 && codeLines.every(line => /export\s*(\*|\{)/.test(line))) {
+          continue;
+        }
+      }
+      
+      // Check for test integration files (simple counts first)
+      if (block.includes('import *') && block.includes('export default')) {
+        const importCount = (block.match(/import\s+\*/g) || []).length;
+        if (importCount >= 3 && /export\s+default\s+\{/.test(block)) {
+          continue;
+        }
+      }
+      
       const normalizedBlock = normalizeBlock(block);
       
       // Enhanced filtering - require minimum tokens for meaningful duplication
