@@ -63,6 +63,7 @@ export interface AnalysisResult {
   context: Context;
   overview: Overview;
   details: FileDetail[];
+  codeContext?: CodeContext[];
 }
 
 /**
@@ -95,6 +96,7 @@ export interface Overview {
     totalLOC: number;
     avgComplexity: number;
     avgLOC: number;
+    avgDuplicationRatio?: number; // Average duplication ratio (0-1)
   };
   
   scores: {
@@ -120,11 +122,7 @@ export interface FileDetail {
     duplicationRatio: Ratio;    // Ratio 0-1 (not percentage!)
   };
   
-  dependencies: {
-    incomingCount: number;   // How many files import this
-    percentile: number;      // Percentile 0-100
-    isEntryPoint: boolean;   // main.ts, index.ts, app.ts
-  };
+  dependencies: FileDependencyAnalysis
   
   issues: Issue[];
   
@@ -153,116 +151,77 @@ export interface Issue {
 // - criticalFiles = details.sort(healthScore).slice(0,5) 
 // - quickWins = details.flatMap(issues).filter(effortHours <= 1)
 
-// ==================== LEGACY SUPPORT ====================
 
 /**
- * Legacy CodeContext for backward compatibility
+ * Code context focused on critical functions and patterns
  */
 export interface CodeContext {
-  path: string;
-  complexity: number;
-  
-  // File structure overview
-  structure: {
-    imports: string[];
-    exports: string[];
-    classes: string[];
-    functions: string[];
-    interfaces: string[];
-    types: string[];
-    enums: string[];
-    constants: string[];
-  };
-  
-  // Key patterns detected
-  patterns: {
-    hasAsyncFunctions: boolean;
-    hasGenerators: boolean;
-    hasDecorators: boolean;
-    hasJSX: boolean;
-    usesTypeScript: boolean;
-    hasErrorHandling: boolean;
-    hasTests: boolean;
-  };
-  
-  // Complexity breakdown
-  complexityBreakdown: {
-    functions: Array<{
-      name: string;
-      complexity: number;
-      lineCount: number;
-      parameters: number;
-      isAsync: boolean;
-      hasErrorHandling: boolean;
-    }>;
-    highestComplexityFunction: string;
-    deepestNesting: number;
-  };
-  
-  // Dependencies analysis
-  dependencies: {
-    internal: string[];
-    external: string[];
-    mostImportedFrom: string[];
-  };
-  
-  // Code snippet samples (for LLM understanding)
-  samples: {
-    complexFunctions: Array<{
-      name: string;
-      complexity: number;
-      snippet: string;
-    }>;
-  };
+  file: string;
+  criticalFunctions: FunctionContext[];
+  patterns: FilePatterns;
 }
 
-/**
- * Legacy CodeContextSummary for backward compatibility
- */
-export interface CodeContextSummary {
-  totalFiles: number;
-  patterns: {
-    asyncUsage: number;
-    errorHandling: number;
-    typeScriptUsage: number;
-    jsxUsage: number;
-    testFiles: number;
-    decoratorUsage: number;
-    generatorUsage: number;
-  };
-  architecture: {
-    totalClasses: number;
-    totalFunctions: number;
-    totalInterfaces: number;
-    totalTypes: number;
-    totalEnums: number;
-    avgFunctionsPerFile: number;
-    avgImportsPerFile: number;
-  };
-  complexity: {
-    filesWithHighComplexity: number;
-    deepestNesting: number;
-    avgComplexityPerFunction: number;
-    mostComplexFunctions: Array<{
-      file: string;
-      name: string;
-      complexity: number;
-      lineCount: number;
-    }>;
-  };
-  dependencies: {
-    mostUsedExternal: Array<{ name: string; count: number }>;
-    mostImportedInternal: Array<{ name: string; count: number }>;
-    avgExternalDepsPerFile: number;
-    avgInternalDepsPerFile: number;
-  };
-  codeQuality: {
-    avgFunctionLength: number;
-    avgParametersPerFunction: number;
-    percentAsyncFunctions: number;
-    percentFunctionsWithErrorHandling: number;
-  };
+export interface FunctionContext {
+  name: string;
+  complexity: number;
+  lineCount: number;
+  parameterCount: number;
+  snippet: string;
+  issues: QualityIssue[];
 }
+
+export interface FilePatterns {
+  quality: QualityPattern[];
+  architecture: ArchitecturePattern[];
+  performance: PerformancePattern[];
+  security: SecurityPattern[];
+  testing: TestingPattern[];
+}
+
+export type QualityPattern = 
+  | 'deep-nesting'
+  | 'long-function' 
+  | 'high-complexity'
+  | 'too-many-params'
+  | 'god-function'
+  | 'single-responsibility'
+  | 'pure-function'
+  | 'well-named';
+
+export type ArchitecturePattern =
+  | 'async-heavy'
+  | 'error-handling'
+  | 'type-safe'
+  | 'dependency-injection'
+  | 'factory-pattern'
+  | 'observer-pattern';
+
+export type PerformancePattern =
+  | 'memory-intensive'
+  | 'cpu-intensive'
+  | 'io-heavy'
+  | 'caching'
+  | 'lazy-loading';
+
+export type SecurityPattern =
+  | 'input-validation'
+  | 'sql-injection-risk'
+  | 'xss-risk'
+  | 'auth-check'
+  | 'sanitization';
+
+export type TestingPattern =
+  | 'test-file'
+  | 'mock-heavy'
+  | 'integration-test'
+  | 'unit-test';
+
+export interface QualityIssue {
+  type: QualityPattern;
+  severity: 'low' | 'medium' | 'high';
+  description: string;
+}
+
 
 // ==================== DEPRECATED INTERFACES ====================
 
@@ -277,7 +236,7 @@ export interface CliOptions {
   exclude?: string[];
   excludeUtility?: boolean;
   withContext?: boolean;
-  format?: 'json' | 'ci' | 'critical' | 'summary';
+  format?: 'json' | 'ci' | 'critical' | 'summary' | 'report';
 }
 
 /**
@@ -285,25 +244,25 @@ export interface CliOptions {
  */
 export interface ThresholdConfig {
   complexity: {
-    production: { medium: number; high: number };
-    test: { medium: number; high: number };
-    utility: { medium: number; high: number };
-    example?: { medium: number; high: number };
-    config?: { medium: number; high: number };
+    production: { medium: number; high: number; critical?: number };
+    test: { medium: number; high: number; critical?: number };
+    utility: { medium: number; high: number; critical?: number };
+    example?: { medium: number; high: number; critical?: number };
+    config?: { medium: number; high: number; critical?: number };
   };
   size: {
-    production: { medium: number; high: number };
-    test: { medium: number; high: number };
-    utility: { medium: number; high: number };
-    example?: { medium: number; high: number };
-    config?: { medium: number; high: number };
+    production: { medium: number; high: number; critical?: number };
+    test: { medium: number; high: number; critical?: number };
+    utility: { medium: number; high: number; critical?: number };
+    example?: { medium: number; high: number; critical?: number };
+    config?: { medium: number; high: number; critical?: number };
   };
   duplication: {
-    production: { medium: number; high: number };
-    test: { medium: number; high: number };
-    utility: { medium: number; high: number };
-    example?: { medium: number; high: number };
-    config?: { medium: number; high: number };
+    production: { medium: number; high: number; critical?: number };
+    test: { medium: number; high: number; critical?: number };
+    utility: { medium: number; high: number; critical?: number };
+    example?: { medium: number; high: number; critical?: number };
+    config?: { medium: number; high: number; critical?: number };
   };
 }
 
@@ -317,4 +276,117 @@ export interface CiFormat {
   grade: 'A' | 'B' | 'C' | 'D' | 'F';
   score: Score;
   criticalCount: number;
+}
+
+
+
+/**
+ * Configuration pour l'analyse universelle de dépendances.
+ */
+export interface DependencyAnalyzerConfig {
+  projectRoot?: string; // Chemin racine du projet absolu
+  extensions?: string[];
+  indexFiles?: string[];
+  aliases?: Record<string, string>;
+  frameworkHints?: FrameworkHint[];
+  analyzeCircularDependencies?: boolean;
+  analyzeDynamicImports?: boolean;
+  followSymlinks?: boolean;
+  maxFileSize?: number;
+  maxDepth?: number;
+  timeout?: number;
+  cache?: boolean;
+  hubFileThreshold?: number; // Seuil d'impact pour qu'un fichier soit considéré comme un "hub"
+  logResolutionErrors?: boolean; // Log des erreurs de résolution d'import
+}
+
+export interface FrameworkHint {
+  name: 'vue' | 'react' | 'angular' | 'svelte' | 'next' | 'nuxt' | 'gatsby' | 'custom';
+  importPatterns?: RegExp[];
+  filePatterns?: RegExp[];
+  resolver?: (importPath: string, context: ResolverContext) => string | null;
+}
+
+export interface ResolverContext {
+  importingFile: string;
+  projectRoot: string;
+}
+
+export interface DependencyAnalysisResult {
+  incomingDependencyCount: Map<string, number>;
+  dependencyGraph: Map<string, Set<string>>;
+  circularDependencies: string[][];
+  errors: AnalysisError[];
+  statistics: DependencyStatistics;
+}
+
+export interface AnalysisError {
+  file: string;
+  error: string;
+  phase: 'read' | 'parse' | 'analyze' | 'config';
+}
+
+export interface DependencyStatistics {
+  totalFiles: number;
+  totalImports: number;
+  averageImportsPerFile: number;
+  maxImports: { file: string; count: number };
+  isolatedFiles: string[];
+  hubFiles: string[];
+}
+/**
+ * Contient les métriques et analyses détaillées pour un seul fichier.
+ */
+export interface FileDependencyAnalysis {
+  outgoingDependencies: number; // Dépendances sortantes (efferent coupling)
+  incomingDependencies: number; // Dépendances entrantes (afferent coupling / impact)
+  cohesionScore: number; // Cohésion (0 = faible, 1 = forte) score de cohésion basé sur la proximité des dépendances.
+  instability: number;          // Instabilité (0 = stable, 1 = instable). I = outgoing / (incoming + outgoing) - Principe de Robert C. Martin
+  percentileUsageRank: number;  // Rang d'utilisation (percentile 0-100)
+  isInCycle: boolean;           // Indique si le fichier fait partie d'un cycle
+}
+
+/**
+ * Le résultat complet de l'analyse, maintenant avec les métriques par fichier.
+ */
+export interface DependencyAnalysisResult {
+  incomingDependencyCount: Map<string, number>;
+  dependencyGraph: Map<string, Set<string>>;
+  circularDependencies: string[][];
+  errors: AnalysisError[];
+  statistics: DependencyStatistics;
+  fileAnalyses: Map<string, FileDependencyAnalysis>; // ✅ Nouvelle propriété
+}
+export interface EmblematicFiles {
+  coreFiles: string[];
+  architecturalFiles: string[];
+  performanceCriticalFiles: string[];
+  complexAlgorithmFiles: string[];
+}
+export interface ReportResult {
+  project: string;
+  repo: string;
+  type: string;
+  stars: string;
+  stableVersion: string;
+  description: string;
+  category: 'small' | 'medium' | 'large';
+  emblematicFiles?: EmblematicFiles;
+  analysis: AnalysisResult;
+  durationMs: number;
+  error?: string;
+}
+
+
+export interface ReportSummary {
+  totalProjects: number;
+  successfulAnalyses: number;
+  failedAnalyses: number;
+  totalDuration: number; // Temps cumulé (pour les stats)
+  realDuration: number;  // Temps réel d'exécution parallèle
+  totalLines: number;
+  avgComplexity: number;
+  avgDuplication: number;
+  gradeDistribution: Record<string, number>;
+  modeCategory: 'production' | 'full';
 }

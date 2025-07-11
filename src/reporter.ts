@@ -2,6 +2,8 @@
 
 import chalk from 'chalk';
 import { AnalysisResult, FileDetail, Issue, IssueType } from './types';
+import { calculateExcessPercentage, formatPercentage, getGrade, ratioToPercentage } from './scoring.utils';
+import { CRITICAL_HEALTH_SCORE } from './thresholds.constants';
 
 /**
  * Generate description for an issue based on type and threshold data
@@ -9,11 +11,11 @@ import { AnalysisResult, FileDetail, Issue, IssueType } from './types';
 function getIssueDescription(issue: Issue): string {
   switch (issue.type) {
     case IssueType.Complexity:
-      return `${issue.severity} complexity: Exceeds threshold by ${(issue.excessRatio * 100 - 100).toFixed(0)}%`;
+      return `${issue.severity} complexity: Exceeds threshold by ${calculateExcessPercentage(issue.excessRatio).toFixed(0)}%`;
     case IssueType.Size:
-      return `${issue.severity} file size: Exceeds threshold by ${(issue.excessRatio * 100 - 100).toFixed(0)}%`;
+      return `${issue.severity} file size: Exceeds threshold by ${calculateExcessPercentage(issue.excessRatio).toFixed(0)}%`;
     case IssueType.Duplication:
-      return `${issue.severity} duplication: Exceeds threshold by ${(issue.excessRatio * 100 - 100).toFixed(0)}%`;
+      return `${issue.severity} duplication: Exceeds threshold by ${calculateExcessPercentage(issue.excessRatio).toFixed(0)}%`;
     default:
       return `${issue.severity} ${issue.type} issue`;
   }
@@ -22,14 +24,14 @@ function getIssueDescription(issue: Issue): string {
 // isCriticalFile function removed - logic integrated into client-side calculations
 
 /**
- * Formate un nombre avec des espaces comme séparateurs de milliers
+ * Format number with spaces as thousands separators
  */
 function formatNumber(num: number): string {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 }
 
 /**
- * Affiche un en-tête de section stylisé
+ * Display styled section header
  */
 function printSectionHeader(title: string): void {
   console.log(`\n${chalk.bold.underline(title)}`);
@@ -37,17 +39,22 @@ function printSectionHeader(title: string): void {
 }
 
 /**
- * Obtient la couleur appropriée pour un score
+ * Get appropriate color for score based on v0.6.0 grading system
+ * Uses centralized grade thresholds from constants.ts
  */
 function getScoreColor(score: number): (text: string) => string {
-  if (score >= 90) return chalk.green;
-  if (score >= 80) return chalk.yellow;
-  if (score >= 70) return chalk.yellow;
-  return chalk.red;
+  const grade = getGrade(score);
+  switch (grade) {
+    case 'A': return chalk.green;        // Grade A - Excellent
+    case 'B': return chalk.greenBright;  // Grade B - Good
+    case 'C': return chalk.yellow;       // Grade C - Acceptable
+    case 'D': return chalk.yellowBright; // Grade D - Poor
+    case 'F': return chalk.red;          // Grade F - Critical
+  }
 }
 
 /**
- * Obtient la couleur appropriée pour un grade
+ * Get appropriate color for grade letter based on v0.6.0 system
  */
 function getGradeColor(grade: string): (text: string) => string {
   switch (grade) {
@@ -62,7 +69,8 @@ function getGradeColor(grade: string): (text: string) => string {
 
 
 /**
- * Affiche les résultats de l'analyse dans le terminal avec un design professionnel
+ * Display analysis results in terminal with professional design
+ * Uses v0.6.0 methodology with McCabe thresholds, progressive penalties, and no artificial caps
  */
 export function reportToTerminal(result: AnalysisResult): void {
   const { context, overview, details } = result;
@@ -99,7 +107,10 @@ export function reportToTerminal(result: AnalysisResult): void {
   // --- Détails des Scores ---
   printSectionHeader('Score Breakdown');
   console.log(`  ${chalk.bold('Complexity:')}      ${getScoreColor(overview.scores.complexity)(overview.scores.complexity + '/100')}`);
-  console.log(`  ${chalk.bold('Duplication:')}     ${getScoreColor(overview.scores.duplication)(overview.scores.duplication + '/100')}`);
+  const duplicationPercentage = overview.statistics.avgDuplicationRatio !== undefined 
+    ? formatPercentage(overview.statistics.avgDuplicationRatio) 
+    : '0.0%';
+  console.log(`  ${chalk.bold('Duplication:')}     ${getScoreColor(overview.scores.duplication)(overview.scores.duplication + '/100')} ${chalk.gray(`(${duplicationPercentage}% detected)`)}`);
   console.log(`  ${chalk.bold('Maintainability:')} ${getScoreColor(overview.scores.maintainability)(overview.scores.maintainability + '/100')}`);
 
   // --- Statistiques ---
@@ -109,7 +120,7 @@ export function reportToTerminal(result: AnalysisResult): void {
   
   const avgDuplication = details.reduce((sum, f) => sum + f.metrics.duplicationRatio, 0) / details.length;
   const avgFunctions = details.reduce((sum, f) => sum + f.metrics.functionCount, 0) / details.length;
-  console.log(`  ${chalk.bold('Average Duplication:')} ${chalk.cyan(Math.round(avgDuplication * 100) + '%')}`);
+  console.log(`  ${chalk.bold('Average Duplication:')} ${chalk.cyan(Math.round(ratioToPercentage(avgDuplication)) + '%')}`);
   console.log(`  ${chalk.bold('Average Functions:')}   ${chalk.cyan(Math.round(avgFunctions))}`);
 
   // --- Critical Files section moved to recommendations below ---
@@ -120,7 +131,7 @@ export function reportToTerminal(result: AnalysisResult): void {
   const criticalFiles = result.details
     .sort((a, b) => a.healthScore - b.healthScore)
     .slice(0, 5)
-    .filter(f => f.healthScore < 80); // Only show truly critical files
+    .filter(f => f.healthScore < CRITICAL_HEALTH_SCORE); // Only show truly critical files
   
   if (criticalFiles.length > 0) {
     printSectionHeader('Critical Files');
@@ -184,5 +195,8 @@ export function reportToTerminal(result: AnalysisResult): void {
 
   // --- Pied de page ---
   console.log(chalk.dim(`\n  Analysis completed with InsightCode v${context.analysis.toolVersion}`));
+  console.log(chalk.dim(`  Note: v0.6.0 methodology uses McCabe-based thresholds (≤10 low, >20 critical) with progressive penalties (no caps)`));
+  console.log(chalk.dim(`  Weights: Complexity 45% (McCabe research), Maintainability 30% (Martin Clean Code), Duplication 25% (Fowler)`));
+  console.log(chalk.dim(`  Duplication: 8-line literal pattern matching, cross-file exact matches only (not structural similarity)`));
   console.log(chalk.dim(`  For detailed JSON output, use: insightcode analyze --json`));
 }

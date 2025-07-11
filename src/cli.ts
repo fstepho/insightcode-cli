@@ -6,14 +6,15 @@ import { CliOptions, AnalysisResult, FileDetail } from './types';
 import { parseDirectory } from './parser';
 import { analyze } from './analyzer';
 import { reportToTerminal } from './reporter';
-import { getConfig } from './config';
-import { analyzeWithContext } from './contextExtractor';
+import { isCriticalFile, isPassingScore } from './scoring.utils';
+import { generateProjectReport } from './report-generator';
+import { getConfig } from './config.manager';
 
 /**
- * Checks if a file is critical based on health score
+ * Wrapper helper pour vérifier si un fichier est critique
  */
-function isCriticalFile(file: FileDetail): boolean {
-  return file.healthScore < 80;
+function isFileCritical(file: FileDetail): boolean {
+  return isCriticalFile(file.healthScore);
 }
 
 const program = new Command();
@@ -21,11 +22,11 @@ const program = new Command();
 // Format output functions
 function outputCiFormat(results: AnalysisResult): void {
   const ciResult = {
-    passed: results.overview.scores.overall >= 70,
+    passed: isPassingScore(results.overview.scores.overall),
     grade: results.overview.grade,
     score: results.overview.scores.overall,
     issues: results.details.reduce((total, file) => total + file.issues.length, 0),
-    critical: results.details.filter(f => isCriticalFile(f)).length
+    critical: results.details.filter(f => isFileCritical(f)).length
   };
   
   console.log(JSON.stringify(ciResult, null, 2));
@@ -39,7 +40,7 @@ function outputCiFormat(results: AnalysisResult): void {
 function outputCriticalFormat(results: AnalysisResult): void {
   const criticalResult = {
     ...results,
-    details: results.details.filter(f => isCriticalFile(f))
+    details: results.details.filter(f => isFileCritical(f))
   };
   
   console.log(JSON.stringify(criticalResult, null, 2));
@@ -52,7 +53,7 @@ function outputSummaryFormat(results: AnalysisResult): void {
   console.log(`Files: ${results.overview.statistics.totalFiles}`);
   console.log(`Issues: ${results.details.reduce((total, file) => total + file.issues.length, 0)}`);
   
-  const criticalFiles = results.details.filter(f => isCriticalFile(f));
+  const criticalFiles = results.details.filter(f => isFileCritical(f));
   if (criticalFiles.length > 0) {
     console.log('\nCritical Files:');
     criticalFiles.forEach((file, index) => {
@@ -67,6 +68,30 @@ function outputSummaryFormat(results: AnalysisResult): void {
   console.log('\nRun with --format=json for full details.');
 }
 
+function outputReportFormat(results: AnalysisResult, projectPath: string): void {
+  // Create a ReportResult-like structure for generateProjectReport
+  const reportResult = {
+    project: projectPath.split('/').pop() || 'project',
+    type: 'analysis',
+    repo: 'local',
+    stableVersion: 'latest',
+    stars: '0',
+    category: 'medium' as 'small' | 'medium' | 'large',
+    description: 'Local project analysis',
+    durationMs: 0, // We don't track this in CLI mode
+    analysis: results,
+    emblematicFiles: {
+      coreFiles: [],
+      architecturalFiles: [],
+      performanceCriticalFiles: [],
+      complexAlgorithmFiles: []
+    }
+  };
+  
+  const report = generateProjectReport(reportResult);
+  console.log(report);
+}
+
 program
   .name('insightcode')
   .description('TypeScript code quality analyzer - 100% local')
@@ -76,13 +101,14 @@ program
   .command('analyze [path]')
   .description('Analyze TypeScript code quality')
   .option('-j, --json', 'Output as JSON')
-  .option('-f, --format <format>', 'Output format: json, ci, critical, summary (default: terminal)')
+  .option('-f, --format <format>', 'Output format: json, ci, critical, summary, report (default: terminal)')
   .option('-e, --exclude <patterns...>', 'Exclude patterns (e.g., "**/*.spec.ts")')
   .option('--exclude-utility', 'Exclude test, example, and utility directories from analysis')
   .option('--with-context', 'Include detailed code context for LLM analysis')
   .action(async (path = '.', options: CliOptions) => {
     try {
-      if (!options.json) {
+      // check if options.format not terminal 
+      if (!options.json && !options.format) {
         console.log(chalk.blue('🔍 Analyzing code quality...'));
       }
       const thresholds = getConfig();
@@ -95,12 +121,7 @@ program
       }
       
       // Analyze metrics
-      let results;
-      if (options.withContext) {
-        results = analyzeWithContext(files, path, thresholds, true);
-      } else {
-        results = analyze(files, path, thresholds);
-      }
+      const results = await analyze(files, path, thresholds, options.withContext);
       
       // Handle output format
       const format = options.format || (options.json ? 'json' : 'terminal');
@@ -110,7 +131,6 @@ program
           console.log(JSON.stringify(results, function(key, val) {
             return val && val.toFixed ? Number(val.toFixed(2)) : val;
           }, 2));
-
           break;
         case 'ci':
           outputCiFormat(results);
@@ -121,6 +141,9 @@ program
         case 'summary':
           outputSummaryFormat(results);
           break;
+        case 'report':
+          outputReportFormat(results, path);
+          break;
         default:
           // Use the new reporter for terminal output
           reportToTerminal(results);
@@ -130,6 +153,7 @@ program
       console.error(chalk.red('\n❌ Error:'), error instanceof Error ? error.message : error);
       process.exit(1);
     }
+    process.exit(0);
   });
 
 program.parse();

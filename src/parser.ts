@@ -6,27 +6,39 @@ import * as path from 'path';
 import glob from 'fast-glob';
 import { FileDetail, Issue, IssueType, Severity, ThresholdConfig } from './types';
 import { normalizePath } from './utils';
-import { getConfig } from './config';
+import { getConfig } from './config.manager';
+
+// Protection contre les stack overflow pour les fichiers de test TypeScript
+const MAX_RECURSION_DEPTH = 1000;
 
 /**
- * Checks if a file is an entry point
+ * Wrapper sécurisé pour les fonctions récursives AST
  */
-function isEntryPoint(filePath: string): boolean {
-  const normalizedPath = normalizePath(filePath);
-  return normalizedPath.includes('main.ts') || 
-         normalizedPath.includes('index.ts') || 
-         normalizedPath.includes('app.ts') ||
-         normalizedPath.endsWith('main.js') ||
-         normalizedPath.endsWith('index.js') ||
-         normalizedPath.endsWith('app.js');
+function safeVisit(node: ts.Node, visitor: (node: ts.Node, depth: number) => void, depth = 0) {
+  if (depth > MAX_RECURSION_DEPTH) {
+    console.warn(`Max recursion depth reached, skipping deeper nodes`);
+    return;
+  }
+  
+  visitor(node, depth);
+  
+  try {
+    ts.forEachChild(node, child => safeVisit(child, visitor, depth + 1));
+  } catch (error) {
+    if (error instanceof RangeError && error.message.includes('Maximum call stack size')) {
+      console.warn(`Stack overflow detected, skipping subtree`);
+    } else {
+      throw error;
+    }
+  }
 }
+
 
 // Default patterns to exclude
 const DEFAULT_EXCLUDE = [
   '**/node_modules/**',
   '**/dist/**',
   '**/build/**',
-  '**/*.d.ts',
   '**/coverage/**',
   '**/.git/**'
 ];
@@ -53,7 +65,12 @@ const UTILITY_PATTERNS = [
   '**/benchmarks/**',
   '**/coverage/**',
   "**/vendor/**",
-  "**/temp-analysis/**"
+  "**/temp-analysis/**",
+  // Fichiers de test problématiques causant des stack overflow/memory issues
+  "**/binderBinaryExpressionStress*",
+  "**/binderBinaryExpressionStressJs*",
+  "**/stress*",
+  "**/fourslash*"
 ];
 
 /**
@@ -118,7 +135,7 @@ function classifyFileType(filePath: string): 'production' | 'test' | 'example' |
 function calculateComplexity(sourceFile: ts.SourceFile): number {
   let complexity = 1; // Base complexity
   
-  function visit(node: ts.Node) {
+  const visitor = (node: ts.Node) => {
     // Add +1 for each decision point
     switch (node.kind) {
       case ts.SyntaxKind.IfStatement:
@@ -141,10 +158,9 @@ function calculateComplexity(sourceFile: ts.SourceFile): number {
         }
         break;
     }
-    ts.forEachChild(node, visit);
-  }
+  };
   
-  visit(sourceFile);
+  safeVisit(sourceFile, visitor);
   return complexity;
 }
 
@@ -206,7 +222,7 @@ function countLinesOfCode(content: string): number {
 function countFunctions(sourceFile: ts.SourceFile): number {
   let functionCount = 0;
 
-  function visit(node: ts.Node) {
+  const visitor = (node: ts.Node) => {
     switch (node.kind) {
       case ts.SyntaxKind.FunctionDeclaration:
       case ts.SyntaxKind.MethodDeclaration:
@@ -218,10 +234,9 @@ function countFunctions(sourceFile: ts.SourceFile): number {
         functionCount++;
         break;
     }
-    ts.forEachChild(node, visit);
-  }
+  };
   
-  visit(sourceFile);
+  safeVisit(sourceFile, visitor);
   return functionCount;
 }
 
@@ -244,7 +259,15 @@ export function parseFile(filePath: string): FileDetail {
   const complexityThresholds = thresholds.complexity[fileType as keyof typeof thresholds.complexity] || thresholds.complexity.production;
   const sizeThresholds = thresholds.size[fileType as keyof typeof thresholds.size] || thresholds.size.production;
   
-  if (complexity > complexityThresholds.high) {
+  if (complexityThresholds.critical && complexity > complexityThresholds.critical) {
+    issues.push({
+      type: IssueType.Complexity,
+      severity: Severity.Critical,
+      line: 1,
+      threshold: complexityThresholds.critical,
+      excessRatio: complexity / complexityThresholds.critical
+    });
+  } else if (complexity > complexityThresholds.high) {
     issues.push({
       type: IssueType.Complexity,
       severity: Severity.High,
@@ -262,7 +285,15 @@ export function parseFile(filePath: string): FileDetail {
     });
   }
   
-  if (loc > sizeThresholds.high) {
+  if (sizeThresholds.critical && loc > sizeThresholds.critical) {
+    issues.push({
+      type: IssueType.Size,
+      severity: Severity.Critical,
+      line: 1,
+      threshold: sizeThresholds.critical,
+      excessRatio: loc / sizeThresholds.critical
+    });
+  } else if (loc > sizeThresholds.high) {
     issues.push({
       type: IssueType.Size,
       severity: Severity.High,
@@ -289,9 +320,12 @@ export function parseFile(filePath: string): FileDetail {
       duplicationRatio: 0  // Will be calculated later in duplication.ts
     },
     dependencies: {
-      incomingCount: 0,  // Will be calculated later in dependencyAnalyzer.ts
-      percentile: 0,   // Will be calculated later in analyzer.ts
-      isEntryPoint: isEntryPoint(filePath)
+      instability: 0, // Will be calculated later in analyzer.ts
+      cohesionScore: 0, // Will be calculated later in analyzer.ts
+      incomingDependencies: 0, // Will be calculated later in analyzer.ts
+      outgoingDependencies: 0, // Will be calculated later in analyzer.ts
+      percentileUsageRank: 0, // Will be calculated later in analyzer.ts
+      isInCycle: false, // Will be calculated later in analyzer.ts
     },
     issues,
     healthScore: 0  // Will be calculated later in analyzer.ts
@@ -330,6 +364,13 @@ export async function parseDirectory(
   
   for (const file of filesToAnalyze) {
     try {
+      // Skip files that are too large to prevent memory issues
+      const stats = fs.statSync(file);
+      if (stats.size > 5 * 1024 * 1024) { // 5MB limit
+        console.warn(`Warning: Skipping large file (${(stats.size / 1024 / 1024).toFixed(1)}MB): ${file}`);
+        continue;
+      }
+      
       const fileDetail = parseFile(file);
       results.push(fileDetail);
     } catch (error) {

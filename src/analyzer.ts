@@ -1,5 +1,7 @@
 // File: src/analyzer.ts - v0.6.0 Complete Refactor
 
+import * as path from 'path';
+import * as fs from 'fs';
 import { 
   AnalysisResult, 
   FileDetail, 
@@ -8,58 +10,80 @@ import {
   ThresholdConfig,
   validateScore
 } from './types';
-import { analyzeDependencies } from './dependencyAnalyzer';
+import { enrichWithContext } from './contextExtractor';
 import { detectDuplication } from './duplication';
 import { getProjectInfo } from './projectInfo';
-import { getConfig } from './config';
+import { isCriticalFile, getGrade } from './scoring.utils';
 import { normalizeProjectPath } from './utils';
 import { 
   calculateComplexityScore, 
   calculateDuplicationScore, 
   calculateMaintainabilityScore, 
   calculateWeightedScore, 
-  getGrade,
   calculateHealthScore 
 } from './scoring';
+import { SCORING_WEIGHTS } from './thresholds.constants';
+import { UniversalDependencyAnalyzer } from './dependencyAnalyzer';
+import { getConfig } from './config.manager';
 // generateRecommendations removed in v0.6.0 - calculable client-side
 
 // ==================== V0.6.0 CORE FUNCTIONS ====================
 
+/**
+ * Finds the actual project root by looking for package.json, tsconfig.json, etc.
+ * For monorepos, prioritizes workspace root over individual package roots.
+ */
+function findProjectRoot(analysisPath: string): string {
+  let currentPath = path.resolve(analysisPath);
+  const rootPath = path.parse(currentPath).root;
+  let lastFoundRoot: string | null = null;
+  
+  while (currentPath !== rootPath) {
+    // Check for project markers
+    const packageJsonPath = path.join(currentPath, 'package.json');
+    const gitPath = path.join(currentPath, '.git');
+    const yarnLockPath = path.join(currentPath, 'yarn.lock');
+    const pnpmLockPath = path.join(currentPath, 'pnpm-lock.yaml');
+    const tsconfigPath = path.join(currentPath, 'tsconfig.json');
+    
+    // Priority order: git repo > lock files > package.json with workspaces > package.json > tsconfig
+    if (fs.existsSync(gitPath)) {
+      // Git repository root - highest priority for monorepos
+      return currentPath;
+    }
+    
+    if (fs.existsSync(yarnLockPath) || fs.existsSync(pnpmLockPath)) {
+      // Lock files usually indicate workspace root
+      return currentPath;
+    }
+    
+    if (fs.existsSync(packageJsonPath)) {
+      try {
+        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+        if (packageJson.workspaces) {
+          // This is a workspace root - highest priority
+          return currentPath;
+        }
+        // Remember this as a potential root, but keep looking for workspace root
+        lastFoundRoot = currentPath;
+      } catch {
+        // Invalid package.json, treat as regular marker
+        lastFoundRoot = currentPath;
+      }
+    }
+    
+    if (!lastFoundRoot && fs.existsSync(tsconfigPath)) {
+      lastFoundRoot = currentPath;
+    }
+    
+    currentPath = path.dirname(currentPath);
+  }
+  
+  // Return the last found root, or the analysis path itself
+  return lastFoundRoot || path.resolve(analysisPath);
+}
+
 // Health score calculation moved to scoring.ts
-
-/**
- * Checks if a file is critical based on health score
- */
-function isCriticalFile(file: FileDetail): boolean {
-  return file.healthScore < 80;
-}
-
-/**
- * Checks if a file is in the critical path (top 10% by usage)
- */
-function isCriticalPath(file: FileDetail, allFiles: FileDetail[]): boolean {
-  const sortedByUsage = [...allFiles].sort((a, b) => b.dependencies.incomingCount - a.dependencies.incomingCount);
-  const topTenPercentCount = Math.ceil(sortedByUsage.length * 0.1);
-  return sortedByUsage.slice(0, topTenPercentCount).includes(file);
-}
-
-/**
- * Calculates usage rank percentile for a file
- */
-function calculateUsageRank(file: FileDetail, allFiles: FileDetail[]): number {
-  if (allFiles.length <= 1) return 0;
-  
-  // Sort all files by incomingCount
-  const sorted = [...allFiles].sort((a, b) => a.dependencies.incomingCount - b.dependencies.incomingCount);
-  
-  // Find position of current file
-  const position = sorted.findIndex(f => f.file === file.file);
-  
-  // Calculate percentile (0 = least used, 100 = most used)
-  const percentile = Math.round((position / (sorted.length - 1)) * 100);
-  return isNaN(percentile) ? 0 : percentile;
-}
-
 
 /**
  * Generates human-readable summary
@@ -71,7 +95,7 @@ function generateSummary(overview: Overview, criticalCount: number): string {
   if (criticalCount === 1) {
     return `Good overall health with 1 file requiring attention`;
   }
-  return `${criticalCount} critical issues found in core modules`;
+  return `${criticalCount} critical files found requiring attention`;
 }
 
 
@@ -82,11 +106,11 @@ function generateSummary(overview: Overview, criticalCount: number): string {
 /**
  * The main analysis function for v0.6.0 - Complete refactor
  */
-export function analyze(files: FileDetail[], projectPath: string, _thresholds: ThresholdConfig): AnalysisResult {
+export async function analyze(files: FileDetail[], projectPath: string, _thresholds: ThresholdConfig, withContext: boolean = false): Promise<AnalysisResult> {
   const startTime = Date.now();
   
   // 1. Calculate all metrics and relationships
-  const processedDetails = processFileDetails(files);
+  const processedDetails = await processFileDetails(files, projectPath);
   
   // 3. Calculate overview scores
   const overview = calculateOverview(processedDetails);
@@ -96,33 +120,59 @@ export function analyze(files: FileDetail[], projectPath: string, _thresholds: T
   
   // 5. Recommendations removed in v0.6.0 - calculable client-side
   
-  return {
+  const result: AnalysisResult = {
     context,
     overview,
     details: processedDetails
   };
-}
 
+  // Enrichir avec le code context si demandé
+  if (withContext) {
+    try {
+      const codeContexts = enrichWithContext(processedDetails, projectPath);
+      result.codeContext = codeContexts;
+    } catch (error) {
+      console.warn('Could not enrich with code context:', error);
+    }
+  }
+
+  return result;
+}
 
 /**
  * Processes file details to calculate all derived metrics
  */
-function processFileDetails(details: FileDetail[]): FileDetail[] {
+async function processFileDetails(details: FileDetail[], projectPath: string): Promise<FileDetail[]> {
   // 1. Detect duplication
-  const filesWithDuplication = detectDuplication(details, getConfig());
+  const filesWithDuplication = detectDuplication(details, getConfig(), projectPath);
   
   // 2. Analyze dependencies
-  const dependencyMap = analyzeDependencies(filesWithDuplication);
-  
-  // 3. Update usage counts from dependency analysis
-  filesWithDuplication.forEach(file => {
-    file.dependencies.incomingCount = dependencyMap.get(file.file) || 0;
+  const actualProjectRoot = findProjectRoot(projectPath);
+  const dependencyAnalyzer = new UniversalDependencyAnalyzer({
+    projectRoot: actualProjectRoot,
+    analyzeCircularDependencies: true,
+    analyzeDynamicImports: true, 
+    cache: true,
+    timeout: 90000,
+    logResolutionErrors: false, // Désactiver debug verbeux
   });
   
-  // 4. Calculate usage ranks
+  const dependencyAnalysisResult = await dependencyAnalyzer.analyze(filesWithDuplication);
+
+  // 3. Update dependencies from dependency analysis
   filesWithDuplication.forEach(file => {
-    file.dependencies.percentile = calculateUsageRank(file, filesWithDuplication);
+    file.dependencies = dependencyAnalysisResult.fileAnalyses.get(file.file) || {
+      incomingDependencies: 0,
+      outgoingDependencies: 0,
+      instability: 0,
+      cohesionScore: 0,
+      percentileUsageRank: 0,
+      isInCycle: false
+    };
   });
+  
+  // 4. Calculate critical path files (done on-demand)
+  
   
   // 5. Mark critical path files (top 10% by usage)
   // Critical path calculation is now done on-demand in helper functions
@@ -162,13 +212,49 @@ function calculateOverview(details: FileDetail[]): Overview {
   const totalLOC = details.reduce((sum, f) => sum + f.metrics.loc, 0);
   const avgComplexity = details.reduce((sum, f) => sum + f.metrics.complexity, 0) / details.length;
   const avgLOC = totalLOC / details.length;
+  const avgDuplicationRatio = details.reduce((sum, f) => sum + f.metrics.duplicationRatio, 0) / details.length;
   
-  // Calculate weighted scores using criticality weighting
+  // Calculate weighted scores following industry standards WITHOUT outlier masking
+  // 
+  // METHODOLOGY: Raw arithmetic weighting that ensures extreme values are properly reflected
+  // in the final grade, following the Pareto principle (20% of code causes 80% of problems).
+  // 
+  // ACADEMIC FOUNDATION:
+  // - McCabe (1976): Complexity is the primary defect predictor - gets highest weight (45%)
+  // - Martin Clean Code (2008): File size impacts maintainability - secondary weight (30%)
+  // - Fowler Refactoring (1999): Duplication indicates technical debt - tertiary weight (25%)
+  // 
+  // INDUSTRY ALIGNMENT:
+  // - SonarQube methodology: Linear aggregation without artificial caps
+  // - CodeClimate approach: Extreme values should dominate quality assessment
+  // - NO logarithmic scaling: Outliers must be visible, not masked
+  // 
+  // WEIGHT RATIONALE (45/30/25%):
+  // - 45% Complexity: Primary defect predictor (McCabe research)
+  // - 30% Dependencies: Architectural impact and maintainability
+  // - 25% Duplication: Technical debt indicator (Fowler)
+  //
+  // This approach ensures that projects with critical issues (complexity 1000+, 
+  // massive files) receive appropriately low grades, following industry best practices
+  // for identifying the most problematic code that requires immediate attention.
+  
   const totalCriticismScore = details.reduce((sum, f) => {
-    const complexityWeight = 1.0;
-    const impactWeight = 2.0;
-    const issueWeight = 0.5;
-    return sum + (f.dependencies.incomingCount * impactWeight) + (f.metrics.complexity * complexityWeight) + (f.issues.length * issueWeight) + 1;
+    // Simple arithmetic mean without logarithmic masking of outliers
+    // This ensures that extremely complex files are properly weighted
+    const baseWeight = 1.0; // Democratic base weight
+    
+    // Use raw complexity - NO logarithmic scaling!
+    // Files with complexity 1000+ should dominate the calculation
+    const complexityImpact = f.metrics.complexity;
+    
+    // Use normalized dependencies for architectural impact
+    const dependencyImpact = f.dependencies.incomingDependencies;
+    
+    // Use raw duplication ratio
+    const duplicationImpact = f.metrics.duplicationRatio * 100;
+    
+    // Simple weighted sum following industry standards
+    return sum + (complexityImpact * SCORING_WEIGHTS.COMPLEXITY) + (dependencyImpact * SCORING_WEIGHTS.MAINTAINABILITY) + (duplicationImpact * SCORING_WEIGHTS.DUPLICATION) + baseWeight;
   }, 0);
   
   let weightedComplexityScore = 0;
@@ -177,8 +263,13 @@ function calculateOverview(details: FileDetail[]): Overview {
   
   if (totalCriticismScore > 0) {
     for (const file of details) {
-      const criticismScore = (file.dependencies.incomingCount * 2.0) + (file.metrics.complexity * 1.0) + (file.issues.length * 0.5) + 1;
+      // Use raw values without logarithmic masking
+      const complexityImpact = file.metrics.complexity;
+      const dependencyImpact = file.dependencies.incomingDependencies;
+      const duplicationImpact = file.metrics.duplicationRatio * 100;
+      const criticismScore = (complexityImpact * SCORING_WEIGHTS.COMPLEXITY) + (dependencyImpact * SCORING_WEIGHTS.MAINTAINABILITY) + (duplicationImpact * SCORING_WEIGHTS.DUPLICATION) + 1.0;
       const weight = criticismScore / totalCriticismScore;
+      
       weightedComplexityScore += calculateComplexityScore(file.metrics.complexity) * weight;
       weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio) * weight;
       weightedMaintainabilityScore += calculateMaintainabilityScore(file.metrics.loc, file.metrics.functionCount) * weight;
@@ -196,7 +287,7 @@ function calculateOverview(details: FileDetail[]): Overview {
   
   const grade = getGrade(overallScore);
   
-  const criticalCount = details.filter(f => isCriticalFile(f)).length;
+  const criticalCount = details.filter(f => isCriticalFile(f.healthScore)).length;
   
   const overview: Overview = {
     grade,
@@ -204,7 +295,8 @@ function calculateOverview(details: FileDetail[]): Overview {
       totalFiles: details.length,
       totalLOC,
       avgComplexity: Math.round(avgComplexity * 10) / 10,
-      avgLOC: Math.round(avgLOC)
+      avgLOC: Math.round(avgLOC),
+      avgDuplicationRatio: Math.round(avgDuplicationRatio * 1000) / 1000 // Round to 3 decimals
     },
     scores: {
       complexity: complexityScore,

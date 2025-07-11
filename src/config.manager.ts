@@ -1,34 +1,10 @@
-// File: src/config.ts
+// File: src/config.manager.ts
 
 import * as fs from 'fs';
 import * as path from 'path';
 import { ThresholdConfig } from './types';
-import { deepMerge } from './utils'; 
-
-// Les seuils par défaut pour la création d'Issues.
-export const DEFAULT_THRESHOLDS: ThresholdConfig = {
-  complexity: {
-    production: { medium: 10, high: 20 },
-    test: { medium: 15, high: 30 },
-    utility: { medium: 15, high: 25 },
-    example: { medium: 20, high: 40 },
-    config: { medium: 20, high: 35 }
-  },
-  size: {
-    production: { medium: 200, high: 300 },
-    test: { medium: 300, high: 500 },
-    utility: { medium: 250, high: 400 },
-    example: { medium: 150, high: 250 },
-    config: { medium: 300, high: 500 }
-  },
-  duplication: {
-    production: { medium: 15, high: 30 },
-    test: { medium: 25, high: 50 },
-    utility: { medium: 20, high: 40 },
-    example: { medium: 50, high: 80 },
-    config: { medium: 30, high: 60 }
-  }
-};
+import { DEFAULT_THRESHOLDS } from './thresholds.constants';
+import { deepMerge } from './utils';
 
 let config: ThresholdConfig | null = null;
 

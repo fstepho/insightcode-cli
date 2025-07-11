@@ -4,6 +4,8 @@ import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { FileDetail, ThresholdConfig, IssueType, Severity } from './types';
+import { DUPLICATION_DETECTION_CONSTANTS } from './thresholds.constants';
+import { percentageToRatio, ratioToPercentage } from './scoring.utils';
 
 /**
  * Interface for files with optional content (used in tests)
@@ -17,14 +19,49 @@ interface FileWithOptionalContent extends FileDetail {
  */
 function getFileContent(filepath: string): string | null {
   try {
-    // Ensure the path is absolute for fs.readFileSync
-    const absolutePath = path.isAbsolute(filepath) 
-      ? filepath 
-      : path.join(process.cwd(), filepath);
-    return fs.readFileSync(absolutePath, 'utf-8');
+    // Try to read the file with different path resolutions
+    // This handles both relative and absolute paths correctly
+    if (fs.existsSync(filepath)) {
+      return fs.readFileSync(filepath, 'utf-8');
+    }
+    
+    // If not found, try resolving from current directory
+    const resolvedPath = path.resolve(filepath);
+    if (fs.existsSync(resolvedPath)) {
+      return fs.readFileSync(resolvedPath, 'utf-8');
+    }
+    
+    return null;
   } catch {
     return null;
   }
+}
+
+/**
+ * Check if a normalized block contains significant code (not just comments/imports)
+ */
+function hasSignificantCode(normalizedBlock: string): boolean {
+  // Remove whitespace and get meaningful content
+  const content = normalizedBlock.replace(/\s+/g, ' ').trim();
+  
+  // Must have some meaningful length
+  if (content.length < DUPLICATION_DETECTION_CONSTANTS.MIN_CONTENT_LENGTH) return false;
+  
+  // Check for code patterns (functions, conditionals, assignments, etc.)
+  const codePatterns = [
+    /\bfunction\b|\bclass\b|\bif\b|\bfor\b|\bwhile\b/, // Keywords
+    /[{}\[\]();]/, // Structural characters
+    /[=!<>+\-*\/]/, // Operators
+    /\w+\s*[\(\[\{]/, // Function/object calls
+  ];
+  
+  const hasCodePatterns = codePatterns.some(pattern => pattern.test(content));
+  
+  // Reject blocks that are mostly imports or simple declarations (but keep export functions)
+  // Check if it's just imports/exports (before normalization these would be trivial)
+  const isTrivialorinit = /^(import\s|export\s*\{|\/\/)/.test(content.trim());
+  
+  return hasCodePatterns && !isTrivialorinit;
 }
 
 
@@ -70,34 +107,37 @@ function normalizeBlock(block: string): string {
 
 
 /**
- * Detect code duplication using pragmatic block-based hashing
+ * Detect code duplication using enhanced literal pattern matching
  * 
  * ALGORITHM:
- * 1. Sliding window of 3 consecutive non-empty lines
- * 2. Normalize each block to handle syntax variations
- * 3. Hash normalized blocks with MD5
- * 4. Count blocks that appear more than once
+ * 1. Split files into 8-line blocks (enhanced from 3-line)
+ * 2. Normalize blocks using regex patterns (variables, strings, numbers)
+ * 3. Filter blocks with < 8 meaningful tokens and significant code patterns
+ * 4. Hash normalized blocks using MD5 for exact matching
+ * 5. Detect exact matches across different files only (not intra-file)
  * 
- * ACCURACY: ~85% - Conservative approach optimized for actionable results
+ * ACCURACY: Pragmatic approach focusing on actionable literal duplication
  * 
  * WHY THIS APPROACH:
- * - Focuses on copy-paste duplication (the real problem)
- * - Ignores structural similarity (often intentional)
- * - 5-line blocks catch meaningful duplications
- * - Avoids false positives in repetitive but necessary code
+ * - Avoids false positives in test files and repetitive but necessary code
+ * - Focuses on copy-paste duplication patterns that warrant refactoring
+ * - Results in ~5-15% duplication vs ~70% with structural detection tools
+ * - Balances precision and recall for practical development use
  * 
- * COMPARISON WITH OTHER TOOLS:
- * - SonarQube: Token-based, detects structural similarity (~70% on benchmarks)
- * - InsightCode: Content-based, detects literal duplication (~6% on benchmarks)
- * - Our approach is more suitable for actionable refactoring decisions
+ * COMPARISON WITH INDUSTRY TOOLS:
+ * - PMD CPD: Token-based, 100+ tokens minimum (more aggressive)
+ * - SonarQube: Structural similarity (catches more, more false positives)
+ * - Our approach: Literal pattern matching optimized for actionable results
  * 
  * @param files Array of files to analyze
  * @param thresholds Configuration thresholds
- * @returns Files with duplication percentages
+ * @returns Files with duplication ratios
  */
-export function detectDuplication(files: FileDetail[], thresholds: ThresholdConfig): FileDetail[] {
-  const blockSize = 3; // Optimal size for catching meaningful duplications
-  const allBlocks = new Map<string, { count: number }>(); 
+export function detectDuplication(files: FileDetail[], thresholds: ThresholdConfig, projectPath?: string): FileDetail[] {
+  // Enhanced structural detection - larger blocks for meaningful patterns
+  const blockSize = DUPLICATION_DETECTION_CONSTANTS.BLOCK_SIZE; // Increased from 3 to catch real duplication patterns
+  const minTokens = DUPLICATION_DETECTION_CONSTANTS.MIN_TOKENS; // Realistic minimum for 8-line JS/TS blocks
+  const allBlocks = new Map<string, { count: number, files: Set<string> }>(); 
   const fileBlocks = new Map<string, Set<string>>();
   
   // First pass: collect all blocks and their hashes from all files
@@ -106,11 +146,30 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
     let content: string | null;
     try {
       const fileWithContent = file as FileWithOptionalContent;
-      content = fileWithContent.content || getFileContent(file.file);
+      if (fileWithContent.content) {
+        content = fileWithContent.content;
+      } else {
+        // Handle file path resolution correctly
+        let filePath: string;
+        if (projectPath && !path.isAbsolute(file.file)) {
+          // If file.file already contains project path as prefix, use as-is
+          if (file.file.startsWith(path.basename(projectPath))) {
+            filePath = file.file;
+          } else {
+            filePath = path.resolve(projectPath, file.file);
+          }
+        } else {
+          filePath = file.file;
+        }
+        content = getFileContent(filePath);
+      }
     } catch (error) {
       content = null;
     }
-    if (!content) continue;
+    
+    if (!content) {
+      continue;
+    }
     
     const lines = content.split(/\r?\n|\r/).filter(line => line.trim().length > 0);
     const blocksInThisFile = new Set<string>();
@@ -121,15 +180,25 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
       const block = lines.slice(i, i + blockSize).join('\n');
       const normalizedBlock = normalizeBlock(block);
       
-      if (normalizedBlock.length < 10 || normalizedBlock.split(' ').length < 3) {
+      // Enhanced filtering - require minimum tokens for meaningful duplication
+      const tokens = normalizedBlock.split(/\s+/).filter(t => t.length > 1);
+      if (normalizedBlock.length < DUPLICATION_DETECTION_CONSTANTS.MIN_BLOCK_LENGTH || tokens.length < minTokens) {
+        continue;
+      }
+      
+      // Check for actual code content (not just comments/whitespace)
+      if (!hasSignificantCode(normalizedBlock)) {
         continue;
       }
       
       const hash = crypto.createHash('md5').update(normalizedBlock).digest('hex');
       blocksInThisFile.add(hash);
       
-      const existing = allBlocks.get(hash) || { count: 0 };
-      allBlocks.set(hash, { count: existing.count + 1 });
+      
+      const existing = allBlocks.get(hash) || { count: 0, files: new Set() };
+      existing.count += 1;
+      existing.files.add(file.file);
+      allBlocks.set(hash, existing);
     }
     
     fileBlocks.set(file.file, blocksInThisFile);
@@ -142,12 +211,16 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
       return { ...file, metrics: { ...file.metrics, duplicationRatio: 0 } };
     }
     
-    const duplicatedBlockCount = Array.from(blocks).filter(hash => 
-      (allBlocks.get(hash)?.count || 0) > 1
-    ).length;
+    // Enhanced calculation - only count blocks duplicated across different files
+    const duplicatedBlockCount = Array.from(blocks).filter(hash => {
+      const blockInfo = allBlocks.get(hash);
+      return blockInfo && blockInfo.count > 1 && blockInfo.files.size > 1;
+    }).length;
     
-    const duplicationPercentage = (duplicatedBlockCount / blocks.size) * 100;
-    const duplicationRatio = duplicationPercentage / 100; // Convert to ratio for v0.6.0
+    // Calculate percentage of duplicated blocks
+    const duplicationPercentage = blocks.size > 0 ? ratioToPercentage(duplicatedBlockCount / blocks.size) : 0;
+    const duplicationRatio = Math.min(percentageToRatio(duplicationPercentage), 1.0); // Cap at 100%
+    
     
     // Generate duplication issues according to v0.6.0 specs
     // For now, we'll assume 'production' type - this could be enhanced to detect file type
@@ -155,21 +228,29 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
     
     const updatedIssues = [...file.issues];
     
-    if (duplicationRatio > duplicationThresholds.high / 100) {
+    if (duplicationThresholds.critical && duplicationRatio > percentageToRatio(duplicationThresholds.critical)) {
+      updatedIssues.push({
+        type: IssueType.Duplication,
+        severity: Severity.Critical,
+        line: 1,
+        threshold: percentageToRatio(duplicationThresholds.critical), // Store as ratio
+        excessRatio: duplicationRatio / percentageToRatio(duplicationThresholds.critical)
+      });
+    } else if (duplicationRatio > percentageToRatio(duplicationThresholds.high)) {
       updatedIssues.push({
         type: IssueType.Duplication,
         severity: Severity.High,
         line: 1,
-        threshold: duplicationThresholds.high / 100, // Store as ratio
-        excessRatio: duplicationRatio / (duplicationThresholds.high / 100)
+        threshold: percentageToRatio(duplicationThresholds.high), // Store as ratio
+        excessRatio: duplicationRatio / percentageToRatio(duplicationThresholds.high)
       });
-    } else if (duplicationRatio > duplicationThresholds.medium / 100) {
+    } else if (duplicationRatio > percentageToRatio(duplicationThresholds.medium)) {
       updatedIssues.push({
         type: IssueType.Duplication,
         severity: Severity.Medium,
         line: 1,
-        threshold: duplicationThresholds.medium / 100, // Store as ratio
-        excessRatio: duplicationRatio / (duplicationThresholds.medium / 100)
+        threshold: percentageToRatio(duplicationThresholds.medium), // Store as ratio
+        excessRatio: duplicationRatio / percentageToRatio(duplicationThresholds.medium)
       });
     }
     
