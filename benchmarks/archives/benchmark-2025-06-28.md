@@ -1,3 +1,5 @@
+> **⚠️ Historical Document**: This document uses legacy weight system (40/30/30). Current system uses 45/30/25 with internal hypothesis disclaimers. See current documentation for up-to-date information.
+
 # InsightCode Benchmarks - Full Codebase Analysis
 
 ## Methodology
@@ -14,7 +16,7 @@
 
 InsightCode uses graduated thresholds aligned with industry standards:
 
-### Complexity (40% weight)
+### Complexity (45% weight - internal hypothesis)
 - ≤10: 100 points (Excellent)
 - ≤15: 85 points (Good)
 - ≤20: 65 points (Acceptable)
@@ -22,7 +24,7 @@ InsightCode uses graduated thresholds aligned with industry standards:
 - ≤50: 20 points (Very Poor)
 - >50: Graduated penalty
 
-### Duplication (30% weight)
+### Duplication (25% weight - internal hypothesis)
 - ≤3%: 100 points (Industry leader)
 - ≤8%: 85 points (Industry standard)
 - ≤15%: 65 points (Acceptable)

@@ -1,3 +1,5 @@
+> **⚠️ Historical Document**: This document uses legacy weight system (40/30/30). Current system uses 45/30/25 with internal hypothesis disclaimers. See current documentation for up-to-date information.
+
 # InsightCode Benchmark Explanations - Production Code Only
 
 ## Methodology
@@ -17,12 +19,12 @@
 ### Overall Score Calculation
 The final score (0-100) is calculated using a weighted average of three metrics:
 ```
-Score = (Complexity Score × 40%) + (Duplication Score × 30%) + (Maintainability Score × 30%)
+Score = (Complexity Score × 45%) + (Maintainability Score × 30%) + (Duplication Score × 25%) [Updated from legacy 40/30/30]
 ```
 
 ### Metric Calculations and Thresholds
 
-#### 1. Cyclomatic Complexity Score (40% weight)
+#### 1. Cyclomatic Complexity Score (45% weight - internal hypothesis)
 Measures code complexity based on control flow paths:
 - **≤ 10**: 100 points (Excellent - simple, linear code)
 - **≤ 15**: 85 points (Good - moderate branching)
@@ -31,7 +33,7 @@ Measures code complexity based on control flow paths:
 - **≤ 50**: 20 points (Very Poor - highly complex)
 - **> 50**: Max(5, 20 - (complexity - 50) / 20) (Critical)
 
-#### 2. Code Duplication Score (30% weight)
+#### 2. Code Duplication Score (25% weight - internal hypothesis)
 Percentage of duplicated code blocks using normalized hashing:
 
 **Detection Algorithm:**
@@ -50,7 +52,7 @@ Percentage of duplicated code blocks using normalized hashing:
 - **≤ 50%**: 20 points (Very Poor - high duplication)
 - **> 50%**: Max(5, 20 - (duplication - 50) / 10) (Critical)
 
-#### 3. Maintainability Score (30% weight)
+#### 3. Maintainability Score (30% weight - internal hypothesis)
 Combines file size and function count metrics:
 ```
 Maintainability = (Size Score + Function Score) / 2 - Extreme File Penalty

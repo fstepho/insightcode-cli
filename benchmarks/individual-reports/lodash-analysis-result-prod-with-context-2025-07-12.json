@@ -1,0 +1,735 @@
+{
+  "project": "lodash",
+  "repo": "https://github.com/lodash/lodash.git",
+  "type": "utility library",
+  "stars": "60.6k",
+  "stableVersion": "4.17.21",
+  "description": "JavaScript utility library",
+  "category": "small",
+  "emblematicFiles": {
+    "coreFiles": [
+      "lodash.js",
+      "index.js"
+    ],
+    "architecturalFiles": [
+      "fp.js",
+      "core.js"
+    ],
+    "performanceCriticalFiles": [
+      "isEqual.js",
+      "cloneDeep.js",
+      "debounce.js"
+    ],
+    "complexAlgorithmFiles": [
+      "get.js",
+      "set.js",
+      "merge.js"
+    ]
+  },
+  "analysis": {
+    "details": [
+      {
+        "file": ".markdown-doctest-setup.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/.markdown-doctest-setup.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 8,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lodash.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lodash.js",
+        "metrics": {
+          "complexity": 1818,
+          "loc": 5970,
+          "functionCount": 493,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 90.9
+          },
+          {
+            "type": "size",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 1000,
+            "excessRatio": 5.97
+          },
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 1884,
+            "threshold": 10,
+            "excessRatio": 1.3,
+            "function": "lazyValue"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 2425,
+            "threshold": 10,
+            "excessRatio": 2.4,
+            "function": "arrayLikeKeys"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 2662,
+            "threshold": 10,
+            "excessRatio": 2.8,
+            "function": "baseClone"
+          },
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 2806,
+            "threshold": 10,
+            "excessRatio": 1.4,
+            "function": "baseDifference"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 3174,
+            "threshold": 10,
+            "excessRatio": 2.1,
+            "function": "baseIntersection"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 3333,
+            "threshold": 10,
+            "excessRatio": 2.3,
+            "function": "baseIsEqualDeep"
+          },
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 3399,
+            "threshold": 10,
+            "excessRatio": 1.4,
+            "function": "baseIsMatch"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 3675,
+            "threshold": 10,
+            "excessRatio": 2,
+            "function": "baseMergeDeep"
+          },
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 4020,
+            "threshold": 10,
+            "excessRatio": 1.2,
+            "function": "baseSet"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 4190,
+            "threshold": 10,
+            "excessRatio": 2.2,
+            "function": "baseSortedIndexBy"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 4311,
+            "threshold": 10,
+            "excessRatio": 1.7,
+            "function": "baseUniq"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 4650,
+            "threshold": 10,
+            "excessRatio": 3.2,
+            "function": "compareAscending"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 5214,
+            "threshold": 10,
+            "excessRatio": 1.8,
+            "function": "wrapper"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 5550,
+            "threshold": 10,
+            "excessRatio": 2.4,
+            "function": "createWrap"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 5675,
+            "threshold": 10,
+            "excessRatio": 1.7,
+            "function": "equalArrays"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 5754,
+            "threshold": 10,
+            "excessRatio": 2.2,
+            "function": "equalByTag"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 5832,
+            "threshold": 10,
+            "excessRatio": 2.5,
+            "function": "equalObjects"
+          },
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 6183,
+            "threshold": 10,
+            "excessRatio": 1.1,
+            "function": "hasPath"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 6249,
+            "threshold": 10,
+            "excessRatio": 2,
+            "function": "initCloneByTag"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 6516,
+            "threshold": 10,
+            "excessRatio": 2.2,
+            "function": "mergeData"
+          },
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 11547,
+            "threshold": 10,
+            "excessRatio": 1.4,
+            "function": "isEmpty"
+          },
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 12525,
+            "threshold": 10,
+            "excessRatio": 1.2,
+            "function": "toNumber"
+          },
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 14146,
+            "threshold": 10,
+            "excessRatio": 1.4,
+            "function": "random"
+          },
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 14655,
+            "threshold": 10,
+            "excessRatio": 1.2,
+            "function": "split"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 14838,
+            "threshold": 10,
+            "excessRatio": 1.9,
+            "function": "template"
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 15146,
+            "threshold": 10,
+            "excessRatio": 1.8,
+            "function": "truncate"
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 0
+      },
+      {
+        "file": "fp/_baseConvert.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/fp/_baseConvert.js",
+        "metrics": {
+          "complexity": 73,
+          "loc": 350,
+          "functionCount": 18,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 3.65
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "line": 1,
+            "threshold": 300,
+            "excessRatio": 1.17
+          },
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 138,
+            "threshold": 10,
+            "excessRatio": 1.7,
+            "function": "baseConvert"
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 2,
+          "incomingDependencies": 1,
+          "instability": 0.67,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 0
+      },
+      {
+        "file": "fp/_convertBrowser.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/fp/_convertBrowser.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 8,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "fp/_mapping.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/fp/_mapping.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 328,
+          "functionCount": 0,
+          "duplicationRatio": 0.02
+        },
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "line": 1,
+            "threshold": 300,
+            "excessRatio": 1.09
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 2,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 100,
+          "isInCycle": false
+        },
+        "healthScore": 79
+      },
+      {
+        "file": "fp/placeholder.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/fp/placeholder.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "perf/perf.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/perf/perf.js",
+        "metrics": {
+          "complexity": 20,
+          "loc": 1639,
+          "functionCount": 7,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 1,
+            "threshold": 15,
+            "excessRatio": 1.33
+          },
+          {
+            "type": "size",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 1000,
+            "excessRatio": 1.64
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 9
+      },
+      {
+        "file": "lib/fp/build-dist.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/fp/build-dist.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 41,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/fp/build-doc.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/fp/build-doc.js",
+        "metrics": {
+          "complexity": 8,
+          "loc": 44,
+          "functionCount": 3,
+          "duplicationRatio": 0.02
+        },
+        "issues": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/fp/build-modules.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/fp/build-modules.js",
+        "metrics": {
+          "complexity": 8,
+          "loc": 92,
+          "functionCount": 5,
+          "duplicationRatio": 0.02
+        },
+        "issues": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/file.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/common/file.js",
+        "metrics": {
+          "complexity": 4,
+          "loc": 27,
+          "functionCount": 4,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.67,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/mapping.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/common/mapping.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 5,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 2,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.33,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/minify.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/common/minify.js",
+        "metrics": {
+          "complexity": 5,
+          "loc": 20,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.67,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/uglify.options.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/common/uglify.options.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 15,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/util.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/common/util.js",
+        "metrics": {
+          "complexity": 4,
+          "loc": 19,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/main/build-dist.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/main/build-dist.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 17,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/main/build-doc.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/main/build-doc.js",
+        "metrics": {
+          "complexity": 4,
+          "loc": 49,
+          "functionCount": 3,
+          "duplicationRatio": 0.03
+        },
+        "issues": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/main/build-modules.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/main/build-modules.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 19,
+          "functionCount": 1,
+          "duplicationRatio": 0.06
+        },
+        "issues": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/main/build-site.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/main/build-site.js",
+        "metrics": {
+          "complexity": 8,
+          "loc": 142,
+          "functionCount": 7,
+          "duplicationRatio": 0.01
+        },
+        "issues": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "perf/asset/perf-ui.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/perf/asset/perf-ui.js",
+        "metrics": {
+          "complexity": 5,
+          "loc": 85,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      }
+    ],
+    "overview": {
+      "grade": "F",
+      "statistics": {
+        "totalFiles": 20,
+        "totalLOC": 8879,
+        "avgComplexity": 98.3,
+        "avgLOC": 444,
+        "avgDuplicationRatio": 0.01
+      },
+      "scores": {
+        "complexity": 6,
+        "duplication": 100,
+        "maintainability": 7,
+        "overall": 30
+      },
+      "summary": "3 critical files found requiring attention"
+    },
+    "context": {
+      "project": {
+        "name": "lodash",
+        "path": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash",
+        "version": "4.17.21"
+      },
+      "analysis": {
+        "timestamp": "2025-07-12T21:46:32.228Z",
+        "durationMs": 25763,
+        "toolVersion": "0.6.1",
+        "filesAnalyzed": 20,
+        "duplicationMode": "legacy"
+      }
+    },
+    "codeContext": []
+  },
+  "durationMs": 25798
+}

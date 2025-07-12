@@ -1,0 +1,732 @@
+{
+  "project": "uuid",
+  "repo": "https://github.com/uuidjs/uuid.git",
+  "type": "utility library",
+  "stars": "15k",
+  "stableVersion": "v11.1.0",
+  "description": "UUID generation library",
+  "category": "small",
+  "emblematicFiles": {
+    "coreFiles": [
+      "dist/index.js",
+      "src/index.js"
+    ],
+    "architecturalFiles": [
+      "src/v1.js",
+      "src/v4.js"
+    ],
+    "performanceCriticalFiles": [
+      "src/rng.js"
+    ],
+    "complexAlgorithmFiles": [
+      "src/v3.js",
+      "src/v5.js"
+    ]
+  },
+  "analysis": {
+    "details": [
+      {
+        "file": "prettier.config.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/prettier.config.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 7,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "wdio.conf.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/wdio.conf.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 82,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/index.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/index.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 15,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 15,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/max.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/max.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/md5-browser.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/md5-browser.ts",
+        "metrics": {
+          "complexity": 16,
+          "loc": 135,
+          "functionCount": 12,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "line": 1,
+            "threshold": 15,
+            "excessRatio": 1.07
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 70
+      },
+      {
+        "file": "src/md5.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/md5.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 10,
+          "functionCount": 1,
+          "duplicationRatio": 0.5
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "high",
+            "line": 1,
+            "threshold": 0.3,
+            "excessRatio": 1.67
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 31
+      },
+      {
+        "file": "src/native-browser.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/native-browser.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 3,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/native.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/native.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 2,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/nil.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/nil.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/parse.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/parse.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 26,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 4,
+          "instability": 0.2,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 89,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/regex.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/regex.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/rng-browser.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/rng-browser.ts",
+        "metrics": {
+          "complexity": 5,
+          "loc": 13,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/rng.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/rng.ts",
+        "metrics": {
+          "complexity": 2,
+          "loc": 10,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 3,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 82,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/sha1-browser.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/sha1-browser.ts",
+        "metrics": {
+          "complexity": 13,
+          "loc": 91,
+          "functionCount": 3,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 1,
+            "threshold": 10,
+            "excessRatio": 1.3
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 85
+      },
+      {
+        "file": "src/sha1.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/sha1.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 10,
+          "functionCount": 1,
+          "duplicationRatio": 0.5
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "high",
+            "line": 1,
+            "threshold": 0.3,
+            "excessRatio": 1.67
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 31
+      },
+      {
+        "file": "src/stringify.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/stringify.ts",
+        "metrics": {
+          "complexity": 4,
+          "loc": 37,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 8,
+          "instability": 0.11,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 96,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/types.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/types.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 21,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 10,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 100,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/uuid-bin.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/uuid-bin.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 72,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 6,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/v1.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/v1.ts",
+        "metrics": {
+          "complexity": 21,
+          "loc": 120,
+          "functionCount": 3,
+          "duplicationRatio": 0.01
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 1.05
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 3,
+          "instability": 0.5,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 82,
+          "isInCycle": false
+        },
+        "healthScore": 50
+      },
+      {
+        "file": "src/v1ToV6.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/v1ToV6.ts",
+        "metrics": {
+          "complexity": 4,
+          "loc": 30,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 2,
+          "instability": 0.6,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/v3.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/v3.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 27,
+          "functionCount": 1,
+          "duplicationRatio": 0.69
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 0.5,
+            "excessRatio": 1.38
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 2,
+          "instability": 0.6,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 0
+      },
+      {
+        "file": "src/v35.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/v35.ts",
+        "metrics": {
+          "complexity": 11,
+          "loc": 45,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 1,
+            "threshold": 10,
+            "excessRatio": 1.1
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 2,
+          "instability": 0.6,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 91
+      },
+      {
+        "file": "src/v4.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/v4.ts",
+        "metrics": {
+          "complexity": 13,
+          "loc": 38,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 1,
+            "threshold": 10,
+            "excessRatio": 1.3
+          },
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 12,
+            "threshold": 10,
+            "excessRatio": 1.3,
+            "function": "v4"
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 4,
+          "incomingDependencies": 2,
+          "instability": 0.67,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 79
+      },
+      {
+        "file": "src/v5.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/v5.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 27,
+          "functionCount": 1,
+          "duplicationRatio": 0.69
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 0.5,
+            "excessRatio": 1.38
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 2,
+          "instability": 0.6,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 0
+      },
+      {
+        "file": "src/v6.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/v6.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 28,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 4,
+          "incomingDependencies": 2,
+          "instability": 0.67,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/v6ToV1.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/v6ToV1.ts",
+        "metrics": {
+          "complexity": 4,
+          "loc": 30,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 1,
+          "instability": 0.75,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/v7.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/v7.ts",
+        "metrics": {
+          "complexity": 12,
+          "loc": 83,
+          "functionCount": 3,
+          "duplicationRatio": 0.01
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 1,
+            "threshold": 10,
+            "excessRatio": 1.2
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 2,
+          "instability": 0.6,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 88
+      },
+      {
+        "file": "src/validate.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/validate.ts",
+        "metrics": {
+          "complexity": 2,
+          "loc": 5,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 4,
+          "instability": 0.2,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 89,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/version.ts",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid/src/version.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 8,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      }
+    ],
+    "overview": {
+      "grade": "A",
+      "statistics": {
+        "totalFiles": 29,
+        "totalLOC": 978,
+        "avgComplexity": 4.62,
+        "avgLOC": 34,
+        "avgDuplicationRatio": 0.08
+      },
+      "scores": {
+        "complexity": 95,
+        "duplication": 95,
+        "maintainability": 100,
+        "overall": 97
+      },
+      "summary": "5 critical files found requiring attention"
+    },
+    "context": {
+      "project": {
+        "name": "uuid",
+        "path": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid",
+        "version": "11.1.0",
+        "repository": "https://github.com/uuidjs/uuid.git"
+      },
+      "analysis": {
+        "timestamp": "2025-07-12T21:46:31.874Z",
+        "durationMs": 25403,
+        "toolVersion": "0.6.1",
+        "filesAnalyzed": 29,
+        "duplicationMode": "legacy"
+      }
+    },
+    "codeContext": []
+  },
+  "durationMs": 25433
+}

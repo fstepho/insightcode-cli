@@ -1,0 +1,238 @@
+{
+  "project": "express",
+  "repo": "https://github.com/expressjs/express.git",
+  "type": "web framework",
+  "stars": "66.2k",
+  "stableVersion": "v5.1.0",
+  "description": "Fast web framework for Node.js",
+  "category": "medium",
+  "emblematicFiles": {
+    "coreFiles": [
+      "lib/application.js",
+      "lib/express.js",
+      "lib/router/index.js"
+    ],
+    "architecturalFiles": [
+      "lib/middleware/init.js",
+      "lib/view.js"
+    ],
+    "performanceCriticalFiles": [
+      "lib/router/layer.js",
+      "lib/router/route.js"
+    ],
+    "complexAlgorithmFiles": [
+      "lib/utils.js",
+      "lib/request.js",
+      "lib/response.js"
+    ]
+  },
+  "analysis": {
+    "details": [
+      {
+        "file": "index.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/index.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 2,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/application.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/application.js",
+        "metrics": {
+          "complexity": 5,
+          "loc": 262,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "line": 1,
+            "threshold": 200,
+            "excessRatio": 1.31
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 2,
+          "incomingDependencies": 1,
+          "instability": 0.67,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 17,
+          "isInCycle": false
+        },
+        "healthScore": 90
+      },
+      {
+        "file": "lib/express.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/express.js",
+        "metrics": {
+          "complexity": 2,
+          "loc": 34,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 1,
+          "instability": 0.75,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 17,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/request.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/request.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 160,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 17,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/response.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/response.js",
+        "metrics": {
+          "complexity": 22,
+          "loc": 468,
+          "functionCount": 9,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "line": 1,
+            "threshold": 20,
+            "excessRatio": 1.1
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "line": 1,
+            "threshold": 300,
+            "excessRatio": 1.56
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 17,
+          "isInCycle": false
+        },
+        "healthScore": 20
+      },
+      {
+        "file": "lib/utils.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/utils.js",
+        "metrics": {
+          "complexity": 9,
+          "loc": 119,
+          "functionCount": 3,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 2,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 100,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/view.js",
+        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/view.js",
+        "metrics": {
+          "complexity": 12,
+          "loc": 90,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "line": 1,
+            "threshold": 10,
+            "excessRatio": 1.2
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 17,
+          "isInCycle": false
+        },
+        "healthScore": 88
+      }
+    ],
+    "overview": {
+      "grade": "A",
+      "statistics": {
+        "totalFiles": 7,
+        "totalLOC": 1135,
+        "avgComplexity": 7.43,
+        "avgLOC": 162,
+        "avgDuplicationRatio": 0
+      },
+      "scores": {
+        "complexity": 90,
+        "duplication": 100,
+        "maintainability": 86,
+        "overall": 91
+      },
+      "summary": "Good overall health with 1 file requiring attention"
+    },
+    "context": {
+      "project": {
+        "name": "express",
+        "path": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express",
+        "version": "5.1.0",
+        "repository": "expressjs/express"
+      },
+      "analysis": {
+        "timestamp": "2025-07-12T21:46:31.944Z",
+        "durationMs": 25472,
+        "toolVersion": "0.6.1",
+        "filesAnalyzed": 7,
+        "duplicationMode": "legacy"
+      }
+    },
+    "codeContext": []
+  },
+  "durationMs": 25499
+}
