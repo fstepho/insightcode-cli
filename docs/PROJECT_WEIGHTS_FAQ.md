@@ -29,7 +29,7 @@ File Health Score = 100 - (complexity_penalty + size_penalty + duplication_penal
 
 **Timeline:**
 - **v0.2.0-v0.3.0**: Used 40/30/30 (legacy)
-- **v0.4.0+**: Updated to 45/30/25 (current)
+- **v0.6.0+**: Updated to 45/30/25 (current)
 
 **Rationale**: Internal hypothesis that complexity is the primary defect predictor deserves higher weight.
 

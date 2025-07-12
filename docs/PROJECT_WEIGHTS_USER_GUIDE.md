@@ -91,7 +91,7 @@ insightcode analyze
 | Version | Weights | Status | Notes |
 |---------|---------|--------|--------|
 | v0.2.0-v0.3.0 | 40/30/30 | Legacy | Complexity/Duplication/Maintainability |
-| v0.4.0+ | 45/30/25 | Current | Complexity/Maintainability/Duplication |
+| v0.6.0+ | 45/30/25 | Current | Complexity/Maintainability/Duplication |
 | Future | TBD | Planned | Empirical validation and user configuration |
 
 ## 🛠️ For Advanced Users

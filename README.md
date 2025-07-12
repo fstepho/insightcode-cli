@@ -432,9 +432,17 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 - **Comprehensive Code Context**: Detailed analysis of async patterns, error handling, TypeScript usage, and more
 
 ### v0.6.1 ✅ Current Focus
+- **Duplication Modes**: Introduced strict and legacy modes for duplication analysis
+- **Improved Scoring Weights**: Updated to 45/30/25 for complexity, maintainability, and duplication
+- **Enhanced JSON Output**: More detailed file-level metrics and criticality scores
+- **Documentation Updates**: Improved user guides and FAQs for project weights and duplication modes
+- **Performance Improvements**: Faster analysis with reduced memory footprint
+- **Bug Fixes**: Resolved issues with file path normalization and dependency resolution 
 - Documentation and Quality Assurance phase
-- Complete audit and synchronization of all technical documentation
+- Complete synchronization of all technical documentation
 - Enhanced accuracy and consistency across all methodology descriptions
+- Finalizing the project scoring weights FAQ and user guide
+- Improved user guides for project weights and duplication modes
 
 ### v0.7.0 🔮 Future Development
 - JSX/TSX support

@@ -390,15 +390,6 @@ async function runProjectAnalysis(
 }
 
 /**
- * Nettoie les chemins de fichiers dans les résultats d'analyse pour les rendre relatifs.
- * @param analysisResult - Le résultat d'analyse à nettoyer.
- * @param projectTempDir - Le répertoire temporaire du projet à retirer des chemins.
- * @param projectRoot - Le répertoire racine du projet de benchmark.
- * @returns Le résultat d'analyse avec les chemins nettoyés.
- */
-// Removed cleanAnalysisPaths - paths should be normalized at source (ast-builder)
-
-/**
  * Orchestre l'analyse complète d'un projet, de la préparation du code à la finalisation des résultats.
  * @param project - Le projet à analyser.
  * @param index - L'index du projet dans la liste totale.

@@ -12,16 +12,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Mathematical Validation**: Verified all scoring formulas and constants match implementation
 - **Version Clarity**: Clear distinction between v0.6.0 (major refactor, ready for release) and v0.6.1 (documentation/QA focus)
 - **Accuracy Improvements**: Updated all metrics, dependency counts, and technical specifications in documentation
+- **TypeCheck Script**: Added `npm run typecheck` for better development workflow
 
 ### Changed
 - **Documentation Consistency**: All technical docs now accurately reflect current codebase state
 - **Version References**: Updated all documentation to use v0.6.1 as current development focus
 - **Technical Accuracy**: Synchronized all formulas, constants, and methodology descriptions with actual implementation
+- **Error Handling**: Improved error logging and debugging context in dependency analyzer
 
 ### Fixed
 - **Documentation Drift**: Eliminated inconsistencies between documentation and code
 - **Version Confusion**: Clarified release status and development timeline
 - **Technical Accuracy**: Corrected all mathematical formulas and scoring methodology descriptions
+- **Silent Failures**: Enhanced error handling in `dependency-analyzer.ts` with better logging and context
+- **Code Cleanup**: Removed unused variables and obsolete methods from dependency analyzer
+- **Error Propagation**: Fixed silent error returns that made debugging difficult
 
 ## [0.6.0] [Ready for Release] - Major Scoring System Refactor
 

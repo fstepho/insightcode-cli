@@ -104,7 +104,3 @@ export function normalizeProjectPath(projectPath: string): string {
   // 4. Return "." for current directory, otherwise return project name
   return projectName || '.';
 }
-
-// resolveAndNormalize removed - paths are normalized at source (Single Source of Truth)
-
-// safeNormalizePath removed - paths are normalized at source (Single Source of Truth)

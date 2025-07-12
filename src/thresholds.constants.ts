@@ -277,7 +277,6 @@ export const HEALTH_PENALTY_CONSTANTS = {
     EXPONENTIAL_DENOMINATOR: 20, // Denominator 20: controls the rate of exponential growth for high complexity
     EXPONENTIAL_POWER: 1.3,      // Power 1.3: moderate exponential growth (between linear and quadratic) - NEEDS VALIDATION
     EXPONENTIAL_MULTIPLIER: 25,  // Multiplier 25: ensures significant penalties for extreme complexity while maintaining score range
-    // SOFT_CAP removed - extreme complexity should receive extreme penalties (Pareto principle)
   },
   DUPLICATION: {
     EXCELLENT_THRESHOLD: BASE_DUPLICATION_THRESHOLDS.EXCELLENT,

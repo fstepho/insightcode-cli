@@ -10,6 +10,7 @@
     "dev": "tsx watch src/cli.ts",
     "start": "tsx src/cli.ts",
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "test": "vitest",
     "prepublishOnly": "npm run build",
     "benchmark:production": "tsx src/benchmark.ts --exclude-utility",

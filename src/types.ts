@@ -170,12 +170,6 @@ export interface Issue {
   function?: string;
 }
 
-// ==================== RECOMMENDATIONS REMOVED ====================
-// Recommendations removed in v0.6.0 - calculable client-side:
-// - criticalFiles = details.sort(healthScore).slice(0,5) 
-// - quickWins = details.flatMap(issues).filter(effortHours <= 1)
-
-
 /**
  * Code context focused on critical functions and patterns
  */
@@ -245,12 +239,6 @@ export interface QualityIssue {
   severity: 'low' | 'medium' | 'high';
   description: string;
 }
-
-
-// ==================== DEPRECATED INTERFACES ====================
-
-// FileMetrics interface removed in v0.6.0 - use FileDetail instead
-
 
 // ==================== CLI & CONFIGURATION ====================
 

@@ -99,18 +99,36 @@ export class UniversalDependencyAnalyzer {
     try {
       return await Promise.race([analysisPromise, timeoutPromise]);
     } catch (error) {
-      return {
+      const errorMessage = (error as Error).message;
+      console.error(`❌ Critical analysis error: ${errorMessage}`);
+      
+      // Log additional context for debugging
+      if (this.config.logResolutionErrors) {
+        console.error(`   Project root: ${this.config.projectRoot}`);
+        console.error(`   Files count: ${files.length}`);
+        console.error(`   Error type: ${this.classifyError(error as Error)}`);
+      }
+      
+      // Return partial results with error information for debugging
+      const partialResult: DependencyAnalysisResult = {
         incomingDependencyCount: new Map(),
         dependencyGraph: new Map(),
         circularDependencies: [],
         errors: [{
           file: 'global',
-          error: (error as Error).message,
+          error: errorMessage,
           phase: 'analyze',
         }],
         statistics: this.getEmptyStatistics(),
         fileAnalyses: new Map(),
       };
+      
+      // In debug mode, still throw to prevent silent failures
+      if (this.config.logResolutionErrors) {
+        throw new Error(`Analysis failed: ${errorMessage}. Enable logging with --verbose for details.`);
+      }
+      
+      return partialResult;
     }
   }
 
@@ -120,7 +138,6 @@ export class UniversalDependencyAnalyzer {
   private async performAnalysis(files: FileDetail[], astData: import('./ast-builder').ASTBuildResult): Promise<DependencyAnalysisResult> {
     const startTime = Date.now();
     const errors: AnalysisError[] = [];
-    const project = this.getOrCreateProject();
     
     if (this.config.logResolutionErrors) {
       console.log(`🚀 Starting dependency analysis for ${files.length} files`);
@@ -243,33 +260,6 @@ export class UniversalDependencyAnalyzer {
           phase: 'analyze'
         });
       }
-    }
-  }
-
-  // addFilesToProject removed - we now reuse existing AST from ast-builder
-
-  /**
-   * Lit le contenu d'un fichier de manière sécurisée.
-   */
-  private async readFileContent(file: FileDetail & { content?: string }): Promise<string> {
-    if (file.content !== undefined) {
-      return file.content;
-    }
-    
-    const absolutePath = this.getAbsolutePath(file.file);
-    
-    try {
-      const stats = await fs.promises.stat(absolutePath);
-      if (stats.size > this.config.maxFileSize) {
-        throw new Error(`File size ${stats.size} exceeds maximum ${this.config.maxFileSize}`);
-      }
-      
-      return await fs.promises.readFile(absolutePath, 'utf8');
-    } catch (error) {
-      if ((error as any).code === 'ENOENT') {
-        throw new Error(`File not found: ${absolutePath}`);
-      }
-      throw error;
     }
   }
 
@@ -790,7 +780,7 @@ export class UniversalDependencyAnalyzer {
     let currentRank = 0;
     const totalFiles = incomingDependencyCount.size;
     
-    for (const [score, files] of Array.from(scoreGroups.entries()).sort(([a], [b]) => a - b)) {
+    for (const [, files] of Array.from(scoreGroups.entries()).sort(([a], [b]) => a - b)) {
       // Tous les fichiers avec le même score ont le même rang
       const percentile = Math.round((currentRank / (totalFiles - 1)) * 100);
       
@@ -912,7 +902,10 @@ export class UniversalDependencyAnalyzer {
         }
       }
     } catch (e) {
-      // Ignorer silencieusement
+      // Log parsing errors for package.json to aid debugging
+      if (this.config.logResolutionErrors) {
+        console.warn(`Warning: Could not parse package.json for framework detection: ${(e as Error).message}`);
+      }
     }
     
     return hints;
@@ -935,8 +928,11 @@ export class UniversalDependencyAnalyzer {
             : pkg.workspaces.packages || [];
           workspaces.push(...ws);
         }
-      } catch {
-        // Ignorer
+      } catch (e) {
+        // Log workspace detection errors for debugging
+        if (this.config.logResolutionErrors) {
+          console.warn(`Warning: Could not parse package.json for workspace detection: ${(e as Error).message}`);
+        }
       }
     }
     
@@ -948,8 +944,11 @@ export class UniversalDependencyAnalyzer {
         if (lerna.packages) {
           workspaces.push(...lerna.packages);
         }
-      } catch {
-        // Ignorer
+      } catch (e) {
+        // Log lerna parsing errors for debugging
+        if (this.config.logResolutionErrors) {
+          console.warn(`Warning: Could not parse lerna.json: ${(e as Error).message}`);
+        }
       }
     }
     
@@ -961,8 +960,11 @@ export class UniversalDependencyAnalyzer {
         if (rush.projects) {
           workspaces.push(...rush.projects.map((p: any) => p.projectFolder));
         }
-      } catch {
-        // Ignorer
+      } catch (e) {
+        // Log rush parsing errors for debugging
+        if (this.config.logResolutionErrors) {
+          console.warn(`Warning: Could not parse rush.json: ${(e as Error).message}`);
+        }
       }
     }
     
@@ -1095,47 +1097,6 @@ export class UniversalDependencyAnalyzer {
     return Math.round((hits / this.resolveCache.size) * 100);
   }
 
-  /**
-   * Obtient ou crée un projet ts-morph avec configuration optimisée.
-   */
-  private getOrCreateProject(): Project {
-    const cacheKey = this.config.projectRoot;
-    
-    if (this.config.cache && this.projectCache.has(cacheKey)) {
-      const project = this.projectCache.get(cacheKey)!;
-      project.getSourceFiles().forEach(sf => project.removeSourceFile(sf));
-      return project;
-    }
-
-    const project = new Project({
-      useInMemoryFileSystem: true,
-      skipAddingFilesFromTsConfig: true,
-      compilerOptions: {
-        target: ts.ScriptTarget.ESNext,
-        module: ts.ModuleKind.ESNext,
-        moduleResolution: ts.ModuleResolutionKind.Bundler,
-        allowJs: true,
-        checkJs: false,
-        strict: false,
-        skipLibCheck: true,
-        skipDefaultLibCheck: true,
-        allowSyntheticDefaultImports: true,
-        esModuleInterop: true,
-        jsx: ts.JsxEmit.Preserve,
-        resolveJsonModule: true,
-        allowArbitraryExtensions: true,
-        noEmit: true,
-        incremental: false,
-      },
-    });
-
-    if (this.config.cache) {
-      this.projectCache.set(cacheKey, project);
-    }
-    
-    return project;
-  }
-
   private getAbsolutePath(filePath: string): string {
     return path.isAbsolute(filePath) 
       ? filePath 
@@ -1160,5 +1121,3 @@ export class UniversalDependencyAnalyzer {
     this.projectCache.clear();
   }
 }
-
-// analyzeDependencies legacy function removed - use UniversalDependencyAnalyzer.analyze(files, astData) directly

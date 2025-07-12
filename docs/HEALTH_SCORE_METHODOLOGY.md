@@ -160,7 +160,7 @@ function getDuplicationPenalty(duplicationRatio: number, duplicationConfig?: Dup
 }
 ```
 
-### Duplication Thresholds: Configurable Modes (v0.5.0+)
+### Duplication Thresholds: Configurable Modes (v0.6.0+)
 
 InsightCode now supports **dual duplication modes** to accommodate different project contexts:
 
