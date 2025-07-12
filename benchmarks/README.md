@@ -25,7 +25,7 @@ Results are saved to `benchmarks/` and significant results are archived here.
 
 InsightCode uses graduated thresholds aligned with industry standards:
 
-#### Complexity (40% weight)
+#### Complexity (45% weight - internal hypothesis)
 - ≤10: 100 points (Excellent)
 - ≤15: 85 points (Good)
 - ≤20: 65 points (Acceptable)
@@ -33,24 +33,26 @@ InsightCode uses graduated thresholds aligned with industry standards:
 - ≤50: 20 points (Very Poor)
 - >50: Graduated penalty
 
-#### Duplication (30% weight)
+#### Duplication (25% weight - internal hypothesis)
 - ≤3%: 100 points (Industry leader)
 - ≤8%: 85 points (Industry standard)
 - ≤15%: 65 points (Acceptable)
 - ≤30%: 40 points (Poor)
 - ≤50%: 20 points (Very Poor)
 
-#### Maintainability (30% weight)
+#### Maintainability (30% weight - internal hypothesis)
 - Based on file size (≤200 lines = 100 points)
 - Function count consideration
 - Additional penalties for files >1000 lines
 
 #### Criticality-Weighted Scoring
-The final project score uses these 40/30/30 weights, but each file's contribution is weighted by its **Criticality Score** - a combination of:
+The final project score uses these **45/30/25 weights** (internal hypothesis requiring validation), but each file's contribution is weighted by its **Criticality Score** - a combination of:
 - **Complexity**: How difficult the file is to understand
 - **Architectural Impact**: How many other files depend on it
 
 This means a small, complex file with many dependents (like a core utility) will impact the final score more than a large, simple file with no dependents.
+
+**⚠️ Important**: The weighting factors (45% complexity, 30% maintainability, 25% duplication) are internal hypotheses requiring empirical validation, not industry standards.
 
 ### Measurement Accuracy
 
