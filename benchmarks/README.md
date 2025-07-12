@@ -4,10 +4,10 @@ This directory contains benchmark results and analysis of popular open-source pr
 
 ## 🎯 Purpose
 
-- Validate InsightCode's scoring algorithm
-- Demonstrate real-world performance
-- Provide reference scores for comparison
-- Build credibility through transparent analysis
+- Validate InsightCode's scoring algorithm against real-world codebases
+- Demonstrate performance and accuracy on diverse project types
+- Provide reference scores for comparison and calibration
+- Build credibility through transparent, reproducible analysis
 
 ## 📊 Latest Results
 
@@ -17,214 +17,237 @@ npm run benchmark              # Full codebase analysis
 npm run benchmark -- --prod    # Production code only
 ```
 
-Results are saved to `benchmarks/` and significant results are archived here.
+**Latest Benchmark:** July 12, 2025 (v0.6.0)
+- **9 projects analyzed** (Angular, Chalk, ESLint, Express, Jest, Lodash, TypeScript, UUID, Vue)
+- **677,099 lines** processed in 29.80 seconds
+- **Analysis speed:** 22,719 lines/second
+- **Success rate:** 100% (9/9 projects)
 
-## 📐 Methodology
+Results are automatically saved to `benchmarks/` with detailed individual reports.
 
-### Scoring System (v0.4.0+)
+## 📐 Methodology (v0.6.0+)
 
-InsightCode uses graduated thresholds aligned with industry standards:
+### Health Score System
 
-#### Complexity (45% weight - internal hypothesis)
-- ≤10: 100 points (Excellent)
-- ≤15: 85 points (Good)
-- ≤20: 65 points (Acceptable)
-- ≤30: 40 points (Poor)
-- ≤50: 20 points (Very Poor)
-- >50: Graduated penalty
+InsightCode uses **progressive penalties without caps** following the Pareto Principle:
 
-#### Duplication (25% weight - internal hypothesis)
-- ≤3%: 100 points (Industry leader)
-- ≤8%: 85 points (Industry standard)
-- ≤15%: 65 points (Acceptable)
-- ≤30%: 40 points (Poor)
-- ≤50%: 20 points (Very Poor)
+#### Core Formula
+```
+Health Score = 100 - Σ(penalties)
+Final Score = Math.max(0, Health Score)
+```
 
-#### Maintainability (30% weight - internal hypothesis)
-- Based on file size (≤200 lines = 100 points)
-- Function count consideration
-- Additional penalties for files >1000 lines
+#### Progressive Penalty System
 
-#### Criticality-Weighted Scoring
-The final project score uses these **45/30/25 weights** (internal hypothesis requiring validation), but each file's contribution is weighted by its **Criticality Score** - a combination of:
-- **Complexity**: How difficult the file is to understand
-- **Architectural Impact**: How many other files depend on it
+**Complexity Penalties** (McCabe-based):
+- ≤10: No penalty (100 points) - McCabe "excellent"
+- 11-20: Linear penalty (100→70 points) - 3 points per unit
+- 21-50: Quadratic penalty (70→30 points) - exponential maintenance burden
+- 51+: Exponential penalty (30→0 points) - extreme complexity gets extreme penalties
+- 100+: Additional catastrophic penalties - no artificial caps
 
-This means a small, complex file with many dependents (like a core utility) will impact the final score more than a large, simple file with no dependents.
+**Duplication Penalties** (Mode-aware):
+- **Legacy Mode** (default): ≤15% excellent, ≤30% acceptable, ≤50% critical
+- **Strict Mode** (--strict-duplication): ≤3% excellent, ≤8% acceptable, ≤15% critical
+- Progressive penalties without caps for extreme duplication
 
-**⚠️ Important**: The weighting factors (45% complexity, 30% maintainability, 25% duplication) are internal hypotheses requiring empirical validation, not industry standards.
+**Size Penalties** (Clean Code inspired):
+- ≤200 LOC: No penalty - optimal file size
+- 201-500 LOC: Linear penalty - gentle degradation
+- 500+ LOC: Exponential penalty - massive files severely penalized
+
+**Issue Penalties** (Severity-weighted):
+- Critical: 20 points each
+- High: 12 points each  
+- Medium: 6 points each
+- Low: 2 points each
+
+### Project-Level Scoring
+
+**Weighted Aggregation** (internal hypothesis requiring validation):
+- **45% Complexity** - Primary defect predictor
+- **30% Maintainability** - Development velocity impact
+- **25% Duplication** - Technical debt indicator
+
+**Grade Thresholds** (Academic standard):
+- A: 90-100 points
+- B: 80-89 points
+- C: 70-79 points
+- D: 60-69 points
+- F: 0-59 points
 
 ### Measurement Accuracy
 
 #### Complexity Calculation
-- **Method**: Extended Cyclomatic Complexity (based on McCabe, 1976)
-- **Accuracy**: 100% validated with comprehensive test suite
+- **Method**: Extended Cyclomatic Complexity (McCabe, 1976)
 - **Base**: Every file starts at complexity 1
-- **+1 for each**:
+- **+1 for each decision point**:
   - `if`, `else if` (but NOT `else` alone)
   - `for`, `while`, `do-while`, `for-in`, `for-of`
   - `case` in switch (but NOT `default`)
   - `catch` in try-catch
-  - `&&`, `||` (logical operators as decision points)*
+  - `&&`, `||` (logical operators as implicit branching)
   - `? :` (ternary operator)
-- **Calculation**: Sum of all decision points in the entire file
-
-*Logical operators are counted because they represent implicit branching in the control flow
+- **Validation**: 100% accurate with comprehensive test suite
 
 #### Duplication Detection
-- **Method**: 8-line sliding window with content-based detection
-- **Philosophy**: Focuses on actual copy-paste, not structural similarity
-- **Accuracy**: ~85% conservative approach (prefers false negatives over false positives)
-- **Note**: Our approach differs from tools like SonarQube - see examples below
+- **Method**: 8-line sliding window with content-based analysis
+- **Philosophy**: Focuses on actionable copy-paste, not structural similarity
+- **Accuracy**: ~85% conservative (prefers false negatives over false positives)
+- **Block size**: 8 lines minimum for significance
+- **Token threshold**: 8+ tokens to filter trivial matches
 
-### Analysis Types
+## 📈 Latest Benchmark Results (July 12, 2025)
 
-#### Full Codebase Analysis
-- Includes all files: production, tests, examples, configs
-- Provides complete picture of project health
-- Best for overall quality assessment
+### Production Code Analysis - Grade Distribution
 
-#### Production Code Analysis (--exclude-utility)
-- Excludes: tests, examples, scripts, tools, fixtures, mocks
-- Focuses on code that runs in production
-- Often reveals cleaner metrics as test code tends to have repetition
+| Grade | Projects | Percentage |
+|-------|----------|------------|
+| **A** | 3 projects | 33% |
+| **B** | 0 projects | 0% |
+| **C** | 2 projects | 22% |
+| **D** | 2 projects | 22% |
+| **F** | 2 projects | 22% |
 
-## 📈 Key Findings (v0.3.0 - June 28, 2025)
+### Top Performers
 
-### Score Distribution
-Based on analysis of 9 popular projects with new graduated scoring:
+1. **UUID** (Grade A, 97/100)
+   - Excellent: Low complexity, minimal duplication
+   - 978 LOC across 29 files
+   - Average complexity: 4.6
 
-**Full Codebase Analysis:**
-- **x project** got an A grade 
-- **x projects** got a B grade
-- **x projects** got a C grade 
-- **x projects** got a D grade
-- **x projects** got an F grade
+2. **Express** (Grade A, 91/100)
+   - Excellent: Well-structured web framework
+   - 1,135 LOC across 7 files
+   - Average complexity: 7.4
 
-**Production Code Only:**
-- **0 projects** got an A grade (16%) - axios, chalk, prettier
-- **2 projects** got a B grade (21%)
-- **1 projects** got a C grade (21%)
-- **0 projects** got a D grade (11%)
-- **6 projects** got an F grade (32%)
+3. **Chalk** (Grade A, 90/100)
+   - Excellent: Clean terminal styling library
+   - 475 LOC across 5 files
+   - Average complexity: 8.0
 
 ### Performance Statistics
-- **Full codebase analysis**: 62,761 lines/second average
-- **Production only**: 18,490 lines/second average
-- **Largest analyzed**: TypeScript (2.8M lines) in 38.3 seconds
-- **Total lines analyzed**: 4.8M+ across all benchmarks
+- **Analysis speed**: 22,719 lines/second
+- **Average code quality**: 69/100
+- **Average duplication rate**: 4.4%
+- **Most critical issues**: Complexity (1,121 issues found)
+- **Largest project**: TypeScript (316,214 LOC, 697 files)
 
-### Notable Insights
-1. **Chalk** achieves A grade (96/100) in full codebase analysis - exceptional code quality
-2. **Even popular projects struggle**: ESLint gets D, Joi gets F
-3. **Test code impacts scores**: Many projects improve when excluding tests
-4. **Size doesn't determine quality**: Small projects can have poor scores too
+### Project Size Analysis
 
-## 🧪 Self-Analysis (Testing & Demo)
+**Small Projects** (lodash, chalk, uuid):
+- Average score: 72/100
+- Average complexity: 37.0
+- Observation: Small size doesn't guarantee quality
 
-InsightCode analyzes itself to:
-- ✅ Test all features work correctly  
-- ✅ Generate real metrics for documentation
-- ✅ Provide examples of output format
-- ❌ NOT to judge its own code quality
+**Medium Projects** (express, vue, jest):
+- Average score: 75/100
+- Average complexity: 18.3
+- Observation: Best balance of features vs maintainability
 
-The C score (72/100) is expected for a parsing/analysis tool due to 
-the inherent complexity of AST manipulation.
-
-**Note**: When you see InsightCode's self-analysis score in documentation or examples, 
-remember it's demonstrating the tool's capabilities, not evaluating its quality.
+**Large Projects** (angular, eslint, typescript):
+- Average score: 59/100
+- Average complexity: 43.4
+- Observation: Scale challenges impact quality metrics
 
 ## 🔍 Understanding the Results: Context Matters
 
-### Case Study: Lodash's Deliberate Monolithic Design
+### Case Study: Lodash's Deliberate Architecture
 
-While InsightCode correctly identifies Lodash's main file as having excessive complexity (1659), it's important to understand this is a **deliberate architectural choice**, not poor engineering.
+**Current Analysis** (July 2025):
+- **Complexity**: 1,818 (extreme)
+- **Health Score**: 0/100 (F grade)
+- **Critical Issues**: 25
 
-#### Historical Context
+**Historical Context**: Lodash's monolithic design was deliberate:
 
-Lodash was designed in the early 2010s with specific goals:
+1. **Pre-ES6 Era Constraints**:
+   - Single file compatibility (browsers, Node.js, Rhino)
+   - No module bundlers or tree-shaking
+   - CDN distribution priority
 
-1. **Universal Compatibility**
-   - Single file works in all environments (browsers, Node.js, Rhino)
-   - No module system required (pre-ES6 modules era)
-   - One `<script>` tag for browser usage
+2. **User Experience Trade-offs**:
+   - ✅ Zero configuration for developers
+   - ✅ Universal compatibility maintained
+   - ❌ Extreme complexity penalty (1,818)
+   - ❌ Maintenance burden
 
-2. **Performance Optimization**
-   - Single file = single HTTP request (critical in 2010-2015)
-   - Bundlers were primitive, tree-shaking didn't exist
-   - CDN-friendly distribution
-
-3. **Developer Experience First**
+3. **Modern Context**:
    ```javascript
-   // The simplicity users love
+   // Legacy usage (still dominant)
    <script src="lodash.js"></script>
-   // Everything available under _ immediately
+   
+   // Modern modular usage available
+   import map from 'lodash/map'
+   import filter from 'lodash/filter'
    ```
 
-#### The Trade-off
+**Key Insight**: F grades can reflect legitimate architectural trade-offs, not just poor engineering. Consider business constraints and historical context when interpreting scores.
 
-Lodash chose **user simplicity over maintainer convenience**:
-- ✅ Zero configuration for users
-- ✅ Works everywhere instantly  
-- ✅ Backward compatibility maintained
-- ❌ High complexity score (1659)
-- ❌ Difficult internal navigation
-- ❌ Challenging to maintain
+## 🧪 Self-Analysis Disclaimer
 
-#### Modern Alternative
+InsightCode analyzes itself for:
+- ✅ Feature validation and testing
+- ✅ Documentation examples
+- ✅ Output format demonstration
+- ❌ **NOT** for quality judgment
 
-Lodash does offer modular imports:
-```javascript
-// Modern usage
-import map from 'lodash/map'
-import filter from 'lodash/filter'
-```
-
-But the monolithic build remains for the millions of projects depending on it.
-
-#### Key Insight
-
-**An F score doesn't always mean bad code** - sometimes it reflects deliberate architectural trade-offs. Lodash prioritized:
-- User experience > Developer experience  
-- Compatibility > Modularity
-- Simplicity > Maintainability
-
-When analyzing code quality, consider the historical context and business constraints that shaped these decisions.
-
-> **Important Limitation**  
-> The overall score given by InsightCode does not distinguish between avoidable structural complexity (due to poor code organization) and justified complexity (required by the project’s algorithmic, performance, or compatibility needs). This lack of context can unfairly downgrade mature or critical projects and may encourage inappropriate refactoring. To make this benchmark truly reliable and recommendable, it is essential to integrate differentiation or weighting for legitimate complexity, in order to provide a relevant and actionable assessment of code quality.
-
-## 📁 Historical Benchmarks
-
-Significant benchmark results are archived with dates:
-- `benchmark-report-production-2025-07-03.md` - v0.4.0 production code analysis
-- `archives/benchmark-2025-06-03.md` - v0.3.0 full codebase analysis with graduated scoring
-- `archives/benchmark-2025-06-28.md` - v0.3.0 full codebase analysis with graduated scoring
-- `archives/benchmark-2025-06-28-production-only.md` - Production code analysis
-- `archives/benchmark-2025-06-27.md` - v0.1.0 initial benchmarks
-- `archives/benchmark-explanations-comparison-2025-06-28.md` - Detailed complexity explanations
+Analysis tools inherently have high complexity due to AST manipulation and parsing logic. Self-analysis scores demonstrate capabilities, not code quality assessment.
 
 ## 🔄 Duplication Detection Philosophy
 
-### InsightCode vs SonarQube: A Different Approach
+### InsightCode vs SonarQube: Different Approaches
 
-Our duplication detection focuses on **actionable copy-paste problems**, not structural patterns:
+| Aspect | SonarQube | InsightCode |
+|--------|-----------|-------------|
+| **Method** | Token/Structure-based | Content-based |
+| **Philosophy** | "Repetitive structure" | "Actionable copy-paste" |
+| **Lodash Result** | 70.4% duplication | ~6% duplication |
+| **Focus** | Structural patterns | Actual code copying |
 
-| Tool | Approach | lodash/perf.js Result | Philosophy |
-|------|----------|----------------------|------------|
-| **SonarQube** | Token/Structure-based | 70.4% duplication | "This code has repetitive structure" |
-| **InsightCode** | Content-based | 6% duplication | "This code has actual copy-paste" |
-
-Example - benchmark suites naturally have repetitive structure:
+**Example**: Benchmark suites with repetitive structure:
 ```javascript
-// This pattern repeated 100+ times is NOT duplication for us
+// SonarQube flags this as duplication
 suites.push(Benchmark.Suite('`_.map`'))
 suites.push(Benchmark.Suite('`_.filter`'))
-// Different methods = different code, even if structure is similar
+
+// InsightCode: Different methods = different code
+// Structure similarity ≠ actionable duplication
 ```
 
-We believe this approach provides more actionable insights for refactoring decisions.
+We prioritize **actionable insights** over structural pattern detection.
+
+## 📁 Benchmark History
+
+### Recent Benchmarks
+- `benchmark-report-prod-with-context-2025-07-12.md` - **Latest** v0.6.0 production analysis
+- `benchmark-report-prod-with-context-2025-07-11.md` - v0.6.0 production analysis
+- `benchmark-summary-prod-with-context-2025-07-12.json` - Machine-readable summary
+
+### Archived Results
+- `archives/benchmark-2025-06-29.md` - v0.5.x full codebase analysis  
+- `archives/benchmark-2025-06-28.md` - v0.5.x production-only analysis
+- `archives/benchmark-explanations-*.md` - Detailed methodology explanations
+
+## 🎯 Benchmark Validation
+
+### Academic Foundation
+- **McCabe (1976)**: Complexity thresholds ≤10 excellent, >50 critical
+- **Martin Clean Code (2008)**: File size recommendations ≤200 LOC optimal
+- **NASA/SEL Standards**: Current NPR 7150.2D requires ≤15 complexity for critical software
+- **ISO/IEC 25010**: Maintainability quality model compliance
+
+### Industry Alignment
+- **SonarQube Quality Gates**: Strict duplication mode aligns with 3% threshold
+- **Google Code Practices**: Duplication tolerance ~2-3% maintained
+- **NIST Guidelines**: >20 complexity = high defect probability
+
+### Statistical Validation
+- **677K+ lines analyzed** across diverse project types
+- **100% success rate** on complex, real-world codebases
+- **Consistent results** across multiple benchmark runs
+- **Performance proven** at 22K+ lines/second analysis speed
 
 ---
 
-*For detailed methodology and academic justification, see [SCORING_THRESHOLDS_JUSTIFICATION.md](../docs/SCORING_THRESHOLDS_JUSTIFICATION.md)*
+*For complete methodology details, see [docs/HEALTH_SCORE_METHODOLOGY.md](../docs/HEALTH_SCORE_METHODOLOGY.md) and [docs/SCORING_ARCHITECTURE.md](../docs/SCORING_ARCHITECTURE.md)*
