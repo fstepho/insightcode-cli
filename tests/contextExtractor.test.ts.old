@@ -2,10 +2,12 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-import { extractCodeContext, enrichWithContext } from '../src/contextExtractor';
+import { contextBuilder } from '../src/context-builder';
+import { astBuilder } from '../src/ast-builder';
+import { fileDetailBuilder } from '../src/file-detail-builder';
 import { FileDetail } from '../src/types';
 
-describe('ContextExtractor', () => {
+describe('ContextBuilder', () => {
   let tempDir: string;
   let testFile: string;
 
@@ -13,8 +15,8 @@ describe('ContextExtractor', () => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'context-test-'));
   });
 
-  describe('extractCodeContext', () => {
-    it('should extract critical functions with high complexity', () => {
+  describe('build', () => {
+    it('should extract critical functions with high complexity', async () => {
       const testCode = `
 function simpleFunction() {
   return 42;

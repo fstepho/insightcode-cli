@@ -49,6 +49,7 @@ class TestClass {
     try {
       // Test the complete analysis flow
       const result = await analyze(tempDir, {
+        format: 'json', // Use JSON format for easier testing
         projectPath: tempDir,
         thresholds: {} as any, // Will use defaults
         excludeUtility: false,
@@ -110,6 +111,7 @@ function veryComplexFunction(a: number, b: string, c: boolean, d: object) {
     try {
       // Test with context extraction enabled
       const result = await analyze(tempDir, {
+        format: 'json',
         projectPath: tempDir,
         thresholds: {} as any, // Will use defaults
         excludeUtility: false,

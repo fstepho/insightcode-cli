@@ -81,7 +81,8 @@ describe('Parser v0.6.0', () => {
         }
       `);
       
-      const fileDetail = parseFile(testFile);
+      const result = parseFile(testFile);
+      const fileDetail = result.fileDetail;
       
       expect(fileDetail.metrics.complexity).toBe(1);
       expect(fileDetail.metrics.loc).toBe(3);
