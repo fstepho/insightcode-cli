@@ -642,7 +642,7 @@ export class UniversalDependencyAnalyzer {
   }
 
   /**
-   * Calcule les statistiques détaillées.
+   * Calculate detailed statistics.
    */
   private calculateStatistics(
     dependencyGraph: Map<string, Set<string>>, 

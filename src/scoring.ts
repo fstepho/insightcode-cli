@@ -2,7 +2,7 @@
 
 import { Issue } from './types';
 import {
-  SCORING_WEIGHTS,
+  PROJECT_SCORING_WEIGHTS,
   DUPLICATION_SCORING_THRESHOLDS,
   MAINTAINABILITY_SCORING_THRESHOLDS,
   COMPLEXITY_LABEL_THRESHOLDS,
@@ -54,7 +54,7 @@ export function getMaintainabilityLabel(score: number): string {
  * Uses progressive degradation following the gold standard: Linear → Quadratic → Exponential.
  * 
  * RESEARCH BASIS: 
- * - McCabe (1976): complexity <= 10 for good code
+ * - McCabe (1976): complexity <= 10 for excellent code
  * - ISO/IEC 25010: Extreme complexity violates maintainability principles
  * - Fowler Technical Debt: Must be visible and quantified, not masked
  * 
@@ -68,7 +68,7 @@ export function getMaintainabilityLabel(score: number): string {
  * respecting the Pareto principle and making technical debt visible.
  */
 export function calculateComplexityScore(complexity: number): number {
-  // Phase 1: McCabe "good" threshold - excellent code
+  // Phase 1: McCabe "excellent" threshold - excellent code
   if (complexity <= 10) return 100;
   
   // Phase 2: Linear degradation (industry standard for moderate complexity)
@@ -117,13 +117,13 @@ export function calculateDuplicationScore(duplicationRatio: number): number {
 }
 
 /**
- * Calcule un score de maintenabilité de 0 à 100 basé sur les métriques de taille.
+ * Calculate maintainability score from 0 to 100 based on size metrics.
  * 
- * RESEARCH BASIS: Martin (2008) Clean Code suggests files should be small.
- * Industry consensus: < 200 LOC is good, 300+ becomes harder to maintain.
+ * INTERNAL CONVENTION: Inspired by Clean Code principles suggesting files should be small.
+ * Industry guidance: < 200 LOC is often considered good, 300+ becomes harder to maintain.
  */
 export function calculateMaintainabilityScore(fileLoc: number, fileFunctionCount: number): number {
-  // Martin Clean Code threshold: <= 200 LOC is considered maintainable
+  // Internal convention (Clean Code inspired): <= 200 LOC is considered maintainable
   const sizeScore = fileLoc <= MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FILE_SIZE
     ? 100 
     : 100 * Math.exp(
@@ -131,7 +131,7 @@ export function calculateMaintainabilityScore(fileLoc: number, fileFunctionCount
         Math.pow(fileLoc - MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FILE_SIZE, MAINTAINABILITY_SCORING_THRESHOLDS.SIZE_PENALTY_POWER)
       );
 
-  // Score basé sur le nombre de fonctions
+  // Score based on function count
   const functionScore = fileFunctionCount <= MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FUNCTION_COUNT
     ? 100
     : 100 * Math.exp(
@@ -142,30 +142,30 @@ export function calculateMaintainabilityScore(fileLoc: number, fileFunctionCount
   return Math.max(0, Math.round((sizeScore + functionScore) / 2));
 }
 
-// --- Fonctions de scoring global et de grade (poids académiques) ---
+// --- Global scoring and grading functions (weighted scoring) ---
 
 /**
- * Calcule le score final pondéré selon les standards académiques.
+ * Calculate the final weighted score based on internal hypotheses.
  * 
- * WEIGHTS BASED ON EMPIRICAL RESEARCH:
- * - 45% Complexity: McCabe (1976) - Strong correlation with defect rate
- * - 30% Maintainability: Martin (2008) - Code structure impact on evolution
- * - 25% Duplication: Fowler (1999) - Refactoring debt indicator
+ * WEIGHTS BASED ON INTERNAL HYPOTHESIS (requires empirical validation):
+ * - 45% Complexity: Internal hypothesis - Primary defect predictor
+ * - 30% Maintainability: Internal hypothesis - Development velocity impact  
+ * - 25% Duplication: Internal hypothesis - Technical debt indicator
  * 
- * These weights align with SonarQube methodology and ISO/IEC 25010 standards.
+ * Note: These weights are internal conventions and require empirical validation.
  */
 export function calculateWeightedScore(
   complexityScore: number,
   duplicationScore: number, 
   maintainabilityScore: number
 ): number {
-  return (complexityScore * SCORING_WEIGHTS.COMPLEXITY) + 
-         (maintainabilityScore * SCORING_WEIGHTS.MAINTAINABILITY) + 
-         (duplicationScore * SCORING_WEIGHTS.DUPLICATION);
+  return (complexityScore * PROJECT_SCORING_WEIGHTS.COMPLEXITY) + 
+         (maintainabilityScore * PROJECT_SCORING_WEIGHTS.MAINTAINABILITY) + 
+         (duplicationScore * PROJECT_SCORING_WEIGHTS.DUPLICATION);
 }
 
 
-// --- Fonctions de coloration (alignées sur les seuils recherche) ---
+// --- Color level functions (aligned with research thresholds) ---
 
 export function getComplexityColorLevel(complexity: number): 'green' | 'yellow' | 'red' | 'redBold' {
     // Aligned with McCabe research thresholds
@@ -236,7 +236,7 @@ function getDuplicationPenalty(duplicationRatio: number): number {
     return (percentage - constants.EXCELLENT_THRESHOLD) * constants.LINEAR_MULTIPLIER;
   }
   
-  // Exponential penalty beyond 30% - NO CAP!
+  // Exponential penalty beyond high threshold - NO CAP!
   // High duplication should devastate the score
   const basePenalty = constants.LINEAR_MAX_PENALTY;
   const exponentialPenalty = Math.pow(
@@ -288,12 +288,12 @@ function getIssuesPenalty(issues: Issue[]): number {
 }
 
 /**
- * Calcule le score de santé en utilisant des pénalités progressives SANS CAPS.
- * Formule : 100 - Somme des Pénalités (sans plafonds artificiels).
- * Les valeurs extrêmes reçoivent des pénalités extrêmes conformes aux règles de l'art.
+ * Calculate health score using progressive penalties WITHOUT CAPS.
+ * Formula: 100 - Sum of Penalties (without artificial ceilings).
+ * Extreme values receive extreme penalties following Rules of the Art.
  * 
- * @param file Objet contenant les métriques et issues du fichier.
- * @returns Score de santé de 0 à 100.
+ * @param file Object containing file metrics and issues.
+ * @returns Health score from 0 to 100.
  */
 export function calculateHealthScore(file: { 
   metrics: { 

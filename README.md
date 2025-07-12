@@ -432,8 +432,10 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 - **Enhanced Architectural Analysis**: Deep function-level complexity breakdown with code samples and dependency mapping
 - **Comprehensive Code Context**: Detailed analysis of async patterns, error handling, TypeScript usage, and more
 
-### v0.6.0 🔮 Future Development
-- Major breaking changes release focused on clarity, consistency, and eliminating redundancy.
+### v0.6.1 ✅ Current Focus
+- Documentation and Quality Assurance phase
+- Complete audit and synchronization of all technical documentation
+- Enhanced accuracy and consistency across all methodology descriptions
 
 ### v0.7.0 🔮 Future Development
 - JSX/TSX support
@@ -507,4 +509,4 @@ MIT - Use it, fork it, improve it!
 
 ---
 
-**Latest**: v0.4.0 | **Downloads**: [![npm](https://img.shields.io/npm/dm/insightcode-cli.svg)](https://www.npmjs.com/package/insightcode-cli) | **Stars**: ⭐ the repo if you find it useful!
+**Latest**: v0.6.1 | **Downloads**: [![npm](https://img.shields.io/npm/dm/insightcode-cli.svg)](https://www.npmjs.com/package/insightcode-cli) | **Stars**: ⭐ the repo if you find it useful!

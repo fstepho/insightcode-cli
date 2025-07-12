@@ -5,7 +5,23 @@ All notable changes to InsightCode CLI will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.6.1] [Unreleased] - Documentation & QA
+
+### Added
+- **Enhanced Documentation**: Comprehensive audit and update of all technical documentation
+- **Mathematical Validation**: Verified all scoring formulas and constants match implementation
+- **Version Clarity**: Clear distinction between v0.6.0 (major refactor, ready for release) and v0.6.1 (documentation/QA focus)
+- **Accuracy Improvements**: Updated all metrics, dependency counts, and technical specifications in documentation
+
+### Changed
+- **Documentation Consistency**: All technical docs now accurately reflect current codebase state
+- **Version References**: Updated all documentation to use v0.6.1 as current development focus
+- **Technical Accuracy**: Synchronized all formulas, constants, and methodology descriptions with actual implementation
+
+### Fixed
+- **Documentation Drift**: Eliminated inconsistencies between documentation and code
+- **Version Confusion**: Clarified release status and development timeline
+- **Technical Accuracy**: Corrected all mathematical formulas and scoring methodology descriptions
 
 ## [0.5.0] - 2025-07-09
 

@@ -1,5 +1,27 @@
 # Architectural Decisions - InsightCode CLI
 
+## 📝 Recent Updates (2025-07-12)
+
+### DECISIONS.md Audit & Corrections
+- ✅ **Updated all references** from 5-line to 8-line duplication detection 
+- ✅ **Marked superseded decisions** for LOC-based weighting (replaced by criticality-weighted scoring)
+- ✅ **Clarified status** of deleted fileScoring.ts module
+- ✅ **Synchronized weight references** across all documentation (45/30/25)
+- ✅ **Added completion status** for implemented decisions
+- ✅ **Fixed chronological order** - 2025-07-12 decisions moved to top
+- ✅ **Eliminated duplicates** - removed duplicate duplication detection decision
+
+### Key Status Changes
+- **Academic Best Practices for Metric Aggregation**: SUPERSEDED by criticality-weighted scoring
+- **LOC Weighting**: SUPERSEDED - fundamentally flawed approach replaced  
+- **fileScoring.ts**: COMPLETED then SUPERSEDED - module deleted
+- **Duplication Detection**: UPDATED to 8-line blocks with enhanced filtering
+- **topIssues.ts**: COMPLETED - created, renamed, then deleted (full lifecycle documented)
+
+**Note**: All superseded decisions are preserved for historical context and learning purposes.
+
+---
+
 Format: **Date | Decision | Reason | Impact**
 
 ## 2025-07-08: **Introduction of Rich Context Extraction for LLM Analysis**

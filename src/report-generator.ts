@@ -200,7 +200,7 @@ export function generateProjectReport(result: ReportResult): string {
     markdown += `### Complexity Calculation\n`;
     markdown += `- **Method:** McCabe Cyclomatic Complexity (1976) + Industry Best Practices\n`;
     markdown += `- **Scoring:** Linear (≤10→20) → Quadratic (20→50) → Exponential (>50) - Rules of the Art\n`;
-    markdown += `- **Research Base:** ISO/IEC 25010, Fowler Technical Debt, Pareto Principle - extreme values dominate\n\n`;
+    markdown += `- **Research Base:** Internal methodology inspired by Pareto Principle - extreme values dominate\n\n`;
     
     markdown += `### Health Score Formula\n`;
     markdown += `- **Base:** 100 points minus penalties\n`;
@@ -297,16 +297,20 @@ function generatePatternAnalysisSection(codeContexts: CodeContext[]): string {
 
 
 function generateScoringMethodologyNotes(): string {
-    let notes = `InsightCode uses **evidence-based scoring** aligned with academic research and industry standards:\n\n`;
+    let notes = `InsightCode uses **internal hypothesis-based scoring** requiring empirical validation:\n\n`;
     
     notes += `#### Overall Score Formula\n`;
     notes += `\`(Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)\`\n\n`;
     
-    notes += `| Dimension | Weight | Academic Foundation & Thresholds |\n`;
-    notes += `|-----------|--------|----------------------------------|\n`;
-    notes += `| **Complexity** | **45%** | **McCabe (1976):** Complexity ≤10 (low), 11-15 (medium), 16-20 (high), 21-50 (very high), >50 (extreme). Primary defect predictor. |\n`;
-    notes += `| **Maintainability** | **30%** | **Martin Clean Code (2008):** Files ≤200 LOC ideal. Impact on development velocity and comprehension. |\n`;
-    notes += `| **Duplication** | **25%** | **Fowler Refactoring (1999):** Technical debt indicator. ≤15% acceptable, >30% concerning, >50% critical maintenance burden. |\n\n`;
+    notes += `| Dimension | Weight | Foundation & Thresholds |\n`;
+    notes += `|-----------|--------|--------------------------|\n`;
+    notes += `| **Complexity** | **45%** | **McCabe (1976) thresholds:** ≤10 (low), 11-15 (medium), 16-20 (high), 21-50 (very high), >50 (extreme). Weight = internal hypothesis. |\n`;
+    notes += `| **Maintainability** | **30%** | **File size impact hypothesis:** ≤200 LOC ideal. Weight = internal hypothesis (requires validation). |\n`;
+    notes += `| **Duplication** | **25%** | **⚠️ LEGACY thresholds (5x more permissive than industry):** ≤15% "excellent" vs SonarQube ≤3%. Weight = internal hypothesis. |\n\n`;
+    
+    notes += `#### ⚠️ Important Disclaimers\n`;
+    notes += `**Project weights (45/30/25) are internal hypotheses requiring empirical validation, NOT industry standards.** These weights apply only to project-level aggregation. File Health Scores use unweighted penalty summation.\n\n`;
+    notes += `**Duplication thresholds are 5x more permissive than industry standards** (≤15% = "excellent" vs SonarQube ≤3%). Scores may appear inflated compared to standard tools.\n\n`;
     
     notes += `#### Grade Scale (Academic Standard)\n`;
     notes += `**A** (90-100) • **B** (80-89) • **C** (70-79) • **D** (60-69) • **F** (<60)\n\n`;

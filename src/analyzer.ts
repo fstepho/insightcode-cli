@@ -214,29 +214,28 @@ function calculateOverview(details: FileDetail[]): Overview {
   const avgLOC = totalLOC / details.length;
   const avgDuplicationRatio = details.reduce((sum, f) => sum + f.metrics.duplicationRatio, 0) / details.length;
   
-  // Calculate weighted scores following industry standards WITHOUT outlier masking
+  // Calculate weighted scores using internal hypothesis weights WITHOUT outlier masking
   // 
   // METHODOLOGY: Raw arithmetic weighting that ensures extreme values are properly reflected
   // in the final grade, following the Pareto principle (20% of code causes 80% of problems).
   // 
-  // ACADEMIC FOUNDATION:
-  // - McCabe (1976): Complexity is the primary defect predictor - gets highest weight (45%)
-  // - Martin Clean Code (2008): File size impacts maintainability - secondary weight (30%)
-  // - Fowler Refactoring (1999): Duplication indicates technical debt - tertiary weight (25%)
+  // INTERNAL HYPOTHESIS (requires empirical validation):
+  // - Complexity: Primary defect predictor hypothesis - gets highest weight (45%)
+  // - File size: Maintainability impact hypothesis - secondary weight (30%)
+  // - Duplication: Technical debt indicator hypothesis - tertiary weight (25%)
   // 
-  // INDUSTRY ALIGNMENT:
-  // - SonarQube methodology: Linear aggregation without artificial caps
-  // - CodeClimate approach: Extreme values should dominate quality assessment
+  // INTERNAL HYPOTHESIS APPROACH:
+  // - Simple arithmetic weighting without outlier masking
   // - NO logarithmic scaling: Outliers must be visible, not masked
   // 
-  // WEIGHT RATIONALE (45/30/25%):
-  // - 45% Complexity: Primary defect predictor (McCabe research)
-  // - 30% Dependencies: Architectural impact and maintainability
-  // - 25% Duplication: Technical debt indicator (Fowler)
+  // WEIGHT RATIONALE (45/30/25%) - INTERNAL HYPOTHESIS:
+  // - 45% Complexity: Internal hypothesis (requires validation)
+  // - 30% Dependencies: Internal hypothesis (requires validation)
+  // - 25% Duplication: Internal hypothesis (requires validation)
   //
   // This approach ensures that projects with critical issues (complexity 1000+, 
-  // massive files) receive appropriately low grades, following industry best practices
-  // for identifying the most problematic code that requires immediate attention.
+  // massive files) receive appropriately low grades, following the principle that
+  // extreme problems should result in extreme penalties.
   
   const totalCriticismScore = details.reduce((sum, f) => {
     // Simple arithmetic mean without logarithmic masking of outliers
@@ -253,8 +252,8 @@ function calculateOverview(details: FileDetail[]): Overview {
     // Use raw duplication ratio
     const duplicationImpact = f.metrics.duplicationRatio * 100;
     
-    // Simple weighted sum following industry standards
-    return sum + (complexityImpact * SCORING_WEIGHTS.COMPLEXITY) + (dependencyImpact * SCORING_WEIGHTS.MAINTAINABILITY) + (duplicationImpact * SCORING_WEIGHTS.DUPLICATION) + baseWeight;
+    // Simple weighted sum following internal hypothesis weights
+    return sum + (complexityImpact * PROJECT_SCORING_WEIGHTS.COMPLEXITY) + (dependencyImpact * PROJECT_SCORING_WEIGHTS.MAINTAINABILITY) + (duplicationImpact * PROJECT_SCORING_WEIGHTS.DUPLICATION) + baseWeight;
   }, 0);
   
   let weightedComplexityScore = 0;
@@ -267,7 +266,7 @@ function calculateOverview(details: FileDetail[]): Overview {
       const complexityImpact = file.metrics.complexity;
       const dependencyImpact = file.dependencies.incomingDependencies;
       const duplicationImpact = file.metrics.duplicationRatio * 100;
-      const criticismScore = (complexityImpact * SCORING_WEIGHTS.COMPLEXITY) + (dependencyImpact * SCORING_WEIGHTS.MAINTAINABILITY) + (duplicationImpact * SCORING_WEIGHTS.DUPLICATION) + 1.0;
+      const criticismScore = (complexityImpact * PROJECT_SCORING_WEIGHTS.COMPLEXITY) + (dependencyImpact * PROJECT_SCORING_WEIGHTS.MAINTAINABILITY) + (duplicationImpact * PROJECT_SCORING_WEIGHTS.DUPLICATION) + 1.0;
       const weight = criticismScore / totalCriticismScore;
       
       weightedComplexityScore += calculateComplexityScore(file.metrics.complexity) * weight;

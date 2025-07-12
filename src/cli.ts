@@ -95,7 +95,7 @@ function outputReportFormat(results: AnalysisResult, projectPath: string): void 
 program
   .name('insightcode')
   .description('TypeScript code quality analyzer - 100% local')
-  .version('0.5.0');
+  .version('0.6.1');
 
 program
   .command('analyze [path]')

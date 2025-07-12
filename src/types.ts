@@ -338,16 +338,16 @@ export interface DependencyStatistics {
  * Contient les métriques et analyses détaillées pour un seul fichier.
  */
 export interface FileDependencyAnalysis {
-  outgoingDependencies: number; // Dépendances sortantes (efferent coupling)
-  incomingDependencies: number; // Dépendances entrantes (afferent coupling / impact)
-  cohesionScore: number; // Cohésion (0 = faible, 1 = forte) score de cohésion basé sur la proximité des dépendances.
-  instability: number;          // Instabilité (0 = stable, 1 = instable). I = outgoing / (incoming + outgoing) - Principe de Robert C. Martin
-  percentileUsageRank: number;  // Rang d'utilisation (percentile 0-100)
-  isInCycle: boolean;           // Indique si le fichier fait partie d'un cycle
+  outgoingDependencies: number; // Outgoing dependencies (efferent coupling)
+  incomingDependencies: number; // Incoming dependencies (afferent coupling / impact)
+  cohesionScore: number; // Cohesion (0 = weak, 1 = strong) cohesion score based on dependency proximity.
+  instability: number;          // Instability (0 = stable, 1 = unstable). I = outgoing / (incoming + outgoing) - Robert C. Martin's principle
+  percentileUsageRank: number;  // Usage rank (percentile 0-100)
+  isInCycle: boolean;           // Indicates if the file is part of a cycle
 }
 
 /**
- * Le résultat complet de l'analyse, maintenant avec les métriques par fichier.
+ * The complete analysis result, now with per-file metrics.
  */
 export interface DependencyAnalysisResult {
   incomingDependencyCount: Map<string, number>;
