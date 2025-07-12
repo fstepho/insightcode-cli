@@ -146,7 +146,7 @@ export function reportToTerminal(result: AnalysisResult): void {
   const timestamp = new Date(context.analysis.timestamp).toLocaleString();
   
   console.log(chalk.cyan('┌' + '─'.repeat(78) + '┐'));
-  console.log(chalk.cyan('│') + chalk.bold.white('  INSIGHTCODE ANALYSIS REPORT').padEnd(95) + chalk.cyan('│'));
+  console.log(chalk.cyan('│') + chalk.bold.white('  INSIGHTCODE ANALYSIS REPORT').padEnd(97) + chalk.cyan('│'));
   console.log(chalk.cyan('│') + '  ' + padEnd(`Project: ${projectName}`, 76) + chalk.cyan('│'));
   console.log(chalk.cyan('│') + '  ' + padEnd(`Date: ${timestamp}`, 76) + chalk.cyan('│'));
   console.log(chalk.cyan('└' + '─'.repeat(78) + '┘'));

@@ -12,7 +12,7 @@ import { getHealthCategory, getScoreStatus } from './scoring.utils';
 /**
  * Génère le rapport markdown synthétique multi-projets
  */
-export function generateMarkdownReport(results: ReportResult[], summary: ReportSummary, excludeUtility: boolean, withContext: boolean): string {
+export function generateMarkdownReport(results: ReportResult[], summary: ReportSummary, excludeUtility: boolean): string {
     const timestamp = new Date().toISOString();
     const mode = excludeUtility ? 'Production Code' : 'Full Project';
     
@@ -20,7 +20,7 @@ export function generateMarkdownReport(results: ReportResult[], summary: ReportS
     let markdown = `# InsightCode Benchmark Report - ${mode}\n\n`;
     markdown += `**Generated:** ${timestamp}\n`;
     markdown += `**Tool Version:** v0.6.0\n`;
-    markdown += `**Analysis Mode:** ${mode}${withContext ? ' with Code Context' : ''}\n\n`;
+    markdown += `**Analysis Mode:** ${mode}\n\n`;
     
     // Executive Summary
     markdown += `## Executive Summary\n\n`;
@@ -53,10 +53,9 @@ export function generateMarkdownReport(results: ReportResult[], summary: ReportS
     markdown += generateCriticalFindings(results);
     
     // Pattern Analysis
-    if (withContext) {
-        markdown += `## Code Pattern Analysis\n\n`;
-        markdown += generatePatternAnalysis(results);
-    }
+    markdown += `## Code Pattern Analysis\n\n`;
+    markdown += generatePatternAnalysis(results);
+  
     
     // Individual Project Summaries
     markdown += `## Project Summaries\n\n`;
@@ -80,7 +79,7 @@ export function generateMarkdownReport(results: ReportResult[], summary: ReportS
 /**
  * Génère tous les rapports individuels et les sauvegarde
  */
-export function generateAllIndividualReports(results: ReportResult[], outputDir: string, excludeUtility: boolean, withContext: boolean): void {
+export function generateAllIndividualReports(results: ReportResult[], outputDir: string, excludeUtility: boolean): void {
      
     // Créer le dossier des rapports individuels s'il n'existe pas
     const individualReportsDir = path.join(outputDir);
@@ -91,13 +90,11 @@ export function generateAllIndividualReports(results: ReportResult[], outputDir:
     // Générer un rapport pour chaque projet réussi
     results.filter(r => !r.error).forEach(result => {
         const reportContent = generateProjectReport(result);
-        // add excludeUtility and withContext info to filename
+        // add excludeUtility info to filename
         const modeSuffix = excludeUtility ? '-prod' : '-full';
-        const contextSuffix = withContext ? '-with-context' : '';
-
         const date = new Date().toISOString().split('T')[0];
 
-        const filename = `${result.project}-analysis-report${modeSuffix}${contextSuffix}-${date}.md`;
+        const filename = `${result.project}-analysis-report${modeSuffix}-${date}.md`;
         const filepath = path.join(individualReportsDir, filename);
         
         fs.writeFileSync(filepath, reportContent);

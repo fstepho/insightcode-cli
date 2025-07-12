@@ -67,11 +67,7 @@ export async function analyze(
     await executeFileDetailStep(context);
     await executeMetricsProcessingStep(context);
     await executeOverviewCalculationStep(context);
-    
-    if (options.withContext) {
-      await executeContextExtractionStep(context);
-    }
-    
+    await executeContextExtractionStep(context);
     await executeContextGenerationStep(context);
     
     return assembleResult(context);
@@ -85,11 +81,7 @@ export async function analyze(
 /**
  * Step 1: Build AST from source files
  */
-async function executeASTBuildStep(context: AnalysisContext): Promise<void> {
-  if (context.options.format === 'terminal') {
-    console.log('🔍 Analyzing code quality...');
-  }
-  
+async function executeASTBuildStep(context: AnalysisContext): Promise<void> {  
   const astBuildOptions: ASTBuildOptions = {
     excludeUtility: context.options.excludeUtility
   };

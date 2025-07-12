@@ -249,7 +249,6 @@ export interface AnalysisOptions {
   format: 'json' | 'ci' | 'critical' | 'summary' | 'markdown' | 'terminal';
   projectPath: string;
   thresholds: ThresholdConfig;
-  withContext?: boolean;
   excludeUtility?: boolean;
   strictDuplication?: boolean;
 }
@@ -259,7 +258,6 @@ export interface CliOptions {
   json?: boolean;
   exclude?: string[];
   excludeUtility?: boolean;
-  withContext?: boolean;
   format?: 'json' | 'ci' | 'critical' | 'summary' | 'markdown' | 'terminal';
   strictDuplication?: boolean;
 }

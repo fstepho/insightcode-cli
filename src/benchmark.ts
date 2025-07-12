@@ -290,7 +290,6 @@ const RESULTS_DIR = path.join(projectRoot, 'benchmarks');
 // Parse command line arguments
 const args = process.argv.slice(2);
 const excludeUtility = args.includes('--exclude-utility');
-const withContext = args.includes('--with-context');
 const sequential = args.includes('--sequential');
 
 // --- UTILITY FUNCTIONS ---
@@ -359,7 +358,6 @@ function determineAnalysisPath(project: Project, projectTempDir: string, exclude
  * @param analysisPath - Le chemin exact du répertoire à analyser.
  * @param projectTempDir - Le chemin de base du projet (pour le contexte de l'analyse).
  * @param thresholds - La configuration des seuils de qualité.
- * @param withContext - Flag pour activer l'analyse de contexte de code.
  * @param excludeUtility - Flag pour exclure les fichiers utilitaires.
  * @param timestamp - Une fonction pour obtenir un timestamp formaté pour les logs.
  * @returns Le résultat brut de l'analyse.
@@ -368,7 +366,6 @@ async function runProjectAnalysis(
   analysisPath: string,
   projectTempDir: string,
   thresholds: ThresholdConfig,
-  withContext: boolean,
   excludeUtility: boolean,
   timestamp: () => string
 ): Promise<AnalysisResult> {
@@ -378,7 +375,6 @@ async function runProjectAnalysis(
     format: 'markdown', // Default format for CLI
     projectPath: projectTempDir,
     thresholds,
-    withContext,
     excludeUtility,
     strictDuplication: false
   };
@@ -418,7 +414,6 @@ async function analyzeProject(project: Project, index: number, total: number): P
       analysisPath,
       projectTempDir,
       thresholds,
-      withContext,
       excludeUtility,
       timestamp
     );
@@ -473,9 +468,8 @@ async function main(): Promise<void> {
   } else {
     console.log(`⚙️  Mode: Full Analysis (all files)`);
   }
-  if (withContext) {
-    console.log(`🧠 Code Context: Enabled (extracting detailed AST data)`);
-  }
+  console.log(`🧠 Code Context: Enabled (extracting detailed AST data)`);
+  
   if (sequential) {
     console.log(`🔄 Execution Mode: Sequential (one project at a time)`);
   } else {
@@ -545,13 +539,12 @@ async function main(): Promise<void> {
 
   const now = new Date();
   const dateSuffix = '-' + now.toISOString().slice(0, 10);
-  const contextSuffix = withContext ? '-with-context' : '';
   const modeSuffix = excludeUtility ? '-prod' : '-full';
   
    // Save individual results
   results.forEach(result => {
     if(!result.project || result.project === 'Unknown') return;
-    const resultFilename = `${result.project}-analysis-result${modeSuffix}${contextSuffix}${dateSuffix}.json`;
+    const resultFilename = `${result.project}-analysis-result${modeSuffix}${dateSuffix}.json`;
     fs.writeFileSync(path.join(RESULTS_DIR + '/individual-reports', resultFilename), 
     JSON.stringify(result, function(_key, val) {
       return val && val.toFixed ? Number(val.toFixed(2)) : val;
@@ -578,8 +571,8 @@ async function main(): Promise<void> {
 
 
   // Generate and save markdown report
-  const markdown = generateMarkdownReport(results, summary, excludeUtility, withContext);
-  const markdownFilename = `benchmark-report${modeSuffix}${contextSuffix}${dateSuffix}.md`;
+  const markdown = generateMarkdownReport(results, summary, excludeUtility);
+  const markdownFilename = `benchmark-report${modeSuffix}${dateSuffix}.md`;
   fs.writeFileSync(
     path.join(RESULTS_DIR, markdownFilename),
     markdown
@@ -587,10 +580,10 @@ async function main(): Promise<void> {
 
   // NOUVEAU : Générer les rapports individuels
   console.log(`\n📝 Generating individual project reports...`);
-  generateAllIndividualReports(results, RESULTS_DIR + '/individual-reports', excludeUtility, withContext);
+  generateAllIndividualReports(results, RESULTS_DIR + '/individual-reports', excludeUtility);
 
   // Save summary
-  const summaryFilename = `benchmark-summary${modeSuffix}${contextSuffix}${dateSuffix}.json`;
+  const summaryFilename = `benchmark-summary${modeSuffix}${dateSuffix}.json`;
   fs.writeFileSync(
     path.join(RESULTS_DIR, summaryFilename),
     JSON.stringify(summary, function (_key, val) {

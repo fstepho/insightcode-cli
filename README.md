@@ -427,7 +427,7 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
   - Enhanced JSON output format with project information
 
 ### What's New (v0.5.0) ✅
-- **Rich Context Extraction**: `--with-context` flag provides detailed architectural insights for external tools and AI systems
+- **Rich Context Extraction**: Provides detailed architectural insights for external tools and AI systems
 - **Enhanced Architectural Analysis**: Deep function-level complexity breakdown with code samples and dependency mapping
 - **Comprehensive Code Context**: Detailed analysis of async patterns, error handling, TypeScript usage, and more
 

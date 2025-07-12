@@ -100,7 +100,6 @@ program
   .option('-f, --format <format>', 'Output format: json, ci, critical, summary, report (default: terminal)')
   .option('-e, --exclude <patterns...>', 'Exclude patterns (e.g., "**/*.spec.ts")')
   .option('--exclude-utility', 'Exclude test, example, and utility directories from analysis')
-  .option('--with-context', 'Include detailed code context for LLM analysis')
   .option('--strict-duplication', 'Use strict duplication thresholds (3%/8%/15%) aligned with industry standards (SonarQube, Google). Default uses legacy permissive thresholds (15%/30%/50%)')
   .action(async (path: string, options: CliOptions) => {
     // Implement the default analyze action
@@ -124,7 +123,6 @@ async function runAnalysis(path: string, options: CliOptions) {
       format: format,
       projectPath: path,
       thresholds,
-      withContext: options.withContext,
       excludeUtility: options.excludeUtility,
       strictDuplication: options.strictDuplication
     };
