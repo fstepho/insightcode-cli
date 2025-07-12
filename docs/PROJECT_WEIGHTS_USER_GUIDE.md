@@ -70,10 +70,10 @@ FileA.ts: Health Score 67/100
 ### Mode Selection
 ```bash
 # Strict mode (industry standards)
-insightcode analyze --strict-duplication
+insightcode --strict-duplication
 
 # Legacy mode (permissive, default)
-insightcode analyze
+insightcode
 ```
 
 ### Score Impact Example

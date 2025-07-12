@@ -19,19 +19,19 @@ InsightCode propose maintenant **deux modes d'analyse de duplication** pour s'ad
 ### Mode Strict (Standards Industriels)
 ```bash
 # Analyse avec seuils stricts alignés SonarQube/Google
-insightcode analyze . --strict-duplication
+insightcode . --strict-duplication
 
 # Combinaison avec d'autres options
-insightcode analyze src/ --strict-duplication --format json
+insightcode src/ --strict-duplication --format json
 ```
 
 ### Mode Legacy (Par défaut)
 ```bash
 # Analyse standard (seuils permissifs)
-insightcode analyze .
+insightcode .
 
 # Explicitement spécifier le mode legacy
-insightcode analyze . # (mode legacy par défaut)
+insightcode . # (mode legacy par défaut)
 ```
 
 ## Comparaison des Résultats
@@ -102,7 +102,7 @@ CRITICAL FILES REQUIRING ATTENTION
 # GitHub Actions exemple
 - name: Code Quality Check (Strict)
   run: |
-    npx insightcode analyze src/ --strict-duplication --format ci
+    npx insightcode src/ --strict-duplication --format ci
     if [ $? -ne 0 ]; then exit 1; fi
 ```
 
@@ -111,7 +111,7 @@ CRITICAL FILES REQUIRING ATTENTION
 # Migration progressive
 - name: Code Quality Check (Legacy)
   run: |
-    npx insightcode analyze src/ --format ci  # Mode legacy par défaut
+    npx insightcode src/ --format ci  # Mode legacy par défaut
     # Échoue seulement si >50% duplication (très permissif)
 ```
 

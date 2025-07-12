@@ -94,71 +94,75 @@ function outputReportFormat(results: AnalysisResult, projectPath: string): void 
 program
   .name('insightcode')
   .description('TypeScript code quality analyzer - 100% local')
-  .version('0.6.1');
-
-program
-  .command('analyze [path]')
-  .description('Analyze TypeScript code quality')
+  .version('0.6.1')
+  .argument('[path]', 'Path to analyze (default: current directory)', '.')
   .option('-j, --json', 'Output as JSON')
   .option('-f, --format <format>', 'Output format: json, ci, critical, summary, report (default: terminal)')
   .option('-e, --exclude <patterns...>', 'Exclude patterns (e.g., "**/*.spec.ts")')
   .option('--exclude-utility', 'Exclude test, example, and utility directories from analysis')
   .option('--with-context', 'Include detailed code context for LLM analysis')
   .option('--strict-duplication', 'Use strict duplication thresholds (3%/8%/15%) aligned with industry standards (SonarQube, Google). Default uses legacy permissive thresholds (15%/30%/50%)')
-  .action(async (path = '.', options: CliOptions) => {
-    try {
-      // check if options.format not terminal 
-      if (!options.json && !options.format) {
-        console.log(chalk.blue('🔍 Analyzing code quality...'));
-      }
-      const thresholds = getConfig();
-      
-      const format = options.format || (options.json ? 'json' : 'terminal');
-      
-
-      // Create analysis options
-      const analysisOptions: AnalysisOptions = {
-        format: format,
-        projectPath: path,
-        thresholds,
-        withContext: options.withContext,
-        excludeUtility: options.excludeUtility,
-        strictDuplication: options.strictDuplication
-      };
-      
-      // Analyze using new flow
-      const results = await analyze(path, analysisOptions);
-      
-     
-      // Handle output format
-      switch (format) {
-        case 'json':
-          console.log(JSON.stringify(results, function(key, val) {
-            return val && val.toFixed ? Number(val.toFixed(2)) : val;
-          }, 2));
-          break;
-        case 'ci':
-          outputCiFormat(results);
-          break;
-        case 'critical':
-          outputCriticalFormat(results);
-          break;
-        case 'summary':
-          outputSummaryFormat(results);
-          break;
-        case 'markdown':
-          outputReportFormat(results, path);
-          break;
-        default:
-          // Use the new reporter for terminal output
-          reportToTerminal(results);
-          break;
-      }
-    } catch (error) {
-      console.error(chalk.red('\n❌ Error:'), error instanceof Error ? error.message : error);
-      process.exit(1);
-    }
-    process.exit(0);
+  .action(async (path: string, options: CliOptions) => {
+    // Implement the default analyze action
+    await runAnalysis(path, options);
   });
+
+// Extract common analysis logic into a function
+async function runAnalysis(path: string, options: CliOptions) {
+  try {
+    // check if options.format not terminal 
+    if (!options.json && !options.format) {
+      console.log(chalk.blue('🔍 Analyzing code quality...'));
+    }
+    const thresholds = getConfig();
+    
+    const format = options.format || (options.json ? 'json' : 'terminal');
+    
+
+    // Create analysis options
+    const analysisOptions: AnalysisOptions = {
+      format: format,
+      projectPath: path,
+      thresholds,
+      withContext: options.withContext,
+      excludeUtility: options.excludeUtility,
+      strictDuplication: options.strictDuplication
+    };
+    
+    // Analyze using new flow
+    const results = await analyze(path, analysisOptions);
+    
+   
+    // Handle output format
+    switch (format) {
+      case 'json':
+        console.log(JSON.stringify(results, function(_key, val) {
+          return val && val.toFixed ? Number(val.toFixed(2)) : val;
+        }, 2));
+        break;
+      case 'ci':
+        outputCiFormat(results);
+        break;
+      case 'critical':
+        outputCriticalFormat(results);
+        break;
+      case 'summary':
+        outputSummaryFormat(results);
+        break;
+      case 'markdown':
+        outputReportFormat(results, path);
+        break;
+      default:
+        // Use the new reporter for terminal output
+        reportToTerminal(results);
+        break;
+    }
+  } catch (error) {
+    console.error(chalk.red('\n❌ Error:'), error instanceof Error ? error.message : error);
+    process.exit(1);
+  }
+  process.exit(0);
+}
+
 
 program.parse();

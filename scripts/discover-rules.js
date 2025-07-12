@@ -47,7 +47,7 @@ tests.forEach(test => {
     fs.writeFileSync(filename, test.code);
     
     // Run InsightCode
-    const output = execSync(`insightcode analyze ${filename} --json`, {
+    const output = execSync(`insightcode ${filename} --json`, {
       encoding: 'utf-8',
       stdio: ['pipe', 'pipe', 'pipe']
     });
@@ -84,7 +84,7 @@ specificTests.forEach(test => {
   const filename = 'temp-test.js';
   fs.writeFileSync(filename, test.code);
   try {
-    const output = execSync(`insightcode analyze ${filename} --json`, {
+    const output = execSync(`insightcode ${filename} --json`, {
       encoding: 'utf-8',
       stdio: 'pipe'
     });

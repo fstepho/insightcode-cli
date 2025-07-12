@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **TypeCheck Script**: Added `npm run typecheck` for better development workflow
 
 ### Changed
+- **Simplified CLI Interface**: Analysis is now the default action - use `insightcode` instead of `insightcode analyze`
 - **Documentation Consistency**: All technical docs now accurately reflect current codebase state
 - **Version References**: Updated all documentation to use v0.6.1 as current development focus
 - **Technical Accuracy**: Synchronized all formulas, constants, and methodology descriptions with actual implementation
@@ -42,10 +43,10 @@ Previous versions used permissive duplication thresholds (≤15% = excellent) th
 
 ```bash
 # Strict mode - Industry standards (SonarQube/Google aligned)
-insightcode analyze . --strict-duplication
+insightcode . --strict-duplication
 
 # Legacy mode - Permissive thresholds (default, maintains compatibility)
-insightcode analyze .
+insightcode .
 ```
 
 ### 📊 Threshold Comparison
@@ -104,10 +105,10 @@ npm run qa
 npm install -g insightcode-cli
 
 # Analyze with industry-standard strict thresholds
-insightcode analyze src/ --strict-duplication --format json
+insightcode src/ --strict-duplication --format json
 
 # Compare with legacy mode
-insightcode analyze src/ --format json
+insightcode src/ --format json
 ```
 
 ### 🎯 Recommendations
@@ -256,9 +257,9 @@ npm install -g insightcode-cli
 
 ### Usage
 ```bash
-insightcode analyze
-insightcode analyze ./src
-insightcode analyze --json > report.json
+insightcode
+insightcode ./src
+insightcode --json > report.json
 ```
 
 ---

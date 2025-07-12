@@ -205,10 +205,10 @@ Our **pragmatic approach** uses 8-line blocks with literal pattern matching, foc
 **Usage**: Select mode via CLI flag:
 ```bash
 # Strict mode (industry-aligned)
-insightcode analyze --strict-duplication
+insightcode --strict-duplication
 
 # Legacy mode (default, permissive)  
-insightcode analyze
+insightcode
 ```
 
 #### STRICT MODE Thresholds (Industry-Aligned)

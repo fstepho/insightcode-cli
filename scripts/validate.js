@@ -285,7 +285,7 @@ DUPLICATION_TESTS.forEach(test => {
 console.log('🔍 Running InsightCode analysis...\n');
 
 try {
-  const output = execSync(`insightcode analyze "${VALIDATION_DIR}" --json`, {
+  const output = execSync(`insightcode "${VALIDATION_DIR}" --json`, {
     encoding: 'utf-8',
     env: { ...process.env, NO_COLOR: '1' }
   });

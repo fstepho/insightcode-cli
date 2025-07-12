@@ -42,17 +42,17 @@
 # Install globally
 npm install -g insightcode-cli
 
-# Analyze any TypeScript project, including InsightCode itself:
-insightcode analyze
+# Analyze current directory
+insightcode
 
 # Analyze specific path
-insightcode analyze ./src
+insightcode ./src
 
 # Focus on production code only
-insightcode analyze --exclude-utility
+insightcode --exclude-utility
 
 # Output JSON for CI/CD
-insightcode analyze --json > report.json
+insightcode --json > report.json
 ```
 # Note: We use self-analysis for testing and documentation,
 # not as a quality metric of the tool itself
@@ -64,7 +64,7 @@ insightcode analyze --json > report.json
 
 ## 📊 Example Output
 
-Real analysis of the **React** project using `insightcode analyze --exclude-utility react`:
+Real analysis of the **React** project using `insightcode --exclude-utility react`:
 
 ```
 🔍 Analyzing code quality...
@@ -205,7 +205,7 @@ Focus on what matters - your actual product code:
 
 ```bash
 # Analyze only production code
-insightcode analyze --exclude-utility
+insightcode --exclude-utility
 
 # This excludes:
 # - Test files (**/test/**, *.spec.ts, *.test.js)
@@ -231,13 +231,13 @@ The production-only analysis gives you the true picture of your codebase health.
 
 ```bash
 # Exclude patterns
-insightcode analyze --exclude "**/*.spec.ts" --exclude "**/vendor/**"
+insightcode --exclude "**/*.spec.ts" --exclude "**/vendor/**"
 
 # Exclude utility directories
-insightcode analyze --exclude-utility
+insightcode --exclude-utility
 
 # JSON output for CI/CD
-insightcode analyze --json
+insightcode --json
 
 # Help
 insightcode --help
@@ -471,7 +471,7 @@ cd insightcode-cli
 npm install
 
 # Development
-npm run dev -- analyze     # Run with tsx watch
+npm run dev              # Run with tsx watch
 npm test                   # Run tests
 npm run build             # Build for production
 ```

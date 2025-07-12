@@ -172,10 +172,10 @@ InsightCode now supports **dual duplication modes** to accommodate different pro
 **CLI Usage:**
 ```bash
 # Strict mode (industry-aligned)
-insightcode analyze . --strict-duplication
+insightcode . --strict-duplication
 
 # Legacy mode (default, backward compatible)
-insightcode analyze .
+insightcode .
 ```
 
 **Technical Implementation:**

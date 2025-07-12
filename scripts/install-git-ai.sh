@@ -39,7 +39,7 @@ git config --local alias.ai-status '!f() {
     echo "📊 Self-analysis mode (for testing/demo purposes)..."
   fi
   
-  ANALYSIS=$(npx insightcode analyze . --json 2>/dev/null || echo "{}")
+  ANALYSIS=$(npx insightcode . --json 2>/dev/null || echo "{}")
   [ "$ANALYSIS" = "{}" ] && echo "❌ Analysis failed" && return 1
   
   # Extract metrics

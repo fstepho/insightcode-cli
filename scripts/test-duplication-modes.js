@@ -30,5 +30,5 @@ testDuplicationMode(0.30, '30% duplication');
 
 console.log('\n✅ Duplication modes working correctly!');
 console.log('\nUsage:');
-console.log('  Legacy mode (default): insightcode analyze .');
-console.log('  Strict mode:          insightcode analyze . --strict-duplication');
+console.log('  Legacy mode (default): insightcode .');
+console.log('  Strict mode:          insightcode . --strict-duplication');
