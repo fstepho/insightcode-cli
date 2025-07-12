@@ -70,7 +70,7 @@ This means a small, complex file with many dependents (like a core utility) will
 *Logical operators are counted because they represent implicit branching in the control flow
 
 #### Duplication Detection
-- **Method**: 5-line sliding window with content-based detection
+- **Method**: 8-line sliding window with content-based detection
 - **Philosophy**: Focuses on actual copy-paste, not structural similarity
 - **Accuracy**: ~85% conservative approach (prefers false negatives over false positives)
 - **Note**: Our approach differs from tools like SonarQube - see examples below

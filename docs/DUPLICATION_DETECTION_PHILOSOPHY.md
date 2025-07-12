@@ -1,8 +1,23 @@
 # InsightCode Duplication Detection Philosophy
 
+## Table of Contents
+
+- [Executive Summary](#executive-summary)
+- [Practical Example: lodash/perf.js Case Study](#practical-example-lodashperfjs-case-study)
+- [Our Detection Algorithm](#our-detection-algorithm)
+- [Why This Matters](#why-this-matters)
+- [Practical Examples](#practical-example)
+- [Benefits of Our Approach](#benefits-of-our-approach)
+- [When to Use Which Tool](#when-to-use-which-tool)
+- [Technical Implementation](#technical-implementation)
+- [Real-World Impact](#real-world-impact)
+- [Summary](#summary)
+
 ## Executive Summary
 
 InsightCode uses a **pragmatic, content-based duplication detection** approach that focuses on actual copy-paste problems rather than structural similarities. This results in more actionable insights for developers.
+
+> **🎯 Quick validation**: Check our [benchmark results](../benchmarks/) showing InsightCode vs other tools on 9 popular projects.
 
 > **Note**: For technical details and academic justification of our detection algorithm, see [SCORING_THRESHOLDS_JUSTIFICATION.md](./SCORING_THRESHOLDS_JUSTIFICATION.md).
 
@@ -37,8 +52,8 @@ suites.push(
 
 ## Our Detection Algorithm
 
-### 1. Sliding Window (5 lines)
-We analyze consecutive 5-line blocks - optimal for catching meaningful duplications without false positives.
+### 1. Sliding Window (8 lines)
+We analyze consecutive 8-line blocks - optimal for catching meaningful duplications without false positives.
 
 ### 2. Smart Normalization
 ```javascript
@@ -60,9 +75,10 @@ lodash.filter(data, fn) // → .filter(VAR, VAR)
 ```
 
 ### 4. Conservative Filtering
-- Minimum 20 characters after normalization
-- Minimum 5 tokens (meaningful code)
+- Minimum 50 characters after normalization
+- Minimum 8 tokens (meaningful code)
 - Blocks must appear 2+ times to count
+- Cross-file detection only (no intra-file duplicates)
 
 ## Why This Matters
 
@@ -144,10 +160,15 @@ function normalizeBlock(block: string): string {
     .replace(/(["'`])(?:(?=(\\?))\2.)*?\1/g, 'STRING')
     .replace(/\b\d+(\.\d+)?\b/g, 'NUM')
     
+    // Properties normalized
+    .replace(/\b(\w+)\s*[:=]\s*/g, 'PROP = ')
+    
     // Noise removed
     .replace(/\/\/.*$/gm, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/\s+/g, ' ')
     .trim();
+}
 }
 ```
 
@@ -166,6 +187,8 @@ While other tools might report high duplication in benchmark or test files, we f
 - More actionable results
 - Better developer experience
 - Faster analysis
+
+> **💡 Want to adjust detection sensitivity?** See our [duplication modes user guide](./DUPLICATION_MODES_USER_GUIDE.md) for configuration options.
 
 ---
 

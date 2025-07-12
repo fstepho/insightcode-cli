@@ -151,7 +151,7 @@ function validate(user) {              // Base: 1
 ```
 #### 2. Code Duplication
 Detects actual copy-paste duplication using pragmatic content analysis:
-- **Algorithm**: 5-line sliding window with normalization
+- **Algorithm**: 8-line sliding window with normalization
 - **Philosophy**: Focus on refactorable duplication, not structural patterns
 - **Target**: < 3% excellent, < 8% good
 
@@ -418,7 +418,6 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
   - **Advanced Criticality Engine**: Scoring is now weighted by file complexity and architectural impact.
   - **Architectural Analysis**: The tool now detects "Silent Killers" and profiles complexity distribution (StdDev).
   - **Enhanced JSON Output**: The API exposes all advanced metrics for CI/CD and external tools
-
   - Configurable thresholds with `insightcode.config.json`
   - Project metadata display in analysis reports  
   - Academic best practices for metric aggregation

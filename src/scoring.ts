@@ -1,17 +1,19 @@
 // File: src/scoring.ts
 
-import { Issue } from './types';
+import { Issue, DuplicationConfig } from './types';
 import {
   PROJECT_SCORING_WEIGHTS,
-  DUPLICATION_SCORING_THRESHOLDS,
   MAINTAINABILITY_SCORING_THRESHOLDS,
   COMPLEXITY_LABEL_THRESHOLDS,
-  DUPLICATION_LABEL_THRESHOLDS,
   COMPLEXITY_COLOR_THRESHOLDS,
   DUPLICATION_COLOR_THRESHOLDS,
   HEALTH_PENALTY_CONSTANTS,
   MAINTAINABILITY_COLOR_THRESHOLDS,
-  SEVERITY_COLOR_THRESHOLDS
+  SEVERITY_COLOR_THRESHOLDS,
+  createDuplicationConfig,
+  createDuplicationScoringThresholds,
+  createDuplicationLabelThresholds,
+  createDuplicationPenaltyConstants
 } from './thresholds.constants';
 import { percentageToRatio, ratioToPercentage } from './scoring.utils';
 
@@ -32,11 +34,14 @@ export function getComplexityLabel(complexity: number): string {
   return 'Extreme';
 }
 
-export function getDuplicationLabel(duplication: number): string {
-  // Aligned with constants.ts thresholds (15/30/50)
-  if (duplication <= DUPLICATION_LABEL_THRESHOLDS.LOW) return 'Low';
-  if (duplication <= DUPLICATION_LABEL_THRESHOLDS.MEDIUM) return 'Medium';
-  if (duplication <= DUPLICATION_LABEL_THRESHOLDS.HIGH) return 'High';
+export function getDuplicationLabel(duplication: number, duplicationConfig?: DuplicationConfig): string {
+  const config = duplicationConfig || createDuplicationConfig(false);
+  const thresholds = createDuplicationLabelThresholds(config);
+  
+  // Aligned with dynamic thresholds based on mode (3/8/15 strict vs 15/30/50 legacy)
+  if (duplication <= thresholds.LOW) return 'Low';
+  if (duplication <= thresholds.MEDIUM) return 'Medium';
+  if (duplication <= thresholds.HIGH) return 'High';
   return 'Very High';
 }
 
@@ -96,22 +101,33 @@ export function calculateComplexityScore(complexity: number): number {
 }
 
 /**
- * Converts duplication ratio to a score from 0 to 100 according to industry standards.
+ * Converts duplication ratio to a score from 0 to 100 using configurable thresholds.
  * 
- * RESEARCH BASIS: Config alignment - ≤15% duplication is acceptable,
- * >30% is concerning, >50% requires immediate attention.
+ * Supports both legacy (permissive) and strict (industry-standard) modes:
+ * - Legacy mode: ≤15% = "excellent" (for brownfield/legacy analysis)
+ * - Strict mode: ≤3% = "excellent" (aligned with SonarQube/Google standards)
+ * 
+ * ⚠️ MODE AWARENESS: The scoring mode significantly affects results:
+ * - 10% duplication: Legacy=100/100 (excellent), Strict=~20/100 (poor)
+ * - Users should be aware which mode is active to interpret scores correctly
+ * 
+ * RESEARCH BASIS: Config alignment varies by mode - legacy optimized for brownfield,
+ * strict aligned with industry standards (SonarQube quality gates).
  */
-export function calculateDuplicationScore(duplicationRatio: number): number {
+export function calculateDuplicationScore(duplicationRatio: number, duplicationConfig?: DuplicationConfig): number {
   const percentage = ratioToPercentage(duplicationRatio);
   
-  // Config threshold: <= 15% duplication is considered acceptable  
-  if (percentage <= DUPLICATION_SCORING_THRESHOLDS.EXCELLENT) return 100;
+  // Use provided config or default to legacy mode
+  const config = duplicationConfig || createDuplicationConfig(false);
+  const thresholds = createDuplicationScoringThresholds(config);
   
-  // Exponential decay beyond 15%, calibrated for 30% (high) and 50% (critical)
-  // At 30%: ~70 score, at 50%: ~30 score
+  // Return 100 if below excellent threshold (varies by mode: 3% strict vs 15% legacy)
+  if (percentage <= thresholds.EXCELLENT) return 100;
+  
+  // Exponential decay beyond excellent threshold, calibrated for high and critical levels
   const score = 100 * Math.exp(
-    -DUPLICATION_SCORING_THRESHOLDS.EXPONENTIAL_MULTIPLIER * 
-    Math.pow(percentage - DUPLICATION_SCORING_THRESHOLDS.EXCELLENT, DUPLICATION_SCORING_THRESHOLDS.EXPONENTIAL_POWER)
+    -thresholds.EXPONENTIAL_MULTIPLIER * 
+    Math.pow(percentage - thresholds.EXCELLENT, thresholds.EXPONENTIAL_POWER)
   );
   return Math.max(0, Math.round(score));
 }
@@ -222,17 +238,18 @@ function getComplexityPenalty(complexity: number): number {
   return basePenalty;
 }
 
-function getDuplicationPenalty(duplicationRatio: number): number {
-  const constants = HEALTH_PENALTY_CONSTANTS.DUPLICATION;
+export function getDuplicationPenalty(duplicationRatio: number, duplicationConfig?: DuplicationConfig): number {
+  const config = duplicationConfig || createDuplicationConfig(false);
+  const constants = createDuplicationPenaltyConstants(config);
   
-  // Aligned with constants.ts threshold of 15%
+  // Threshold varies by mode: 3% (strict) vs 15% (legacy)
   if (duplicationRatio <= percentageToRatio(constants.EXCELLENT_THRESHOLD)) return 0;
   
   // Progressive penalty without artificial caps
   const percentage = ratioToPercentage(duplicationRatio);
   
   if (percentage <= constants.HIGH_THRESHOLD) {
-    // Linear penalty up to 30%
+    // Linear penalty up to high threshold (8% strict vs 30% legacy)
     return (percentage - constants.EXCELLENT_THRESHOLD) * constants.LINEAR_MULTIPLIER;
   }
   
@@ -252,7 +269,7 @@ function getSizePenalty(loc: number): number {
   
   if (loc <= constants.EXCELLENT_THRESHOLD) return 0;
   
-  // Progressive penalty following Clean Code principles
+  // Progressive penalty following internal convention (Clean Code inspired)
   if (loc <= constants.HIGH_THRESHOLD) {
     // Linear penalty up to 500 LOC
     return (loc - constants.EXCELLENT_THRESHOLD) / constants.LINEAR_DIVISOR;
@@ -302,10 +319,10 @@ export function calculateHealthScore(file: {
     duplicationRatio: number;
   }; 
   issues: Issue[]; 
-}): number {
+}, duplicationConfig?: DuplicationConfig): number {
   
   const complexityPenalty = getComplexityPenalty(file.metrics.complexity);
-  const duplicationPenalty = getDuplicationPenalty(file.metrics.duplicationRatio);
+  const duplicationPenalty = getDuplicationPenalty(file.metrics.duplicationRatio, duplicationConfig);
   const sizePenalty = getSizePenalty(file.metrics.loc);
   const issuesPenalty = getIssuesPenalty(file.issues);
   

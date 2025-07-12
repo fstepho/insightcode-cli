@@ -105,6 +105,7 @@ program
   .option('-e, --exclude <patterns...>', 'Exclude patterns (e.g., "**/*.spec.ts")')
   .option('--exclude-utility', 'Exclude test, example, and utility directories from analysis')
   .option('--with-context', 'Include detailed code context for LLM analysis')
+  .option('--strict-duplication', 'Use strict duplication thresholds (3%/8%/15%) aligned with industry standards (SonarQube, Google). Default uses legacy permissive thresholds (15%/30%/50%)')
   .action(async (path = '.', options: CliOptions) => {
     try {
       // check if options.format not terminal 
@@ -121,7 +122,7 @@ program
       }
       
       // Analyze metrics
-      const results = await analyze(files, path, thresholds, options.withContext);
+      const results = await analyze(files, path, thresholds, options.withContext, options.strictDuplication);
       
       // Handle output format
       const format = options.format || (options.json ? 'json' : 'terminal');

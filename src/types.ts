@@ -38,6 +38,28 @@ export function validateScore(value: number): Score {
   return Math.round(value) as Score;
 }
 
+// ==================== DUPLICATION MODE TYPES ====================
+
+/**
+ * Duplication analysis mode
+ */
+export enum DuplicationMode {
+  Legacy = 'legacy',    // Permissive thresholds (15%/30%/50%) for brownfield/legacy analysis
+  Strict = 'strict'     // Industry-standard thresholds (3%/8%/15%) aligned with SonarQube/Google
+}
+
+/**
+ * Duplication mode configuration
+ */
+export interface DuplicationConfig {
+  mode: DuplicationMode;
+  thresholds: {
+    excellent: number;
+    high: number;
+    critical: number;
+  };
+}
+
 // ==================== ENUMS ====================
 
 export enum IssueType {
@@ -82,6 +104,7 @@ export interface Context {
     durationMs: number;     // Always milliseconds
     toolVersion: string;    // InsightCode version
     filesAnalyzed: number;
+    duplicationMode: DuplicationMode; // Strict or Legacy duplication thresholds
   };
 }
 
@@ -237,6 +260,7 @@ export interface CliOptions {
   excludeUtility?: boolean;
   withContext?: boolean;
   format?: 'json' | 'ci' | 'critical' | 'summary' | 'report';
+  strictDuplication?: boolean;
 }
 
 /**

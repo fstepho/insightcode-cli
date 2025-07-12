@@ -24,6 +24,13 @@
 
 Format: **Date | Decision | Reason | Impact**
 
+## 2025-07-12: Duplication Detection Algorithm Update (8-line blocks)
+**Decision**: Update duplication detection from 5-line to 8-line sliding window blocks, with enhanced filtering (50 characters minimum, 8 tokens minimum).
+**Reason**: Better balance between detection accuracy and performance. 8-line blocks catch more meaningful duplication patterns while filtering out trivial code snippets. Aligns with enhanced detection algorithm implemented in v0.6.0+.
+**Impact**: More accurate duplication detection with fewer false positives. All documentation updated to reflect 8-line implementation. Maintains philosophy of pragmatic, content-based detection versus structural similarity.
+
+---
+
 ## 2025-07-08: **Introduction of Rich Context Extraction for LLM Analysis**
 **Decision**: Implement comprehensive code context extraction system (`contextExtractor.ts`) that provides rich semantic information about TypeScript/JavaScript files to help LLMs better analyze InsightCode outputs. The system analyzes AST structure, patterns, dependencies, and complexity breakdowns to generate detailed context summaries.
 
@@ -57,29 +64,35 @@ Format: **Date | Decision | Reason | Impact**
 **Impact**: The CLI provides significantly more value, offering users not just a grade, but a true profile of their project's architecture and hidden risks.
 
 
-## 2025-07-03: Academic Best Practices for Metric Aggregation
-**Decision**: Refactor analyzer.ts to calculate project scores as weighted averages of file scores instead of applying scoring functions to project averages.
-**Reason**: Follow academic research and industry standards for proper metric aggregation. The previous approach calculated complexity/duplication averages first, then scored them, which doesn't properly weight the impact of individual files.
-**Impact**: Mathematically correct scoring system where larger files have appropriate influence on project scores. Uses file size (LOC) as weighting factor, which is the industry standard. Maintains backward compatibility while ensuring academic rigor.
+## 2025-07-03: Academic Best Practices for Metric Aggregation (SUPERSEDED)
+**Decision**: ~~Refactor analyzer.ts to calculate project scores as weighted averages of file scores instead of applying scoring functions to project averages.~~
+**Status**: **SUPERSEDED by Criticality-Weighted Scoring** - This LOC-based approach was replaced by impact+complexity weighting.
+**Legacy Reason**: Follow internal hypothesis for proper metric aggregation. The previous approach calculated complexity/duplication averages first, then scored them, which doesn't properly weight the impact of individual files.
+**Legacy Impact**: Mathematically correct scoring system where larger files have appropriate influence on project scores. Uses file size (LOC) as weighting factor, which is the industry standard. Maintains backward compatibility while ensuring academic rigor.
 
 ---
 
 ## 2025-07-03: Single Source of Truth for Scoring Logic
-**Decision**: Centralize all 40/30/30 weighting logic in scoring.ts and eliminate duplicate implementations across analyzer.ts, reporter.ts, and fileScoring.ts.
+**Decision**: Centralize all 45/30/25 weighting logic in scoring.ts and eliminate duplicate implementations across analyzer.ts, reporter.ts, and fileScoring.ts.
 **Reason**: Multiple scoring implementations created maintenance burden and potential inconsistencies. Found duplicate logic in three different files.
 **Impact**: All scoring calculations now use identical logic from shared functions. Easier maintenance, guaranteed consistency, and cleaner architecture.
+**Note**: Weights are internal hypotheses (45% complexity, 30% maintainability, 25% duplication) requiring empirical validation.
 
 ---
 
-## 2025-07-03: Weighted Average Project Scoring with LOC Weighting
-**Decision**: Use file size (lines of code) as weighting factor when aggregating file scores to project scores.
-**Reason**: Industry standard approach - larger files should have more influence on overall project health. A 1000-line file with issues is more impactful than a 10-line file with the same issues.
-**Impact**: More accurate project-level scores that reflect real-world maintenance burden. Follows academic literature on software metric aggregation.
+## 2025-07-03: Weighted Average Project Scoring with LOC Weighting (SUPERSEDED)
+**Decision**: ~~Use file size (lines of code) as weighting factor when aggregating file scores to project scores.~~
+**Status**: **SUPERSEDED by Criticality-Weighted Scoring** - This approach was fundamentally flawed and replaced.
+**Legacy Reason**: Industry standard approach - larger files should have more influence on overall project health. A 1000-line file with issues is more impactful than a 10-line file with the same issues.
+**Legacy Impact**: More accurate project-level scores that reflect real-world maintenance burden. Follows academic literature on software metric aggregation.
+**Why Superseded**: LOC weighting incorrectly favored large, simple files over small, critical ones. The new criticality-based model (impact + complexity) provides much more accurate risk assessment.
 
-## 2025-07-03: Rename topIssues.ts to fileScoring.ts
-**Decision**: Rename the module from topIssues.ts to fileScoring.ts for clarity.
-**Reason**: The module does more than just identify top issues - it handles all file-level scoring logic using the same functions as project scoring.
-**Impact**: Better code organization and clearer module responsibility. Name reflects actual functionality.
+## 2025-07-03: Rename topIssues.ts to fileScoring.ts (COMPLETED & SUPERSEDED)
+**Decision**: ~~Rename the module from topIssues.ts to fileScoring.ts for clarity.~~
+**Status**: **COMPLETED then SUPERSEDED** - Module was renamed then later deleted entirely.
+**Legacy Reason**: The module does more than just identify top issues - it handles all file-level scoring logic using the same functions as project scoring.
+**Legacy Impact**: Better code organization and clearer module responsibility. Name reflects actual functionality.
+**Final Resolution**: Module was completely removed as part of centralizing all scoring logic in `analyzer.ts` to eliminate competing definitions of "criticality".
 
 ---
 
@@ -90,8 +103,9 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
-## 2025-06-29: File Scoring Algorithm with Weighted Criticality
+## 2025-06-29: File Scoring Algorithm with Weighted Criticality (COMPLETED)
 **Decision**: Create dedicated `topIssues.ts` module with weighted file scoring (complexity-heavy).
+**Status**: **COMPLETED** - Module was created, later renamed to `fileScoring.ts`, then finally deleted and merged into `analyzer.ts`.
 **Reason**: Need prioritized list of files to fix; users want to know which files need attention first.
 **Impact**: Terminal shows top 5 critical files with severity labels; JSON export includes `topFiles` array; developers can immediately focus on highest-impact improvements.
 
@@ -187,10 +201,10 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
-## 2025-06-27: Conservative duplication detection accepted
-**Decision**: Keep 5-line block detection despite ~85% accuracy
-**Reason**: Better to underreport than overreport duplication
-**Impact**: Some duplication missed but no false alarms
+## 2025-07-03: Conservative duplication detection accepted (UPDATED)
+**Decision**: Keep 8-line block detection with enhanced filtering (50+ characters, 8+ tokens minimum).
+**Reason**: Better balance between precision and recall. 8-line blocks catch meaningful duplication while enhanced filtering reduces false positives from trivial code.
+**Impact**: More accurate actionable duplication detection, aligned with pragmatic philosophy focused on refactorable duplicates.
 
 ---
 
@@ -285,10 +299,11 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
-## 2025-06-25: Weighted score 40/30/30
-**Decision**: Complexity 40%, Duplication 30%, Maintainability 30%  
-**Reason**: Complexity is the #1 factor in technical debt  
-**Impact**: Score that reflects real refactoring priorities
+## 2025-06-25: Weighted score 45/30/25 (Updated from 40/30/30)
+**Decision**: Complexity 45%, Maintainability 30%, Duplication 25%  
+**Reason**: Internal hypothesis - Complexity is the primary defect predictor (requires empirical validation)
+**Impact**: Score that reflects internal hypotheses about refactoring priorities
+**Status**: Internal hypothesis requiring empirical validation, not industry standard
 
 ---
 
@@ -320,10 +335,10 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
-## 2025-06-24: Duplication by block hashing
-**Decision**: MD5 hash of 5-line blocks to detect duplication  
-**Reason**: Balance between precision and performance  
-**Impact**: Fast detection, few false positives
+## 2025-06-24: Duplication by block hashing (UPDATED)
+**Decision**: MD5 hash of 8-line blocks to detect duplication (updated from original 5-line approach)
+**Reason**: Balance between precision and performance. 8-line blocks provide better detection of meaningful duplications.
+**Impact**: Fast detection, fewer false positives, more accurate results
 
 ---
 

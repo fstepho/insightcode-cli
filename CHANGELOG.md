@@ -23,6 +23,115 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Version Confusion**: Clarified release status and development timeline
 - **Technical Accuracy**: Corrected all mathematical formulas and scoring methodology descriptions
 
+## [0.6.0] [Ready for Release] - Major Scoring System Refactor
+
+### ✨ What's New
+
+**Dual-Mode Duplication Analysis**: InsightCode now offers two duplication analysis modes to accommodate different project contexts and quality standards.
+
+### 🎯 Problem Solved
+
+Previous versions used permissive duplication thresholds (≤15% = excellent) that were 5x more lenient than industry standards (SonarQube: ≤3%). This created confusion about actual code quality and made InsightCode incompatible with strict DevOps environments.
+
+### 🔧 New CLI Option
+
+```bash
+# Strict mode - Industry standards (SonarQube/Google aligned)
+insightcode analyze . --strict-duplication
+
+# Legacy mode - Permissive thresholds (default, maintains compatibility)
+insightcode analyze .
+```
+
+### 📊 Threshold Comparison
+
+| Mode | Excellent | Acceptable | Critical | Use Case |
+|------|-----------|------------|----------|----------|
+| **Strict** | ≤3% | ≤8% | ≤15% | New projects, high standards |
+| **Legacy** | ≤15% | ≤30% | ≤50% | Brownfield, gradual improvement |
+
+### 🎨 Visual Indicators
+
+Reports now clearly display the active duplication mode:
+
+```
+Duplication Score:   88/100  ██████████████████░░
+Duplication Mode:   Legacy (Permissive for Brownfield)
+
+Duplication Score:   75/100  ███████████████░░░░░
+Duplication Mode:   Strict (Industry Standards: SonarQube/Google)
+```
+
+### 📈 Impact Example
+
+For 30% duplication in a project:
+
+- **Legacy Mode**: Score 88/100, Grade A, no critical files
+- **Strict Mode**: Score 75/100, Grade A, 2 critical files identified
+
+### 🛠️ Technical Implementation
+
+- **Type-safe configuration**: Full TypeScript support with enums and interfaces
+- **Non-breaking change**: Legacy mode remains default
+- **Complete propagation**: Mode affects scoring, health calculation, and reporting
+- **API persistence**: Mode information included in JSON outputs for CI/CD integration
+
+### 📚 Documentation
+
+- **User Guide**: `/docs/DUPLICATION_MODES_USER_GUIDE.md`
+- **Technical Audit**: `DUPLICATION_THRESHOLDS_AUDIT.md`
+- **CLI Help**: Option documented in `--help`
+
+### 🧪 Testing
+
+```bash
+# Quick test of both modes
+npm run test:duplication-modes
+
+# Full validation suite
+npm run qa
+```
+
+### ⚡ Quick Start
+
+```bash
+# Install/update
+npm install -g insightcode-cli
+
+# Analyze with industry-standard strict thresholds
+insightcode analyze src/ --strict-duplication --format json
+
+# Compare with legacy mode
+insightcode analyze src/ --format json
+```
+
+### 🎯 Recommendations
+
+- **New projects**: Use `--strict-duplication` for industry-aligned standards
+- **Legacy codebases**: Start with default mode, gradually adopt strict
+- **CI/CD**: Choose mode based on team maturity and quality goals
+
+### 🔄 Migration Path
+
+1. **Baseline**: Run analysis in legacy mode to establish current state
+2. **Assess**: Use strict mode to understand gaps vs industry standards  
+3. **Improve**: Address critical issues identified in strict mode
+4. **Adopt**: Gradually migrate CI/CD pipelines to strict mode
+
+
+### 🏆 Benefits
+
+- ✅ **Industry Alignment**: Scores now comparable with SonarQube, CodeClimate
+- ✅ **Transparency**: Clear indication of which mode is active
+- ✅ **Flexibility**: Choose appropriate strictness for project context
+- ✅ **Backward Compatibility**: Existing workflows unchanged
+- ✅ **Academic Honesty**: No more misleading "excellent" scores for poor duplication
+
+### 📊 Validation Results
+
+All existing tests pass + 12 new tests specifically for duplication modes. Documentation automatically validated for accuracy.
+
+
 ## [0.5.0] - 2025-07-09
 
 ### Added

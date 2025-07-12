@@ -1,12 +1,12 @@
 // File: src/thresholds.constants.ts
 
-import { ThresholdConfig } from './types';
+import { ThresholdConfig, DuplicationConfig, DuplicationMode } from './types';
 
 /**
  * Type-safe threshold values
  */
 type ComplexityThreshold = 10 | 15 | 20 | 50;
-type DuplicationThreshold = 15 | 30 | 50 | 100;
+type DuplicationThreshold = 3 | 8 | 15 | 30 | 50 | 100;  // Extended to support strict mode (3, 8)
 type HealthScoreThreshold = 80;
 
 /**
@@ -51,10 +51,27 @@ const BASE_COMPLEXITY_THRESHOLDS: ComplexityBaseThresholds<ComplexityThreshold> 
   VERY_HIGH: 50
 } as const;
 
+/**
+ * Duplication thresholds - Legacy mode (5x more permissive than industry standards)
+ * ⚠️ ACADEMIC HONESTY WARNING: These thresholds are NOT aligned with industry standards
+ * - SonarQube standard: >3% fails quality gate for new code
+ * - Google practices: ~2-3% duplication maintained
+ * - Our legacy mode: ≤15% = "excellent" (for brownfield/legacy analysis)
+ */
 const BASE_DUPLICATION_THRESHOLDS: BaseThresholds<DuplicationThreshold> = {
-  EXCELLENT: 15,
-  HIGH: 30,
-  CRITICAL: 50
+  EXCELLENT: 15,    // 5x more permissive than SonarQube (3%)
+  HIGH: 30,         // 4x more permissive than industry (8%)
+  CRITICAL: 50      // Legacy/brownfield tolerance
+} as const;
+
+/**
+ * Duplication thresholds - Strict mode (industry standard aligned)
+ * Aligned with SonarQube "Sonar way" quality gates and Google practices
+ */
+const STRICT_DUPLICATION_THRESHOLDS: BaseThresholds<DuplicationThreshold> = {
+  EXCELLENT: 3,     // SonarQube quality gate standard
+  HIGH: 8,          // Industry acceptable threshold
+  CRITICAL: 15      // Warning threshold for legacy code
 } as const;
 
 /**
@@ -355,4 +372,79 @@ export const CONVERSION_CONSTANTS = {
   RATIO_TO_PERCENTAGE: 100,
   PERCENTAGE_TO_RATIO: 0.01,
   MS_TO_SECONDS: 1000,
-} as const;
+}
+
+/**
+ * Type-safe duplication configuration factory
+ * Creates appropriate duplication thresholds based on mode selection
+ */
+export function createDuplicationConfig(strict: boolean = false): DuplicationConfig {
+  if (strict) {
+    return {
+      mode: DuplicationMode.Strict,
+      thresholds: {
+        excellent: STRICT_DUPLICATION_THRESHOLDS.EXCELLENT,
+        high: STRICT_DUPLICATION_THRESHOLDS.HIGH,
+        critical: STRICT_DUPLICATION_THRESHOLDS.CRITICAL
+      }
+    };
+  } else {
+    return {
+      mode: DuplicationMode.Legacy,
+      thresholds: {
+        excellent: BASE_DUPLICATION_THRESHOLDS.EXCELLENT,
+        high: BASE_DUPLICATION_THRESHOLDS.HIGH,
+        critical: BASE_DUPLICATION_THRESHOLDS.CRITICAL
+      }
+    };
+  }
+}
+
+/**
+ * Creates dynamic duplication scoring thresholds based on configuration
+ */
+export function createDuplicationScoringThresholds(config: DuplicationConfig) {
+  return {
+    EXCELLENT: config.thresholds.excellent,
+    EXPONENTIAL_MULTIPLIER: DUPLICATION_SCORING_THRESHOLDS.EXPONENTIAL_MULTIPLIER,
+    EXPONENTIAL_POWER: DUPLICATION_SCORING_THRESHOLDS.EXPONENTIAL_POWER
+  } as const;
+}
+
+/**
+ * Creates dynamic duplication label thresholds based on configuration
+ */
+export function createDuplicationLabelThresholds(config: DuplicationConfig) {
+  return {
+    LOW: config.thresholds.excellent,
+    MEDIUM: config.thresholds.high,
+    HIGH: config.thresholds.critical
+  } as const;
+}
+
+/**
+ * Creates dynamic duplication color thresholds based on configuration
+ */
+export function createDuplicationColorThresholds(config: DuplicationConfig) {
+  return {
+    [ColorThreshold.Green]: config.thresholds.excellent,
+    [ColorThreshold.Yellow]: config.thresholds.high,
+    [ColorThreshold.Red]: config.thresholds.critical,
+    [ColorThreshold.RedBold]: 100 // Extreme duplication threshold
+  } as const;
+}
+
+/**
+ * Creates dynamic duplication penalty constants based on configuration
+ */
+export function createDuplicationPenaltyConstants(config: DuplicationConfig) {
+  return {
+    EXCELLENT_THRESHOLD: config.thresholds.excellent,
+    HIGH_THRESHOLD: config.thresholds.high,
+    LINEAR_MULTIPLIER: HEALTH_PENALTY_CONSTANTS.DUPLICATION.LINEAR_MULTIPLIER,
+    LINEAR_MAX_PENALTY: HEALTH_PENALTY_CONSTANTS.DUPLICATION.LINEAR_MAX_PENALTY,
+    EXPONENTIAL_DENOMINATOR: HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_DENOMINATOR,
+    EXPONENTIAL_POWER: HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_POWER,
+    EXPONENTIAL_MULTIPLIER: HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_MULTIPLIER
+  } as const;
+}

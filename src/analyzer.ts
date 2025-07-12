@@ -8,7 +8,8 @@ import {
   Context, 
   Overview, 
   ThresholdConfig,
-  validateScore
+  validateScore,
+  DuplicationConfig
 } from './types';
 import { enrichWithContext } from './contextExtractor';
 import { detectDuplication } from './duplication';
@@ -22,7 +23,7 @@ import {
   calculateWeightedScore, 
   calculateHealthScore 
 } from './scoring';
-import { SCORING_WEIGHTS } from './thresholds.constants';
+import { PROJECT_SCORING_WEIGHTS, createDuplicationConfig } from './thresholds.constants';
 import { UniversalDependencyAnalyzer } from './dependencyAnalyzer';
 import { getConfig } from './config.manager';
 // generateRecommendations removed in v0.6.0 - calculable client-side
@@ -106,17 +107,18 @@ function generateSummary(overview: Overview, criticalCount: number): string {
 /**
  * The main analysis function for v0.6.0 - Complete refactor
  */
-export async function analyze(files: FileDetail[], projectPath: string, _thresholds: ThresholdConfig, withContext: boolean = false): Promise<AnalysisResult> {
+export async function analyze(files: FileDetail[], projectPath: string, _thresholds: ThresholdConfig, withContext: boolean = false, strictDuplication: boolean = false): Promise<AnalysisResult> {
   const startTime = Date.now();
   
   // 1. Calculate all metrics and relationships
-  const processedDetails = await processFileDetails(files, projectPath);
+  const duplicationConfig = createDuplicationConfig(strictDuplication);
+  const processedDetails = await processFileDetails(files, projectPath, duplicationConfig);
   
   // 3. Calculate overview scores
-  const overview = calculateOverview(processedDetails);
+  const overview = calculateOverview(processedDetails, duplicationConfig);
   
   // 4. Generate context
-  const context = generateContext(projectPath, processedDetails, startTime);
+  const context = generateContext(projectPath, processedDetails, startTime, duplicationConfig);
   
   // 5. Recommendations removed in v0.6.0 - calculable client-side
   
@@ -142,7 +144,7 @@ export async function analyze(files: FileDetail[], projectPath: string, _thresho
 /**
  * Processes file details to calculate all derived metrics
  */
-async function processFileDetails(details: FileDetail[], projectPath: string): Promise<FileDetail[]> {
+async function processFileDetails(details: FileDetail[], projectPath: string, duplicationConfig: DuplicationConfig): Promise<FileDetail[]> {
   // 1. Detect duplication
   const filesWithDuplication = detectDuplication(details, getConfig(), projectPath);
   
@@ -179,7 +181,7 @@ async function processFileDetails(details: FileDetail[], projectPath: string): P
   
   // 6. Calculate health scores
   filesWithDuplication.forEach(file => {
-    file.healthScore = validateScore(calculateHealthScore(file));
+    file.healthScore = validateScore(calculateHealthScore(file, duplicationConfig));
   });
   
   return filesWithDuplication;
@@ -188,7 +190,7 @@ async function processFileDetails(details: FileDetail[], projectPath: string): P
 /**
  * Calculates overview metrics from processed details
  */
-function calculateOverview(details: FileDetail[]): Overview {
+function calculateOverview(details: FileDetail[], duplicationConfig: DuplicationConfig): Overview {
   if (details.length === 0) {
     return {
       grade: 'F',
@@ -270,7 +272,7 @@ function calculateOverview(details: FileDetail[]): Overview {
       const weight = criticismScore / totalCriticismScore;
       
       weightedComplexityScore += calculateComplexityScore(file.metrics.complexity) * weight;
-      weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio) * weight;
+      weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio, duplicationConfig) * weight;
       weightedMaintainabilityScore += calculateMaintainabilityScore(file.metrics.loc, file.metrics.functionCount) * weight;
     }
   } else {
@@ -315,7 +317,7 @@ function calculateOverview(details: FileDetail[]): Overview {
 /**
  * Generates context information
  */
-function generateContext(projectPath: string, details: FileDetail[], startTime: number): Context {
+function generateContext(projectPath: string, details: FileDetail[], startTime: number, duplicationConfig: DuplicationConfig): Context {
   const projectInfo = getProjectInfo(projectPath);
   const endTime = Date.now();
   
@@ -330,7 +332,8 @@ function generateContext(projectPath: string, details: FileDetail[], startTime: 
       timestamp: new Date().toISOString(),
       durationMs: endTime - startTime,
       toolVersion: '0.6.0',
-      filesAnalyzed: details.length
+      filesAnalyzed: details.length,
+      duplicationMode: duplicationConfig.mode
     }
   };
 }
