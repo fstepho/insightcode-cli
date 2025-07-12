@@ -258,6 +258,7 @@ export interface QualityIssue {
  * Analysis options for the analyzer
  */
 export interface AnalysisOptions {
+  format: 'json' | 'ci' | 'critical' | 'summary' | 'markdown' | 'terminal';
   projectPath: string;
   thresholds: ThresholdConfig;
   withContext?: boolean;
@@ -271,7 +272,7 @@ export interface CliOptions {
   exclude?: string[];
   excludeUtility?: boolean;
   withContext?: boolean;
-  format?: 'json' | 'ci' | 'critical' | 'summary' | 'report';
+  format?: 'json' | 'ci' | 'critical' | 'summary' | 'markdown' | 'terminal';
   strictDuplication?: boolean;
 }
 

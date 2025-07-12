@@ -113,8 +113,12 @@ program
       }
       const thresholds = getConfig();
       
+      const format = options.format || (options.json ? 'json' : 'terminal');
+      
+
       // Create analysis options
       const analysisOptions: AnalysisOptions = {
+        format: format,
         projectPath: path,
         thresholds,
         withContext: options.withContext,
@@ -125,9 +129,8 @@ program
       // Analyze using new flow
       const results = await analyze(path, analysisOptions);
       
+     
       // Handle output format
-      const format = options.format || (options.json ? 'json' : 'terminal');
-      
       switch (format) {
         case 'json':
           console.log(JSON.stringify(results, function(key, val) {
@@ -143,7 +146,7 @@ program
         case 'summary':
           outputSummaryFormat(results);
           break;
-        case 'report':
+        case 'markdown':
           outputReportFormat(results, path);
           break;
         default:

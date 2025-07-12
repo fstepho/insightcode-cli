@@ -86,22 +86,28 @@ export async function analyze(
  * Step 1: Build AST from source files
  */
 async function executeASTBuildStep(context: AnalysisContext): Promise<void> {
-  console.log('🔧 Building AST...');
+  if (context.options.format === 'terminal') {
+    console.log('🔍 Analyzing code quality...');
+  }
   
   const astBuildOptions: ASTBuildOptions = {
     excludeUtility: context.options.excludeUtility
   };
   
   context.astData = await astBuilder.build(context.inputPath, astBuildOptions);
-  console.log(`📁 Found ${context.astData.totalFiles} files`);
+  if (context.options.format === 'terminal') {
+    console.log(`📁 Found ${context.astData.totalFiles} files`);
+  }
 }
 
 /**
  * Step 2: Extract file details from AST
  */
 async function executeFileDetailStep(context: AnalysisContext): Promise<void> {
-  console.log('📊 Extracting file details...');
-  
+  if (context.options.format === 'terminal') {
+    console.log('📊 Extracting file details...');
+  }
+
   if (!context.astData) throw new Error('AST data not available');
   
   context.rawFileDetails = await fileDetailBuilder.build(context.astData, {
@@ -118,8 +124,10 @@ async function executeFileDetailStep(context: AnalysisContext): Promise<void> {
  * 3. Calculate health scores using progressive penalties (no artificial caps)
  */
 async function executeMetricsProcessingStep(context: AnalysisContext): Promise<void> {
-  console.log('⚙️ Processing metrics...');
-  
+  if (context.options.format === 'terminal') {
+    console.log('⚙️ Processing metrics...');
+  }
+
   if (!context.rawFileDetails || !context.astData) {
     throw new Error('Raw file details or AST data not available');
   }
@@ -174,8 +182,10 @@ async function executeMetricsProcessingStep(context: AnalysisContext): Promise<v
  * - No outlier masking - extreme values receive extreme penalties
  */
 async function executeOverviewCalculationStep(context: AnalysisContext): Promise<void> {
-  console.log('📈 Calculating overview...');
-  
+  if (context.options.format === 'terminal') {
+    console.log('📈 Calculating overview...');
+  }
+
   if (!context.processedFileDetails) {
     throw new Error('Processed file details not available');
   }
@@ -188,7 +198,9 @@ async function executeOverviewCalculationStep(context: AnalysisContext): Promise
  * Step 5: Extract code context (optional)
  */
 async function executeContextExtractionStep(context: AnalysisContext): Promise<void> {
-  console.log('🧠 Building code context...');
+  if (context.options.format === 'terminal') {
+    console.log('🧠 Extracting code context...');
+  }
   
   if (!context.processedFileDetails || !context.astData) {
     throw new Error('Processed file details or AST data not available');

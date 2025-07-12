@@ -375,6 +375,7 @@ async function runProjectAnalysis(
   console.log(`  � [${timestamp()}] Building AST and analyzing...`);
   
   const analysisOptions: AnalysisOptions = {
+    format: 'markdown', // Default format for CLI
     projectPath: projectTempDir,
     thresholds,
     withContext,
