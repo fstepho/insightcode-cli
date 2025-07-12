@@ -289,7 +289,7 @@ const RESULTS_DIR = path.join(projectRoot, 'benchmarks');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
-const excludeUtility = args.includes('--exclude-utility');
+const production = args.includes('--production');
 const sequential = args.includes('--sequential');
 
 // --- UTILITY FUNCTIONS ---
@@ -337,16 +337,16 @@ async function prepareRepository(project: Project, projectTempDir: string, times
  * Détermine le chemin de répertoire à analyser en fonction de la configuration du projet et des options.
  * @param project - L'objet projet.
  * @param projectTempDir - Le répertoire de base du projet cloné.
- * @param excludeUtility - Flag pour exclure les fichiers utilitaires.
+ * @param production - Flag pour exclure les fichiers utilitaires.
  * @returns Un objet contenant le chemin d'analyse et des informations pour les logs.
  */
-function determineAnalysisPath(project: Project, projectTempDir: string, excludeUtility: boolean): { analysisPath: string, pathInfo: string, pathMode: string } {
-  const analysisPath = (excludeUtility && project.sourcePath)
+function determineAnalysisPath(project: Project, projectTempDir: string, production: boolean): { analysisPath: string, pathInfo: string, pathMode: string } {
+  const analysisPath = (production && project.sourcePath)
     ? path.join(projectTempDir, project.sourcePath)
     : projectTempDir;
 
   const pathInfo = path.relative(projectTempDir, analysisPath) || '.';
-  const pathMode = excludeUtility ?
+  const pathMode = production ?
     (project.sourcePath ? `production scope: ${pathInfo}` : 'production scope: full repo') :
     'full repo (sourcePath ignored)';
 
@@ -358,7 +358,7 @@ function determineAnalysisPath(project: Project, projectTempDir: string, exclude
  * @param analysisPath - Le chemin exact du répertoire à analyser.
  * @param projectTempDir - Le chemin de base du projet (pour le contexte de l'analyse).
  * @param thresholds - La configuration des seuils de qualité.
- * @param excludeUtility - Flag pour exclure les fichiers utilitaires.
+ * @param production - Flag pour exclure les fichiers utilitaires.
  * @param timestamp - Une fonction pour obtenir un timestamp formaté pour les logs.
  * @returns Le résultat brut de l'analyse.
  */
@@ -366,7 +366,7 @@ async function runProjectAnalysis(
   analysisPath: string,
   projectTempDir: string,
   thresholds: ThresholdConfig,
-  excludeUtility: boolean,
+  production: boolean,
   timestamp: () => string
 ): Promise<AnalysisResult> {
   console.log(`  � [${timestamp()}] Building AST and analyzing...`);
@@ -375,7 +375,7 @@ async function runProjectAnalysis(
     format: 'markdown', // Default format for CLI
     projectPath: projectTempDir,
     thresholds,
-    excludeUtility,
+    production,
     strictDuplication: false
   };
   
@@ -406,7 +406,7 @@ async function analyzeProject(project: Project, index: number, total: number): P
     // 2. Détermination des chemins et configuration
     console.log(`  🔍 [${timestamp()}] Starting direct analysis...`);
     const thresholds = getConfig();
-    const { analysisPath, pathInfo, pathMode } = determineAnalysisPath(project, projectTempDir, excludeUtility);
+    const { analysisPath, pathInfo, pathMode } = determineAnalysisPath(project, projectTempDir, production);
     console.log(`  📁 [${timestamp()}] Analysis path: ${pathInfo} (${pathMode})`);
 
     // 3. Exécution du moteur d'analyse
@@ -414,7 +414,7 @@ async function analyzeProject(project: Project, index: number, total: number): P
       analysisPath,
       projectTempDir,
       thresholds,
-      excludeUtility,
+      production,
       timestamp
     );
 
@@ -463,7 +463,7 @@ async function main(): Promise<void> {
   console.log(`\n🚀 InsightCode Benchmark Tool`);
   console.log(`📊 Analyzing ${Object.values(PROJECTS).flat().length} popular JavaScript/TypeScript projects`);
 
-  if (excludeUtility) {
+  if (production) {
     console.log(`⚙️  Mode: Production Only (excluding test/utility files)`);
   } else {
     console.log(`⚙️  Mode: Full Analysis (all files)`);
@@ -539,7 +539,7 @@ async function main(): Promise<void> {
 
   const now = new Date();
   const dateSuffix = '-' + now.toISOString().slice(0, 10);
-  const modeSuffix = excludeUtility ? '-prod' : '-full';
+  const modeSuffix = production ? '-prod' : '-full';
   
    // Save individual results
   results.forEach(result => {
@@ -566,12 +566,12 @@ async function main(): Promise<void> {
       dist[r.analysis.overview.grade] = (dist[r.analysis.overview.grade] || 0) + 1;
       return dist;
     }, {} as Record<string, number>),
-    modeCategory: excludeUtility ? 'production' : 'full'
+    modeCategory: production ? 'production' : 'full'
   };
 
 
   // Generate and save markdown report
-  const markdown = generateMarkdownReport(results, summary, excludeUtility);
+  const markdown = generateMarkdownReport(results, summary, production);
   const markdownFilename = `benchmark-report${modeSuffix}${dateSuffix}.md`;
   fs.writeFileSync(
     path.join(RESULTS_DIR, markdownFilename),
@@ -580,7 +580,7 @@ async function main(): Promise<void> {
 
   // NOUVEAU : Générer les rapports individuels
   console.log(`\n📝 Generating individual project reports...`);
-  generateAllIndividualReports(results, RESULTS_DIR + '/individual-reports', excludeUtility);
+  generateAllIndividualReports(results, RESULTS_DIR + '/individual-reports', production);
 
   // Save summary
   const summaryFilename = `benchmark-summary${modeSuffix}${dateSuffix}.json`;

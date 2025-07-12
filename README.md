@@ -49,7 +49,7 @@ insightcode
 insightcode ./src
 
 # Focus on production code only
-insightcode --exclude-utility
+insightcode --production
 
 # Output JSON for CI/CD
 insightcode --json > report.json
@@ -64,7 +64,7 @@ insightcode --json > report.json
 
 ## 📊 Example Output
 
-Real analysis of the **React** project using `insightcode --exclude-utility react`:
+Real analysis of the **React** project using `insightcode --production react`:
 
 ```
 🔍 Analyzing code quality...
@@ -205,7 +205,7 @@ Focus on what matters - your actual product code:
 
 ```bash
 # Analyze only production code
-insightcode --exclude-utility
+insightcode --production
 
 # This excludes:
 # - Test files (**/test/**, *.spec.ts, *.test.js)
@@ -234,7 +234,7 @@ The production-only analysis gives you the true picture of your codebase health.
 insightcode --exclude "**/*.spec.ts" --exclude "**/vendor/**"
 
 # Exclude utility directories
-insightcode --exclude-utility
+insightcode --production
 
 # JSON output for CI/CD
 insightcode --json
@@ -396,7 +396,7 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 
 ### Using InsightCode Effectively
 
-1. **Start with production code**: Use `--exclude-utility` to focus on what matters
+1. **Start with production code**: Use `--production` to focus on what matters
 2. **Track trends**: Run regularly and monitor score changes over time
 3. **Focus on top issues**: The tool shows the 5 most critical files - start there
 4. **Consider context**: High complexity might be justified (algorithms, parsers)

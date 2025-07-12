@@ -204,7 +204,7 @@ All existing tests pass + 12 new tests specifically for duplication modes. Docum
 ## [0.1.1] - 2025-06-27
 
 ### Added
-- `--exclude-utility` flag to analyze only production code
+- `--production` flag to analyze only production code
 - Smart file type classification (production, test, example, utility, config)
 - Configurable thresholds based on file type
 - Better product quality insights by separating concerns

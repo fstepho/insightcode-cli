@@ -5,7 +5,7 @@
 ## Methodology
 - **Date**: 2025-06-29
 - **InsightCode Version**: 0.2.0
-- **Analysis Type**: Production Code Only (with --exclude-utility)
+- **Analysis Type**: Production Code Only (with --production)
 - **Total Projects Analyzed**: 9
 - **Complexity Threshold**: 15+ (for explanations)
 - **Analysis Method**: Automated complexity analysis with detailed explanations

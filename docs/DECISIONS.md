@@ -146,7 +146,7 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
-## 2025-06-27: Production code analysis with --exclude-utility
+## 2025-06-27: Production code analysis with --production
 **Decision**: Add flag to exclude test/example/utility files from analysis
 **Reason**: Test code skews metrics (duplication OK in tests, examples have patterns)
 **Impact**: Clearer product quality view, chalk score drops from C(76) to F(58)

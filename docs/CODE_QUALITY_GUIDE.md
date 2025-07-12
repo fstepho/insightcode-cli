@@ -25,7 +25,7 @@ The overall score translates to a grade:
 | ✔️ Good Practice | 💡 Why? | 🛠️ InsightCode Command |
 |------------------|---------|------------------------|
 | **Focus on Criticality** | The tool guides you to the most important files. | Check `Top 5 Critical Files` & `Architectural Risks` first. |
-| **Analyze Production Code** | Avoid noise from tests and configuration files. | `insightcode --exclude-utility` |
+| **Analyze Production Code** | Avoid noise from tests and configuration files. | `insightcode --production` |
 | **Track Trends Over Time** | See if quality improves or degrades with new features. | Integrate the JSON output in your CI/CD pipeline. |
 | **Combine with Human Review** | Context is king! A score can't understand business logic. | The score is a conversation starter, not a judgment. |
 | **Justify Outliers** | Not all complexity is bad. | See our [explained benchmarks](./../benchmarks/). |
@@ -62,7 +62,7 @@ and architectural risks.       Refactor/Document/Accept
 insightcode
 
 # Focus on production code only
-insightcode --exclude-utility
+insightcode --production
 
 # JSON export for tracking/CI
 insightcode --json > quality-report.json

@@ -52,7 +52,7 @@ class TestClass {
         format: 'json', // Use JSON format for easier testing
         projectPath: tempDir,
         thresholds: {} as any, // Will use defaults
-        excludeUtility: false
+        production: false
       });
 
       // Verify the analysis completed successfully
@@ -113,7 +113,7 @@ function veryComplexFunction(a: number, b: string, c: boolean, d: object) {
         format: 'json',
         projectPath: tempDir,
         thresholds: {} as any, // Will use defaults
-        excludeUtility: false
+        production: false
       });
 
       // Verify the analysis completed successfully

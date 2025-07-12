@@ -49,7 +49,7 @@ const UTILITY_PATTERNS = [
  * Configuration options for AST building
  */
 export interface ASTBuildOptions {
-  excludeUtility?: boolean;
+  production?: boolean;
   excludePatterns?: string[];
 }
 
@@ -125,7 +125,7 @@ export class ASTBuilder {
     const patterns = ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'];
     let ignore = [...DEFAULT_EXCLUDE, ...(options.excludePatterns || [])];
     
-    if (options.excludeUtility) {
+    if (options.production) {
       ignore = [...ignore, ...UTILITY_PATTERNS];
     }
     

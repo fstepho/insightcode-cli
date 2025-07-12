@@ -12,9 +12,9 @@ import { getHealthCategory, getScoreStatus } from './scoring.utils';
 /**
  * Génère le rapport markdown synthétique multi-projets
  */
-export function generateMarkdownReport(results: ReportResult[], summary: ReportSummary, excludeUtility: boolean): string {
+export function generateMarkdownReport(results: ReportResult[], summary: ReportSummary, production: boolean): string {
     const timestamp = new Date().toISOString();
-    const mode = excludeUtility ? 'Production Code' : 'Full Project';
+    const mode = production ? 'Production Code' : 'Full Project';
     
     // Header du rapport
     let markdown = `# InsightCode Benchmark Report - ${mode}\n\n`;
@@ -79,7 +79,7 @@ export function generateMarkdownReport(results: ReportResult[], summary: ReportS
 /**
  * Génère tous les rapports individuels et les sauvegarde
  */
-export function generateAllIndividualReports(results: ReportResult[], outputDir: string, excludeUtility: boolean): void {
+export function generateAllIndividualReports(results: ReportResult[], outputDir: string, production: boolean): void {
      
     // Créer le dossier des rapports individuels s'il n'existe pas
     const individualReportsDir = path.join(outputDir);
@@ -90,8 +90,8 @@ export function generateAllIndividualReports(results: ReportResult[], outputDir:
     // Générer un rapport pour chaque projet réussi
     results.filter(r => !r.error).forEach(result => {
         const reportContent = generateProjectReport(result);
-        // add excludeUtility info to filename
-        const modeSuffix = excludeUtility ? '-prod' : '-full';
+        // add production info to filename
+        const modeSuffix = production ? '-prod' : '-full';
         const date = new Date().toISOString().split('T')[0];
 
         const filename = `${result.project}-analysis-report${modeSuffix}-${date}.md`;

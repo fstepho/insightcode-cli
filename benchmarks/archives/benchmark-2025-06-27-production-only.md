@@ -3,7 +3,7 @@
 ## Methodology
 - **Date**: 2025-06-27
 - **InsightCode Version**: 0.2.0
-- **Analysis Type**: Production Code Only (with --exclude-utility)
+- **Analysis Type**: Production Code Only (with --production)
 - **Total Projects Analyzed**: 19
 - **Analysis Method**: Fresh clone, default settings, no modifications
 

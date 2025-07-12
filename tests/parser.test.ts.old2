@@ -59,7 +59,7 @@ describe('Parser v0.6.0', () => {
       expect(files[0].endsWith('include.ts')).toBe(true);
     });
     
-    it('should exclude utility files when excludeUtility is true', async () => {
+    it('should exclude utility files when production is true', async () => {
       fs.writeFileSync(path.join(tempDir, 'app.ts'), 'const app = true;');
       const testDir = path.join(tempDir, 'test');
       fs.mkdirSync(testDir);
