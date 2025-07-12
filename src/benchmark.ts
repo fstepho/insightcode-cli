@@ -2,8 +2,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { AnalysisResult, EmblematicFiles, ReportResult, ReportSummary, ThresholdConfig } from '../src/types';
-import { parseDirectory } from '../src/parser';
-import { analyze } from '../src/analyzer';
+import { analyze, AnalysisOptions } from './analyzer';
 import { getConfig } from './config.manager';
 import { generateAllIndividualReports, generateMarkdownReport } from './report-generator';
 import { execa, ExecaError } from 'execa';
@@ -373,13 +372,18 @@ async function runProjectAnalysis(
   excludeUtility: boolean,
   timestamp: () => string
 ): Promise<AnalysisResult> {
-  console.log(`  📂 [${timestamp()}] Parsing directory structure...`);
-  const parsedFiles = await parseDirectory(analysisPath, [], excludeUtility);
-  console.log(`  📄 [${timestamp()}] Found ${parsedFiles.length} files to analyze`);
-
-  console.log(`  ⚙️  [${timestamp()}] Running analysis engine...`);
-  const results = await analyze(parsedFiles, projectTempDir, thresholds, withContext);
-  console.log(`  📊 [${timestamp()}] Analysis engine completed`);
+  console.log(`  � [${timestamp()}] Building AST and analyzing...`);
+  
+  const analysisOptions: AnalysisOptions = {
+    projectPath: projectTempDir,
+    thresholds,
+    withContext,
+    excludeUtility,
+    strictDuplication: false
+  };
+  
+  const results = await analyze(analysisPath, analysisOptions);
+  console.log(`  📊 [${timestamp()}] Analysis completed`);
 
   return results;
 }
@@ -391,21 +395,7 @@ async function runProjectAnalysis(
  * @param projectRoot - Le répertoire racine du projet de benchmark.
  * @returns Le résultat d'analyse avec les chemins nettoyés.
  */
-function cleanAnalysisPaths(analysisResult: AnalysisResult, projectTempDir: string, projectRoot: string): AnalysisResult {
-  const prefixToRemove = path.relative(projectRoot, projectTempDir);
-  const cleanPath = (p: string) => {
-    const escapedPrefix = prefixToRemove.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    return p.replace(new RegExp(`^${escapedPrefix}[\\/]`), '');
-  };
-
-  analysisResult.details.forEach(detail => {
-    detail.file = cleanPath(detail.file);
-  });
-
-  // Idéalement, il faudrait aussi nettoyer les chemins dans codeContext si besoin.
-
-  return analysisResult;
-}
+// Removed cleanAnalysisPaths - paths should be normalized at source (ast-builder)
 
 /**
  * Orchestre l'analyse complète d'un projet, de la préparation du code à la finalisation des résultats.
@@ -442,7 +432,7 @@ async function analyzeProject(project: Project, index: number, total: number): P
     );
 
     // 4. Nettoyage des résultats
-    const analysis = cleanAnalysisPaths(analysisResult, projectTempDir, projectRoot);
+    const analysis = analysisResult; // Paths are already normalized at source
 
     const duration = Date.now() - startTime;
     console.log(`  ✅ [${index}/${total}] [${timestamp()}] ${project.name} completed in ${(duration / 1000).toFixed(2)}s`);

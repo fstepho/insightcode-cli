@@ -114,9 +114,9 @@ console.log('| File | Complexity | LOC | Health Score | Penalty Analysis |');
 console.log('|------|------------|-----|--------------|------------------|');
 
 const healthExamples = [
-  { name: 'contextExtractor.ts', complexity: 97, loc: 315 },
-  { name: 'dependencyAnalyzer.ts', complexity: 176, loc: 834 },
-  { name: 'parser.ts', complexity: 80, loc: 300 },
+  { name: 'context-builder.ts', complexity: 97, loc: 315 },
+  { name: 'dependency-analyzer.ts', complexity: 176, loc: 834 },
+  { name: 'file-detail-builder.ts', complexity: 80, loc: 300 },
 ];
 
 healthExamples.forEach(example => {

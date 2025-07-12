@@ -32,7 +32,7 @@ Format: **Date | Decision | Reason | Impact**
 ---
 
 ## 2025-07-08: **Introduction of Rich Context Extraction for LLM Analysis**
-**Decision**: Implement comprehensive code context extraction system (`contextExtractor.ts`) that provides rich semantic information about TypeScript/JavaScript files to help LLMs better analyze InsightCode outputs. The system analyzes AST structure, patterns, dependencies, and complexity breakdowns to generate detailed context summaries.
+**Decision**: Implement comprehensive code context extraction system (`context-builder.ts`) that provides rich semantic information about TypeScript/JavaScript files to help LLMs better analyze InsightCode outputs. The system analyzes AST structure, patterns, dependencies, and complexity breakdowns to generate detailed context summaries.
 
 **Reason**: To enable more sophisticated analysis and reporting by providing LLMs with structured context about code architecture, patterns, and quality metrics when they analyze InsightCode results. This moves beyond simple metrics to provide semantic understanding of code structure, making LLM-based analysis more actionable and insightful.
 

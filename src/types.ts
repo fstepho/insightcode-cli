@@ -136,7 +136,8 @@ export interface Overview {
  * Details - WHAT Per File
  */
 export interface FileDetail {
-  file: string;  // Relative path
+  file: string;        // Relative path - SINGLE SOURCE OF TRUTH  
+  absolutePath: string; // Absolute path for file operations
   
   metrics: {
     complexity: number;     // Cyclomatic complexity
@@ -252,6 +253,17 @@ export interface QualityIssue {
 
 
 // ==================== CLI & CONFIGURATION ====================
+
+/**
+ * Analysis options for the analyzer
+ */
+export interface AnalysisOptions {
+  projectPath: string;
+  thresholds: ThresholdConfig;
+  withContext?: boolean;
+  excludeUtility?: boolean;
+  strictDuplication?: boolean;
+}
 
 export interface CliOptions {
   path: string;

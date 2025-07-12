@@ -156,7 +156,7 @@ export function generateProjectReport(result: ReportResult): string {
     markdown += generateHealthDistribution(analysis.details);
     
     // Critical Files
-    const criticalFiles = getCriticalFiles(analysis.details);
+    const criticalFiles = getCriticalFiles(analysis.details, result.emblematicFiles);
     if (criticalFiles.length > 0) {
         markdown += `## Critical Files Requiring Attention\n\n`;
         markdown += generateCriticalFilesSection(criticalFiles, result.emblematicFiles);
@@ -365,10 +365,46 @@ function generateHealthDistribution(details: FileDetail[]): string {
     return markdown;
 }
 
-function getCriticalFiles(details: FileDetail[]): FileDetail[] {
+function getCriticalFiles(details: FileDetail[], emblematicFiles: any): FileDetail[] {
     return details
         .filter(d => d.healthScore < 70 || d.issues.some(i => i.severity === 'critical' || i.severity === 'high'))
-        .sort((a, b) => a.healthScore - b.healthScore)
+        .sort((a, b) => {
+            // Priority 0: Emblematic files first within same severity groups
+            const aIsEmblematic = isFileEmblematic(a.file, emblematicFiles);
+            const bIsEmblematic = isFileEmblematic(b.file, emblematicFiles);
+            
+            // Priority 1: Critical issues count (descending)
+            const aCriticalCount = a.issues.filter(i => i.severity === 'critical').length;
+            const bCriticalCount = b.issues.filter(i => i.severity === 'critical').length;
+            if (aCriticalCount !== bCriticalCount) {
+                return bCriticalCount - aCriticalCount;
+            }
+            
+            // Priority 1.5: Within same critical count, emblematic files first
+            if (aCriticalCount === bCriticalCount && aIsEmblematic !== bIsEmblematic) {
+                return aIsEmblematic ? -1 : 1;
+            }
+            
+            // Priority 2: High issues count (descending)
+            const aHighCount = a.issues.filter(i => i.severity === 'high').length;
+            const bHighCount = b.issues.filter(i => i.severity === 'high').length;
+            if (aHighCount !== bHighCount) {
+                return bHighCount - aHighCount;
+            }
+            
+            // Priority 2.5: Within same high count, emblematic files first
+            if (aHighCount === bHighCount && aIsEmblematic !== bIsEmblematic) {
+                return aIsEmblematic ? -1 : 1;
+            }
+            
+            // Priority 3: Health score (ascending - worst first)
+            if (a.healthScore !== b.healthScore) {
+                return a.healthScore - b.healthScore;
+            }
+            
+            // Priority 4: Complexity (descending)
+            return b.metrics.complexity - a.metrics.complexity;
+        })
         .slice(0, 10);
 }
 
@@ -377,6 +413,7 @@ function generateCriticalFilesSection(criticalFiles: FileDetail[], emblematicFil
     markdown += `|------|--------|--------------------|----------------|\n`;
     
     criticalFiles.forEach(file => {
+        // FileDetail.file is already normalized - trust it
         const isEmblematic = isFileEmblematic(file.file, emblematicFiles);
         const fileLabel = isEmblematic ? `⭐ ${file.file}` : file.file;
         
@@ -585,24 +622,6 @@ function generateCodeContextAnalysis(codeContexts: CodeContext[]): string {
         markdown += generatePatternTable(patternCounts.architecture, 'architecture');
     }
     
-    // Critical functions
-    const criticalFunctions = codeContexts
-        .flatMap((context) => context.criticalFunctions)
-        .filter(f => f.complexity > 15 || f.issues.length > 2)
-        .sort((a, b) => b.complexity - a.complexity)
-        .slice(0, 5);
-    
-    if (criticalFunctions.length > 0) {
-        markdown += `### Most Complex Functions\n\n`;
-        markdown += `| Function | Complexity | Lines | Issues |\n`;
-        markdown += `|----------|------------|-------|--------|\n`;
-        
-        criticalFunctions.forEach(func => {
-            const issueList = func.issues.map(i => i.type).join(', ');
-            markdown += `| ${func.name} | ${func.complexity} | ${func.lineCount} | ${issueList || 'None'} |\n`;
-        });
-        markdown += `\n`;
-    }
     
     return markdown;
 }

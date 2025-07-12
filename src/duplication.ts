@@ -141,7 +141,7 @@ function normalizeBlock(block: string): string {
  * @param thresholds Configuration thresholds
  * @returns Files with duplication ratios
  */
-export function detectDuplication(files: FileDetail[], thresholds: ThresholdConfig, projectPath?: string): FileDetail[] {
+export function detectDuplication(files: FileDetail[], thresholds: ThresholdConfig): FileDetail[] {
   // Enhanced structural detection - larger blocks for meaningful patterns
   const blockSize = DUPLICATION_DETECTION_CONSTANTS.BLOCK_SIZE; // Increased from 3 to catch real duplication patterns
   const minTokens = DUPLICATION_DETECTION_CONSTANTS.MIN_TOKENS; // Realistic minimum for 8-line JS/TS blocks
@@ -166,19 +166,8 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
       if (fileWithContent.content) {
         content = fileWithContent.content;
       } else {
-        // Handle file path resolution correctly
-        let filePath: string;
-        if (projectPath && !path.isAbsolute(file.file)) {
-          // If file.file already contains project path as prefix, use as-is
-          if (file.file.startsWith(path.basename(projectPath))) {
-            filePath = file.file;
-          } else {
-            filePath = path.resolve(projectPath, file.file);
-          }
-        } else {
-          filePath = file.file;
-        }
-        content = getFileContent(filePath);
+        // Use absolute path from source of truth
+        content = getFileContent(file.absolutePath);
       }
     } catch (error) {
       content = null;

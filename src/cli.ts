@@ -3,8 +3,7 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { CliOptions, AnalysisResult, FileDetail } from './types';
-import { parseDirectory } from './parser';
-import { analyze } from './analyzer';
+import { analyze, AnalysisOptions } from './analyzer';
 import { reportToTerminal } from './reporter';
 import { isCriticalFile, isPassingScore } from './scoring.utils';
 import { generateProjectReport } from './report-generator';
@@ -113,16 +112,18 @@ program
         console.log(chalk.blue('🔍 Analyzing code quality...'));
       }
       const thresholds = getConfig();
-      // Parse files
-      const files = await parseDirectory(path, options.exclude, options.excludeUtility);
       
-      if (files.length === 0) {
-        console.error(chalk.red('\n❌ No TypeScript/JavaScript files found!'));
-        process.exit(1);
-      }
+      // Create analysis options
+      const analysisOptions: AnalysisOptions = {
+        projectPath: path,
+        thresholds,
+        withContext: options.withContext,
+        excludeUtility: options.excludeUtility,
+        strictDuplication: options.strictDuplication
+      };
       
-      // Analyze metrics
-      const results = await analyze(files, path, thresholds, options.withContext, options.strictDuplication);
+      // Analyze using new flow
+      const results = await analyze(path, analysisOptions);
       
       // Handle output format
       const format = options.format || (options.json ? 'json' : 'terminal');

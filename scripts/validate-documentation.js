@@ -47,13 +47,13 @@ complexityTests.forEach(({ complexity, expected, phase }) => {
 console.log('\n2. 🏥 HEALTH SCORE EXAMPLES');
 const healthTests = [
   {
-    name: 'dependencyAnalyzer.ts',
+    name: 'dependency-analyzer.ts',
     file: { metrics: { complexity: 176, loc: 834, duplicationRatio: 0 }, issues: [] },
     expected: 0,
     note: 'Complexity 176, LOC 834'
   },
   {
-    name: 'contextExtractor.ts', 
+    name: 'context-builder.ts', 
     file: { metrics: { complexity: 97, loc: 315, duplicationRatio: 0 }, issues: [] },
     expected: 0,
     note: 'Complexity 97, LOC 315'

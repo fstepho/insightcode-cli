@@ -228,13 +228,13 @@ function getIssuesPenalty(issues: Issue[]): number {
 
 | File | Complexity | LOC | Health Score | Penalty Analysis |
 |------|------------|-----|--------------|------------------|
-| `contextExtractor.ts` | 97 | 315 | **0** | Complexity: 97, Size: 8, Total: 105 |
-| `dependencyAnalyzer.ts` | 176 | 834 | **0** | Complexity: 133, Size: 22, Total: 155 |
-| `parser.ts` | 80 | 300 | **11** | Complexity: 82, Size: 7, Total: 89 |
+| `context-builder.ts` | 97 | 315 | **0** | Complexity: 97, Size: 8, Total: 105 |
+| `dependency-analyzer.ts` | 176 | 834 | **0** | Complexity: 133, Size: 22, Total: 155 |
+| `file-detail-builder.ts` | 80 | 300 | **11** | Complexity: 82, Size: 7, Total: 89 |
 
 ### Why Health Score = 0 is Mathematically Correct
 
-**dependencyAnalyzer.ts Analysis (exact calculation):**
+**dependency-analyzer.ts Analysis (exact calculation):**
 ```
 Complexity 176:
 - calculateComplexityScore(176) = 0 (exponential phase)
@@ -251,7 +251,7 @@ Total Penalty: 133 + 22 = 155
 Health Score: Math.max(0, 100 - 155) = 0
 ```
 
-**contextExtractor.ts Analysis (exact calculation):**
+**context-builder.ts Analysis (exact calculation):**
 ```
 Complexity 97:
 - calculateComplexityScore(97) = 3 (exponential phase)
@@ -294,7 +294,7 @@ Health Score: Math.max(0, 100 - 105) = 0
 The extreme scores reflect **real technical debt** that requires immediate attention. This follows the **Pareto Principle**: identifying the 20% of code that causes 80% of maintenance problems.
 
 ### Immediate Actions Required
-1. **Refactor `dependencyAnalyzer.ts`**: Split 176-complexity functions
+1. **Refactor `dependency-analyzer.ts`**: Split 176-complexity functions
 2. **Break down large files**: Extract modules from 800+ LOC files
 3. **Simplify conditional logic**: Reduce nested if/else statements
 

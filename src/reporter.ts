@@ -98,6 +98,7 @@ function createSectionHeader(title: string): string {
  * Format file path for consistent display
  */
 function formatFilePath(path: string, maxLength: number = 40): string {
+  // FileDetail.file is already normalized - trust it
   if (path.length <= maxLength) {
     return padEnd(path, maxLength);
   }
@@ -202,14 +203,24 @@ export function reportToTerminal(result: AnalysisResult): void {
       ));
       
       if (mainIssue) {
+        // Get the actual metric value based on issue type
+        let actualValue = '';
+        if (mainIssue.type === IssueType.Complexity) {
+          actualValue = `${file.metrics.complexity}`;
+        } else if (mainIssue.type === IssueType.Size) {
+          actualValue = `${file.metrics.loc} lines`;
+        } else if (mainIssue.type === IssueType.Duplication) {
+          actualValue = `${(file.metrics.duplicationRatio * 100).toFixed(1)}%`;
+        }
+        
         console.log(createAlignedRow(
           `  ${SYMBOLS.arrow} Issue:`,
           `${mainIssue.type} (${mainIssue.severity})`,
           COLUMN_CONFIG.subIndent
         ));
         console.log(createAlignedRow(
-          `  ${SYMBOLS.arrow} Severity:`,
-          `${mainIssue.excessRatio.toFixed(1)}x threshold`,
+          `  ${SYMBOLS.arrow} Value:`,
+          `${actualValue} (${mainIssue.excessRatio.toFixed(1)}x threshold)`,
           COLUMN_CONFIG.subIndent
         ));
       }

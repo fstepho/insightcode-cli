@@ -341,7 +341,7 @@ try {
   console.log('📋 Testing InsightCode\'s own files:\n');
   
   const ownFiles = [
-    { file: 'src/parser.ts', reportedComplexity: 24 },
+    { file: 'src/file-detail-builder.ts', reportedComplexity: 24 },
     { file: 'src/analyzer.ts', reportedComplexity: 18 },
     { file: 'src/reporter.ts', reportedComplexity: 25 }
   ];

@@ -1,169 +1,151 @@
-// File: src/analyzer.ts - v0.6.0 Complete Refactor
+// File: src/analyzer.ts - Analysis orchestrator with pipeline architecture
 
 import * as path from 'path';
-import * as fs from 'fs';
 import { 
   AnalysisResult, 
-  FileDetail, 
-  Context, 
-  Overview, 
-  ThresholdConfig,
-  validateScore,
-  DuplicationConfig
+  FileDetail,
+  Context,
+  Overview,
+  AnalysisOptions,
+  validateScore
 } from './types';
-import { enrichWithContext } from './contextExtractor';
+
+// Export AnalysisOptions for other modules
+export { AnalysisOptions } from './types';
+import { astBuilder, ASTBuildOptions, ASTBuildResult } from './ast-builder';
+import { fileDetailBuilder } from './file-detail-builder';
+import { contextBuilder } from './context-builder';
 import { detectDuplication } from './duplication';
-import { getProjectInfo } from './projectInfo';
-import { isCriticalFile, getGrade } from './scoring.utils';
-import { normalizeProjectPath } from './utils';
-import { 
-  calculateComplexityScore, 
-  calculateDuplicationScore, 
-  calculateMaintainabilityScore, 
-  calculateWeightedScore, 
-  calculateHealthScore 
-} from './scoring';
-import { PROJECT_SCORING_WEIGHTS, createDuplicationConfig } from './thresholds.constants';
-import { UniversalDependencyAnalyzer } from './dependencyAnalyzer';
+import { UniversalDependencyAnalyzer } from './dependency-analyzer';
+import { calculateHealthScore } from './scoring';
+import { createDuplicationConfig } from './thresholds.constants';
 import { getConfig } from './config.manager';
-// generateRecommendations removed in v0.6.0 - calculable client-side
+import { ProjectDiscovery } from './analyzer/ProjectDiscovery';
+import { OverviewCalculator } from './analyzer/OverviewCalculator';
+import { ContextGenerator } from './analyzer/ContextGenerator';
 
-// ==================== V0.6.0 CORE FUNCTIONS ====================
 
 /**
- * Finds the actual project root by looking for package.json, tsconfig.json, etc.
- * For monorepos, prioritizes workspace root over individual package roots.
+ * Analysis context shared across pipeline steps
  */
-function findProjectRoot(analysisPath: string): string {
-  let currentPath = path.resolve(analysisPath);
-  const rootPath = path.parse(currentPath).root;
-  let lastFoundRoot: string | null = null;
+class AnalysisContext {
+  constructor(
+    public readonly inputPath: string,
+    public readonly options: AnalysisOptions,
+    public readonly startTime: number = Date.now()
+  ) {}
   
-  while (currentPath !== rootPath) {
-    // Check for project markers
-    const packageJsonPath = path.join(currentPath, 'package.json');
-    const gitPath = path.join(currentPath, '.git');
-    const yarnLockPath = path.join(currentPath, 'yarn.lock');
-    const pnpmLockPath = path.join(currentPath, 'pnpm-lock.yaml');
-    const tsconfigPath = path.join(currentPath, 'tsconfig.json');
-    
-    // Priority order: git repo > lock files > package.json with workspaces > package.json > tsconfig
-    if (fs.existsSync(gitPath)) {
-      // Git repository root - highest priority for monorepos
-      return currentPath;
-    }
-    
-    if (fs.existsSync(yarnLockPath) || fs.existsSync(pnpmLockPath)) {
-      // Lock files usually indicate workspace root
-      return currentPath;
-    }
-    
-    if (fs.existsSync(packageJsonPath)) {
-      try {
-        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-        if (packageJson.workspaces) {
-          // This is a workspace root - highest priority
-          return currentPath;
-        }
-        // Remember this as a potential root, but keep looking for workspace root
-        lastFoundRoot = currentPath;
-      } catch {
-        // Invalid package.json, treat as regular marker
-        lastFoundRoot = currentPath;
-      }
-    }
-    
-    if (!lastFoundRoot && fs.existsSync(tsconfigPath)) {
-      lastFoundRoot = currentPath;
-    }
-    
-    currentPath = path.dirname(currentPath);
-  }
-  
-  // Return the last found root, or the analysis path itself
-  return lastFoundRoot || path.resolve(analysisPath);
+  // Results from each step
+  astData?: ASTBuildResult;
+  rawFileDetails?: FileDetail[];
+  processedFileDetails?: FileDetail[];
+  codeContext?: AnalysisResult['codeContext'];
+  overview?: Overview;
+  context?: Context;
 }
 
-// Health score calculation moved to scoring.ts
-
 /**
- * Generates human-readable summary
+ * Main analysis orchestrator with pipeline architecture
+ * 
+ * Flow:
+ * 1. Build AST from source files
+ * 2. Extract file details from AST
+ * 3. Process metrics (duplication, dependencies, health scores)
+ * 4. Calculate overview scores
+ * 5. Generate context metadata
+ * 6. Assemble final result
  */
-function generateSummary(overview: Overview, criticalCount: number): string {
-  if (criticalCount === 0) {
-    return `Excellent code health with grade ${overview.grade}`;
+export async function analyze(
+  inputPath: string,
+  options: AnalysisOptions
+): Promise<AnalysisResult> {
+  const context = new AnalysisContext(inputPath, options);
+  
+  try {
+    // Execute pipeline steps
+    await executeASTBuildStep(context);
+    await executeFileDetailStep(context);
+    await executeMetricsProcessingStep(context);
+    await executeOverviewCalculationStep(context);
+    
+    if (options.withContext) {
+      await executeContextExtractionStep(context);
+    }
+    
+    await executeContextGenerationStep(context);
+    
+    return assembleResult(context);
+    
+  } catch (error) {
+    console.error('Analysis failed:', error);
+    throw error;
   }
-  if (criticalCount === 1) {
-    return `Good overall health with 1 file requiring attention`;
-  }
-  return `${criticalCount} critical files found requiring attention`;
 }
 
-
-// Issue generation moved to parser.ts - no more legacy conversion needed
-
-// ==================== MAIN ANALYSIS FUNCTION ====================
-
 /**
- * The main analysis function for v0.6.0 - Complete refactor
+ * Step 1: Build AST from source files
  */
-export async function analyze(files: FileDetail[], projectPath: string, _thresholds: ThresholdConfig, withContext: boolean = false, strictDuplication: boolean = false): Promise<AnalysisResult> {
-  const startTime = Date.now();
+async function executeASTBuildStep(context: AnalysisContext): Promise<void> {
+  console.log('🔧 Building AST...');
   
-  // 1. Calculate all metrics and relationships
-  const duplicationConfig = createDuplicationConfig(strictDuplication);
-  const processedDetails = await processFileDetails(files, projectPath, duplicationConfig);
-  
-  // 3. Calculate overview scores
-  const overview = calculateOverview(processedDetails, duplicationConfig);
-  
-  // 4. Generate context
-  const context = generateContext(projectPath, processedDetails, startTime, duplicationConfig);
-  
-  // 5. Recommendations removed in v0.6.0 - calculable client-side
-  
-  const result: AnalysisResult = {
-    context,
-    overview,
-    details: processedDetails
+  const astBuildOptions: ASTBuildOptions = {
+    excludeUtility: context.options.excludeUtility
   };
-
-  // Enrichir avec le code context si demandé
-  if (withContext) {
-    try {
-      const codeContexts = enrichWithContext(processedDetails, projectPath);
-      result.codeContext = codeContexts;
-    } catch (error) {
-      console.warn('Could not enrich with code context:', error);
-    }
-  }
-
-  return result;
+  
+  context.astData = await astBuilder.build(context.inputPath, astBuildOptions);
+  console.log(`📁 Found ${context.astData.totalFiles} files`);
 }
 
 /**
- * Processes file details to calculate all derived metrics
+ * Step 2: Extract file details from AST
  */
-async function processFileDetails(details: FileDetail[], projectPath: string, duplicationConfig: DuplicationConfig): Promise<FileDetail[]> {
-  // 1. Detect duplication
-  const filesWithDuplication = detectDuplication(details, getConfig(), projectPath);
+async function executeFileDetailStep(context: AnalysisContext): Promise<void> {
+  console.log('📊 Extracting file details...');
   
-  // 2. Analyze dependencies
-  const actualProjectRoot = findProjectRoot(projectPath);
+  if (!context.astData) throw new Error('AST data not available');
+  
+  context.rawFileDetails = await fileDetailBuilder.build(context.astData, {
+    projectPath: context.options.projectPath
+  });
+}
+
+/**
+ * Step 3: Process metrics (duplication, dependencies, health scores)
+ * 
+ * Processing flow:
+ * 1. Detect duplication using 8-line sliding window algorithm
+ * 2. Analyze dependencies with universal resolver and circular detection
+ * 3. Calculate health scores using progressive penalties (no artificial caps)
+ */
+async function executeMetricsProcessingStep(context: AnalysisContext): Promise<void> {
+  console.log('⚙️ Processing metrics...');
+  
+  if (!context.rawFileDetails || !context.astData) {
+    throw new Error('Raw file details or AST data not available');
+  }
+  
+  const duplicationConfig = createDuplicationConfig(context.options.strictDuplication || false);
+  
+  // 1. Detect duplication
+  const filesWithDuplication = detectDuplication(context.rawFileDetails, getConfig());
+  
+  // 2. Analyze dependencies  
+  // Use the analysis path as project root, not the git repo root
+  const analysisProjectRoot = path.resolve(context.inputPath);
   const dependencyAnalyzer = new UniversalDependencyAnalyzer({
-    projectRoot: actualProjectRoot,
+    projectRoot: analysisProjectRoot,
     analyzeCircularDependencies: true,
-    analyzeDynamicImports: true, 
+    analyzeDynamicImports: true,
     cache: true,
     timeout: 90000,
-    logResolutionErrors: false, // Désactiver debug verbeux
+    logResolutionErrors: false
   });
   
-  const dependencyAnalysisResult = await dependencyAnalyzer.analyze(filesWithDuplication);
-
-  // 3. Update dependencies from dependency analysis
-  filesWithDuplication.forEach(file => {
-    file.dependencies = dependencyAnalysisResult.fileAnalyses.get(file.file) || {
+  const dependencyAnalysisResult = await dependencyAnalyzer.analyze(filesWithDuplication, context.astData);
+  
+  // 3. Update dependencies and calculate health scores
+  context.processedFileDetails = filesWithDuplication.map(file => {
+    const dependencies = dependencyAnalysisResult.fileAnalyses.get(file.file) || {
       incomingDependencies: 0,
       outgoingDependencies: 0,
       instability: 0,
@@ -171,171 +153,82 @@ async function processFileDetails(details: FileDetail[], projectPath: string, du
       percentileUsageRank: 0,
       isInCycle: false
     };
-  });
-  
-  // 4. Calculate critical path files (done on-demand)
-  
-  
-  // 5. Mark critical path files (top 10% by usage)
-  // Critical path calculation is now done on-demand in helper functions
-  
-  // 6. Calculate health scores
-  filesWithDuplication.forEach(file => {
-    file.healthScore = validateScore(calculateHealthScore(file, duplicationConfig));
-  });
-  
-  return filesWithDuplication;
-}
-
-/**
- * Calculates overview metrics from processed details
- */
-function calculateOverview(details: FileDetail[], duplicationConfig: DuplicationConfig): Overview {
-  if (details.length === 0) {
+    
+    const healthScore = validateScore(calculateHealthScore(file, duplicationConfig));
+    
     return {
-      grade: 'F',
-      statistics: {
-        totalFiles: 0,
-        totalLOC: 0,
-        avgComplexity: 0,
-        avgLOC: 0
-      },
-      scores: {
-        complexity: 0,
-        duplication: 0,
-        maintainability: 0,
-        overall: 0
-      },
-      summary: 'No files analyzed'
+      ...file,
+      dependencies,
+      healthScore
     };
-  }
-  
-  // Calculate statistics
-  const totalLOC = details.reduce((sum, f) => sum + f.metrics.loc, 0);
-  const avgComplexity = details.reduce((sum, f) => sum + f.metrics.complexity, 0) / details.length;
-  const avgLOC = totalLOC / details.length;
-  const avgDuplicationRatio = details.reduce((sum, f) => sum + f.metrics.duplicationRatio, 0) / details.length;
-  
-  // Calculate weighted scores using internal hypothesis weights WITHOUT outlier masking
-  // 
-  // METHODOLOGY: Raw arithmetic weighting that ensures extreme values are properly reflected
-  // in the final grade, following the Pareto principle (20% of code causes 80% of problems).
-  // 
-  // INTERNAL HYPOTHESIS (requires empirical validation):
-  // - Complexity: Primary defect predictor hypothesis - gets highest weight (45%)
-  // - File size: Maintainability impact hypothesis - secondary weight (30%)
-  // - Duplication: Technical debt indicator hypothesis - tertiary weight (25%)
-  // 
-  // INTERNAL HYPOTHESIS APPROACH:
-  // - Simple arithmetic weighting without outlier masking
-  // - NO logarithmic scaling: Outliers must be visible, not masked
-  // 
-  // WEIGHT RATIONALE (45/30/25%) - INTERNAL HYPOTHESIS:
-  // - 45% Complexity: Internal hypothesis (requires validation)
-  // - 30% Dependencies: Internal hypothesis (requires validation)
-  // - 25% Duplication: Internal hypothesis (requires validation)
-  //
-  // This approach ensures that projects with critical issues (complexity 1000+, 
-  // massive files) receive appropriately low grades, following the principle that
-  // extreme problems should result in extreme penalties.
-  
-  const totalCriticismScore = details.reduce((sum, f) => {
-    // Simple arithmetic mean without logarithmic masking of outliers
-    // This ensures that extremely complex files are properly weighted
-    const baseWeight = 1.0; // Democratic base weight
-    
-    // Use raw complexity - NO logarithmic scaling!
-    // Files with complexity 1000+ should dominate the calculation
-    const complexityImpact = f.metrics.complexity;
-    
-    // Use normalized dependencies for architectural impact
-    const dependencyImpact = f.dependencies.incomingDependencies;
-    
-    // Use raw duplication ratio
-    const duplicationImpact = f.metrics.duplicationRatio * 100;
-    
-    // Simple weighted sum following internal hypothesis weights
-    return sum + (complexityImpact * PROJECT_SCORING_WEIGHTS.COMPLEXITY) + (dependencyImpact * PROJECT_SCORING_WEIGHTS.MAINTAINABILITY) + (duplicationImpact * PROJECT_SCORING_WEIGHTS.DUPLICATION) + baseWeight;
-  }, 0);
-  
-  let weightedComplexityScore = 0;
-  let weightedDuplicationScore = 0;
-  let weightedMaintainabilityScore = 0;
-  
-  if (totalCriticismScore > 0) {
-    for (const file of details) {
-      // Use raw values without logarithmic masking
-      const complexityImpact = file.metrics.complexity;
-      const dependencyImpact = file.dependencies.incomingDependencies;
-      const duplicationImpact = file.metrics.duplicationRatio * 100;
-      const criticismScore = (complexityImpact * PROJECT_SCORING_WEIGHTS.COMPLEXITY) + (dependencyImpact * PROJECT_SCORING_WEIGHTS.MAINTAINABILITY) + (duplicationImpact * PROJECT_SCORING_WEIGHTS.DUPLICATION) + 1.0;
-      const weight = criticismScore / totalCriticismScore;
-      
-      weightedComplexityScore += calculateComplexityScore(file.metrics.complexity) * weight;
-      weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio, duplicationConfig) * weight;
-      weightedMaintainabilityScore += calculateMaintainabilityScore(file.metrics.loc, file.metrics.functionCount) * weight;
-    }
-  } else {
-    weightedComplexityScore = 100;
-    weightedDuplicationScore = 100;
-    weightedMaintainabilityScore = 100;
-  }
-  
-  const complexityScore = validateScore(weightedComplexityScore);
-  const duplicationScore = validateScore(weightedDuplicationScore);
-  const maintainabilityScore = validateScore(weightedMaintainabilityScore);
-  const overallScore = validateScore(calculateWeightedScore(complexityScore, duplicationScore, maintainabilityScore));
-  
-  const grade = getGrade(overallScore);
-  
-  const criticalCount = details.filter(f => isCriticalFile(f.healthScore)).length;
-  
-  const overview: Overview = {
-    grade,
-    statistics: {
-      totalFiles: details.length,
-      totalLOC,
-      avgComplexity: Math.round(avgComplexity * 10) / 10,
-      avgLOC: Math.round(avgLOC),
-      avgDuplicationRatio: Math.round(avgDuplicationRatio * 1000) / 1000 // Round to 3 decimals
-    },
-    scores: {
-      complexity: complexityScore,
-      duplication: duplicationScore,
-      maintainability: maintainabilityScore,
-      overall: overallScore
-    },
-    summary: '' // Will be set after overview creation
-  };
-  
-  // Set summary after overview is created
-  overview.summary = generateSummary(overview, criticalCount);
-  
-  return overview;
+  });
 }
 
 /**
- * Generates context information
+ * Step 4: Calculate overview scores using criticism-based weighted methodology
+ * 
+ * Methodology:
+ * - Files with higher "criticism scores" get more weight in final calculations
+ * - Follows Pareto principle (20% of files cause 80% of problems)
+ * - Three-dimensional scoring: Complexity (45%) + Maintainability (30%) + Duplication (25%)
+ * - No outlier masking - extreme values receive extreme penalties
  */
-function generateContext(projectPath: string, details: FileDetail[], startTime: number, duplicationConfig: DuplicationConfig): Context {
-  const projectInfo = getProjectInfo(projectPath);
-  const endTime = Date.now();
+async function executeOverviewCalculationStep(context: AnalysisContext): Promise<void> {
+  console.log('📈 Calculating overview...');
+  
+  if (!context.processedFileDetails) {
+    throw new Error('Processed file details not available');
+  }
+  
+  const duplicationConfig = createDuplicationConfig(context.options.strictDuplication || false);
+  context.overview = OverviewCalculator.calculate(context.processedFileDetails, duplicationConfig);
+}
+
+/**
+ * Step 5: Extract code context (optional)
+ */
+async function executeContextExtractionStep(context: AnalysisContext): Promise<void> {
+  console.log('🧠 Building code context...');
+  
+  if (!context.processedFileDetails || !context.astData) {
+    throw new Error('Processed file details or AST data not available');
+  }
+  
+  context.codeContext = await contextBuilder.build(context.processedFileDetails, context.astData, {
+    projectPath: context.options.projectPath,
+    enabled: true
+  });
+}
+
+/**
+ * Step 6: Generate analysis context metadata
+ */
+async function executeContextGenerationStep(context: AnalysisContext): Promise<void> {
+  if (!context.processedFileDetails) {
+    throw new Error('Processed file details not available');
+  }
+  
+  const duplicationConfig = createDuplicationConfig(context.options.strictDuplication || false);
+  context.context = ContextGenerator.generate(
+    context.options.projectPath,
+    context.processedFileDetails,
+    context.startTime,
+    duplicationConfig
+  );
+}
+
+/**
+ * Assembles final analysis result
+ */
+function assembleResult(context: AnalysisContext): AnalysisResult {
+  if (!context.processedFileDetails || !context.overview || !context.context) {
+    throw new Error('Required analysis data not available');
+  }
   
   return {
-    project: {
-      name: projectInfo.name,
-      path: normalizeProjectPath(projectInfo.path),
-      version: projectInfo.packageJson?.version,
-      repository: typeof projectInfo.packageJson?.repository === 'string' ? projectInfo.packageJson.repository : undefined
-    },
-    analysis: {
-      timestamp: new Date().toISOString(),
-      durationMs: endTime - startTime,
-      toolVersion: '0.6.0',
-      filesAnalyzed: details.length,
-      duplicationMode: duplicationConfig.mode
-    }
+    details: context.processedFileDetails,
+    overview: context.overview,
+    context: context.context,
+    ...(context.codeContext && { codeContext: context.codeContext })
   };
 }
-
-// Recommendations generation moved to recommendations.ts

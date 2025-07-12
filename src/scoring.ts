@@ -1,6 +1,6 @@
 // File: src/scoring.ts
 
-import { Issue, DuplicationConfig } from './types';
+import { Issue, DuplicationConfig, FileDetail } from './types';
 import {
   PROJECT_SCORING_WEIGHTS,
   MAINTAINABILITY_SCORING_THRESHOLDS,
@@ -329,4 +329,37 @@ export function calculateHealthScore(file: {
   const totalPenalty = complexityPenalty + duplicationPenalty + sizePenalty + issuesPenalty;
   
   return Math.max(0, Math.round(100 - totalPenalty));
+}
+
+/**
+ * Calculate criticism score for a file using original hypothesis weights
+ * Higher score = more problematic file = more weight in final scores
+ * 
+ * Original weights from pre-v0.6.0:
+ * - Impact (dependencies): 2.0 (most important)
+ * - Complexity: 1.0 
+ * - Issues count: 0.5
+ * - Base score: 1 (to avoid zero weights)
+ */
+export function calculateCriticismScore(file: FileDetail): number {
+  const complexityWeight = 1.0;
+  const impactWeight = 2.0;
+  const issueWeight = 0.5;
+  
+  // Calculate impact based on dependency metrics
+  const impact = (file.dependencies?.incomingDependencies || 0) + 
+                 (file.dependencies?.outgoingDependencies || 0) + 
+                 (file.dependencies?.isInCycle ? 5 : 0); // Penalty for circular dependencies
+  
+  // Count issues (we don't have explicit issues array in new structure, so approximate)
+  // High complexity, high duplication, or large files are "issues"
+  let issueCount = 0;
+  if (file.metrics.complexity > 10) issueCount++;
+  if (file.metrics.duplicationRatio > 0.1) issueCount++; // 10% duplication threshold
+  if (file.metrics.loc > 500) issueCount++; // Large file threshold
+  
+  return (impact * impactWeight) + 
+         (file.metrics.complexity * complexityWeight) + 
+         (issueCount * issueWeight) + 
+         1; // Base score to avoid zero weights
 }

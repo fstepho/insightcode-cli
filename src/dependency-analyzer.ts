@@ -1,7 +1,6 @@
-// File: src/dependencyAnalyzer.ts
+// File: src/dependency-analyzer.ts
 
-import { Project, SourceFile, SyntaxKind, ts, Node, CallExpression } from 'ts-morph';// Export pour compatibilité avec l'ancienne API
-export { analyzeDependencies as analyzeDependenciesAsync } from './dependencyAnalyzer';
+import { Project, SourceFile, SyntaxKind, ts, Node, CallExpression } from 'ts-morph';
 import * as path from 'path';
 import * as fs from 'fs';
 import { CachedInputFileSystem, Resolver, ResolverFactory } from 'enhanced-resolve';
@@ -87,8 +86,8 @@ export class UniversalDependencyAnalyzer {
   /**
    * Analyse principale avec timeout et gestion d'erreurs robuste.
    */
-  public async analyze(files: FileDetail[]): Promise<DependencyAnalysisResult> {
-    const analysisPromise = this.performAnalysis(files);
+  public async analyze(files: FileDetail[], astData: import('./ast-builder').ASTBuildResult): Promise<DependencyAnalysisResult> {
+    const analysisPromise = this.performAnalysis(files, astData);
 
     const timeoutPromise = new Promise<DependencyAnalysisResult>((_, reject) =>
       setTimeout(
@@ -118,7 +117,7 @@ export class UniversalDependencyAnalyzer {
   /**
    * Logique d'analyse interne optimisée.
    */
-  private async performAnalysis(files: FileDetail[]): Promise<DependencyAnalysisResult> {
+  private async performAnalysis(files: FileDetail[], astData: import('./ast-builder').ASTBuildResult): Promise<DependencyAnalysisResult> {
     const startTime = Date.now();
     const errors: AnalysisError[] = [];
     const project = this.getOrCreateProject();
@@ -159,7 +158,7 @@ export class UniversalDependencyAnalyzer {
       return true;
     });
 
-    const filePaths = new Set(validFiles.map(f => normalizePath(f.file)));
+    const filePaths = new Set(validFiles.map(f => f.file)); // Already normalized
     const incomingDependencyCount = new Map<string, number>();
     const dependencyGraph = new Map<string, Set<string>>();
     
@@ -168,14 +167,19 @@ export class UniversalDependencyAnalyzer {
       dependencyGraph.set(path, new Set());
     });
 
-    const sourceFiles = await this.addFilesToProject(project, validFiles, errors);
+    // Reuse existing AST - no re-parsing needed!
+    const sourceFiles = astData.files.map(f => f.sourceFile);
+    
+    // Create simple mapping SourceFile → normalized path
+    const pathMap = new Map<SourceFile, string>();
+    astData.files.forEach(f => pathMap.set(f.sourceFile, f.relativePath));
 
     // Analyse parallèle avec gestion de la concurrence
     const concurrency = Math.min(10, sourceFiles.length);
     const chunks = this.chunkArray(sourceFiles, Math.ceil(sourceFiles.length / concurrency));
     
     await Promise.all(chunks.map(chunk =>
-      this.analyzeChunk(chunk, filePaths, incomingDependencyCount, dependencyGraph, errors)
+      this.analyzeChunk(chunk, pathMap, filePaths, incomingDependencyCount, dependencyGraph, errors)
     ));
 
     const statistics = this.calculateStatistics(dependencyGraph, incomingDependencyCount);
@@ -217,6 +221,7 @@ export class UniversalDependencyAnalyzer {
    */
   private async analyzeChunk(
     sourceFiles: SourceFile[],
+    pathMap: Map<SourceFile, string>,
     filePaths: Set<string>,
     incomingDependencyCount: Map<string, number>,
     dependencyGraph: Map<string, Set<string>>,
@@ -227,7 +232,7 @@ export class UniversalDependencyAnalyzer {
         if (this.config.logResolutionErrors) {
           console.log(`🔄 Processing source file: ${sourceFile.getFilePath()}`);
         }
-        await this.analyzeSourceFile(sourceFile, filePaths, incomingDependencyCount, dependencyGraph);
+        await this.analyzeSourceFile(sourceFile, pathMap, filePaths, incomingDependencyCount, dependencyGraph);
       } catch (err) {
         const error = err as Error;
         const errorType = this.classifyError(error);
@@ -241,50 +246,7 @@ export class UniversalDependencyAnalyzer {
     }
   }
 
-  /**
-   * Ajoute les fichiers au projet avec gestion d'erreurs robuste.
-   */
-  private async addFilesToProject(
-    project: Project, 
-    files: FileDetail[], 
-    errors: AnalysisError[]
-  ): Promise<SourceFile[]> {
-    const sourceFilePromises = files.map(async (file) => {
-      try {
-        if (this.config.logResolutionErrors) {
-          console.log(`📖 Reading file content: ${file.file}`);
-        }
-        const content = await this.readFileContent(file);
-        const absolutePath = this.getAbsolutePath(file.file);
-        
-        // Créer le fichier source
-        const sourceFile = project.createSourceFile(absolutePath, content, { overwrite: true });
-        
-        if (this.config.logResolutionErrors) {
-          console.log(`📝 Created source file: ${absolutePath}`);
-          console.log(`   Content length: ${content.length} chars`);
-        }
-        
-        // Note: getPreEmitDiagnostics() removed for parallel performance
-        // TypeScript syntax validation is not critical for dependency analysis
-        // as import/export statements can be parsed even with type errors
-        
-        return sourceFile;
-      } catch (error) {
-        if (this.config.logResolutionErrors) {
-          console.log(`❌ Error adding file ${file.file}: ${(error as Error).message}`);
-        }
-        errors.push({
-          file: file.file,
-          error: (error as Error).message,
-          phase: 'read',
-        });
-        return null;
-      }
-    });
-
-    return (await Promise.all(sourceFilePromises)).filter((sf): sf is SourceFile => sf !== null);
-  }
+  // addFilesToProject removed - we now reuse existing AST from ast-builder
 
   /**
    * Lit le contenu d'un fichier de manière sécurisée.
@@ -317,11 +279,13 @@ export class UniversalDependencyAnalyzer {
    */
   private async analyzeSourceFile(
     sourceFile: SourceFile,
+    pathMap: Map<SourceFile, string>,
     filePaths: Set<string>,
     incomingDependencyCount: Map<string, number>,
     dependencyGraph: Map<string, Set<string>>
   ): Promise<void> {
-    const currentFile = normalizePath(path.relative(this.config.projectRoot, sourceFile.getFilePath()));
+    // Use normalized path from Single Source of Truth
+    const currentFile = pathMap.get(sourceFile) || 'unknown-file';
     const importSpecifiers = new Set<string>();
     
     // Debug: vérifier si le fichier est parsé correctement
@@ -525,7 +489,7 @@ export class UniversalDependencyAnalyzer {
           return resolve(null);
         }
 
-        // Convertir en chemin relatif normalisé
+        // Convert to relative normalized path
         const relativePath = normalizePath(path.relative(this.config.projectRoot, result));
         resolve(relativePath);
       });
@@ -705,7 +669,7 @@ export class UniversalDependencyAnalyzer {
     }
 
     for (const file of files) {
-      const filePath = normalizePath(file.file);
+      const filePath = file.file; // Already normalized
       const outgoingDependencies = dependencyGraph.get(filePath)?.size ?? 0;
       
       // Utiliser directement l'impact score comme incoming count
@@ -1197,25 +1161,4 @@ export class UniversalDependencyAnalyzer {
   }
 }
 
-/**
- * Fonction de compatibilité pour l'ancienne API.
- * Wrapper asynchrone qui peut être awaité.
- */
-export async function analyzeDependencies(
-  files: FileDetail[], 
-  projectRoot?: string
-): Promise<Map<string, number>> {
-  const analyzer = new UniversalDependencyAnalyzer({ 
-    projectRoot,
-    analyzeCircularDependencies: true, // Pour la performance
-    timeout: 60000
-  });
-  
-  try {
-    const result = await analyzer.analyze(files);
-    return result.incomingDependencyCount;
-  } catch (error) {
-    console.error('Dependency analysis failed:', error);
-    return new Map<string, number>();
-  }
-}
+// analyzeDependencies legacy function removed - use UniversalDependencyAnalyzer.analyze(files, astData) directly
