@@ -1,224 +1,427 @@
-// File: src/reporter.ts - v0.6.0 Complete Refactor
-
+// File: src/reporter.ts - Enhanced CLI Reporter with Perfect Alignment
 import chalk from 'chalk';
-import { AnalysisResult, FileDetail, Issue, IssueType } from './types';
-import { calculateExcessPercentage, formatPercentage, getGrade, ratioToPercentage } from './scoring.utils';
-import { CRITICAL_HEALTH_SCORE } from './thresholds.constants';
+import { AnalysisResult, FileDetail, Issue, Severity, IssueType, CodeContext, DuplicationMode } from './types';
+
+// Configuration for alignment
+const COLUMN_CONFIG = {
+  label: 20,        // Width for labels
+  value: 12,        // Width for values
+  description: 40,  // Width for descriptions
+  indent: 2,        // Spaces for indentation
+  subIndent: 4      // Spaces for sub-items
+};
+
+// Unicode symbols
+const SYMBOLS = {
+  arrow: '→',
+  bullet: '•',
+  success: '✓',
+  error: '✗',
+  warning: '⚠',
+  star: '★',
+  box: '■',
+  boxEmpty: '□',
+  progressFull: '█',
+  progressEmpty: '░',
+  verticalLine: '│',
+  horizontalLine: '─',
+  cornerTopLeft: '┌',
+  cornerTopRight: '┐',
+  cornerBottomLeft: '└',
+  cornerBottomRight: '┘'
+};
 
 /**
- * Generate description for an issue based on type and threshold data
+ * Pad string to specific length
  */
-function getIssueDescription(issue: Issue): string {
-  switch (issue.type) {
-    case IssueType.Complexity:
-      return `${issue.severity} complexity: Exceeds threshold by ${calculateExcessPercentage(issue.excessRatio).toFixed(0)}%`;
-    case IssueType.Size:
-      return `${issue.severity} file size: Exceeds threshold by ${calculateExcessPercentage(issue.excessRatio).toFixed(0)}%`;
-    case IssueType.Duplication:
-      return `${issue.severity} duplication: Exceeds threshold by ${calculateExcessPercentage(issue.excessRatio).toFixed(0)}%`;
-    default:
-      return `${issue.severity} ${issue.type} issue`;
+function padEnd(str: string, length: number): string {
+  const visibleLength = str.replace(/\x1b\[[0-9;]*m/g, '').length;
+  const padding = Math.max(0, length - visibleLength);
+  return str + ' '.repeat(padding);
+}
+
+function padStart(str: string, length: number): string {
+  const visibleLength = str.replace(/\x1b\[[0-9;]*m/g, '').length;
+  const padding = Math.max(0, length - visibleLength);
+  return ' '.repeat(padding) + str;
+}
+
+/**
+ * Create aligned row with label and value
+ */
+function createAlignedRow(label: string, value: string, indent: number = 0): string {
+  const indentStr = ' '.repeat(indent);
+  const paddedLabel = padEnd(label, COLUMN_CONFIG.label - indent);
+  return `${indentStr}${paddedLabel}${value}`;
+}
+
+/**
+ * Create a progress bar with exact width
+ */
+function createProgressBar(value: number, max: number = 100, width: number = 20): string {
+  const percentage = Math.min(value / max, 1);
+  const filled = Math.round(percentage * width);
+  const empty = width - filled;
+  
+  const filledChars = SYMBOLS.progressFull.repeat(filled);
+  const emptyChars = SYMBOLS.progressEmpty.repeat(empty);
+  
+  // Color the filled part based on percentage
+  let coloredBar = '';
+  if (percentage >= 0.8) {
+    coloredBar = chalk.green(filledChars);
+  } else if (percentage >= 0.6) {
+    coloredBar = chalk.yellow(filledChars);
+  } else {
+    coloredBar = chalk.red(filledChars);
   }
-}
-
-// isCriticalFile function removed - logic integrated into client-side calculations
-
-/**
- * Format number with spaces as thousands separators
- */
-function formatNumber(num: number): string {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  
+  return coloredBar + chalk.gray(emptyChars);
 }
 
 /**
- * Display styled section header
+ * Create a horizontal line
  */
-function printSectionHeader(title: string): void {
-  console.log(`\n${chalk.bold.underline(title)}`);
-  console.log(chalk.dim('─'.repeat(title.length + 10)));
+function createSeparator(width: number = 80): string {
+  return chalk.gray(SYMBOLS.horizontalLine.repeat(width));
 }
 
 /**
- * Get appropriate color for score based on v0.6.0 grading system
- * Uses centralized grade thresholds from constants.ts
+ * Create a section header with consistent formatting
  */
-function getScoreColor(score: number): (text: string) => string {
-  const grade = getGrade(score);
-  switch (grade) {
-    case 'A': return chalk.green;        // Grade A - Excellent
-    case 'B': return chalk.greenBright;  // Grade B - Good
-    case 'C': return chalk.yellow;       // Grade C - Acceptable
-    case 'D': return chalk.yellowBright; // Grade D - Poor
-    case 'F': return chalk.red;          // Grade F - Critical
+function createSectionHeader(title: string): string {
+  const line = createSeparator(60);
+  return `\n${line}\n${chalk.bold.white(title)}\n${line}`;
+}
+
+/**
+ * Format file path for consistent display
+ */
+function formatFilePath(path: string, maxLength: number = 40): string {
+  if (path.length <= maxLength) {
+    return padEnd(path, maxLength);
   }
-}
-
-/**
- * Get appropriate color for grade letter based on v0.6.0 system
- */
-function getGradeColor(grade: string): (text: string) => string {
-  switch (grade) {
-    case 'A': return chalk.bgGreen.black;
-    case 'B': return chalk.bgYellow.black;
-    case 'C': return chalk.bgYellow.black;
-    case 'D': return chalk.bgRed.white;
-    case 'F': return chalk.bgRed.bold.white;
-    default: return chalk.gray;
+  
+  const parts = path.split('/');
+  if (parts.length <= 2) {
+    return padEnd(path.substring(0, maxLength - 3) + '...', maxLength);
   }
+  
+  // Shorten middle parts
+  const start = parts[0];
+  const end = parts[parts.length - 1];
+  const shortened = `${start}/.../` + end;
+  
+  if (shortened.length <= maxLength) {
+    return padEnd(shortened, maxLength);
+  }
+  
+  return padEnd(path.substring(0, maxLength - 3) + '...', maxLength);
 }
 
+/**
+ * Get color based on score - returns a chalk function compatible with v4
+ */
+function getScoreColor(score: number) {
+  if (score >= 90) return chalk.green;
+  if (score >= 80) return chalk.greenBright; 
+  if (score >= 70) return chalk.yellow;
+  if (score >= 60) return chalk.red;
+  return chalk.redBright;
+}
 
 /**
- * Display analysis results in terminal with professional design
- * Uses v0.6.0 methodology with McCabe thresholds, progressive penalties, and no artificial caps
+ * Main reporter function with perfect alignment
  */
 export function reportToTerminal(result: AnalysisResult): void {
   const { context, overview, details } = result;
-
-  // --- En-tête Principal ---
-  console.log(chalk.cyanBright(`
-  ┌──────────────────────────────────────────┐
-  │                                          │
-  │   📊   ${chalk.bold('InsightCode Analysis Report')}   📊  │
-  │                                          │
-  └──────────────────────────────────────────┘
-  `));
-
-  // --- Infos du Projet ---
-  printSectionHeader('Project Overview');
-  console.log(`  ${chalk.bold('Project:')}     ${chalk.cyan(context.project.name)}`);
-  if (context.project.version) {
-    console.log(`  ${chalk.bold('Version:')}     ${chalk.cyan(context.project.version)}`);
-  }
-  console.log(`  ${chalk.bold('Path:')}        ${chalk.dim(context.project.path)}`);
-  console.log(`  ${chalk.bold('Files:')}       ${chalk.cyan(overview.statistics.totalFiles)}`);
-  console.log(`  ${chalk.bold('Total Lines:')} ${chalk.cyan(formatNumber(overview.statistics.totalLOC))}`);
-  console.log(`  ${chalk.bold('Analyzed:')}    ${chalk.dim(new Date(context.analysis.timestamp).toLocaleString())}`);
-  console.log(`  ${chalk.bold('Duration:')}    ${chalk.dim(context.analysis.durationMs + 'ms')}`);
-
-  // --- Score Global ---
-  printSectionHeader('Overall Code Quality Score');
-  const gradeColor = getGradeColor(overview.grade);
-  const scoreColor = getScoreColor(overview.scores.overall);
   
-  console.log(`  ${chalk.bold('Overall Score:')} ${scoreColor(overview.scores.overall + '/100')} ${gradeColor(` ${overview.grade} `)}`);
-  console.log(`  ${chalk.bold('Summary:')} ${chalk.italic(overview.summary)}`);
-
-  // --- Détails des Scores ---
-  printSectionHeader('Score Breakdown');
-  console.log(`  ${chalk.bold('Complexity:')}      ${getScoreColor(overview.scores.complexity)(overview.scores.complexity + '/100')}`);
-  const duplicationPercentage = overview.statistics.avgDuplicationRatio !== undefined 
-    ? formatPercentage(overview.statistics.avgDuplicationRatio) 
-    : '0.0%';
-  console.log(`  ${chalk.bold('Duplication:')}     ${getScoreColor(overview.scores.duplication)(overview.scores.duplication + '/100')} ${chalk.gray(`(${duplicationPercentage}% detected)`)}`);
-  console.log(`  ${chalk.bold('Maintainability:')} ${getScoreColor(overview.scores.maintainability)(overview.scores.maintainability + '/100')}`);
-
-  // --- Statistiques ---
-  printSectionHeader('Project Statistics');
-  console.log(`  ${chalk.bold('Average Complexity:')} ${chalk.cyan(overview.statistics.avgComplexity)}`);
-  console.log(`  ${chalk.bold('Average LOC:')}        ${chalk.cyan(overview.statistics.avgLOC)}`);
+  // Clear and start
+  console.clear();
+  console.log('');
   
-  const avgDuplication = details.reduce((sum, f) => sum + f.metrics.duplicationRatio, 0) / details.length;
-  const avgFunctions = details.reduce((sum, f) => sum + f.metrics.functionCount, 0) / details.length;
-  console.log(`  ${chalk.bold('Average Duplication:')} ${chalk.cyan(Math.round(ratioToPercentage(avgDuplication)) + '%')}`);
-  console.log(`  ${chalk.bold('Average Functions:')}   ${chalk.cyan(Math.round(avgFunctions))}`);
-
-  // --- Critical Files section moved to recommendations below ---
-
-  // --- Recommendations v0.6.0 - Client-side calculation ---
+  // Header Box
+  const projectName = context.project.name;
+  const timestamp = new Date(context.analysis.timestamp).toLocaleString();
   
-  // Critical Files: Top 5 sorted by severity, impact, then health score
-  const criticalFiles = result.details
-    .filter(f => f.healthScore < CRITICAL_HEALTH_SCORE) // Only show truly critical files
-    .sort((a, b) => {
-      // 1. Sort by worst issue severity first
-      const aWorstIssue = a.issues.length > 0 ? a.issues.sort((x, y) => y.excessRatio - x.excessRatio)[0] : null;
-      const bWorstIssue = b.issues.length > 0 ? b.issues.sort((x, y) => y.excessRatio - x.excessRatio)[0] : null;
-      
-      if (aWorstIssue && bWorstIssue) {
-        // Compare by severity priority (critical=3, high=2, medium=1)
-        const aSeverityScore = aWorstIssue.severity === 'critical' ? 3 : aWorstIssue.severity === 'high' ? 2 : 1;
-        const bSeverityScore = bWorstIssue.severity === 'critical' ? 3 : bWorstIssue.severity === 'high' ? 2 : 1;
-        
-        if (aSeverityScore !== bSeverityScore) {
-          return bSeverityScore - aSeverityScore; // Higher severity first
-        }
-        
-        // 2. If same severity, sort by impact (excessRatio)
-        if (Math.abs(aWorstIssue.excessRatio - bWorstIssue.excessRatio) > 0.1) {
-          return bWorstIssue.excessRatio - aWorstIssue.excessRatio; // Higher impact first
-        }
-      }
-      
-      // 3. Finally sort by health score (lower = worse)
-      return a.healthScore - b.healthScore;
-    })
+  console.log(chalk.cyan('┌' + '─'.repeat(78) + '┐'));
+  console.log(chalk.cyan('│') + chalk.bold.white('  INSIGHTCODE ANALYSIS REPORT').padEnd(95) + chalk.cyan('│'));
+  console.log(chalk.cyan('│') + '  ' + padEnd(`Project: ${projectName}`, 76) + chalk.cyan('│'));
+  console.log(chalk.cyan('│') + '  ' + padEnd(`Date: ${timestamp}`, 76) + chalk.cyan('│'));
+  console.log(chalk.cyan('└' + '─'.repeat(78) + '┘'));
+  
+  // Grade Display with aligned metrics
+  console.log(createSectionHeader('QUALITY OVERVIEW'));
+  
+  const gradeColor = getScoreColor(overview.scores.overall);
+  console.log(createAlignedRow('Overall Grade:', `${gradeColor.bold(overview.grade)} (${overview.scores.overall}/100)`));
+  console.log(createAlignedRow('Project Health:', createProgressBar(overview.scores.overall)));
+  console.log('');
+  
+  // Individual Scores - perfectly aligned
+  console.log(createAlignedRow('Complexity Score:', padStart(overview.scores.complexity.toString(), 3) + '/100  ' + createProgressBar(overview.scores.complexity)));
+  console.log(createAlignedRow('Duplication Score:', padStart(overview.scores.duplication.toString(), 3) + '/100  ' + createProgressBar(overview.scores.duplication)));
+  console.log(createAlignedRow('Maintainability:', padStart(overview.scores.maintainability.toString(), 3) + '/100  ' + createProgressBar(overview.scores.maintainability)));
+  
+  // Duplication mode indicator
+  const duplicationModeText = context.analysis.duplicationMode === 'strict' 
+    ? chalk.yellow('Strict (Industry Standards: SonarQube/Google)') 
+    : chalk.blue('Legacy (Permissive for Brownfield)');
+  console.log(createAlignedRow('Duplication Mode:', duplicationModeText));
+  
+  // Statistics - aligned in columns
+  console.log(createSectionHeader('PROJECT STATISTICS'));
+  
+  console.log(createAlignedRow('Files Analyzed:', overview.statistics.totalFiles.toString()));
+  console.log(createAlignedRow('Total Lines:', overview.statistics.totalLOC.toLocaleString()));
+  console.log(createAlignedRow('Average Complexity:', overview.statistics.avgComplexity.toFixed(1)));
+  console.log(createAlignedRow('Average File Size:', overview.statistics.avgLOC.toFixed(0) + ' lines'));
+  
+  const avgDuplication = overview.statistics.avgDuplicationRatio || 0;
+  console.log(createAlignedRow('Average Duplication:', (avgDuplication * 100).toFixed(1) + '%'));
+  
+  // Critical Files - with perfect sub-item alignment
+  const criticalFiles = details
+    .filter(f => f.healthScore < 70)
+    .sort((a, b) => a.healthScore - b.healthScore)
     .slice(0, 5);
   
   if (criticalFiles.length > 0) {
-    printSectionHeader('Critical Files');
+    console.log(createSectionHeader('CRITICAL FILES REQUIRING ATTENTION'));
+    
     criticalFiles.forEach((file, index) => {
-      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.red(file.file)} ${chalk.dim(`(health: ${file.healthScore}/100)`)}`);  
-      if (file.issues.length > 0) {
-        const worstIssue = file.issues.sort((a, b) => b.excessRatio - a.excessRatio)[0];
-        console.log(`      ${chalk.bold('Main Issue:')} ${getIssueDescription(worstIssue)}`);
-        console.log(`      ${chalk.bold('Impact:')} ${worstIssue.excessRatio.toFixed(1)}x over threshold`);
+      const mainIssue = file.issues.sort((a, b) => b.excessRatio - a.excessRatio)[0];
+      
+      console.log(`\n${chalk.red.bold(`${index + 1}.`)} ${chalk.red(formatFilePath(file.file))}`);
+      
+      // Sub-items with consistent arrow alignment
+      console.log(createAlignedRow(
+        `  ${SYMBOLS.arrow} Health:`,
+        `${createProgressBar(file.healthScore, 100, 10)} ${padStart(file.healthScore.toString(), 3)}/100`,
+        COLUMN_CONFIG.subIndent
+      ));
+      
+      if (mainIssue) {
+        console.log(createAlignedRow(
+          `  ${SYMBOLS.arrow} Issue:`,
+          `${mainIssue.type} (${mainIssue.severity})`,
+          COLUMN_CONFIG.subIndent
+        ));
+        console.log(createAlignedRow(
+          `  ${SYMBOLS.arrow} Severity:`,
+          `${mainIssue.excessRatio.toFixed(1)}x threshold`,
+          COLUMN_CONFIG.subIndent
+        ));
+      }
+      
+      if (file.dependencies && file.dependencies.incomingDependencies > 0) {
+        console.log(createAlignedRow(
+          `  ${SYMBOLS.arrow} Impact:`,
+          `${file.dependencies.incomingDependencies} files depend on this`,
+          COLUMN_CONFIG.subIndent
+        ));
       }
     });
   }
   
-  // Quick Wins: Issues sorted by excessRatio (highest impact first)
-  const quickWins = result.details
-    .flatMap(file => 
-      file.issues
-        .filter(issue => issue.severity === 'medium') // Focus on medium issues as quick wins
-        .map(issue => ({ file: file.file, ...issue }))
-    )
-    .sort((a, b) => b.excessRatio - a.excessRatio)
-    .slice(0, 5);
-  
-  if (quickWins.length > 0) {
-    printSectionHeader('Quick Wins');
-    quickWins.forEach((win, index) => {
-      console.log(`  ${chalk.bold(index + 1 + '.')} ${chalk.green(win.file)} - ${chalk.cyan(win.type)}`);
-      console.log(`      ${chalk.bold('Issue:')} ${getIssueDescription(win)}`);
-      console.log(`      ${chalk.bold('Impact:')} ${win.excessRatio.toFixed(1)}x over threshold`);
-    });
+  // Architecture Insights - if available
+  if (hasArchitectureData(details)) {
+    console.log(createSectionHeader('ARCHITECTURE INSIGHTS'));
+    
+    // Hub Files
+    const hubFiles = details
+      .filter(f => f.dependencies && f.dependencies.incomingDependencies > 10)
+      .sort((a, b) => b.dependencies.incomingDependencies - a.dependencies.incomingDependencies)
+      .slice(0, 3);
+    
+    if (hubFiles.length > 0) {
+      console.log(chalk.bold('\nCentral Hub Files:'));
+      hubFiles.forEach(file => {
+        console.log(createAlignedRow(
+          `  ${SYMBOLS.arrow} ${formatFilePath(file.file, 35)}`,
+          `${file.dependencies.incomingDependencies} dependents`,
+          COLUMN_CONFIG.subIndent
+        ));
+      });
+    }
+    
+    // Unstable Files
+    const unstableFiles = details
+      .filter(f => f.dependencies && f.dependencies.instability > 0.8)
+      .slice(0, 3);
+    
+    if (unstableFiles.length > 0) {
+      console.log(chalk.bold('\nUnstable Files (high change risk):'));
+      unstableFiles.forEach(file => {
+        console.log(createAlignedRow(
+          `  ${SYMBOLS.arrow} ${formatFilePath(file.file, 35)}`,
+          `instability: ${(file.dependencies.instability * 100).toFixed(0)}%`,
+          COLUMN_CONFIG.subIndent
+        ));
+      });
+    }
   }
-
-  // --- Résumé des Issues ---
+  
+  // Issues Summary - aligned table
   const allIssues = details.flatMap(f => f.issues);
   if (allIssues.length > 0) {
-    printSectionHeader('Issues Summary');
+    console.log(createSectionHeader('ISSUES SUMMARY'));
     
+    // Group by severity
     const issuesBySeverity = allIssues.reduce((acc, issue) => {
       acc[issue.severity] = (acc[issue.severity] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-
+    
+    // Group by type
     const issuesByType = allIssues.reduce((acc, issue) => {
       acc[issue.type] = (acc[issue.type] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
+    
+    console.log(chalk.bold('\nBy Severity:'));
+    Object.entries(issuesBySeverity)
+      .sort(([a], [b]) => getSeverityOrder(a) - getSeverityOrder(b))
+      .forEach(([severity, count]) => {
+        const color = getSeverityColor(severity);
+        console.log(createAlignedRow(
+          `  ${severity}:`,
+          color(count.toString()),
+          COLUMN_CONFIG.subIndent
+        ));
+      });
+    
+    console.log(chalk.bold('\nBy Type:'));
+    Object.entries(issuesByType)
+      .sort(([, a], [, b]) => b - a)
+      .forEach(([type, count]) => {
+        console.log(createAlignedRow(
+          `  ${type}:`,
+          count.toString(),
+          COLUMN_CONFIG.subIndent
+        ));
+      });
+  }
+  
+  // Recommendations - well formatted
+  console.log(createSectionHeader('ACTIONABLE RECOMMENDATIONS'));
+  
+  const recommendations = generateRecommendations(details);
+  recommendations.slice(0, 5).forEach((rec, index) => {
+    console.log(`\n${chalk.green.bold(`${index + 1}.`)} ${chalk.green(rec.title)}`);
+    console.log(createAlignedRow(
+      `  ${SYMBOLS.arrow} Action:`,
+      rec.description,
+      COLUMN_CONFIG.subIndent
+    ));
+    console.log(createAlignedRow(
+      `  ${SYMBOLS.arrow} Impact:`,
+      `+${rec.impact} points`,
+      COLUMN_CONFIG.subIndent
+    ));
+    console.log(createAlignedRow(
+      `  ${SYMBOLS.arrow} Effort:`,
+      rec.effort,
+      COLUMN_CONFIG.subIndent
+    ));
+  });
+  
+  // Footer
+  console.log('\n' + createSeparator());
+  console.log(chalk.gray(`InsightCode v${context.analysis.toolVersion} • Analysis completed in ${context.analysis.durationMs}ms`));
+  console.log(chalk.gray(`Run with --format=json for detailed data export`));
+}
 
-    console.log(`  ${chalk.bold('By Severity:')}`);
-    Object.entries(issuesBySeverity).forEach(([severity, count]) => {
-      const color = severity === 'critical' ? chalk.red.bold : 
-                   severity === 'high' ? chalk.red : 
-                   severity === 'medium' ? chalk.yellow : chalk.green;
-      console.log(`    ${color(severity.toUpperCase())}: ${count}`);
-    });
+// Helper functions
 
-    console.log(`  ${chalk.bold('By Type:')}`);
-    Object.entries(issuesByType).forEach(([type, count]) => {
-      console.log(`    ${chalk.cyan(type)}: ${count}`);
+function hasArchitectureData(details: FileDetail[]): boolean {
+  return details.some(f => f.dependencies && f.dependencies.incomingDependencies > 0);
+}
+
+function getSeverityOrder(severity: string): number {
+  const order: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
+  return order[severity.toLowerCase()] || 99;
+}
+
+function getSeverityColor(severity: string) {
+  switch (severity.toLowerCase()) {
+    case 'critical': return chalk.red.bold;
+    case 'high': return chalk.red;
+    case 'medium': return chalk.yellow;
+    case 'low': return chalk.green;
+    default: return chalk.gray;
+  }
+}
+
+interface Recommendation {
+  title: string;
+  description: string;
+  impact: number;
+  effort: string;
+}
+
+function generateRecommendations(details: FileDetail[]): Recommendation[] {
+  const recommendations: Recommendation[] = [];
+  
+  // High complexity files
+  const highComplexityFiles = details
+    .filter(f => f.metrics.complexity > 20)
+    .sort((a, b) => b.metrics.complexity - a.metrics.complexity);
+    
+  if (highComplexityFiles.length > 0) {
+    recommendations.push({
+      title: `Refactor ${formatFilePath(highComplexityFiles[0].file, 30)}`,
+      description: 'Split complex functions into smaller units',
+      impact: Math.min(15, highComplexityFiles.length * 3),
+      effort: '2-4 hours'
     });
   }
-
-  // --- Pied de page ---
-  console.log(chalk.dim(`\n  Analysis completed with InsightCode v${context.analysis.toolVersion}`));
-  console.log(chalk.dim(`  Note: v0.6.0 methodology uses McCabe-based thresholds (≤10 low, >20 critical) with progressive penalties (no caps)`));
-  console.log(chalk.dim(`  Weights: Complexity 45% (McCabe research), Maintainability 30% (Martin Clean Code), Duplication 25% (Fowler)`));
-  console.log(chalk.dim(`  Duplication: 8-line literal pattern matching, cross-file exact matches only (not structural similarity)`));
-  console.log(chalk.dim(`  For detailed JSON output, use: insightcode analyze --json`));
+  
+  // Duplication issues
+  const duplicationFiles = details
+    .filter(f => f.metrics.duplicationRatio > 0.1)
+    .sort((a, b) => b.metrics.duplicationRatio - a.metrics.duplicationRatio);
+    
+  if (duplicationFiles.length > 0) {
+    recommendations.push({
+      title: `Extract duplicated code`,
+      description: `${duplicationFiles.length} files have >10% duplication`,
+      impact: Math.min(20, duplicationFiles.length * 5),
+      effort: '3-5 hours'
+    });
+  }
+  
+  // Architectural improvements
+  const hubFiles = details
+    .filter(f => f.dependencies && f.dependencies.incomingDependencies > 15)
+    .sort((a, b) => b.dependencies.incomingDependencies - a.dependencies.incomingDependencies);
+    
+  if (hubFiles.length > 0) {
+    recommendations.push({
+      title: `Decouple ${formatFilePath(hubFiles[0].file, 30)}`,
+      description: 'Reduce coupling with dependency injection',
+      impact: 25,
+      effort: '1-2 days'
+    });
+  }
+  
+  // Large files
+  const largeFiles = details
+    .filter(f => f.metrics.loc > 500)
+    .sort((a, b) => b.metrics.loc - a.metrics.loc);
+    
+  if (largeFiles.length > 0) {
+    recommendations.push({
+      title: `Split large file`,
+      description: `${formatFilePath(largeFiles[0].file, 30)} has ${largeFiles[0].metrics.loc} lines`,
+      impact: 10,
+      effort: '4-6 hours'
+    });
+  }
+  
+  return recommendations.sort((a, b) => {
+    const aRatio = a.impact / (a.effort.includes('day') ? 16 : 4);
+    const bRatio = b.impact / (b.effort.includes('day') ? 16 : 4);
+    return bRatio - aRatio;
+  });
 }
