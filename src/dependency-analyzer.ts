@@ -1,20 +1,17 @@
 // File: src/dependency-analyzer.ts
 
-import { Project, SourceFile, SyntaxKind, ts, Node, CallExpression } from 'ts-morph';
+import { Project, SourceFile } from 'ts-morph';
 import * as path from 'path';
 import * as fs from 'fs';
-import { CachedInputFileSystem, Resolver, ResolverFactory } from 'enhanced-resolve';
 import { 
   AnalysisError, 
   DependencyAnalysisResult, 
   DependencyAnalyzerConfig, 
-  DependencyStatistics, 
-  FileDependencyAnalysis, 
   FileDetail,
   FrameworkHint 
 } from './types';
-import { normalizePath } from './utils';
-
+import { DependencyResolver } from './dependency-resolver';
+import { DependencyGraph } from './dependency-graph';
 
 // Type helper pour la migration
 export type DependencyAnalysisFunction = (
@@ -27,10 +24,10 @@ export type DependencyAnalysisFunction = (
  * Supporte tous les écosystèmes JavaScript/TypeScript modernes.
  */
 export class UniversalDependencyAnalyzer {
-  private readonly projectCache = new Map<string, Project>(); // ✅ Cache par instance au lieu de static
+  private readonly projectCache = new Map<string, Project>();
   private readonly config: Required<DependencyAnalyzerConfig>;
-  private readonly moduleResolver: Resolver;
-  private readonly resolveCache = new Map<string, string | null>();
+  private readonly resolver: DependencyResolver;
+  private readonly graph: DependencyGraph;
   private readonly workspaces: string[];
   private readonly frameworkHints: FrameworkHint[];
 
@@ -65,22 +62,18 @@ export class UniversalDependencyAnalyzer {
       logResolutionErrors: config.logResolutionErrors ?? false,
     };
     
-    // Configuration avancée du résolveur avec support des workspaces
-    this.moduleResolver = ResolverFactory.createResolver({
-      fileSystem: new CachedInputFileSystem(fs, 60000), // Cache 60s pour améliorer les perfs
+    // Initialiser les composants
+    this.resolver = new DependencyResolver(projectRoot, {
       extensions: this.config.extensions,
-      exportsFields: ['exports'],
-      mainFields: ['main', 'module', 'browser'],
-      alias: Object.entries(this.config.aliases).map(([key, value]) => ({
-        name: key,
-        alias: value,
-        onlyModule: false,
-      })),
-      modules: this.getModulesDirectories(),
-      symlinks: this.config.followSymlinks,
-      preferRelative: true,
-      conditionNames: ['node', 'import', 'require', 'default'],
+      aliases: this.config.aliases,
+      followSymlinks: this.config.followSymlinks,
+      logResolutionErrors: this.config.logResolutionErrors,
     });
+    
+    this.graph = new DependencyGraph(
+      this.config.hubFileThreshold,
+      this.config.logResolutionErrors
+    );
   }
 
   /**
@@ -99,715 +92,240 @@ export class UniversalDependencyAnalyzer {
     try {
       return await Promise.race([analysisPromise, timeoutPromise]);
     } catch (error) {
-      const errorMessage = (error as Error).message;
-      console.error(`❌ Critical analysis error: ${errorMessage}`);
-      
-      // Log additional context for debugging
-      if (this.config.logResolutionErrors) {
-        console.error(`   Project root: ${this.config.projectRoot}`);
-        console.error(`   Files count: ${files.length}`);
-        console.error(`   Error type: ${this.classifyError(error as Error)}`);
-      }
-      
-      // Return partial results with error information for debugging
-      const partialResult: DependencyAnalysisResult = {
+      const analysisError: AnalysisError = {
+        file: 'global',
+        error: error instanceof Error ? error.message : String(error),
+        phase: 'analyze',
+      };
+
+      return {
         incomingDependencyCount: new Map(),
         dependencyGraph: new Map(),
-        circularDependencies: [],
-        errors: [{
-          file: 'global',
-          error: errorMessage,
-          phase: 'analyze',
-        }],
         statistics: this.getEmptyStatistics(),
         fileAnalyses: new Map(),
+        circularDependencies: [],
+        errors: [analysisError],
       };
-      
-      // In debug mode, still throw to prevent silent failures
-      if (this.config.logResolutionErrors) {
-        throw new Error(`Analysis failed: ${errorMessage}. Enable logging with --verbose for details.`);
-      }
-      
-      return partialResult;
     }
   }
 
   /**
-   * Logique d'analyse interne optimisée.
+   * Logique d'analyse principale, optimisée pour les gros projets.
    */
   private async performAnalysis(files: FileDetail[], astData: import('./ast-builder').ASTBuildResult): Promise<DependencyAnalysisResult> {
     const startTime = Date.now();
     const errors: AnalysisError[] = [];
     
-    if (this.config.logResolutionErrors) {
-      console.log(`🚀 Starting dependency analysis for ${files.length} files`);
-      console.log(`   Project root: ${this.config.projectRoot}`);
-    }
-
-    // Filtrage intelligent des fichiers
+    // ✅ Filtrage des fichiers valides - basé sur la liste fournie
     const validFiles = files.filter(file => {
-      // Estimation de la taille réelle
-      const estimatedSize = file.metrics.loc * 80;
-      if (estimatedSize > this.config.maxFileSize) {
+      const filePath = file.file;
+      
+      if (this.isGeneratedFile(filePath)) {
+        if (this.config.logResolutionErrors) {
+          console.log(`🚫 Skipping generated file: ${filePath}`);
+        }
+        return false;
+      }
+      
+      // Vérifier que le fichier existe physiquement et respecte la taille max
+      try {
+        const absolutePath = path.isAbsolute(filePath) 
+          ? filePath 
+          : path.join(this.config.projectRoot, filePath);
+        const stats = fs.statSync(absolutePath);
+        
+        if (stats.size > this.config.maxFileSize) {
+          errors.push({
+            file: filePath,
+            error: `File too large: ${Math.round(stats.size / 1024)}KB > ${Math.round(this.config.maxFileSize / 1024)}KB`,
+            phase: 'read',
+          });
+          return false;
+        }
+        
+        return true;
+      } catch (e) {
         errors.push({
-          file: file.file,
-          error: `File too large: ${file.metrics.loc} lines (estimated ${(estimatedSize / 1024 / 1024).toFixed(2)}MB)`,
+          file: filePath,
+          error: `File access error: ${(e as Error).message}`,
           phase: 'read',
         });
-        if (this.config.logResolutionErrors) {
-          console.log(`❌ File filtered out (too large): ${file.file}`);
-        }
         return false;
       }
-      
-      if (this.config.logResolutionErrors) {
-        console.log(`✅ File passed filter: ${file.file}`);
-      }
-      
-      // Ignorer les fichiers générés
-      if (this.isGeneratedFile(file.file)) {
-        if (this.config.logResolutionErrors) {
-          console.log(`❌ File filtered out (generated): ${file.file}`);
-        }
-        return false;
-      }
-      
-      return true;
     });
 
+    // Normaliser tous les chemins de fichiers dans un Set pour la recherche rapide
     const filePaths = new Set(validFiles.map(f => f.file)); // Already normalized
-    const incomingDependencyCount = new Map<string, number>();
-    const dependencyGraph = new Map<string, Set<string>>();
-    
-    filePaths.forEach(path => {
-      incomingDependencyCount.set(path, 0);
-      dependencyGraph.set(path, new Set());
-    });
 
-    // Reuse existing AST - no re-parsing needed!
+    if (this.config.logResolutionErrors) {
+      console.log(`\n🔍 Starting dependency analysis for ${validFiles.length} files...`);
+      console.log(`   Total files available in AST: ${astData.files.length}`);
+    }
+
+    // Construire le project et analyser les fichiers
     const sourceFiles = astData.files.map(f => f.sourceFile);
     
-    // Create simple mapping SourceFile → normalized path
-    const pathMap = new Map<SourceFile, string>();
-    astData.files.forEach(f => pathMap.set(f.sourceFile, f.relativePath));
+    // Initialiser le graphe avec tous les fichiers valides
+    for (const file of validFiles) {
+      this.graph.addNode(file.file);
+    }
 
-    // Analyse parallèle avec gestion de la concurrence
-    const concurrency = Math.min(10, sourceFiles.length);
-    const chunks = this.chunkArray(sourceFiles, Math.ceil(sourceFiles.length / concurrency));
+    // Analyser les fichiers en chunks pour éviter la surcharge mémoire
+    const chunkSize = Math.max(1, Math.min(50, Math.ceil(validFiles.length / 10)));
+    const chunks = this.chunkArray(validFiles, chunkSize);
     
-    await Promise.all(chunks.map(chunk =>
-      this.analyzeChunk(chunk, pathMap, filePaths, incomingDependencyCount, dependencyGraph, errors)
-    ));
+    let processedFiles = 0;
+    
+    if (this.config.logResolutionErrors) {
+      console.log(`🔄 Processing ${chunks.length} chunks of ~${chunkSize} files each...`);
+    }
 
-    const statistics = this.calculateStatistics(dependencyGraph, incomingDependencyCount);
-    const circularDependencies = this.config.analyzeCircularDependencies
-      ? this.detectCircularDependencies(dependencyGraph)
+    for (let i = 0; i < chunks.length; i++) {
+      const chunk = chunks[i];
+      
+      if (this.config.logResolutionErrors && chunks.length > 5) {
+        console.log(`  📦 Processing chunk ${i + 1}/${chunks.length} (${chunk.length} files)`);
+      }
+      
+      try {
+        const chunkResults = await this.analyzeChunk(chunk, sourceFiles, filePaths, errors);
+        processedFiles += chunkResults;
+      } catch (error) {
+        errors.push({
+          file: `chunk-${i}`,
+          error: error instanceof Error ? error.message : String(error),
+          phase: 'analyze',
+        });
+      }
+    }
+
+    // Calculer les dépendances circulaires
+    const circularDependencies = this.config.analyzeCircularDependencies 
+      ? this.graph.detectCycles()
       : [];
 
-    const fileAnalyses = this.calculateFileAnalyses(
-      validFiles,
-      dependencyGraph, 
-      incomingDependencyCount, 
-      circularDependencies
-    );
-
-    const duration = Date.now() - startTime;
-    if (this.config.logResolutionErrors) {
-      console.log(
-        `Analysis completed in ${duration}ms. ` +
-        `Analyzed ${sourceFiles.length} files with ${errors.length} errors. ` +
-        `Cache hit rate: ${this.getCacheHitRate()}%`
-      );
-    }
-
-    // Nettoyer le cache de résolution après l'analyse
-    this.resolveCache.clear();
-
-    return { 
-      incomingDependencyCount, 
-      dependencyGraph, 
-      circularDependencies, 
-      errors, 
-      statistics, 
-      fileAnalyses 
-    };
-  }
-
-  /**
-   * Analyse un groupe de fichiers sources.
-   */
-  private async analyzeChunk(
-    sourceFiles: SourceFile[],
-    pathMap: Map<SourceFile, string>,
-    filePaths: Set<string>,
-    incomingDependencyCount: Map<string, number>,
-    dependencyGraph: Map<string, Set<string>>,
-    errors: AnalysisError[]
-  ): Promise<void> {
-    for (const sourceFile of sourceFiles) {
-      try {
-        if (this.config.logResolutionErrors) {
-          console.log(`🔄 Processing source file: ${sourceFile.getFilePath()}`);
-        }
-        await this.analyzeSourceFile(sourceFile, pathMap, filePaths, incomingDependencyCount, dependencyGraph);
-      } catch (err) {
-        const error = err as Error;
-        const errorType = this.classifyError(error);
-        
-        errors.push({
-          file: sourceFile.getFilePath(),
-          error: `[${errorType}] ${error.message}`,
-          phase: 'analyze'
-        });
-      }
-    }
-  }
-
-  /**
-   * Analyse un fichier source avec extraction complète des dépendances.
-   * Amélioré pour capturer tous les types d'imports.
-   */
-  private async analyzeSourceFile(
-    sourceFile: SourceFile,
-    pathMap: Map<SourceFile, string>,
-    filePaths: Set<string>,
-    incomingDependencyCount: Map<string, number>,
-    dependencyGraph: Map<string, Set<string>>
-  ): Promise<void> {
-    // Use normalized path from Single Source of Truth
-    const currentFile = pathMap.get(sourceFile) || 'unknown-file';
-    const importSpecifiers = new Set<string>();
-    
-    // Debug: vérifier si le fichier est parsé correctement
-    if (this.config.logResolutionErrors) {
-      console.log(`📄 Analyzing file: ${currentFile}`);
-      console.log(`   Import declarations found: ${sourceFile.getImportDeclarations().length}`);
-    }
-
-    // 1. Imports statiques (incluant import type)
-    sourceFile.getImportDeclarations().forEach(decl => {
-      const specifier = decl.getModuleSpecifierValue();
-      importSpecifiers.add(specifier);
-      
-      // Debug basique - logger TOUS les imports
-      if (this.config.logResolutionErrors) {
-        console.log(`📂 Import found in ${currentFile}: "${specifier}"`);
-      }
-      
-      // Debug pour les imports de workspace
-      if (this.config.logResolutionErrors && (specifier.startsWith('shared/') || specifier.startsWith('react-reconciler/'))) {
-        console.log(`🔍 Detected workspace import in ${currentFile}: ${specifier} (type-only: ${decl.isTypeOnly()})`);
-      }
-      
-      // Debug pour les imports de type
-      if (this.config.logResolutionErrors && decl.isTypeOnly()) {
-        console.log(`📝 Type-only import in ${currentFile}: ${specifier}`);
-      }
-    });
-
-    // 2. Exports avec source
-    sourceFile.getExportDeclarations().forEach(decl => {
-      const specifier = decl.getModuleSpecifierValue();
-      if (specifier) {
-        importSpecifiers.add(specifier);
-      }
-    });
-
-    // 4. Imports dynamiques et require() si activé
-    if (this.config.analyzeDynamicImports) {
-      this.extractDynamicImports(sourceFile, importSpecifiers);
-    }
-
-    // Log de debug pour les fichiers suspects
-    if (this.config.logResolutionErrors && currentFile.includes('types')) {
-      console.log(`\n🔍 Analyzing ${currentFile}:`);
-      console.log(`  Found ${importSpecifiers.size} import specifiers`);
-    }
-
-    // 5. Résolution parallèle avec cache
-    const resolutionPromises = Array.from(importSpecifiers).map(async specifier => {
-      const resolved = await this.resolveModulePathWithCache(specifier, currentFile);
-      
-      if (this.config.logResolutionErrors && specifier.startsWith('shared/')) {
-        console.log(`🔍 Resolving workspace import "${specifier}": ${resolved ? `"${resolved}"` : 'NOT RESOLVED'}`);
-      }
-      
-      // Debug: log les résolutions pour les fichiers types
-      if (this.config.logResolutionErrors && (specifier.includes('types') || resolved?.includes('types'))) {
-        console.log(`  📌 "${specifier}" => ${resolved ? `"${resolved}"` : 'NOT RESOLVED'}`);
-        if (resolved && !filePaths.has(resolved)) {
-          console.log(`    ⚠️  Resolved file NOT in filePaths!`);
-          // Chercher des fichiers similaires
-          const similar = Array.from(filePaths).filter(f => f.includes(path.basename(resolved)));
-          if (similar.length > 0) {
-            console.log(`    💡 Similar files in filePaths:`, similar);
-          }
-        }
-      }
-      
-      return resolved;
-    });
-    
-    const allResolved = await Promise.all(resolutionPromises);
-    const resolvedPaths = allResolved
-      .filter((p): p is string => p !== null && filePaths.has(p));
-    
-    // Debug détaillé des chemins pour React
-    if (this.config.logResolutionErrors && currentFile.includes('ReactHooks')) {
-      console.log(`\n🔍 DETAILED DEBUG for ${currentFile}:`);
-      console.log(`   allResolved count: ${allResolved.filter(p => p !== null).length}`);
-      console.log(`   filePaths size: ${filePaths.size}`);
-      
-      allResolved.forEach((resolved, i) => {
-        if (resolved && (resolved.includes('shared') || resolved.includes('react-reconciler'))) {
-          const inFilePaths = filePaths.has(resolved);
-          console.log(`   [${i}] "${resolved}" -> in filePaths: ${inFilePaths}`);
-          
-          if (!inFilePaths) {
-            // Chercher des chemins similaires
-            const similar = Array.from(filePaths).filter(fp => 
-              fp.includes('shared') && fp.includes(path.basename(resolved))
-            );
-            if (similar.length > 0) {
-              console.log(`       Similar in filePaths: ${similar[0]}`);
-            }
-          }
-        }
-      });
-      
-      console.log(`   Final resolvedPaths: ${resolvedPaths.length}`);
-    }
-
-    // 6. Mise à jour du graphe
-    for (const resolvedPath of resolvedPaths) {
-      this.addDependency(currentFile, resolvedPath, incomingDependencyCount, dependencyGraph);
-    }
-
-    // Debug final
-    if (this.config.logResolutionErrors && currentFile.includes('types')) {
-      const deps = dependencyGraph.get(currentFile) || new Set();
-      console.log(`  ✅ Final dependencies from ${currentFile}: ${deps.size} files`);
-    }
-  }
-
-  /**
-   * Extrait les imports dynamiques d'un fichier source.
-   */
-  private extractDynamicImports(sourceFile: SourceFile, importSpecifiers: Set<string>): void {
-    sourceFile.forEachDescendant((node) => {
-      if (!Node.isCallExpression(node)) return;
-      
-      const expression = node.getExpression();
-      const firstArg = node.getArguments()[0];
-      
-      if (!Node.isStringLiteral(firstArg)) return;
-      
-      const isImport = expression.getKind() === ts.SyntaxKind.ImportKeyword;
-      const isRequire = Node.isIdentifier(expression) && expression.getText() === 'require';
-      
-      if (isImport || isRequire) {
-        importSpecifiers.add(firstArg.getLiteralValue());
-      }
-    });
-  }
-
-  /**
-   * Résolution de module avec cache et debug amélioré.
-   */
-  private async resolveModulePathWithCache(
-    importPath: string, 
-    importingFile: string
-  ): Promise<string | null> {
-    const cacheKey = `${importingFile}:${importPath}`;
-    
-    if (this.resolveCache.has(cacheKey)) {
-      return this.resolveCache.get(cacheKey)!;
-    }
-    
-    const result = await this.resolveModulePath(importPath, importingFile);
-    
-    // Log spécial pour les imports suspects
-    if (this.config.logResolutionErrors && importPath.includes('types')) {
-      console.log(`📍 Resolution: "${importPath}" from "${importingFile}" => ${result || 'NOT FOUND'}`);
-    }
-    
-    this.resolveCache.set(cacheKey, result);
-    return result;
-  }
-
-  /**
-   * Résolution de module robuste avec enhanced-resolve.
-   */
-  private async resolveModulePath(
-    importPath: string, 
-    importingFile: string
-  ): Promise<string | null> {
-    // Handle TypeScript imports with .js extension (ESM pattern)
-    let adjustedImportPath = importPath;
-    if (importPath.endsWith('.js') && importPath.startsWith('.')) {
-      // Try without extension first (enhanced-resolve will add extensions)
-      adjustedImportPath = importPath.slice(0, -3);
-    }
-    
-    return new Promise((resolve) => {
-      const context = {};
-      const lookupStartPath = path.dirname(this.getAbsolutePath(importingFile));
-      const resolveContext = {};
-
-      this.moduleResolver.resolve(context, lookupStartPath, adjustedImportPath, resolveContext, (err, result) => {
-        if (err || typeof result !== 'string') {
-          // Logger les erreurs de résolution pour le debug (sauf pour les modules natifs connus)
-          const isNodeBuiltin = this.isNodeBuiltinModule(importPath);
-          if (!isNodeBuiltin && err && this.config.logResolutionErrors) {
-            console.log(`❌ Failed to resolve "${importPath}" from "${importingFile}": ${err.message}`);
-          }
-          // Debug workspace imports spécifiquement
-          if (this.config.logResolutionErrors && (importPath.startsWith('shared/') || importPath.startsWith('react-reconciler/'))) {
-            console.log(`🔍 Workspace import "${importPath}" failed from "${importingFile}"`);
-            console.log(`   Available aliases:`, Object.keys(this.config.aliases));
-          }
-          return resolve(null);
-        }
-
-        // Vérifier que c'est un fichier réel et non un module natif
-        try {
-          const stats = fs.statSync(result);
-          if (!stats.isFile()) {
-            return resolve(null);
-          }
-        } catch {
-          return resolve(null);
-        }
-
-        // Convert to relative normalized path
-        const relativePath = normalizePath(path.relative(this.config.projectRoot, result));
-        resolve(relativePath);
-      });
-    });
-  }
-
-  /**
-   * Vérifie si un module est un module natif Node.js.
-   */
-  private isNodeBuiltinModule(moduleName: string): boolean {
-    const builtins = [
-      'fs', 'path', 'http', 'https', 'crypto', 'os', 'util', 'stream',
-      'buffer', 'events', 'url', 'querystring', 'child_process', 'cluster',
-      'dgram', 'dns', 'net', 'readline', 'repl', 'tls', 'tty', 'vm', 'zlib',
-      'assert', 'console', 'constants', 'domain', 'punycode', 'process'
-    ];
-    
-    const name = moduleName.startsWith('node:') 
-      ? moduleName.slice(5) 
-      : moduleName;
-    
-    return builtins.includes(name);
-  }
-
-  /**
-   * Ajoute une dépendance au graphe.
-   */
-  private addDependency(
-    from: string, 
-    to: string, 
-    incomingDependencyCount: Map<string, number>, 
-    dependencyGraph: Map<string, Set<string>>
-  ): void {
-    if (from === to) return;
-
-    const dependencies = dependencyGraph.get(from);
-    if (dependencies && !dependencies.has(to)) {
-      dependencies.add(to);
-      incomingDependencyCount.set(to, (incomingDependencyCount.get(to) ?? 0) + 1);
-      
-      if (this.config.logResolutionErrors && (from.includes('ReactAct') || to.includes('shared'))) {
-        console.log(`🔗 Added dependency: ${from} -> ${to}`);
-      }
-    }
-  }
-
-  /**
-   * Détection optimisée des dépendances circulaires.
-   */
-  private detectCircularDependencies(dependencyGraph: Map<string, Set<string>>): string[][] {
-    const cycles: string[][] = [];
-    const visited = new Set<string>();
-    const recursionStack = new Set<string>();
-    const pathStack: string[] = [];
-    const cycleSignatures = new Set<string>();
-
-    const dfs = (node: string): void => {
-      visited.add(node);
-      recursionStack.add(node);
-      pathStack.push(node);
-
-      for (const dep of dependencyGraph.get(node) ?? []) {
-        if (!visited.has(dep)) {
-          dfs(dep);
-        } else if (recursionStack.has(dep)) {
-          const cycleStart = pathStack.indexOf(dep);
-          if (cycleStart !== -1) {
-            const cycle = pathStack.slice(cycleStart);
-            const signature = this.getCycleSignature(cycle);
-            
-            if (!cycleSignatures.has(signature)) {
-              cycles.push(this.normalizeCycle(cycle));
-              cycleSignatures.add(signature);
-            }
-          }
-        }
-      }
-
-      recursionStack.delete(node);
-      pathStack.pop();
-    };
-
-    for (const node of dependencyGraph.keys()) {
-      if (!visited.has(node)) {
-        dfs(node);
-      }
-    }
-    
-    return cycles;
-  }
-
-  /**
-   * Génère une signature unique pour un cycle.
-   */
-  private getCycleSignature(cycle: string[]): string {
-    const normalized = this.normalizeCycle(cycle);
-    return normalized.join(' -> ');
-  }
-
-  /**
-   * Normalise un cycle pour avoir une représentation canonique.
-   */
-  private normalizeCycle(cycle: string[]): string[] {
-    if (cycle.length === 0) return [];
-    
-    let minIndex = 0;
-    for (let i = 1; i < cycle.length; i++) {
-      if (cycle[i] < cycle[minIndex]) {
-        minIndex = i;
-      }
-    }
-    
-    return [...cycle.slice(minIndex), ...cycle.slice(0, minIndex)];
-  }
-
-  /**
-   * Calculate detailed statistics.
-   */
-  private calculateStatistics(
-    dependencyGraph: Map<string, Set<string>>, 
-    incomingDependencyCount: Map<string, number>
-  ): DependencyStatistics {
-    const totalFiles = dependencyGraph.size;
-    let totalImports = 0;
-    let maxImports = { file: '', count: 0 };
-    const isolatedFiles: string[] = [];
-    
-    for (const [file, deps] of dependencyGraph.entries()) {
-      const depsCount = deps.size;
-      totalImports += depsCount;
-      
-      if (depsCount > maxImports.count) {
-        maxImports = { file, count: depsCount };
-      }
-      
-      if (depsCount === 0 && (incomingDependencyCount.get(file) ?? 0) === 0) {
-        isolatedFiles.push(file);
-      }
-    }
-    
-    const hubFiles = Array.from(incomingDependencyCount.entries())
-      .filter(([, score]) => score > this.config.hubFileThreshold)
-      .sort(([, a], [, b]) => b - a)
-      .map(([file]) => file);
 
     return {
-      totalFiles,
-      totalImports,
-      averageImportsPerFile: totalFiles > 0 ? totalImports / totalFiles : 0,
-      maxImports,
-      isolatedFiles,
-      hubFiles,
+      incomingDependencyCount: this.graph.getIncomingDependencyCount(),
+      dependencyGraph: this.graph.getDependencyGraph(),
+      statistics: this.graph.getStatistics(),
+      fileAnalyses: this.graph.calculateFileAnalyses(validFiles, circularDependencies),
+      circularDependencies,
+      errors,
     };
   }
 
   /**
-   * Calcule les métriques détaillées pour chaque fichier.
-   * Assure la cohérence entre incomingDependencies et incomingDependencyCount.
+   * Analyse un chunk de fichiers de manière parallèle.
    */
-  private calculateFileAnalyses(
-    files: FileDetail[],
-    dependencyGraph: Map<string, Set<string>>,
-    incomingDependencyCount: Map<string, number>,
-    circularDependencies: string[][]
-  ): Map<string, FileDependencyAnalysis> {
-    const analyses = new Map<string, FileDependencyAnalysis>();
+  private async analyzeChunk(
+    files: FileDetail[], 
+    sourceFiles: SourceFile[], 
+    filePaths: Set<string>, 
+    errors: AnalysisError[]
+  ): Promise<number> {
+    let processedCount = 0;
     
-    const usageRanks = this.calculateAllUsageRanks(incomingDependencyCount);
-    const filesInCycles = new Set(circularDependencies.flat());
+    const analysisPromises = files.map(async (file) => {
+      try {
+        await this.analyzeSourceFile(file, sourceFiles, filePaths, errors);
+        processedCount++;
+      } catch (error) {
+        errors.push({
+          file: file.file,
+          error: error instanceof Error ? error.message : String(error),
+          phase: 'analyze',
+        });
+      }
+    });
+    
+    await Promise.all(analysisPromises);
+    return processedCount;
+  }
 
-    // Debug: vérifier la cohérence
-    if (this.config.logResolutionErrors) {
-      console.log('\n📊 Metrics calculation:');
-      console.log(`  Total files: ${files.length}`);
-      console.log(`  Files in dependency graph: ${dependencyGraph.size}`);
-      console.log(`  Files with incoming dependency count: ${incomingDependencyCount.size}`);
+  /**
+   * Analyse un fichier source et construit le graphe de dépendances.
+   */
+  private async analyzeSourceFile(
+    file: FileDetail, 
+    sourceFiles: SourceFile[], 
+    filePaths: Set<string>, 
+    errors: AnalysisError[]
+  ): Promise<void> {
+    const filePath = file.file; // Already normalized
+    
+    // Trouver le SourceFile correspondant
+    const sourceFile = sourceFiles.find(sf => {
+      const sfPath = sf.getFilePath();
+      const relativePath = path.relative(this.config.projectRoot, sfPath).replace(/\\\\/g, '/');
+      return relativePath === filePath;
+    });
+    
+    if (!sourceFile) {
+      errors.push({
+        file: filePath,
+        error: 'Source file not found in AST',
+        phase: 'parse',
+      });
+      return;
     }
 
-    for (const file of files) {
-      const filePath = file.file; // Already normalized
-      const outgoingDependencies = dependencyGraph.get(filePath)?.size ?? 0;
-      
-      // Utiliser directement l'impact score comme incoming count
-      const incomingDependencies = incomingDependencyCount.get(filePath) ?? 0;
-      const totalCoupling = incomingDependencies + outgoingDependencies;
-
-      // Calcul des métriques avancées
-      const instability = totalCoupling === 0 ? 0 : outgoingDependencies / totalCoupling;
-      const dependencies = dependencyGraph.get(filePath) ?? new Set();
-      const cohesionScore = this.calculateCohesion(filePath, dependencies);
-
-      const analysis: FileDependencyAnalysis = {
-        outgoingDependencies: outgoingDependencies,
-        incomingDependencies: incomingDependencies, // Directement depuis incomingDependencyCount
-        instability: parseFloat(instability.toFixed(2)),
-        cohesionScore: parseFloat(cohesionScore.toFixed(2)),
-        percentileUsageRank: usageRanks.get(filePath) ?? 0,
-        isInCycle: filesInCycles.has(filePath),
-      };
-
-      // Debug pour les fichiers suspects
-      if (this.config.logResolutionErrors && filePath.includes('types')) {
-        console.log(`\n  📄 ${filePath}:`);
-        console.log(`    Incoming: ${incomingDependencies}`);
-        console.log(`    Outgoing: ${outgoingDependencies}`);
-        console.log(`    Percentile: ${analysis.percentileUsageRank}%`);
+    // Extraire les imports
+    const imports = this.resolver.extractImports(sourceFile);
+    
+    // Résoudre tous les imports
+    const resolutionPromises = imports.map(async importInfo => {
+      try {
+        const resolved = await this.resolver.resolveImport(importInfo.importPath, filePath);
         
-        // Lister qui importe ce fichier
-        if (incomingDependencies === 0) {
-          console.log(`    ⚠️  No incoming dependencies detected!`);
-          // Chercher dans le graphe qui pourrait l'importer
-          let importers = [];
-          for (const [from, deps] of dependencyGraph.entries()) {
-            if (deps.has(filePath)) {
-              importers.push(from);
+        if (resolved && filePaths.has(resolved)) {
+          // ✅ C'est un fichier de notre projet
+          this.graph.addEdge(filePath, resolved);
+        } else if (resolved && !filePaths.has(resolved)) {
+          // Import résolu mais vers un fichier externe au scope analysé
+          if (this.config.logResolutionErrors) {
+            const similar = Array.from(filePaths).filter(f => f.includes(path.basename(resolved)));
+            if (similar.length > 0) {
+              console.log(`🔍 External resolved import \"${importInfo.importPath}\" => \"${resolved}\" (not in scope)`);
+              console.log(`   Similar files in scope: ${similar.slice(0, 3).join(', ')}`);
             }
           }
-          if (importers.length > 0) {
-            console.log(`    🐛 BUG: Found importers not counted:`, importers);
+        } else if (!resolved) {
+          // Import non résolu - essayer de trouver des fichiers similaires
+          if (this.config.logResolutionErrors) {
+            console.log(`❌ Unresolved import \"${importInfo.importPath}\" from \"${filePath}\"`);
+            
+            // Chercher des fichiers similaires pour aider au debug
+            const importBasename = path.basename(importInfo.importPath).replace(/\\.(js|ts|jsx|tsx)$/, '');
+            
+            if (importBasename.length > 2) {
+              const similar = Array.from(filePaths).filter(fp => 
+                path.basename(fp).toLowerCase().includes(importBasename.toLowerCase()) ||
+                importBasename.toLowerCase().includes(path.basename(fp, path.extname(fp)).toLowerCase())
+              );
+              
+              if (similar.length > 0) {
+                console.log(`   💡 Similar files found: ${similar.slice(0, 3).join(', ')}`);
+                
+                // Si on trouve exactement un match, créer la dépendance
+                if (similar.length === 1) {
+                  console.log(`   ✅ Auto-linking to: ${similar[0]}`);
+                  this.graph.addEdge(filePath, similar[0]);
+                }
+              }
+            }
           }
         }
-      }
-
-      analyses.set(filePath, analysis);
-    }
-
-    return analyses;
-  }
-
-  /**
-   * Calcule le score de cohésion basé sur la proximité des dépendances.
-   */
-  private calculateCohesion(file: string, dependencies: Set<string>): number {
-    if (dependencies.size === 0) return 1;
-    
-    const fileParts = file.split('/');
-    let cohesionSum = 0;
-    
-    for (const dep of dependencies) {
-      const depParts = dep.split('/');
-      const commonParts = this.countCommonPathParts(fileParts, depParts);
-      cohesionSum += commonParts / Math.max(fileParts.length, depParts.length);
-    }
-    
-    return cohesionSum / dependencies.size;
-  }
-
-  /**
-   * Compte le nombre de parties communes dans deux chemins.
-   */
-  private countCommonPathParts(path1: string[], path2: string[]): number {
-    let count = 0;
-    const minLength = Math.min(path1.length, path2.length);
-    
-    for (let i = 0; i < minLength; i++) {
-      if (path1[i] === path2[i]) {
-        count++;
-      } else {
-        break;
-      }
-    }
-    
-    return count;
-  }
-
-  /**
-   * Calcule les rangs d'utilisation en percentiles.
-   * Corrigé pour gérer correctement les scores de 0.
-   */
-  private calculateAllUsageRanks(incomingDependencyCount: Map<string, number>): Map<string, number> {
-    const ranks = new Map<string, number>();
-    
-    if (incomingDependencyCount.size === 0) {
-      return ranks;
-    }
-
-    // Cas spécial : un seul fichier
-    if (incomingDependencyCount.size === 1) {
-      const filePath = Array.from(incomingDependencyCount.keys())[0];
-      ranks.set(filePath, 0);
-      return ranks;
-    }
-
-    // Trier par score d'impact
-    const sortedFiles = Array.from(incomingDependencyCount.entries())
-      .sort(([, a], [, b]) => a - b);
-    
-    // Grouper les fichiers par score pour gérer les égalités
-    const scoreGroups = new Map<number, string[]>();
-    for (const [file, score] of sortedFiles) {
-      if (!scoreGroups.has(score)) {
-        scoreGroups.set(score, []);
-      }
-      scoreGroups.get(score)!.push(file);
-    }
-
-    // Assigner les rangs en gérant les égalités
-    let currentRank = 0;
-    const totalFiles = incomingDependencyCount.size;
-    
-    for (const [, files] of Array.from(scoreGroups.entries()).sort(([a], [b]) => a - b)) {
-      // Tous les fichiers avec le même score ont le même rang
-      const percentile = Math.round((currentRank / (totalFiles - 1)) * 100);
-      
-      for (const file of files) {
-        ranks.set(file, percentile);
-      }
-      
-      currentRank += files.length;
-    }
-
-    // Debug log pour les fichiers suspects
-    if (this.config.logResolutionErrors) {
-      const suspiciousFiles = Array.from(ranks.entries())
-        .filter(([file, rank]) => {
-          const score = incomingDependencyCount.get(file) || 0;
-          return score === 0 && rank > 50;
-        });
-      
-      if (suspiciousFiles.length > 0) {
-        console.warn('⚠️  Suspicious percentile ranks detected:');
-        suspiciousFiles.forEach(([file, rank]) => {
-          console.warn(`  ${file}: rank=${rank}% but score=0`);
+      } catch (error) {
+        errors.push({
+          file: filePath,
+          error: `Failed to resolve \"${importInfo.importPath}\": ${(error as Error).message}`,
+          phase: 'analyze',
         });
       }
-    }
-
-    return ranks;
+    });
+    
+    await Promise.all(resolutionPromises);
   }
 
   /**
@@ -1023,21 +541,6 @@ export class UniversalDependencyAnalyzer {
   }
 
   /**
-   * Obtient les répertoires de modules en incluant les workspaces.
-   */
-  private getModulesDirectories(): string[] {
-    const modules = ['node_modules'];
-    
-    // Ajouter les node_modules des workspaces
-    for (const workspace of this.workspaces) {
-      const workspaceModules = path.join(workspace, 'node_modules');
-      modules.push(workspaceModules);
-    }
-    
-    return modules;
-  }
-
-  /**
    * Vérifie si un fichier est généré automatiquement.
    */
   private isGeneratedFile(filePath: string): boolean {
@@ -1057,20 +560,6 @@ export class UniversalDependencyAnalyzer {
     return generatedPatterns.some(pattern => pattern.test(filePath));
   }
 
-  /**
-   * Classifie le type d'erreur pour un meilleur debugging.
-   */
-  private classifyError(error: Error): string {
-    const message = error.message.toLowerCase();
-    
-    if (error instanceof SyntaxError) return 'syntax';
-    if (message.includes('resolve')) return 'resolution';
-    if (message.includes('timeout')) return 'timeout';
-    if (message.includes('memory')) return 'memory';
-    if (message.includes('permission')) return 'permission';
-    
-    return 'unknown';
-  }
 
   /**
    * Divise un tableau en chunks pour le traitement parallèle.
@@ -1083,27 +572,7 @@ export class UniversalDependencyAnalyzer {
     return chunks;
   }
 
-  /**
-   * Calcule le taux de hit du cache.
-   */
-  private getCacheHitRate(): number {
-    if (this.resolveCache.size === 0) return 0;
-    
-    let hits = 0;
-    for (const value of this.resolveCache.values()) {
-      if (value !== null) hits++;
-    }
-    
-    return Math.round((hits / this.resolveCache.size) * 100);
-  }
-
-  private getAbsolutePath(filePath: string): string {
-    return path.isAbsolute(filePath) 
-      ? filePath 
-      : path.resolve(this.config.projectRoot, filePath);
-  }
-
-  private getEmptyStatistics(): DependencyStatistics {
+  private getEmptyStatistics() {
     return {
       totalFiles: 0,
       totalImports: 0,
@@ -1119,5 +588,6 @@ export class UniversalDependencyAnalyzer {
    */
   public clearCache(): void {
     this.projectCache.clear();
+    this.resolver.clearCache();
   }
 }
