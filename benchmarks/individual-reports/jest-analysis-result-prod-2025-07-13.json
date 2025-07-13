@@ -9461,7 +9461,7 @@
       "analysis": {
         "timestamp": "2025-07-13T00:47:25.220Z",
         "durationMs": 69676,
-        "toolVersion": "0.6.1",
+        "toolVersion": "0.6.0",
         "filesAnalyzed": 388,
         "duplicationMode": "legacy"
       }

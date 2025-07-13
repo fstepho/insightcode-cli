@@ -12644,7 +12644,7 @@
       "analysis": {
         "timestamp": "2025-07-13T00:47:24.171Z",
         "durationMs": 68626,
-        "toolVersion": "0.6.1",
+        "toolVersion": "0.6.0",
         "filesAnalyzed": 425,
         "duplicationMode": "legacy"
       }

@@ -14,7 +14,7 @@
 - **Timestamp:** 2025-07-13T00:47:22.929Z
 - **Duration:** 67.40s
 - **Files Analyzed:** 697
-- **Tool Version:** 0.6.1
+- **Tool Version:** 0.6.0
 
 ## Quality Overview
 
