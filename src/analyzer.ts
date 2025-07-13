@@ -117,7 +117,7 @@ async function executeFileDetailStep(context: AnalysisContext): Promise<void> {
  */
 async function executeMetricsProcessingStep(context: AnalysisContext): Promise<void> {
   if (context.options.format === 'terminal') {
-    console.log('⚙️ Processing metrics...');
+    console.log('⚙️  Processing metrics...');
   }
 
   if (!context.rawFileDetails || !context.astData) {
