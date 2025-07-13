@@ -1,438 +1,389 @@
-// File: src/reporter.ts - Enhanced CLI Reporter with Perfect Alignment
-import chalk from 'chalk';
-import { AnalysisResult, FileDetail, Issue, Severity, IssueType, CodeContext, DuplicationMode } from './types';
+// File: reporter.ts
+import { ReportResult, AnalysisResult, Overview, FileDetail, Issue, CodeContext, FunctionContext, QualityIssue } from './types';
 
-// Configuration for alignment
-const COLUMN_CONFIG = {
-  label: 20,        // Width for labels
-  value: 12,        // Width for values
-  description: 40,  // Width for descriptions
-  indent: 2,        // Spaces for indentation
-  subIndent: 4      // Spaces for sub-items
+// -----------------------------------------------------------------------------
+// SECTION 0: CONFIGURATION
+// -----------------------------------------------------------------------------
+
+const TOTAL_WIDTH = 110; // Master width for all tables and boxes
+
+// -----------------------------------------------------------------------------
+// SECTION 1: ANSI COLOR AND STYLE MANAGEMENT
+// -----------------------------------------------------------------------------
+
+// A simple helper to encapsulate ANSI codes for readability.
+const Ansi = {
+  bold: (s: string) => `\x1b[1m${s}\x1b[0m`,
+  color: (code: number, s: string) => `\x1b[38;5;${code}m${s}\x1b[0m`,
+  bg_color: (code: number, s: string) => `\x1b[48;5;${code}m${s}\x1b[0m`,
+
+  // Semantic color palette (self-resetting)
+  blue: (s: string) => Ansi.color(75, s),
+  gray: (s: string) => Ansi.color(244, s),
+  white: (s: string) => Ansi.color(255, s),
+  red: (s: string) => Ansi.color(196, s),
+  orange: (s: string) => Ansi.color(208, s),
+  yellow: (s: string) => Ansi.color(220, s),
+  green: (s: string) => Ansi.color(77, s),
 };
 
-// Unicode symbols
-const SYMBOLS = {
-  arrow: '→',
-  bullet: '•',
-  success: '✓',
-  error: '✗',
-  warning: '⚠',
-  star: '★',
-  box: '■',
-  boxEmpty: '□',
-  progressFull: '█',
-  progressEmpty: '░',
-  verticalLine: '│',
-  horizontalLine: '─',
-  cornerTopLeft: '┌',
-  cornerTopRight: '┐',
-  cornerBottomLeft: '└',
-  cornerBottomRight: '┘'
-};
+// -----------------------------------------------------------------------------
+// SECTION 2: FORMATTING AND LAYOUT HELPERS
+// -----------------------------------------------------------------------------
 
 /**
- * Pad string to specific length
+ * Pads a string with trailing spaces to a specific length, ignoring ANSI codes.
  */
 function padEnd(str: string, length: number): string {
   const visibleLength = str.replace(/\x1b\[[0-9;]*m/g, '').length;
-  const padding = Math.max(0, length - visibleLength);
-  return str + ' '.repeat(padding);
-}
-
-function padStart(str: string, length: number): string {
-  const visibleLength = str.replace(/\x1b\[[0-9;]*m/g, '').length;
-  const padding = Math.max(0, length - visibleLength);
-  return ' '.repeat(padding) + str;
+  return str + ' '.repeat(Math.max(0, length - visibleLength));
 }
 
 /**
- * Create aligned row with label and value
+ * Truncates and formats a file path for concise display.
  */
-function createAlignedRow(label: string, value: string, indent: number = 0): string {
-  const indentStr = ' '.repeat(indent);
-  const paddedLabel = padEnd(label, COLUMN_CONFIG.label - indent);
-  return `${indentStr}${paddedLabel}${value}`;
+function truncatePath(filePath: string, maxLength: number): string {
+    if (filePath.length <= maxLength) {
+        return filePath;
+    }
+    const parts = filePath.split('/');
+    if (parts.length > 2) {
+        const end = parts.pop() || '';
+        const start = parts.shift() || '';
+        const shortPath = `${start}/.../${end}`;
+        if (shortPath.length <= maxLength) return shortPath;
+    }
+    return '...' + filePath.slice(-maxLength + 3);
 }
 
 /**
- * Create a progress bar with exact width
+ * Formats a large number into a 'k' (thousands) format.
  */
-function createProgressBar(value: number, max: number = 100, width: number = 20): string {
-  const percentage = Math.min(value / max, 1);
-  const filled = Math.round(percentage * width);
-  const empty = width - filled;
-  
-  const filledChars = SYMBOLS.progressFull.repeat(filled);
-  const emptyChars = SYMBOLS.progressEmpty.repeat(empty);
-  
-  // Color the filled part based on percentage
-  let coloredBar = '';
-  if (percentage >= 0.8) {
-    coloredBar = chalk.green(filledChars);
-  } else if (percentage >= 0.6) {
-    coloredBar = chalk.yellow(filledChars);
-  } else {
-    coloredBar = chalk.red(filledChars);
-  }
-  
-  return coloredBar + chalk.gray(emptyChars);
+function formatK(num: number): string {
+    return num > 999 ? `${(num / 1000).toFixed(0)}k` : `${num}`;
 }
 
 /**
- * Create a horizontal line
+ * Creates a visual progress bar with neutral, less bright colors.
  */
-function createSeparator(width: number = 80): string {
-  return chalk.gray(SYMBOLS.horizontalLine.repeat(width));
+function createProgressBar(score: number, width: number): string {
+    const filledCount = Math.round((score / 100) * width);
+    const emptyCount = width - filledCount;
+    const filled = '█'.repeat(filledCount);
+    const empty = '░'.repeat(emptyCount);
+
+    // Use a light gray for the filled part to be less flashy than pure white.
+    return `${Ansi.color(250, filled)}${Ansi.gray(empty)}`;
 }
 
 /**
- * Create a section header with consistent formatting
+ * Generates a table row with borders.
  */
-function createSectionHeader(title: string): string {
-  const line = createSeparator(60);
-  return `\n${line}\n${chalk.bold.white(title)}\n${line}`;
+function createTableRow(columns: string[], widths: number[]): string {
+    const content = columns.map((col, i) => padEnd(col, widths[i])).join(` ${Ansi.bold('│')} `);
+    return `${Ansi.bold('│')} ${content} ${Ansi.bold('│')}`;
 }
 
 /**
- * Format file path for consistent display
+ * Generates a table separator line.
  */
-function formatFilePath(path: string, maxLength: number = 40): string {
-  // FileDetail.file is already normalized - trust it
-  if (path.length <= maxLength) {
-    return padEnd(path, maxLength);
-  }
-  
-  const parts = path.split('/');
-  if (parts.length <= 2) {
-    return padEnd(path.substring(0, maxLength - 3) + '...', maxLength);
-  }
-  
-  // Shorten middle parts
-  const start = parts[0];
-  const end = parts[parts.length - 1];
-  const shortened = `${start}/.../` + end;
-  
-  if (shortened.length <= maxLength) {
-    return padEnd(shortened, maxLength);
-  }
-  
-  return padEnd(path.substring(0, maxLength - 3) + '...', maxLength);
+function createTableSeparator(widths: number[]): string {
+    const left = '├';
+    const right = '┤';
+    const cross = '┼';
+    const line = '─';
+    const separator = widths.map(w => line.repeat(w + 2)).join(Ansi.bold(cross));
+    return Ansi.bold(`${left}${separator}${right}`);
 }
 
 /**
- * Get color based on score - returns a chalk function compatible with v4
+ * Creates a line of text inside a box, ensuring alignment.
  */
-function getScoreColor(score: number) {
-  if (score >= 90) return chalk.green;
-  if (score >= 80) return chalk.greenBright; 
-  if (score >= 70) return chalk.yellow;
-  if (score >= 60) return chalk.red;
-  return chalk.redBright;
+function createBoxedLine(content: string, totalWidth: number): string {
+    const innerWidth = totalWidth - 4; // 2 for borders, 2 for spaces
+    const paddedContent = padEnd(content, innerWidth);
+    return `${Ansi.bold('│')} ${paddedContent} ${Ansi.bold('│')}`;
 }
 
 /**
- * Main reporter function with perfect alignment
+ * Formats an issue string to fit within a max length, abbreviating if necessary.
  */
-export function reportToTerminal(result: AnalysisResult): void {
-  const { context, overview, details } = result;
-  
-  // Clear and start
-  console.clear();
-  console.log('');
-  
-  // Header Box
-  const projectName = context.project.name;
-  const timestamp = new Date(context.analysis.timestamp).toLocaleString();
-  
-  console.log(chalk.cyan('┌' + '─'.repeat(78) + '┐'));
-  console.log(chalk.cyan('│') + chalk.bold.white('  INSIGHTCODE ANALYSIS REPORT').padEnd(97) + chalk.cyan('│'));
-  console.log(chalk.cyan('│') + '  ' + padEnd(`Project: ${projectName}`, 76) + chalk.cyan('│'));
-  console.log(chalk.cyan('│') + '  ' + padEnd(`Date: ${timestamp}`, 76) + chalk.cyan('│'));
-  console.log(chalk.cyan('└' + '─'.repeat(78) + '┘'));
-  
-  // Grade Display with aligned metrics
-  console.log(createSectionHeader('QUALITY OVERVIEW'));
-  
-  const gradeColor = getScoreColor(overview.scores.overall);
-  console.log(createAlignedRow('Overall Grade:', `${gradeColor.bold(overview.grade)} (${overview.scores.overall}/100)`));
-  console.log(createAlignedRow('Project Health:', createProgressBar(overview.scores.overall)));
-  console.log('');
-  
-  // Individual Scores - perfectly aligned
-  console.log(createAlignedRow('Complexity Score:', padStart(overview.scores.complexity.toString(), 3) + '/100  ' + createProgressBar(overview.scores.complexity)));
-  console.log(createAlignedRow('Duplication Score:', padStart(overview.scores.duplication.toString(), 3) + '/100  ' + createProgressBar(overview.scores.duplication)));
-  console.log(createAlignedRow('Maintainability:', padStart(overview.scores.maintainability.toString(), 3) + '/100  ' + createProgressBar(overview.scores.maintainability)));
-  
-  // Duplication mode indicator
-  const duplicationModeText = context.analysis.duplicationMode === 'strict' 
-    ? chalk.yellow('Strict (Industry Standards: SonarQube/Google)') 
-    : chalk.blue('Legacy (Permissive for Brownfield)');
-  console.log(createAlignedRow('Duplication Mode:', duplicationModeText));
-  
-  // Statistics - aligned in columns
-  console.log(createSectionHeader('PROJECT STATISTICS'));
-  
-  console.log(createAlignedRow('Files Analyzed:', overview.statistics.totalFiles.toString()));
-  console.log(createAlignedRow('Total Lines:', overview.statistics.totalLOC.toLocaleString()));
-  console.log(createAlignedRow('Average Complexity:', overview.statistics.avgComplexity.toFixed(1)));
-  console.log(createAlignedRow('Average File Size:', overview.statistics.avgLOC.toFixed(0) + ' lines'));
-  
-  const avgDuplication = overview.statistics.avgDuplicationRatio || 0;
-  console.log(createAlignedRow('Average Duplication:', (avgDuplication * 100).toFixed(1) + '%'));
-  
-  // Critical Files - with perfect sub-item alignment
-  const criticalFiles = details
-    .filter(f => f.healthScore < 70)
-    .sort((a, b) => a.healthScore - b.healthScore)
-    .slice(0, 5);
-  
-  if (criticalFiles.length > 0) {
-    console.log(createSectionHeader('CRITICAL FILES REQUIRING ATTENTION'));
+function formatIssueString(issue: Issue | undefined, maxLength: number): string {
+    if (!issue) {
+        return Ansi.gray('N/A');
+    }
+
+    const icon = Ansi.red('🔴');
+    const type = issue.type;
+    const severity = issue.severity;
+
+    const fullText = `${icon} ${type} (${severity})`;
+    const visibleLength = fullText.replace(/\x1b\[[0-9;]*m/g, '').length;
+
+    if (visibleLength <= maxLength) {
+        return fullText;
+    }
     
-    criticalFiles.forEach((file, index) => {
-      const mainIssue = file.issues.sort((a, b) => b.excessRatio - a.excessRatio)[0];
-      
-      console.log(`\n${chalk.red.bold(`${index + 1}.`)} ${chalk.red(formatFilePath(file.file))}`);
-      
-      // Sub-items with consistent arrow alignment
-      console.log(createAlignedRow(
-        `  ${SYMBOLS.arrow} Health:`,
-        `${createProgressBar(file.healthScore, 100, 10)} ${padStart(file.healthScore.toString(), 3)}/100`,
-        COLUMN_CONFIG.subIndent
-      ));
-      
-      if (mainIssue) {
-        // Get the actual metric value based on issue type
-        let actualValue = '';
-        if (mainIssue.type === IssueType.Complexity) {
-          actualValue = `${file.metrics.complexity}`;
-        } else if (mainIssue.type === IssueType.Size) {
-          actualValue = `${file.metrics.loc} lines`;
-        } else if (mainIssue.type === IssueType.Duplication) {
-          actualValue = `${(file.metrics.duplicationRatio * 100).toFixed(1)}%`;
+    const shortSeverity = severity.substring(0, 4);
+    const shortText = `${icon} ${type} (${shortSeverity}.)`;
+    const shortVisibleLength = shortText.replace(/\x1b\[[0-9;]*m/g, '').length;
+
+    if (shortVisibleLength <= maxLength) {
+        return shortText;
+    }
+
+    const availableSpaceForType = maxLength - (shortVisibleLength - type.length);
+    const shortType = type.substring(0, availableSpaceForType - 4) + '...';
+    return `${icon} ${shortType} (${shortSeverity}.)`;
+}
+
+/**
+ * Creates a colored badge for the project grade.
+ */
+function formatGradeBadge(grade: 'A' | 'B' | 'C' | 'D' | 'F'): string {
+    const blackText = (s: string) => Ansi.color(0, s);
+    const gradeText = ` ${grade} `;
+    switch (grade) {
+        case 'A': return Ansi.bg_color(40, blackText(gradeText)); // Green
+        case 'B': return Ansi.bg_color(118, blackText(gradeText)); // Light Green
+        case 'C': return Ansi.bg_color(226, blackText(gradeText)); // Yellow
+        case 'D': return Ansi.bg_color(208, blackText(gradeText)); // Orange
+        case 'F': return Ansi.bg_color(196, blackText(gradeText)); // Red
+        default: return grade;
+    }
+}
+
+/**
+ * Formats the metrics string for the risky files table with right alignment.
+ */
+function formatMetrics(metrics: { complexity: number, duplicationRatio: number, loc: number }): string {
+    const c = metrics.complexity.toString().padStart(5, ' ');
+    const d = ((metrics.duplicationRatio * 100).toFixed(0) + "%").padStart(4, ' ');
+    const l = formatK(metrics.loc).padStart(4, ' ');
+    return `C:${c} D:${d} L:${l}`;
+}
+
+
+// -----------------------------------------------------------------------------
+// SECTION 3: REPORT SECTION GENERATION LOGIC
+// -----------------------------------------------------------------------------
+
+function generateHeader(result: ReportResult): string[] {
+    const repoPath = result.repo.replace(/https?:\/\//, '').replace(/\.git$/, '');
+    const header = `${Ansi.blue(Ansi.bold(result.project))} ${Ansi.blue(`v${result.stableVersion}`)}`;
+    const subHeader = `(${repoPath}, ${result.stars} stars)`;
+    const analysisTime = `Analysis from ${new Date(result.analysis.context.analysis.timestamp).toLocaleDateString('en-US', { day:'numeric', month:'short', year:'numeric'})}, took ${(result.durationMs / 1000).toFixed(1)}s`;
+
+    return [
+        Ansi.bold(`┌${'─'.repeat(TOTAL_WIDTH - 2)}┐`),
+        createBoxedLine(`${header} ${Ansi.gray(subHeader)}`, TOTAL_WIDTH),
+        createBoxedLine(Ansi.gray(analysisTime), TOTAL_WIDTH),
+        Ansi.bold(`└${'─'.repeat(TOTAL_WIDTH - 2)}┘`),
+    ];
+}
+
+function generateOverview(overview: Overview): string[] {
+    const { grade, summary, scores } = overview;
+    const lines: string[] = [];
+
+    const widths = [24, 66, 10];
+
+    const gradeBadge = formatGradeBadge(grade);
+    const overviewTitle = `OVERVIEW: GRADE ${gradeBadge}`;
+
+    lines.push(Ansi.bold(`┌${'─'.repeat(widths[0]+2)}┬${'─'.repeat(widths[1]+2)}┬${'─'.repeat(widths[2]+2)}┐`));
+    lines.push(createTableRow([overviewTitle, Ansi.gray(summary), ''], widths));
+    lines.push(createTableSeparator(widths));
+
+    const metrics = [
+        { key: 'Complexity', score: scores.complexity, color: Ansi.orange },
+        { key: 'Duplication', score: scores.duplication, color: Ansi.green },
+        { key: 'Maintainability', score: scores.maintainability, color: Ansi.yellow },
+        { key: 'Overall Health', score: scores.overall, color: Ansi.yellow },
+    ];
+
+    metrics.forEach(({ key, score, color }) => {
+        const label = color(key);
+        let scoreStr = color(score.toString());
+
+        if (key === 'Duplication') {
+            const duplicationRatio = overview.statistics.avgDuplicationRatio ?? 0;
+            const duplicationPercent = (duplicationRatio * 100).toFixed(0);
+            scoreStr = `${color(score.toString())} ${Ansi.gray(`(${duplicationPercent}%)`)}`;
         }
+
+        const bar = createProgressBar(score, 64);
+        lines.push(createTableRow([label, bar, scoreStr], widths));
+    });
+
+    lines.push(Ansi.bold(`└${'─'.repeat(widths[0]+2)}┴${'─'.repeat(widths[1]+2)}┴${'─'.repeat(widths[2]+2)}┘`));
+    return lines;
+}
+
+function generateStatsAndInsights(analysis: AnalysisResult): string[] {
+    const { overview, details } = analysis;
+    const stats = overview.statistics;
+
+    // --- Data Extraction ---
+    const cycleCount = details.filter(d => d.dependencies.isInCycle).length;
+    const unstableCount = details.filter(d => d.dependencies.instability > 0.8).length;
+    const lowCohesionCount = details.filter(d => d.dependencies.cohesionScore < 0.5).length;
+
+    const keyStats = [
+        { label: 'Total Files', value: Ansi.white(stats.totalFiles.toString()) },
+        { label: 'Total LOC', value: Ansi.white(formatK(stats.totalLOC)) },
+        { label: 'Avg Complexity', value: Ansi.white(stats.avgComplexity.toFixed(1)) },
+    ];
+
+    const archConcerns = [
+        { label: '🔴 Low Cohesion Files (SRP)', value: Ansi.white(lowCohesionCount.toString()) },
+        { label: '🟠 High Instability Files', value: Ansi.white(unstableCount.toString()) },
+        { label: '🟡 Files in Dep. Cycles', value: Ansi.white(cycleCount.toString()) },
+    ];
+
+    // --- Layout Configuration ---
+    const widths = [51, 52];
+    const keyStatsLabelWidth = 16;
+    const archConcernsLabelWidth = 35;
+
+    // --- Table Construction ---
+    const lines = [
+        Ansi.bold(`┌${'─'.repeat(widths[0] + 2)}┬${'─'.repeat(widths[1] + 2)}┐`),
+        createTableRow(['KEY STATS', 'ARCHITECTURAL CONCERNS'], widths),
+        createTableSeparator(widths),
+    ];
+
+    for (let i = 0; i < 3; i++) {
+        const statCol = `${padEnd(keyStats[i].label, keyStatsLabelWidth)}${keyStats[i].value}`;
+        const concernCol = `${padEnd(archConcerns[i].label, archConcernsLabelWidth)}${archConcerns[i].value}`;
+        lines.push(createTableRow([statCol, concernCol], widths));
+    }
+
+    lines.push(Ansi.bold(`└${'─'.repeat(widths[0] + 2)}┴${'─'.repeat(widths[1] + 2)}┘`));
+
+    return lines;
+}
+
+function generateRiskyFiles(details: FileDetail[]): string[] {
+    const riskyFiles = [...details]
+        .sort((a, b) => a.healthScore - b.healthScore)
+        .slice(0, 6);
+
+    // Adjusted column widths to ensure alignment
+    const widths = [2, 46, 21, 28];
+    const totalWidth = widths.reduce((a, b) => a + b, 0) + (widths.length * 3) + 1;
+    
+    const title = ' TOP 6 RISKY FILES ';
+    const topBorderLine = '─'.repeat(totalWidth - title.length - 2);
+
+    const lines = [
+        Ansi.bold(`┌${title}${topBorderLine}┐`),
+        createTableRow(['S', 'File Path', 'Metrics', 'Primary Issue'], widths),
+        createTableSeparator(widths),
+    ];
+
+    riskyFiles.forEach(file => {
+        const score = Ansi.red(file.healthScore.toString());
+        const filePath = truncatePath(file.file, widths[1] - 2);
+        const metricsStr = formatMetrics(file.metrics);
         
-        console.log(createAlignedRow(
-          `  ${SYMBOLS.arrow} Issue:`,
-          `${mainIssue.type} (${mainIssue.severity})`,
-          COLUMN_CONFIG.subIndent
-        ));
-        console.log(createAlignedRow(
-          `  ${SYMBOLS.arrow} Value:`,
-          `${actualValue} (${mainIssue.excessRatio.toFixed(1)}x threshold)`,
-          COLUMN_CONFIG.subIndent
-        ));
-      }
-      
-      if (file.dependencies && file.dependencies.incomingDependencies > 0) {
-        console.log(createAlignedRow(
-          `  ${SYMBOLS.arrow} Impact:`,
-          `${file.dependencies.incomingDependencies} files depend on this`,
-          COLUMN_CONFIG.subIndent
-        ));
-      }
+        const primaryIssue = file.issues.sort((a,b) => {
+             const severityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+             return severityOrder[a.severity] - severityOrder[b.severity];
+        })[0];
+
+        const issueStr = formatIssueString(primaryIssue, widths[3]);
+        
+        lines.push(createTableRow([score, Ansi.gray(filePath), Ansi.gray(metricsStr), issueStr], widths));
     });
-  }
-  
-  // Architecture Insights - if available
-  if (hasArchitectureData(details)) {
-    console.log(createSectionHeader('ARCHITECTURE INSIGHTS'));
-    
-    // Hub Files
-    const hubFiles = details
-      .filter(f => f.dependencies && f.dependencies.incomingDependencies > 10)
-      .sort((a, b) => b.dependencies.incomingDependencies - a.dependencies.incomingDependencies)
-      .slice(0, 3);
-    
-    if (hubFiles.length > 0) {
-      console.log(chalk.bold('\nCentral Hub Files:'));
-      hubFiles.forEach(file => {
-        console.log(createAlignedRow(
-          `  ${SYMBOLS.arrow} ${formatFilePath(file.file, 35)}`,
-          `${file.dependencies.incomingDependencies} dependents`,
-          COLUMN_CONFIG.subIndent
-        ));
-      });
+
+    lines.push(Ansi.bold(`└${'─'.repeat(totalWidth - 2)}┘`));
+    return lines;
+}
+
+function generateDeepDive(analysis: AnalysisResult): string[] {
+    const title = ' DEEP DIVE: CRITICAL FUNCTIONS ';
+    const topBorderLine = '─'.repeat(TOTAL_WIDTH - title.length - 2);
+
+    const lines = [
+        Ansi.bold(`┌${title}${topBorderLine}┐`),
+    ];
+
+    if (!analysis.codeContext || analysis.codeContext.length === 0) {
+        lines.push(createBoxedLine(Ansi.gray('No detailed function context available for this analysis.'), TOTAL_WIDTH));
+        lines.push(Ansi.bold(`└${'─'.repeat(TOTAL_WIDTH - 2)}┘`));
+        return lines;
+    }
+
+    const allFunctions = analysis.codeContext.flatMap(context => 
+        context.criticalFunctions.map(func => ({ ...func, file: context.file }))
+    );
+
+    const topFunctions = allFunctions
+        .sort((a, b) => b.complexity - a.complexity)
+        .slice(0, 3);
+
+    if (topFunctions.length === 0) {
+        lines.push(createBoxedLine(Ansi.gray('No critical functions found meeting the reporting threshold.'), TOTAL_WIDTH));
+        lines.push(Ansi.bold(`└${'─'.repeat(TOTAL_WIDTH - 2)}┘`));
+        return lines;
     }
     
-    // Unstable Files
-    const unstableFiles = details
-      .filter(f => f.dependencies && f.dependencies.instability > 0.8)
-      .slice(0, 3);
-    
-    if (unstableFiles.length > 0) {
-      console.log(chalk.bold('\nUnstable Files (high change risk):'));
-      unstableFiles.forEach(file => {
-        console.log(createAlignedRow(
-          `  ${SYMBOLS.arrow} ${formatFilePath(file.file, 35)}`,
-          `instability: ${(file.dependencies.instability * 100).toFixed(0)}%`,
-          COLUMN_CONFIG.subIndent
-        ));
-      });
-    }
-  }
-  
-  // Issues Summary - aligned table
-  const allIssues = details.flatMap(f => f.issues);
-  if (allIssues.length > 0) {
-    console.log(createSectionHeader('ISSUES SUMMARY'));
-    
-    // Group by severity
-    const issuesBySeverity = allIssues.reduce((acc, issue) => {
-      acc[issue.severity] = (acc[issue.severity] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    // Group by type
-    const issuesByType = allIssues.reduce((acc, issue) => {
-      acc[issue.type] = (acc[issue.type] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    console.log(chalk.bold('\nBy Severity:'));
-    Object.entries(issuesBySeverity)
-      .sort(([a], [b]) => getSeverityOrder(a) - getSeverityOrder(b))
-      .forEach(([severity, count]) => {
-        const color = getSeverityColor(severity);
-        console.log(createAlignedRow(
-          `  ${severity}:`,
-          color(count.toString()),
-          COLUMN_CONFIG.subIndent
-        ));
-      });
-    
-    console.log(chalk.bold('\nBy Type:'));
-    Object.entries(issuesByType)
-      .sort(([, a], [, b]) => b - a)
-      .forEach(([type, count]) => {
-        console.log(createAlignedRow(
-          `  ${type}:`,
-          count.toString(),
-          COLUMN_CONFIG.subIndent
-        ));
-      });
-  }
-  
-  // Recommendations - well formatted
-  console.log(createSectionHeader('ACTIONABLE RECOMMENDATIONS'));
-  
-  const recommendations = generateRecommendations(details);
-  recommendations.slice(0, 5).forEach((rec, index) => {
-    console.log(`\n${chalk.green.bold(`${index + 1}.`)} ${chalk.green(rec.title)}`);
-    console.log(createAlignedRow(
-      `  ${SYMBOLS.arrow} Action:`,
-      rec.description,
-      COLUMN_CONFIG.subIndent
-    ));
-    console.log(createAlignedRow(
-      `  ${SYMBOLS.arrow} Impact:`,
-      `+${rec.impact} points`,
-      COLUMN_CONFIG.subIndent
-    ));
-    console.log(createAlignedRow(
-      `  ${SYMBOLS.arrow} Effort:`,
-      rec.effort,
-      COLUMN_CONFIG.subIndent
-    ));
-  });
-  
-  // Footer
-  console.log('\n' + createSeparator());
-  console.log(chalk.gray(`InsightCode v${context.analysis.toolVersion} • Analysis completed in ${context.analysis.durationMs}ms`));
-  console.log(chalk.gray(`Run with --format=json for detailed data export`));
-}
+    topFunctions.forEach((func, index) => {
+        if (index > 0) {
+             lines.push(createTableSeparator([TOTAL_WIDTH - 4]));
+        } else {
+             lines.push(createBoxedLine('', TOTAL_WIDTH));
+        }
+        const funcTitle = `🎯 ${Ansi.bold(func.name)} in ${Ansi.yellow(truncatePath(func.file, 50))}`;
+        lines.push(createBoxedLine(funcTitle, TOTAL_WIDTH));
+        
+        const metrics = `Complexity: ${Ansi.orange(func.complexity.toString())} | Lines: ${Ansi.orange(func.lineCount.toString())} | Params: ${Ansi.orange(func.parameterCount.toString())}`;
+        lines.push(createBoxedLine(`   ${metrics}`, TOTAL_WIDTH));
 
-// Helper functions
+        if (func.issues.length > 0) {
+            lines.push(createBoxedLine(`   ${Ansi.bold('Detected Issues:')}`, TOTAL_WIDTH));
+            
+            const issueLabels = func.issues.map(issue => `     - ${Ansi.red(issue.type)} (${issue.severity})`);
+            const maxLabelLength = issueLabels.reduce((max, label) => {
+                const visibleLength = label.replace(/\x1b\[[0-9;]*m/g, '').length;
+                return Math.max(max, visibleLength);
+            }, 0);
 
-function hasArchitectureData(details: FileDetail[]): boolean {
-  return details.some(f => f.dependencies && f.dependencies.incomingDependencies > 0);
-}
-
-function getSeverityOrder(severity: string): number {
-  const order: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
-  return order[severity.toLowerCase()] || 99;
-}
-
-function getSeverityColor(severity: string) {
-  switch (severity.toLowerCase()) {
-    case 'critical': return chalk.red.bold;
-    case 'high': return chalk.red;
-    case 'medium': return chalk.yellow;
-    case 'low': return chalk.green;
-    default: return chalk.gray;
-  }
-}
-
-interface Recommendation {
-  title: string;
-  description: string;
-  impact: number;
-  effort: string;
-}
-
-function generateRecommendations(details: FileDetail[]): Recommendation[] {
-  const recommendations: Recommendation[] = [];
-  
-  // High complexity files
-  const highComplexityFiles = details
-    .filter(f => f.metrics.complexity > 20)
-    .sort((a, b) => b.metrics.complexity - a.metrics.complexity);
-    
-  if (highComplexityFiles.length > 0) {
-    recommendations.push({
-      title: `Refactor ${formatFilePath(highComplexityFiles[0].file, 30)}`,
-      description: 'Split complex functions into smaller units',
-      impact: Math.min(15, highComplexityFiles.length * 3),
-      effort: '2-4 hours'
+            func.issues.forEach((issue, i) => {
+                const paddedLabel = padEnd(issueLabels[i], maxLabelLength);
+                const issueLine = `${paddedLabel}: ${Ansi.gray(issue.description)}`;
+                lines.push(createBoxedLine(issueLine, TOTAL_WIDTH));
+            });
+        } else {
+             lines.push(createBoxedLine(`   ${Ansi.gray('No specific issues flagged for this function.')}`, TOTAL_WIDTH));
+        }
     });
-  }
-  
-  // Duplication issues
-  const duplicationFiles = details
-    .filter(f => f.metrics.duplicationRatio > 0.1)
-    .sort((a, b) => b.metrics.duplicationRatio - a.metrics.duplicationRatio);
     
-  if (duplicationFiles.length > 0) {
-    recommendations.push({
-      title: `Extract duplicated code`,
-      description: `${duplicationFiles.length} files have >10% duplication`,
-      impact: Math.min(20, duplicationFiles.length * 5),
-      effort: '3-5 hours'
-    });
-  }
-  
-  // Architectural improvements
-  const hubFiles = details
-    .filter(f => f.dependencies && f.dependencies.incomingDependencies > 15)
-    .sort((a, b) => b.dependencies.incomingDependencies - a.dependencies.incomingDependencies);
-    
-  if (hubFiles.length > 0) {
-    recommendations.push({
-      title: `Decouple ${formatFilePath(hubFiles[0].file, 30)}`,
-      description: 'Reduce coupling with dependency injection',
-      impact: 25,
-      effort: '1-2 days'
-    });
-  }
-  
-  // Large files
-  const largeFiles = details
-    .filter(f => f.metrics.loc > 500)
-    .sort((a, b) => b.metrics.loc - a.metrics.loc);
-    
-  if (largeFiles.length > 0) {
-    recommendations.push({
-      title: `Split large file`,
-      description: `${formatFilePath(largeFiles[0].file, 30)} has ${largeFiles[0].metrics.loc} lines`,
-      impact: 10,
-      effort: '4-6 hours'
-    });
-  }
-  
-  return recommendations.sort((a, b) => {
-    const aRatio = a.impact / (a.effort.includes('day') ? 16 : 4);
-    const bRatio = b.impact / (b.effort.includes('day') ? 16 : 4);
-    return bRatio - aRatio;
-  });
+    lines.push(Ansi.bold(`└${'─'.repeat(TOTAL_WIDTH - 2)}┘`));
+    return lines;
+}
+
+
+// -----------------------------------------------------------------------------
+// SECTION 4: MAIN EXPORTED FUNCTION
+// -----------------------------------------------------------------------------
+
+/**
+ * Orchestrates the generation and printing of the full report to the console.
+ */
+export function generateCliOutput(result: ReportResult): void {
+    const output: string[] = [
+        ...generateHeader(result),
+        '',
+        ...generateOverview(result.analysis.overview),
+        '',
+        ...generateStatsAndInsights(result.analysis),
+        '',
+        ...generateRiskyFiles(result.analysis.details),
+        '',
+        ...generateDeepDive(result.analysis),
+    ];
+
+    console.log(output.join('\n'));
 }

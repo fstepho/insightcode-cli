@@ -4,11 +4,10 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import { CliOptions, AnalysisResult, FileDetail } from './types';
 import { analyze, AnalysisOptions } from './analyzer';
-import { reportToTerminal } from './reporter';
 import { isCriticalFile, isPassingScore } from './scoring.utils';
 import { generateProjectReport } from './report-generator';
 import { getConfig } from './config.manager';
-import { generateCliOutput } from './reporterV2';
+import { generateCliOutput } from './reporter';
 import { defaultJsonReplacer } from './json-utils';
 
 /**
@@ -133,6 +132,25 @@ async function runAnalysis(path: string, options: CliOptions) {
     const results = await analyze(path, analysisOptions);
     
    
+     // Create a ReportResult-like structure for generateProjectReport
+      const reportResult = {
+        project: path.split('/').pop() || 'project',
+        type: 'analysis',
+        repo: 'local',
+        stableVersion: 'latest',
+        stars: '0',
+        category: 'medium' as 'small' | 'medium' | 'large',
+        description: 'Local project analysis',
+        durationMs: 0, // We don't track this in CLI mode
+        analysis: results,
+        emblematicFiles: {
+          coreFiles: [],
+          architecturalFiles: [],
+          performanceCriticalFiles: [],
+          complexAlgorithmFiles: []
+        }
+      };
+
     // Handle output format
     switch (format) {
       case 'json':
@@ -152,7 +170,7 @@ async function runAnalysis(path: string, options: CliOptions) {
         break;
       default:
         // Use the new reporter for terminal output
-        reportToTerminal(results);
+        generateCliOutput(reportResult);
         break;
     }
   } catch (error) {
