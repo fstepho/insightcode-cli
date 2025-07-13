@@ -5,137 +5,40 @@ All notable changes to InsightCode CLI will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.1] [Unreleased] - Documentation & QA
+## [0.6.0] - 2025-07-13
 
 ### Added
-- **Enhanced Documentation**: Comprehensive audit and update of all technical documentation
-- **Mathematical Validation**: Verified all scoring formulas and constants match implementation
-- **Version Clarity**: Clear distinction between v0.6.0 (major refactor, ready for release) and v0.6.1 (documentation/QA focus)
-- **Accuracy Improvements**: Updated all metrics, dependency counts, and technical specifications in documentation
-- **TypeCheck Script**: Added `npm run typecheck` for better development workflow
+- Dual-mode duplication analysis (strict vs legacy thresholds)
+- Comprehensive documentation validation system (79+ examples across 11 files)
+- Enhanced development workflow commands (`npm run typecheck`, `npm run qa`, `npm run validate-docs`)
+- Automated pattern-based validation to prevent documentation drift
+- Industry-standard strict duplication thresholds option (`--strict-duplication`)
+- Mathematical validation system ensuring 100% accuracy of documented formulas and constants
+- Configuration file exclusion and license header filtering in duplication detection
 
 ### Changed
-- **Simplified CLI Interface**: Analysis is now the default action - use `insightcode` instead of `insightcode analyze`
-- **Documentation Consistency**: All technical docs now accurately reflect current codebase state
-- **Version References**: Updated all documentation to use v0.6.1 as current development focus
-- **Technical Accuracy**: Synchronized all formulas, constants, and methodology descriptions with actual implementation
-- **Error Handling**: Improved error logging and debugging context in dependency analyzer
+- CLI interface: analysis is now the default action (no more `analyze` subcommand required)
+- Flag renamed: `--exclude-utility` to `--production` for clarity
+- **Modular architecture**: Major refactoring with extraction of specialized components
+  - `DependencyResolver` and `DependencyGraph` extracted as standalone modules (~500 lines reduction)
+  - `FileDetailBuilder` class for encapsulated file detail construction
+  - New `src/analyzer/` directory with 3 specialized modules (`ContextGenerator`, `OverviewCalculator`, `ProjectDiscovery`)
+- Enhanced error handling and logging throughout dependency analyzer
+- Improved TypeScript coverage and type safety
+- Enhanced 8-line sliding window duplication detection algorithm
+- Scoring weights adjusted for better complexity/duplication balance
+- CLI formatting and color-coded severity indicators improved
+
+### Removed
+- `analyze` subcommand (analysis is now the default action)
+- `--with-context` flag (functionality integrated into core analysis)
+- Monolithic `parser.ts` file (replaced by modular `FileDetailBuilder` class)
+- Unused variables and obsolete methods throughout codebase
 
 ### Fixed
-- **Documentation Drift**: Eliminated inconsistencies between documentation and code
-- **Version Confusion**: Clarified release status and development timeline
-- **Technical Accuracy**: Corrected all mathematical formulas and scoring methodology descriptions
-- **Silent Failures**: Enhanced error handling in `dependency-analyzer.ts` with better logging and context
-- **Code Cleanup**: Removed unused variables and obsolete methods from dependency analyzer
-- **Error Propagation**: Fixed silent error returns that made debugging difficult
-
-## [0.6.0] [Ready for Release] - Major Scoring System Refactor
-
-### ✨ What's New
-
-**Dual-Mode Duplication Analysis**: InsightCode now offers two duplication analysis modes to accommodate different project contexts and quality standards.
-
-### 🎯 Problem Solved
-
-Previous versions used permissive duplication thresholds (≤15% = excellent) that were 5x more lenient than industry standards (SonarQube: ≤3%). This created confusion about actual code quality and made InsightCode incompatible with strict DevOps environments.
-
-### 🔧 New CLI Option
-
-```bash
-# Strict mode - Industry standards (SonarQube/Google aligned)
-insightcode . --strict-duplication
-
-# Legacy mode - Permissive thresholds (default, maintains compatibility)
-insightcode .
-```
-
-### 📊 Threshold Comparison
-
-| Mode | Excellent | Acceptable | Critical | Use Case |
-|------|-----------|------------|----------|----------|
-| **Strict** | ≤3% | ≤8% | ≤15% | New projects, high standards |
-| **Legacy** | ≤15% | ≤30% | ≤50% | Brownfield, gradual improvement |
-
-### 🎨 Visual Indicators
-
-Reports now clearly display the active duplication mode:
-
-```
-Duplication Score:   88/100  ██████████████████░░
-Duplication Mode:   Legacy (Permissive for Brownfield)
-
-Duplication Score:   75/100  ███████████████░░░░░
-Duplication Mode:   Strict (Industry Standards: SonarQube/Google)
-```
-
-### 📈 Impact Example
-
-For 30% duplication in a project:
-
-- **Legacy Mode**: Score 88/100, Grade A, no critical files
-- **Strict Mode**: Score 75/100, Grade A, 2 critical files identified
-
-### 🛠️ Technical Implementation
-
-- **Type-safe configuration**: Full TypeScript support with enums and interfaces
-- **Non-breaking change**: Legacy mode remains default
-- **Complete propagation**: Mode affects scoring, health calculation, and reporting
-- **API persistence**: Mode information included in JSON outputs for CI/CD integration
-
-### 📚 Documentation
-
-- **User Guide**: `/docs/DUPLICATION_MODES_USER_GUIDE.md`
-- **Technical Audit**: `DUPLICATION_THRESHOLDS_AUDIT.md`
-- **CLI Help**: Option documented in `--help`
-
-### 🧪 Testing
-
-```bash
-# Quick test of both modes
-npm run test:duplication-modes
-
-# Full validation suite
-npm run qa
-```
-
-### ⚡ Quick Start
-
-```bash
-# Install/update
-npm install -g insightcode-cli
-
-# Analyze with industry-standard strict thresholds
-insightcode src/ --strict-duplication --format json
-
-# Compare with legacy mode
-insightcode src/ --format json
-```
-
-### 🎯 Recommendations
-
-- **New projects**: Use `--strict-duplication` for industry-aligned standards
-- **Legacy codebases**: Start with default mode, gradually adopt strict
-- **CI/CD**: Choose mode based on team maturity and quality goals
-
-### 🔄 Migration Path
-
-1. **Baseline**: Run analysis in legacy mode to establish current state
-2. **Assess**: Use strict mode to understand gaps vs industry standards  
-3. **Improve**: Address critical issues identified in strict mode
-4. **Adopt**: Gradually migrate CI/CD pipelines to strict mode
-
-
-### 🏆 Benefits
-
-- ✅ **Industry Alignment**: Scores now comparable with SonarQube, CodeClimate
-- ✅ **Transparency**: Clear indication of which mode is active
-- ✅ **Flexibility**: Choose appropriate strictness for project context
-- ✅ **Backward Compatibility**: Existing workflows unchanged
-- ✅ **Academic Honesty**: No more misleading "excellent" scores for poor duplication
-
-### 📊 Validation Results
-
-All existing tests pass + 12 new tests specifically for duplication modes. Documentation automatically validated for accuracy.
+- Silent error returns in dependency analyzer
+- Documentation inconsistencies between examples and implementation
+- JSON output formatting with absolutePath filtering
 
 
 ## [0.5.0] - 2025-07-09

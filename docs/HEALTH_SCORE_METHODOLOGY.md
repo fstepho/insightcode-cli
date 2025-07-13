@@ -1,4 +1,4 @@
-# Health Score Methodology - v0.6.1
+# Health Score Methodology - v0.6.0
 
 ## Executive Summary
 
@@ -17,7 +17,7 @@ InsightCode's **Health Score** (0-100) uses progressive penalties **without arti
 ## Health Score Formula
 
 ```typescript
-// Required imports for the implementation (v0.6.1+)
+// Required imports for the implementation (v0.6.0+)
 import { Issue, DuplicationConfig } from './types';
 import { createDuplicationConfig, createDuplicationPenaltyConstants } from './thresholds.constants';
 import { percentageToRatio, ratioToPercentage } from './scoring.utils';
@@ -129,7 +129,7 @@ function getSizePenalty(loc: number): number {
 }
 ```
 
-### 3. Duplication Penalty (Mode-Aware v0.6.1+)
+### 3. Duplication Penalty (Mode-Aware v0.6.0+)
 ```typescript
 function getDuplicationPenalty(duplicationRatio: number, duplicationConfig?: DuplicationConfig): number {
   const config = duplicationConfig || createDuplicationConfig(false); // Default to legacy
@@ -300,7 +300,7 @@ The extreme scores reflect **real technical debt** that requires immediate atten
 
 These scores serve their purpose: **making technical debt visible and actionable**.
 
-## Summary of Model Completions (v0.6.1)
+## Summary of Model Completions (v0.6.0)
 
 ### ✅ **Completed Requirements**
 

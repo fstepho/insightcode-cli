@@ -1,12 +1,12 @@
-# InsightCode Scoring Thresholds: Justification - v0.6.1
+# InsightCode Scoring Thresholds: Justification - v0.6.0
 
 ## Executive Summary
 
-This document provides comprehensive justification for the scoring thresholds and methodology used in InsightCode v0.6.1. Our approach implements **industry best practices** following the **Rules of the Art**: Linear → Quadratic → Exponential progression, validated against empirical data from 9 popular open-source projects representing over 670,000 lines of production code.
+This document provides comprehensive justification for the scoring thresholds and methodology used in InsightCode v0.6.0. Our approach implements **industry best practices** following the **Rules of the Art**: Linear → Quadratic → Exponential progression, validated against empirical data from 9 popular open-source projects representing over 670,000 lines of production code.
 
-## Methodology Overview - v0.6.1
+## Methodology Overview - v0.6.0
 
-InsightCode v0.6.1 implements a **research-based weighted scoring model** that respects fundamental software engineering principles:
+InsightCode v0.6.0 implements a **research-based weighted scoring model** that respects fundamental software engineering principles:
 
 ### 🏛️ **Foundational Principles**
 1. **Pareto Principle (80/20)**: 20% of code causes 80% of problems - extreme complexity receives extreme penalties
@@ -14,7 +14,7 @@ InsightCode v0.6.1 implements a **research-based weighted scoring model** that r
 3. **Fowler Technical Debt**: Debt must be visible and quantifiable - no logarithmic scaling
 4. **McCabe Research**: Complexity ≤10 threshold for maintainable code
 
-### 📊 **Health Score Methodology (v0.6.1)**
+### 📊 **Health Score Methodology (v0.6.0)**
 - **Direct penalty summation**: Health Score = 100 - (complexity penalty + duplication penalty + size penalty + issues penalty)
 - **No weighting applied**: Each penalty type contributes directly to the total
 - **Progressive scaling**: Individual penalties use research-based curves
@@ -154,7 +154,7 @@ function calculateComplexityScore(complexity: number): number {
 
 ---
 
-## 2. Code Duplication Thresholds (Dual-Mode v0.6.1+)
+## 2. Code Duplication Thresholds (Dual-Mode v0.6.0+)
 
 ### Academic Research on Code Duplication
 
@@ -168,7 +168,7 @@ Code duplication research has consistently shown strong correlations between dup
 - **15-30% (Poor)**: Significantly increased maintenance overhead [Roy & Cordy, 2007]
 - **30%+ (Critical)**: Strong predictor of system decay [Lague et al., 1997]
 
-#### v0.6.1+ Dual-Mode System
+#### v0.6.0+ Dual-Mode System
 InsightCode now supports **dual duplication threshold modes** to address the academic and practical gap between industry standards and legacy codebase realities:
 
 **STRICT MODE** (`--strict-duplication`): Industry-aligned thresholds
@@ -183,7 +183,7 @@ InsightCode now supports **dual duplication threshold modes** to address the aca
 - **30-50%**: Acceptable - Maintenance overhead threshold
 - **50%+**: Progressive penalties
 
-#### v0.6.1+ Detection Algorithm vs Industry Standards
+#### v0.6.0+ Detection Algorithm vs Industry Standards
 Our **pragmatic approach** uses 8-line blocks with literal pattern matching, focusing on actionable copy-paste duplication:
 
 **Key Features:**
@@ -200,7 +200,7 @@ Our **pragmatic approach** uses 8-line blocks with literal pattern matching, foc
 
 **Note**: Direct percentage comparison with SonarQube reports may show variations due to different detection algorithms.
 
-### v0.6.1+ Dual-Mode Threshold Justification
+### v0.6.0+ Dual-Mode Threshold Justification
 
 **Usage**: Select mode via CLI flag:
 ```bash
@@ -324,7 +324,7 @@ Our grade boundaries align with established academic and industry assessment pra
 - **Industry alignment** acknowledged where our thresholds differ from current practice
 
 ### Known Limitations & Design Choices
-- **Duplication dual-mode system (v0.6.1+)**: Strict mode (3%) aligns with SonarQube, legacy mode (15%) remains permissive for existing codebase analysis
+- **Duplication dual-mode system (v0.6.0+)**: Strict mode (3%) aligns with SonarQube, legacy mode (15%) remains permissive for existing codebase analysis
 - **8-line detection blocks**: May report different percentages than SonarQube's 10+ statement/token threshold
 - **File size conventions**: Internal guidelines inspired by Clean Code, not formal standards
 - **Complexity boundaries**: Based on McCabe's original research; NASA current standards are more stringent (≤15)
@@ -361,4 +361,4 @@ For new code or strict quality gates, consider:
 - **ISO/IEC 25010:2011**. *Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE)*. ISO Store: [https://www.iso.org/standard/35733.html](https://www.iso.org/standard/35733.html)
 
 ---
-*This document represents **version 0.6.0** of InsightCode's threshold justification. Last updated: 2025-07-11*
+*This document represents **version 0.6.0** of InsightCode's threshold justification. Last updated: 2025-07-13*

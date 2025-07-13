@@ -1,4 +1,4 @@
-# Mathematical Coefficients Justification - v0.6.1
+# Mathematical Coefficients Justification - v0.6.0
 
 ## Executive Summary
 
@@ -197,7 +197,7 @@ Current exponential powers across the system:
 
 ---
 
-## Duplication Penalty Coefficients (Mode-Aware v0.6.1+)
+## Duplication Penalty Coefficients (Mode-Aware v0.6.0+)
 
 ### **Mode-Aware Threshold System**
 - **STRICT MODE**: 3%/8%/15% thresholds (industry-aligned)

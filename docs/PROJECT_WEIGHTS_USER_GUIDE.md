@@ -2,7 +2,7 @@
 
 ## 🎯 Quick Answer
 
-**Current project weights (v0.6.1):**
+**Current project weights (v0.6.0):**
 - **45%** Complexity (internal hypothesis)
 - **30%** Maintainability (internal hypothesis) 
 - **25%** Duplication (internal hypothesis)
@@ -63,9 +63,9 @@ FileA.ts: Health Score 67/100
 ### Supporting Research (Thresholds Only)
 - **Complexity thresholds**: Based on McCabe (1976) - ≤10 recommended
 - **File size guidelines**: Inspired by Martin Clean Code (2008) - ≤200 LOC
-- **Duplication detection (v0.6.1+)**: Dual-mode system - strict 3%/8%/15% (industry-aligned) or legacy 15%/30%/50% (permissive)
+- **Duplication detection (v0.6.0+)**: Dual-mode system - strict 3%/8%/15% (industry-aligned) or legacy 15%/30%/50% (permissive)
 
-## 🎯 Duplication Mode Impact (v0.6.1+)
+## 🎯 Duplication Mode Impact (v0.6.0+)
 
 ### Mode Selection
 ```bash
@@ -133,8 +133,8 @@ const customScore = (rawComplexity * 0.60) + (rawMaintainability * 0.25) + (rawD
 - **Coefficient Justification**: `/docs/MATHEMATICAL_COEFFICIENTS_JUSTIFICATION.md`
 - **Full FAQ**: `/docs/PROJECT_WEIGHTS_FAQ.md`
 - **Academic References**: `/docs/SCORING_THRESHOLDS_JUSTIFICATION.md`
-- **Duplication Modes**: `/docs/DUPLICATION_MODES_USER_GUIDE.md` (v0.6.1+)
+- **Duplication Modes**: `/docs/DUPLICATION_MODES_USER_GUIDE.md` (v0.6.0+)
 
 ---
 
-**Bottom Line**: Use InsightCode scores as **guidance and trends**, not absolute measures. The weights are internal hypotheses that help aggregate complex information, but they're not scientifically validated industry standards. With v0.6.1+, choose the appropriate duplication mode for your context (strict for new projects, legacy for existing codebases). Always apply your domain knowledge and team experience when interpreting results.
+**Bottom Line**: Use InsightCode scores as **guidance and trends**, not absolute measures. The weights are internal hypotheses that help aggregate complex information, but they're not scientifically validated industry standards. With v0.6.0+, choose the appropriate duplication mode for your context (strict for new projects, legacy for existing codebases). Always apply your domain knowledge and team experience when interpreting results.

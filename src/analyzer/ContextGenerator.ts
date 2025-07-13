@@ -65,7 +65,7 @@ export class ContextGenerator {
     return {
       timestamp: new Date().toISOString(),
       durationMs: duration,
-      toolVersion: '0.6.1',
+      toolVersion: require('../../package.json').version,
       filesAnalyzed: fileDetails.length,
       duplicationMode: duplicationConfig.mode
     };

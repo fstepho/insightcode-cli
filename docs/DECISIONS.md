@@ -1,28 +1,71 @@
 # Architectural Decisions - InsightCode CLI
 
-## 📝 Recent Updates (2025-07-12)
-
-### DECISIONS.md Audit & Corrections
-- ✅ **Updated all references** from 5-line to 8-line duplication detection 
-- ✅ **Marked superseded decisions** for LOC-based weighting (replaced by criticality-weighted scoring)
-- ✅ **Clarified status** of deleted fileScoring.ts module
-- ✅ **Synchronized weight references** across all documentation (45/30/25)
-- ✅ **Added completion status** for implemented decisions
-- ✅ **Fixed chronological order** - 2025-07-12 decisions moved to top
-- ✅ **Eliminated duplicates** - removed duplicate duplication detection decision
-
-### Key Status Changes
-- **Academic Best Practices for Metric Aggregation**: SUPERSEDED by criticality-weighted scoring
-- **LOC Weighting**: SUPERSEDED - fundamentally flawed approach replaced  
-- **fileScoring.ts**: COMPLETED then SUPERSEDED - module deleted
-- **Duplication Detection**: UPDATED to 8-line blocks with enhanced filtering
-- **topIssues.ts**: COMPLETED - created, renamed, then deleted (full lifecycle documented)
-
-**Note**: All superseded decisions are preserved for historical context and learning purposes.
+Format: **Date | Decision | Reason | Impact**
 
 ---
 
-Format: **Date | Decision | Reason | Impact**
+## 2025-07-13: CHANGELOG format compliance with Keep a Changelog
+**Decision**: Restructure CHANGELOG.md to strictly follow Keep a Changelog format with standard sections (Added/Changed/Removed/Fixed) instead of custom emoji sections.
+**Reason**: Keep a Changelog is the industry standard. Our custom format with emojis and verbose descriptions was non-standard and harder to parse. Standard format improves readability and tool compatibility.
+**Impact**: Cleaner, more professional changelog that follows established conventions. Easier for tools and users to parse changes. More concise entries focused on essential information.
+
+---
+
+## 2025-07-13: Comprehensive Documentation Validation System
+**Decision**: Implement unified documentation validation using `validate-docs.js` with 10 regex patterns to automatically detect and verify 79+ numerical examples across 11 documentation files against actual code implementation.
+**Reason**: Manual documentation maintenance was error-prone and time-consuming. Previous versions had inconsistencies between documented examples and actual code behavior. Need automated anti-regression system to ensure long-term accuracy.
+**Impact**: 100% accuracy guarantee for all documentation examples. Prevents future documentation drift. Enables confident releases knowing all technical specifications are verified. Reduces maintenance burden while improving quality.
+
+---
+
+## 2025-07-13: CLI Interface Simplification - Analysis as Default Action  
+**Decision**: Make analysis the default CLI action. Users can now use `insightcode` directly instead of requiring `insightcode analyze`.
+**Reason**: Improved user experience. Analysis is the primary use case (95%+ of usage). Removes friction for new users. Aligns with industry standards where the main action is the default.
+**Impact**: Cleaner CLI interface. Backward compatibility maintained (analyze subcommand still works). Simplified documentation and onboarding. Better first-time user experience.
+
+---
+
+## 2025-07-13: Mathematical Accuracy Verification for v0.6.0
+**Decision**: Verify every mathematical formula, scoring constant, and threshold in documentation against actual implementation using automated validation.
+**Reason**: Documentation accuracy is critical for user trust and adoption. Previous manual processes led to inconsistencies. Need to guarantee that all documented examples produce correct results.
+**Impact**: 100% confidence in documentation accuracy. Enhanced user trust. Eliminated confusion between documented behavior and actual tool behavior. Foundation for reliable technical communication.
+
+---
+
+## 2025-07-13: Modular Component Extraction for Dependency Analysis
+**Decision**: Extract `DependencyResolver` and `DependencyGraph` as standalone modules from the monolithic `dependency-analyzer.ts`, reducing main analyzer by ~500 lines.
+**Reason**: Improve separation of concerns, enhance testability, and reduce complexity in core analyzer. The original file was becoming unwieldy with multiple responsibilities (resolution, graph management, orchestration).
+**Impact**: Better modularity with 3 specialized components (`DependencyResolver`, `DependencyGraph`, `UniversalDependencyAnalyzer`). Improved maintainability while preserving identical public API. Enhanced testability of individual components.
+
+---
+
+## 2025-07-13: FileDetailBuilder Class Introduction
+**Decision**: Replace monolithic `parser.ts` with dedicated `FileDetailBuilder` class and create specialized `src/analyzer/` directory with 3 modules (`ContextGenerator`, `OverviewCalculator`, `ProjectDiscovery`).
+**Reason**: The original `parser.ts` was a 382-line monolithic file handling multiple concerns. Need better encapsulation and modular architecture for file detail construction and analysis orchestration.
+**Impact**: Improved code organization with clear separation of responsibilities. Enhanced maintainability and testability. Better encapsulation of file detail construction logic. Foundation for scalable analyzer architecture.
+
+---
+
+## 2025-07-13: Developer Experience Enhancement
+**Decision**: Add `npm run typecheck` command and improve error handling throughout dependency analyzer.
+**Reason**: Better development workflow and more robust error handling for better debugging experience. TypeScript checking was missing from the workflow.
+**Impact**: Improved developer productivity with dedicated TypeScript checking. More reliable error handling throughout the codebase. Better debugging capabilities.
+
+---
+
+## 2025-07-13: Quality Assurance Workflow Unification  
+**Decision**: Create unified `npm run qa` command that combines build, test, and documentation validation.
+**Reason**: Streamline quality assurance process. Developers need a single command to verify all aspects of code quality before commits.
+**Impact**: Simplified workflow for contributors. Single command ensures all quality checks pass. Reduces risk of incomplete validation before releases.
+
+---
+
+## 2025-07-13: RELEASE_NOTES Removal for Project Maturity
+**Decision**: Remove `RELEASE_NOTES_v0.6.0.md` file and consolidate all release information into CHANGELOG.md.
+**Reason**: Avoid documentation duplication and corporate formalism inappropriate for project maturity level. CHANGELOG.md suffices for tracking changes.
+**Impact**: Cleaner documentation structure. Single source of truth for changes. Reduced maintenance burden. More appropriate documentation approach for project scale.
+
+---
 
 ## 2025-07-12: Duplication Detection Algorithm Update (8-line blocks)
 **Decision**: Update duplication detection from 5-line to 8-line sliding window blocks, with enhanced filtering (50 characters minimum, 8 tokens minimum).
@@ -415,13 +458,6 @@ Format: **Date | Decision | Reason | Impact**
 **Decision**: Test parsing and scoring, not CLI  
 **Reason**: 80/20, effort vs value  
 **Impact**: 2h of tests vs 2 days
-
----
-
-## Coming: [Template for future decisions]
-**Decision**:  
-**Reason**:  
-**Impact**:  
 
 ---
 

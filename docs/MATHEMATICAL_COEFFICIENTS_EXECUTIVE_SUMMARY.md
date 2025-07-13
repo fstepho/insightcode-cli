@@ -179,4 +179,4 @@ interface CoefficientValidation {
 
 ---
 
-*Synthesis document v0.6.1 - Complete mathematical coefficients justification*
+*Synthesis document v0.6.0 - Complete mathematical coefficients justification*

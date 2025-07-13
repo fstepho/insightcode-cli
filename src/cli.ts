@@ -95,7 +95,7 @@ function outputReportFormat(results: AnalysisResult, projectPath: string): void 
 program
   .name('insightcode')
   .description('TypeScript code quality analyzer - 100% local')
-  .version('0.6.1')
+  .version('0.6.0')
   .argument('[path]', 'Path to analyze (default: current directory)', '.')
   .option('-j, --json', 'Output as JSON')
   .option('-f, --format <format>', 'Output format: json, ci, critical, summary, report (default: terminal)')

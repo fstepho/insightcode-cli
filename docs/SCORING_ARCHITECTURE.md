@@ -1,4 +1,4 @@
-# InsightCode Scoring Architecture - v0.6.1+
+# InsightCode Scoring Architecture - v0.6.0+
 
 ## Architecture Overview
 
@@ -25,7 +25,7 @@ return sum + (complexityImpact * 0.45);      // Hardcoded
 const blockSize = 8;                         // Hardcoded
 ```
 
-### 🎯 **After (v0.6.1+)** - Unified centralization
+### 🎯 **After (v0.6.0+)** - Unified centralization
 ```typescript
 // thresholds.constants.ts - SINGLE SOURCE OF TRUTH FOR EVERYTHING
 export const DEFAULT_THRESHOLDS = {
@@ -103,7 +103,7 @@ DUPLICATION_DETECTION_CONSTANTS: {
 }
 ```
 
-### 5. **Health Score Penalties (Mode-Aware v0.6.1+)**
+### 5. **Health Score Penalties (Mode-Aware v0.6.0+)**
 ```typescript
 HEALTH_PENALTY_CONSTANTS: {
   COMPLEXITY: { 
@@ -113,7 +113,7 @@ HEALTH_PENALTY_CONSTANTS: {
     // Example: Complexity 176 → Penalty 133 (catastrophic)
   },
   DUPLICATION: { 
-    // Mode-aware thresholds (v0.6.1+):
+    // Mode-aware thresholds (v0.6.0+):
     // STRICT MODE: 3%/8%/15% (industry-aligned)
     // LEGACY MODE: 15%/30%/50% (permissive for legacy codebases)
     // Progressive penalties without caps - extreme duplication devastates score
@@ -132,13 +132,13 @@ HEALTH_PENALTY_CONSTANTS: {
 
 ## Guaranteed Consistency
 
-### ✅ All systems aligned (Mode-Aware v0.6.1+)
+### ✅ All systems aligned (Mode-Aware v0.6.0+)
 - **Config thresholds** (issues): 10/15/20 (complexity), strict 3/8/15% or legacy 15/30/50% (duplication)
 - **Labels & colors**: 10/15/20 (complexity), mode-specific duplication thresholds  
 - **Scoring functions**: 10/15/20 (complexity), mode-aware duplication scoring
 - **Penalty functions**: 10/15/20 (complexity), mode-aware duplication penalties
 
-**Duplication Mode Selection (v0.6.1+)**: Use `--strict-duplication` flag for industry-aligned 3%/8%/15% thresholds, or default legacy 15%/30%/50% for existing codebases.
+**Duplication Mode Selection (v0.6.0+)**: Use `--strict-duplication` flag for industry-aligned 3%/8%/15% thresholds, or default legacy 15%/30%/50% for existing codebases.
 
 ### ✅ Automatically consistent documentation
 Notes in `report-generator.ts` reference the same thresholds as the implementation.
@@ -199,7 +199,7 @@ grep -r "= 10\|= 15\|= 20\|= 0\.45\|= 200" src/
 # Ensure duplication thresholds support both modes
 ```
 
-## Key Improvements in v0.6.1+
+## Key Improvements in v0.6.0+
 
 ### 📉 **Eliminated Redundancy**
 - **Before**: Two files (`config.ts` + `scoringConstants.ts`) with overlapping thresholds

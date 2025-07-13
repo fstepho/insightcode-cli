@@ -142,5 +142,5 @@ interface CoefficientTest {
 
 ---
 
-*Reference document v0.6.1 - Updated with comprehensive coefficient analysis*
+*Reference document v0.6.0 - Updated with comprehensive coefficient analysis*
 *See: `docs/MATHEMATICAL_COEFFICIENTS_JUSTIFICATION.md` for detailed analysis*

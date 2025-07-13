@@ -42,17 +42,25 @@
 # Install globally
 npm install -g insightcode-cli
 
-# Analyze current directory
+# Simple analysis (new default behavior)
 insightcode
 
 # Analyze specific path
 insightcode ./src
 
-# Focus on production code only
+# Focus on production code only  
 insightcode --production
 
-# Output JSON for CI/CD
+# Use industry-standard strict duplication thresholds
+insightcode --strict-duplication
+
+# Export for CI/CD integration
 insightcode --json > report.json
+
+# Multiple format options
+insightcode --format=summary    # Brief overview
+insightcode --format=critical   # Only critical files
+insightcode --format=ci         # CI/CD friendly output
 ```
 # Note: We use self-analysis for testing and documentation,
 # not as a quality metric of the tool itself
@@ -230,18 +238,39 @@ The production-only analysis gives you the true picture of your codebase health.
 ## 🔧 CLI Options
 
 ```bash
-# Exclude patterns
+# Analysis modes
+insightcode                    # Default: analyze current directory
+insightcode ./src             # Analyze specific path
+insightcode --production      # Focus on production code only
+
+# Duplication analysis modes (v0.6.0+)
+insightcode --strict-duplication    # Industry standards (3%/8%/15%)
+insightcode                         # Legacy mode (15%/30%/50%) - default
+
+# Output formats
+insightcode --json                  # Full JSON output
+insightcode --format=summary        # Brief overview
+insightcode --format=critical       # Only critical files  
+insightcode --format=ci             # CI/CD optimized output
+insightcode --format=markdown       # Markdown report
+
+# Filtering
 insightcode --exclude "**/*.spec.ts" --exclude "**/vendor/**"
 
-# Exclude utility directories
-insightcode --production
-
-# JSON output for CI/CD
-insightcode --json
-
-# Help
+# Get help
 insightcode --help
 ```
+
+### Duplication Mode Selection (v0.6.0+)
+
+Choose the appropriate duplication analysis mode for your project context:
+
+| Mode | Thresholds | Best For | Example Usage |
+|------|------------|----------|---------------|
+| **Legacy** (default) | 15%/30%/50% | Existing codebases, gradual improvement | `insightcode` |
+| **Strict** | 3%/8%/15% | New projects, industry alignment | `insightcode --strict-duplication` |
+
+**Strict mode** aligns with industry standards (SonarQube, Google, etc.) while **Legacy mode** provides more permissive thresholds suitable for brownfield projects.
 
 ### JSON Output Format
 
@@ -414,51 +443,42 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 
 ## 🗺️ Roadmap
 
-### What's New (v0.4.0) ✅
-  - **Advanced Criticality Engine**: Scoring is now weighted by file complexity and architectural impact.
-  - **Architectural Analysis**: The tool now detects "Silent Killers" and profiles complexity distribution (StdDev).
-  - **Enhanced JSON Output**: The API exposes all advanced metrics for CI/CD and external tools
-  - Configurable thresholds with `insightcode.config.json`
-  - Project metadata display in analysis reports  
-  - Academic best practices for metric aggregation
-  - Improved reporting with better metrics display
-  - Expanded test coverage (55 tests with comprehensive scenarios)
-  - Robust configuration management with validation and defaults
-  - Enhanced JSON output format with project information
+### What's New (v0.6.0) ✅ **Major Release - BREAKING CHANGES**
+- **🚨 CLI Interface Redesign**: Analysis is now the default action - `analyze` subcommand removed
+- **🚨 Flag Renaming**: `--exclude-utility` → `--production` for better clarity  
+- **🚨 Removed Features**: `--with-context` flag no longer available
+- **📚 Complete Documentation Audit**: All technical documentation synchronized with implementation (79+ examples validated)
+- **🔍 Dual-Mode Duplication Analysis**: Choose between strict (industry standards) and legacy (permissive) thresholds
+- **⚡ Enhanced Developer Experience**: Added `npm run typecheck`, improved error handling, unified validation tools
+- **🎯 Mathematical Validation**: Every scoring formula and constant verified for 100% accuracy
+- **🛡️ Quality Assurance**: Comprehensive validation system prevents documentation drift
 
 ### What's New (v0.5.0) ✅
-- **Rich Context Extraction**: Provides detailed architectural insights for external tools and AI systems
-- **Enhanced Architectural Analysis**: Deep function-level complexity breakdown with code samples and dependency mapping
-- **Comprehensive Code Context**: Detailed analysis of async patterns, error handling, TypeScript usage, and more
+- **Rich Context Extraction**: Detailed architectural insights for LLM analysis and external tools
+- **Enhanced Function Analysis**: Deep complexity breakdown with pattern detection
+- **Comprehensive Code Context**: Analysis of async patterns, error handling, TypeScript usage
 
-### v0.6.1 ✅ Current Focus
-- **Duplication Modes**: Introduced strict and legacy modes for duplication analysis
-- **Improved Scoring Weights**: Updated to 45/30/25 for complexity, maintainability, and duplication
-- **Enhanced JSON Output**: More detailed file-level metrics and criticality scores
-- **Documentation Updates**: Improved user guides and FAQs for project weights and duplication modes
-- **Performance Improvements**: Faster analysis with reduced memory footprint
-- **Bug Fixes**: Resolved issues with file path normalization and dependency resolution 
-- Documentation and Quality Assurance phase
-- Complete synchronization of all technical documentation
-- Enhanced accuracy and consistency across all methodology descriptions
-- Finalizing the project scoring weights FAQ and user guide
-- Improved user guides for project weights and duplication modes
+### What's New (v0.4.0) ✅
+- **Advanced Criticality Engine**: Scoring weighted by file complexity and architectural impact
+- **Architectural Metrics**: Detection of "Silent Killers" and complexity distribution analysis
+- **Enhanced JSON Output**: Complete metrics exposure for CI/CD and external tools
+- **Academic Methodology**: Research-based best practices for metric aggregation
 
 ### v0.7.0 🔮 Future Development
-- JSX/TSX support
-- Improved duplication detection algorithm
-- HTML reports with charts
-- AI-powered code recommendations based on context analysis
-- Interactive HTML reports with architectural visualization
-- Advanced pattern matching for specific frameworks (React, Vue, etc.)
-- Historical tracking capabilities
+- **Enhanced Duplication Detection**: More sophisticated algorithm with contextual awareness
+- **JSX/TSX Support**: Full React/Vue component analysis capabilities  
+- **Interactive HTML Reports**: Rich visualizations with architectural diagrams
+- **AI-Powered Insights**: Context-aware recommendations using LLM integration
+- **Framework-Specific Analysis**: Specialized patterns for React, Vue, Angular, and Node.js
+- **Historical Tracking**: Code quality trends over time with regression detection
 
 ### Future 🔮
-- GitHub Actions integration
-- Test coverage metrics
-- Multi-language support (Python, Java)
-- Performance optimization features
-- Historical tracking & trend analysis
+- **Multi-Language Support**: Python, Java, C# analysis capabilities
+- **GitHub Actions Integration**: Seamless CI/CD workflow templates
+- **VS Code Extension**: Real-time analysis and inline suggestions
+- **Team Analytics**: Aggregate metrics across multiple repositories
+- **Performance Profiling**: Identify performance bottlenecks alongside quality issues
+- **Test Coverage Integration**: Combine quality metrics with coverage data
 
 ## 🤝 Contributing
 
@@ -516,4 +536,4 @@ MIT - Use it, fork it, improve it!
 
 ---
 
-**Latest**: v0.6.1 | **Downloads**: [![npm](https://img.shields.io/npm/dm/insightcode-cli.svg)](https://www.npmjs.com/package/insightcode-cli) | **Stars**: ⭐ the repo if you find it useful!
+**Latest**: v0.6.0 | **Downloads**: [![npm](https://img.shields.io/npm/dm/insightcode-cli.svg)](https://www.npmjs.com/package/insightcode-cli) | **Stars**: ⭐ the repo if you find it useful!

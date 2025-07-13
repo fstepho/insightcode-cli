@@ -2,12 +2,12 @@
 
 ## ❓ What are the current project scoring weights?
 
-**Current weights (v0.6.1+):**
+**Current weights (v0.6.0+):**
 - **45%** Complexity 
 - **30%** Maintainability
 - **25%** Duplication (with mode-aware thresholds)
 
-**Note**: v0.6.1 introduced dual-mode duplication thresholds - see below for details.
+**Note**: v0.6.0 introduced dual-mode duplication thresholds - see below for details.
 
 ## ❓ Are these industry standard weights?
 
@@ -51,9 +51,9 @@ File Health Score = 100 - (complexity_penalty + size_penalty + duplication_penal
 
 **Project weights**: Currently no. The weights are hardcoded as internal hypotheses. Future versions may support user-configurable project weights based on specific project contexts.
 
-**Duplication thresholds**: Yes! (v0.6.1+) Use `--strict-duplication` for industry-aligned thresholds or default legacy mode for permissive analysis.
+**Duplication thresholds**: Yes! (v0.6.0+) Use `--strict-duplication` for industry-aligned thresholds or default legacy mode for permissive analysis.
 
-## ❓ What's the duplication dual-mode system? (v0.6.1+)
+## ❓ What's the duplication dual-mode system? (v0.6.0+)
 
 **Two threshold modes:**
 - **Strict mode** (`--strict-duplication`): 3%/8%/15% thresholds aligned with SonarQube/industry standards  
@@ -73,4 +73,4 @@ Same codebase can receive different duplication scores (and thus project grades)
 
 ---
 
-*Last updated: v0.6.1 - This FAQ will be updated as we gather more empirical data.*
+*Last updated: v0.6.0 - This FAQ will be updated as we gather more empirical data.*
