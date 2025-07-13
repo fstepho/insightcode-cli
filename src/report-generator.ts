@@ -5,7 +5,7 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
-import { AnalysisResult, FileDetail, Issue, Severity, CodeContext, FileDependencyAnalysis, ReportResult, ReportSummary } from './types';
+import { AnalysisResult, FileDetail, Issue, CodeContext, ReportResult, ReportSummary } from './types';
 import { getComplexityLabel, getDuplicationLabel, getMaintainabilityLabel } from './scoring';
 import { getHealthCategory, getScoreStatus } from './scoring.utils';
 

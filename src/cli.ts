@@ -42,7 +42,11 @@ function outputCriticalFormat(results: AnalysisResult): void {
     details: results.details.filter(f => isFileCritical(f))
   };
   
-  console.log(JSON.stringify(criticalResult, null, 2));
+  console.log(JSON.stringify(criticalResult, function(key, val) {
+    // Filter out absolutePath from output
+    if (key === 'absolutePath') return undefined;
+    return val;
+  }, 2));
 }
 
 function outputSummaryFormat(results: AnalysisResult): void {
@@ -134,7 +138,9 @@ async function runAnalysis(path: string, options: CliOptions) {
     // Handle output format
     switch (format) {
       case 'json':
-        console.log(JSON.stringify(results, function(_key, val) {
+        console.log(JSON.stringify(results, function(key, val) {
+          // Filter out absolutePath from output
+          if (key === 'absolutePath') return undefined;
           return val && val.toFixed ? Number(val.toFixed(2)) : val;
         }, 2));
         break;
