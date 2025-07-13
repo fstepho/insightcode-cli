@@ -44,11 +44,10 @@ if [[ "$COMMIT_MSG" =~ ^ai: ]]; then
     echo "⚠️  Warning: InsightCode analysis failed. Continuing without metrics."
   else
     # Extraire les métriques
-    SCORE=$(echo "$ANALYSIS" | jq -r '.score // "?"')
-    GRADE=$(echo "$ANALYSIS" | jq -r '.grade // "?"')
-    FILES=$(echo "$ANALYSIS" | jq -r '.summary.totalFiles // "?"')
-    LINES=$(echo "$ANALYSIS" | jq -r '.summary.totalLines // "?"')
-    TOP_ISSUE=$(echo "$ANALYSIS" | jq -r '.topFiles[0] // {} | "\(.path // "N/A") (complexity: \(.complexity // "N/A"))"')
+    SCORE=$(echo "$ANALYSIS" | jq -r '.overview.scores.overall // "?"')
+    GRADE=$(echo "$ANALYSIS" | jq -r '.overview.grade // "?"')
+    FILES=$(echo "$ANALYSIS" | jq -r '.overview.statistics.totalFiles // "?"')
+    LINES=$(echo "$ANALYSIS" | jq -r '.overview.statistics.totalLOC // "?"')
     
     # Date au format ISO
     CURRENT_DATE=$(date "+%Y-%m-%d %H:%M")
@@ -57,7 +56,6 @@ if [[ "$COMMIT_MSG" =~ ^ai: ]]; then
     NEW_STATUS="<!-- GIT-HOOK:START -->
 Last Analysis: $CURRENT_DATE
 Score: $GRADE ($SCORE/100) | Files: $FILES | Lines: $LINES
-Top Issues: $TOP_ISSUE
 <!-- GIT-HOOK:END -->"
     
     # Mettre à jour .ai.md avec sed
