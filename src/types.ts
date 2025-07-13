@@ -335,14 +335,6 @@ export interface ResolverContext {
   projectRoot: string;
 }
 
-export interface DependencyAnalysisResult {
-  incomingDependencyCount: Map<string, number>;
-  dependencyGraph: Map<string, Set<string>>;
-  circularDependencies: string[][];
-  errors: AnalysisError[];
-  statistics: DependencyStatistics;
-}
-
 export interface AnalysisError {
   file: string;
   error: string;
