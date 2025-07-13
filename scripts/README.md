@@ -4,68 +4,97 @@ Utility scripts for InsightCode development and quality assurance.
 
 ## 🧪 **Quality Assurance Scripts**
 
-### `doc-test-and-generate.js` ⭐
-**Test et génération automatique de la documentation**
+### `validate-docs.js` ⭐⭐
+**Comprehensive documentation validation and generation**
 ```bash
-npm run doc:test
-```
-- 🧪 **Validation critique** : Teste tous les exemples numériques mentionnés dans la documentation
-- 📊 **Génération automatique** : Produit les tables de mapping exactes à partir du code
-- 🔄 **Anti-régression** : Évite les écarts futurs entre documentation et implémentation
-- ⚡ **Usage recommandé** : Avant chaque release pour garantir la cohérence
-
-### `validate-markdown-examples.js` ⭐⭐
-**NEW: Comprehensive markdown documentation validator**
-```bash
+# Validate all documentation examples
 npm run validate-docs
+
+# Generate documentation tables
+npm run generate-docs
 ```
 - 📖 **Parses markdown files** (HEALTH_SCORE_METHODOLOGY.md, SCORING_ARCHITECTURE.md, etc.)
-- 🔍 **Extracts ALL numerical examples** automatically using regex patterns
+- 🔍 **Extracts ALL numerical examples** automatically using 10 regex patterns
 - ✅ **Validates against real code** (calculateComplexityScore, calculateHealthScore, etc.)
 - 🚨 **Detects inconsistencies** without relying on hardcoded test values
-- **Patterns detected**: `Complexity X → Score Y`, formulas, health score tables, mapping tables
+- 📊 **Generates documentation tables** with research basis and formulas
+- 🔄 **Anti-regression** : Prevents future discrepancies between documentation and implementation
+- **Patterns detected**: Complexity scores, penalties, formulas, health scores, mappings, duplication, weights, thresholds
 
-### `validate-documentation.js`
-**LEGACY: Manual validation with hardcoded test cases**
+### `validate.js`
+**Live code testing and accuracy measurement**
 ```bash
-node scripts/validate-documentation.js
+node scripts/validate.js
 ```
-- ✅ Vérifie tous les exemples numériques (complexity scores, health scores)
-- ✅ Valide les formules mathématiques contre le code réel
-- ✅ Détecte les incohérences documentation/implémentation
-- ✅ Tests de non-régression automatiques
+- 🧪 Tests scoring functions with real temporary files
+- 📊 Accuracy measurement against known cases
+- ✅ Validates scoring implementation with own codebase
 
-### `generate-numeric-examples.js`
-**Génération automatique des exemples numériques**
+### `validate-coefficients.js`
+**Mathematical coefficient analysis**
 ```bash
-node scripts/generate-numeric-examples.js
+npm run validate-coefficients
 ```
-- 📊 Génère les tables de mapping complexité → score
-- 📋 Produit les exemples de Health Score complets
-- 🧮 Valide les formules mathématiques exactes
-- 🔄 Évite les écarts futurs entre code et documentation
+- 🧮 Analysis of mathematical coefficients and powers
+- 📋 Research basis validation for scoring formulas
+- 🎯 Expert judgment mapping verification
 
-## 📈 **Benchmark Scripts**
-
-### `benchmark.js`
-**Analyse des projets populaires JS/TS**
+### `validate-power-coefficients.js`
+**Empirical coefficient optimization**
 ```bash
-node scripts/benchmark.js
+npm run validate-powers
 ```
-- Analyse des projets open-source populaires
-- Validation empirique des seuils de scoring
-- Génération de rapports de comparaison
+- 🔬 Systematic power coefficient testing
+- 📈 Empirical validation methodology
+- 🎯 Expert review task generation
+
+## 🔧 **Utility Scripts**
+
+### `test-duplication-modes.js`
+**Test different duplication detection modes**
+```bash
+npm run test:duplication-modes
+```
+- 🔍 Tests various duplication detection strategies
+- 📊 Performance comparison between modes
+
+### `fix-weight-references.js`
+**Fix weight reference inconsistencies**
+```bash
+npm run fix-weight-refs
+```
+- 🔧 Fixes weight reference inconsistencies in codebase
+- 📝 Updates documentation to match implementation
+
+### `discover-rules.js`
+**Discover linting and quality rules**
+```bash
+node scripts/discover-rules.js
+```
+- 🔍 Discovers applicable linting rules for the project
+- 📋 Generates rule configuration recommendations
+
+### `install-git-ai.sh`
+**Install git AI helper**
+```bash
+./scripts/install-git-ai.sh
+```
+- 🤖 Installs AI-powered git commit message helper
+- 🔧 Sets up development environment enhancements
 
 ## 🎯 **Usage Recommandé**
 
 ### Workflow de développement :
 1. **Avant modification** : `npm run validate-docs`
 2. **Après modification** : `npm run validate-docs` + `npm test`
-3. **Mise à jour docs** : `node scripts/generate-numeric-examples.js`
+3. **Mise à jour docs** : `npm run generate-docs`
 
 ### Intégration continue :
 ```bash
-npm run build && npm test && node scripts/validate-documentation.js
+npm run qa  # Includes build, test, and validate-docs
 ```
 
-See [Benchmarks Documentation](../benchmarks/) for results and methodology.
+### Validation complète avant release :
+```bash
+npm run qa && npm run validate-coefficients && npm run validate-powers
+```
