@@ -7,18 +7,17 @@ const { calculateComplexityScore, calculateHealthScore, calculateDuplicationScor
 let globalErrors = 0;
 const docsDir = path.join(__dirname, '..', 'docs');
 
-// All patterns from the 4 scripts
 const PATTERNS = {
-  complexityScore: /(?:Complexity|complexity)\s+(\d+)\s*[→\-–>]\s*(?:Score|score)\s*:?\s*(\d+)/gi,
-  complexityPenalty: /(?:Complexity|complexity)\s+(\d+)\s*[→\-–>]\s*(?:Penalty|penalty)\s*:?\s*(\d+)/gi,
-  formula: /100-\((\d+)-10\)×3=(\d+)/gi,
+  complexityScore: /(?:Complexity|complexity|CC)\s*(?:of\s+)?(\d+)\s*(?:[→\-–>=>]|yields?|gives?|produces?)\s*(?:Score|score|result)\s*:?\s*(\d+)/gi,
+  complexityPenalty: /(?:Complexity|complexity|CC)\s*(?:of\s+)?(\d+)\s*(?:[→\-–>=>]|yields?|gives?|results?\s+in)\s*(?:Penalty|penalty|deduction)\s*:?\s*(\d+)/gi,
+  formula: /100-\((\d+)-10\)[×*]3=(\d+)/gi,
   healthScore: /\|\s*`?([^`|]+\.ts)`?\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*\*\*(\d+)\*\*/gi,
   mapping: /\|\s*(\d+(?:-\d+)?)\s*\|[^|]*\|[^|]*\|\s*(\d+)\s*\|/gi,
-  duplication: /(?:duplication|Duplication)\s*(?:ratio|percentage|level)?\s*(?:of\s+)?(?:≤|<=|>|>=)?\s*(\d+)%/gi,
-  weight: /(?:weight|Weight|WEIGHT)\s*[:\s]*(?:of\s+)?(?:0\.)?(\d{1,2})(?:\.(\d+))?(?:%|percent)?/gi,
-  threshold: /(?:threshold|limit|THRESHOLD|EXCELLENT_THRESHOLD|HIGH_THRESHOLD)\s*[:\s=]*\s*(\d+)/gi,
-  quadratic: /70-\(\((\d+)-20\)\/30\)²×40=(\d+)/gi,
-  exponential: /30-\(\((\d+)-50\)\/50\)\^1\.8×30=(\d+)/gi
+  duplication: /(?:duplication|Duplication|duplicate)\s*(?:ratio|percentage|level|rate)?\s*(?:of\s+)?(?:≤|<=|>|>=|is\s+)?(\d+)%/gi,
+  weight: /(?:weight|Weight|WEIGHT|coefficient)\s*[:\s=]*(?:of\s+)?(?:0\.)?(\d{1,2})(?:\.(\d+))?(?:%|percent)?/gi,
+  threshold: /(?:threshold|limit|THRESHOLD|EXCELLENT_THRESHOLD|HIGH_THRESHOLD|boundary|cutoff)\s*[:\s=]*\s*(\d+)/gi,
+  quadratic: /70-\(\((\d+)-20\)\/30\)[²^2][×*]40=(\d+)/gi,
+  exponential: /30-\(\((\d+)-50\)\/50\)[\^]1\.8[×*]30=(\d+)/gi
 };
 
 // Validation functions (from validate-markdown-examples.js)
@@ -179,98 +178,195 @@ function getLineNumber(content, index) {
 
 function validateExample(example) {
   let isValid = false;
+  let actual;
   
-  switch (example.type) {
-    case 'complexityScore':
-      const actual = calculateComplexityScore(example.input);
-      isValid = actual === example.expected;
-      if (!isValid) {
-        globalErrors++;
-        console.log(`❌ COMPLEXITY SCORE MISMATCH`);
-        console.log(`   Source: ${example.source}`);
-        console.log(`   Example: "${example.raw}"`);
-        console.log(`   Expected: ${example.expected}, Actual: ${actual}`);
-      }
-      break;
+  try {
+    switch (example.type) {
+      case 'complexityScore':
+        actual = calculateComplexityScore(example.input);
+        
+        // Validate function output
+        if (actual === undefined || actual === null || isNaN(actual)) {
+          throw new Error(`calculateComplexityScore returned invalid value: ${actual}`);
+        }
+        
+        isValid = actual === example.expected;
+        if (!isValid) {
+          globalErrors++;
+          console.log(`❌ COMPLEXITY SCORE MISMATCH`);
+          console.log(`   Source: ${example.source}`);
+          console.log(`   Example: "${example.raw}"`);
+          console.log(`   Expected: ${example.expected}, Actual: ${actual}`);
+        }
+        break;
       
-    case 'complexityPenalty':
-      const score = calculateComplexityScore(example.input);
-      const basePenalty = 100 - score;
-      let extremePenalty = 0;
-      if (example.input > 100) {
-        extremePenalty = Math.round(Math.pow((example.input - 100) / 100, 1.5) * 50);
-      }
-      const actualPenalty = basePenalty + extremePenalty;
-      isValid = actualPenalty === example.expected;
-      if (!isValid) {
-        globalErrors++;
-        console.log(`❌ COMPLEXITY PENALTY MISMATCH`);
-        console.log(`   Source: ${example.source}`);
-        console.log(`   Expected: ${example.expected}, Actual: ${actualPenalty}`);
-      }
-      break;
-      
-    case 'healthScore':
-      const file = {
-        metrics: {
-          complexity: example.complexity,
-          loc: example.loc,
-          duplicationRatio: 0.0,
-          functionCount: Math.round(example.loc / 20)
-        },
-        issues: []
-      };
-      const actualHealth = calculateHealthScore(file);
-      isValid = actualHealth === example.expected;
-      if (!isValid) {
-        globalErrors++;
-        console.log(`❌ HEALTH SCORE MISMATCH`);
-        console.log(`   Source: ${example.source}`);
-        console.log(`   Expected: ${example.expected}, Actual: ${actualHealth}`);
-      }
-      break;
-      
-    case 'duplicationScore':
-      const actualDup = calculateDuplicationScore(example.input);
-      let expectedRange = { min: 0, max: 100 };
-      if (example.percentage <= 15) expectedRange = { min: 90, max: 100 };
-      else if (example.percentage <= 30) expectedRange = { min: 70, max: 90 };
-      else if (example.percentage >= 50) expectedRange = { min: 0, max: 50 };
-      
-      isValid = actualDup >= expectedRange.min && actualDup <= expectedRange.max;
-      if (!isValid) {
-        globalErrors++;
-        console.log(`❌ DUPLICATION SCORE RANGE MISMATCH`);
-        console.log(`   Source: ${example.source}`);
-        console.log(`   Percentage: ${example.percentage}%, Score: ${actualDup}`);
-        console.log(`   Expected range: ${expectedRange.min}-${expectedRange.max}`);
-      }
-      break;
-      
-    case 'projectWeight':
-      isValid = example.input >= 0 && example.input <= 1 && 
-                Math.abs(example.input - example.expected) < 0.01;
-      if (!isValid) {
-        globalErrors++;
-        console.log(`❌ PROJECT WEIGHT MISMATCH`);
-        console.log(`   Source: ${example.source}`);
-        console.log(`   Weight: ${example.input}, Expected: ${example.expected}`);
-      }
-      break;
-      
-    case 'threshold':
-      const reasonableThresholds = [200, 500, 100, 10, 15, 20, 50];
-      isValid = reasonableThresholds.includes(example.input);
-      if (!isValid) {
-        globalErrors++;
-        console.log(`❌ THRESHOLD VALUE UNREASONABLE`);
-        console.log(`   Source: ${example.source}`);
-        console.log(`   Threshold: ${example.input}`);
-      }
-      break;
+      case 'complexityPenalty':
+        const score = calculateComplexityScore(example.input);
+        if (score === undefined || score === null || isNaN(score)) {
+          throw new Error(`calculateComplexityScore returned invalid value: ${score}`);
+        }
+        
+        const basePenalty = 100 - score;
+        let extremePenalty = 0;
+        if (example.input > 100) {
+          extremePenalty = Math.round(Math.pow((example.input - 100) / 100, 1.5) * 50);
+        }
+        const actualPenalty = basePenalty + extremePenalty;
+        
+        if (isNaN(actualPenalty)) {
+          throw new Error(`Calculated penalty is NaN for input ${example.input}`);
+        }
+        
+        isValid = actualPenalty === example.expected;
+        if (!isValid) {
+          globalErrors++;
+          console.log(`❌ COMPLEXITY PENALTY MISMATCH`);
+          console.log(`   Source: ${example.source}`);
+          console.log(`   Expected: ${example.expected}, Actual: ${actualPenalty}`);
+        }
+        break;
+        
+      case 'healthScore':
+        const file = {
+          metrics: {
+            complexity: example.complexity,
+            loc: example.loc,
+            duplicationRatio: 0.0,
+            functionCount: Math.round(example.loc / 20)
+          },
+          issues: []
+        };
+        
+        const actualHealth = calculateHealthScore(file);
+        if (actualHealth === undefined || actualHealth === null || isNaN(actualHealth)) {
+          throw new Error(`calculateHealthScore returned invalid value: ${actualHealth}`);
+        }
+        
+        isValid = actualHealth === example.expected;
+        if (!isValid) {
+          globalErrors++;
+          console.log(`❌ HEALTH SCORE MISMATCH`);
+          console.log(`   Source: ${example.source}`);
+          console.log(`   Expected: ${example.expected}, Actual: ${actualHealth}`);
+        }
+        break;
+        
+      case 'duplicationScore':
+        const actualDup = calculateDuplicationScore(example.input);
+        if (actualDup === undefined || actualDup === null || isNaN(actualDup)) {
+          throw new Error(`calculateDuplicationScore returned invalid value: ${actualDup}`);
+        }
+        
+        let expectedRange = { min: 0, max: 100 };
+        if (example.percentage <= 15) expectedRange = { min: 90, max: 100 };
+        else if (example.percentage <= 30) expectedRange = { min: 70, max: 90 };
+        else if (example.percentage >= 50) expectedRange = { min: 0, max: 50 };
+        
+        isValid = actualDup >= expectedRange.min && actualDup <= expectedRange.max;
+        if (!isValid) {
+          globalErrors++;
+          console.log(`❌ DUPLICATION SCORE RANGE MISMATCH`);
+          console.log(`   Source: ${example.source}`);
+          console.log(`   Percentage: ${example.percentage}%, Score: ${actualDup}`);
+          console.log(`   Expected range: ${expectedRange.min}-${expectedRange.max}`);
+        }
+        break;
+        
+      case 'projectWeight':
+        // Input validation for project weights
+        if (typeof example.input !== 'number' || example.input < 0 || example.input > 1) {
+          throw new Error(`Invalid project weight input: ${example.input}`);
+        }
+        
+        isValid = example.input >= 0 && example.input <= 1 && 
+                  Math.abs(example.input - example.expected) < 0.01;
+        if (!isValid) {
+          globalErrors++;
+          console.log(`❌ PROJECT WEIGHT MISMATCH`);
+          console.log(`   Source: ${example.source}`);
+          console.log(`   Weight: ${example.input}, Expected: ${example.expected}`);
+        }
+        break;
+        
+      case 'threshold':
+        // Input validation for thresholds
+        if (typeof example.input !== 'number' || example.input < 0) {
+          throw new Error(`Invalid threshold input: ${example.input}`);
+        }
+        
+        const reasonableThresholds = [200, 500, 100, 10, 15, 20, 50];
+        isValid = reasonableThresholds.includes(example.input);
+        if (!isValid) {
+          globalErrors++;
+          console.log(`❌ THRESHOLD VALUE UNREASONABLE`);
+          console.log(`   Source: ${example.source}`);
+          console.log(`   Threshold: ${example.input}`);
+        }
+        break;
+        
+      default:
+        throw new Error(`Unknown example type: ${example.type}`);
+    }
+    
+  } catch (error) {
+    console.error(`💥 CRITICAL ERROR validating ${example.type}`);
+    console.error(`   Input: ${JSON.stringify(example.input || {complexity: example.complexity, loc: example.loc})}`);
+    console.error(`   Error: ${error.message}`);
+    console.error(`   Source: ${example.source}`);
+    console.error(`   Raw: "${example.raw}"`);
+    
+    // Mark as error but continue validation
+    globalErrors++;
+    return false;
   }
   
   return isValid;
+}
+
+// Semantic validation functions
+function validateSemanticCoherence(examples) {
+  let warnings = 0;
+  
+  // 1. Complexity scores should decrease as complexity increases
+  const complexityExamples = examples
+    .filter(e => e.type === 'complexityScore')
+    .sort((a, b) => a.input - b.input);
+  
+  for (let i = 1; i < complexityExamples.length; i++) {
+    if (complexityExamples[i].expected > complexityExamples[i-1].expected) {
+      console.log(`⚠️  Semantic warning: Complexity ${complexityExamples[i].input} has higher score (${complexityExamples[i].expected}) than complexity ${complexityExamples[i-1].input} (${complexityExamples[i-1].expected})`);
+      warnings++;
+    }
+  }
+  
+  // 2. Health scores should be reasonable (0-100)
+  const healthExamples = examples.filter(e => e.type === 'healthScore');
+  healthExamples.forEach(example => {
+    if (example.expected < 0 || example.expected > 100) {
+      console.log(`⚠️  Semantic warning: Health score ${example.expected} is outside valid range [0-100] for ${example.filename}`);
+      warnings++;
+    }
+  });
+  
+  // 3. Penalties should increase with complexity
+  const penaltyExamples = examples
+    .filter(e => e.type === 'complexityPenalty')
+    .sort((a, b) => a.input - b.input);
+  
+  for (let i = 1; i < penaltyExamples.length; i++) {
+    if (penaltyExamples[i].expected < penaltyExamples[i-1].expected) {
+      console.log(`⚠️  Semantic warning: Complexity ${penaltyExamples[i].input} has lower penalty (${penaltyExamples[i].expected}) than complexity ${penaltyExamples[i-1].input} (${penaltyExamples[i-1].expected})`);
+      warnings++;
+    }
+  }
+  
+  if (warnings === 0) {
+    console.log(`✅ Semantic coherence: All ${examples.length} examples follow logical patterns`);
+  } else {
+    console.log(`⚠️  Semantic coherence: ${warnings} potential inconsistencies detected`);
+  }
+  
+  return warnings;
 }
 
 // Generation functions (from doc-test-and-generate.js)
@@ -431,7 +527,30 @@ function validateFile(filename) {
     }
   });
   
-  console.log(`📊 Results: ${validExamples}/${examples.length} examples valid`);
+  // Semantic coherence validation
+  console.log(`\n🧠 Semantic coherence validation:`);
+  const semanticWarnings = validateSemanticCoherence(examples);
+  
+  console.log(`📊 Results: ${validExamples}/${examples.length} examples valid, ${semanticWarnings} semantic warnings`);
+}
+
+// Pattern coverage diagnostics
+function diagnosePatternsUsage(allExamples) {
+  console.log('\n🔍 Pattern Usage Diagnostics:');
+  
+  const patternUsage = {};
+  Object.keys(PATTERNS).forEach(key => {
+    patternUsage[key] = allExamples.filter(e => e.type === key || 
+      (key === 'complexityScore' && ['complexityScore'].includes(e.type))).length;
+  });
+  
+  Object.entries(patternUsage).forEach(([pattern, count]) => {
+    const status = count > 0 ? '✅' : '⚠️';
+    console.log(`  ${status} ${pattern}: ${count} examples detected`);
+  });
+  
+  const totalDetected = Object.values(patternUsage).reduce((sum, count) => sum + count, 0);
+  console.log(`\n📊 Pattern coverage: ${totalDetected} total examples detected across ${Object.keys(patternUsage).filter(k => patternUsage[k] > 0).length}/${Object.keys(PATTERNS).length} patterns`);
 }
 
 // Main
@@ -453,7 +572,20 @@ if (command === 'generate') {
     'CODE_QUALITY_GUIDE.md'
   ];
   
+  // Collect all examples for pattern diagnostics
+  const allExamples = [];
+  docsToValidate.forEach(docFile => {
+    const filepath = path.join(docsDir, docFile);
+    if (fs.existsSync(filepath)) {
+      const content = fs.readFileSync(filepath, 'utf8');
+      allExamples.push(...extractExamples(content, docFile));
+    }
+  });
+  
   docsToValidate.forEach(validateFile);
+  
+  // Pattern usage diagnostics
+  diagnosePatternsUsage(allExamples);
   
   console.log('\n' + '='.repeat(60));
   console.log('## 📈 VALIDATION SUMMARY');
