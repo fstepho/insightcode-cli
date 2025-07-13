@@ -163,6 +163,22 @@ function formatMetrics(metrics: { complexity: number, duplicationRatio: number, 
     return `C:${c} D:${d} L:${l}`;
 }
 
+/**
+ * Returns an ANSI color function based on issue severity.
+ */
+function getSeverityColorForIssue(severity: 'high' | 'medium' | 'low'): (s: string) => string {
+    switch (severity) {
+        case 'high':
+            return Ansi.red;
+        case 'medium':
+            return Ansi.orange;
+        case 'low':
+            return Ansi.yellow;
+        default:
+            return Ansi.gray;
+    }
+}
+
 
 // -----------------------------------------------------------------------------
 // SECTION 3: REPORT SECTION GENERATION LOGIC
@@ -302,16 +318,13 @@ function generateRiskyFiles(details: FileDetail[]): string[] {
 }
 
 function generateDeepDive(analysis: AnalysisResult): string[] {
-    const title = ' DEEP DIVE: CRITICAL FUNCTIONS ';
-    const topBorderLine = '─'.repeat(TOTAL_WIDTH - title.length - 2);
+    const title = Ansi.bold('DEEP DIVE: CRITICAL FUNCTIONS');
+    const separator = Ansi.gray('─'.repeat(TOTAL_WIDTH));
 
-    const lines = [
-        Ansi.bold(`┌${title}${topBorderLine}┐`),
-    ];
+    const lines = [title, separator];
 
     if (!analysis.codeContext || analysis.codeContext.length === 0) {
-        lines.push(createBoxedLine(Ansi.gray('No detailed function context available for this analysis.'), TOTAL_WIDTH));
-        lines.push(Ansi.bold(`└${'─'.repeat(TOTAL_WIDTH - 2)}┘`));
+        lines.push(Ansi.gray('No detailed function context available for this analysis.'));
         return lines;
     }
 
@@ -324,43 +337,42 @@ function generateDeepDive(analysis: AnalysisResult): string[] {
         .slice(0, 3);
 
     if (topFunctions.length === 0) {
-        lines.push(createBoxedLine(Ansi.gray('No critical functions found meeting the reporting threshold.'), TOTAL_WIDTH));
-        lines.push(Ansi.bold(`└${'─'.repeat(TOTAL_WIDTH - 2)}┘`));
+        lines.push(Ansi.gray('No critical functions found meeting the reporting threshold.'));
         return lines;
     }
     
     topFunctions.forEach((func, index) => {
         if (index > 0) {
-             lines.push(createTableSeparator([TOTAL_WIDTH - 4]));
-        } else {
-             lines.push(createBoxedLine('', TOTAL_WIDTH));
+            lines.push(Ansi.gray('· '.repeat(TOTAL_WIDTH / 2)));
         }
-        const funcTitle = `🎯 ${Ansi.bold(func.name)} in ${Ansi.yellow(truncatePath(func.file, 50))}`;
-        lines.push(createBoxedLine(funcTitle, TOTAL_WIDTH));
         
-        const metrics = `Complexity: ${Ansi.orange(func.complexity.toString())} | Lines: ${Ansi.orange(func.lineCount.toString())} | Params: ${Ansi.orange(func.parameterCount.toString())}`;
-        lines.push(createBoxedLine(`   ${metrics}`, TOTAL_WIDTH));
+        lines.push(`\n🎯 ${Ansi.bold(func.name)} in ${Ansi.yellow(truncatePath(func.file, 50))}`);
+        lines.push(`   ${Ansi.gray('Metrics:')} Complexity: ${Ansi.orange(func.complexity.toString())} | Lines: ${Ansi.orange(func.lineCount.toString())} | Params: ${Ansi.orange(func.parameterCount.toString())}`);
 
         if (func.issues.length > 0) {
-            lines.push(createBoxedLine(`   ${Ansi.bold('Detected Issues:')}`, TOTAL_WIDTH));
+            lines.push(`   ${Ansi.bold('Detected Issues:')}`);
             
-            const issueLabels = func.issues.map(issue => `     - ${Ansi.red(issue.type)} (${issue.severity})`);
+            const severityOrder = { high: 0, medium: 1, low: 2 };
+            const sortedIssues = [...func.issues].sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
+
+            const issueLabels = sortedIssues.map(issue => {
+                const colorFunc = getSeverityColorForIssue(issue.severity);
+                return `     - ${colorFunc(issue.type)} (${issue.severity})`;
+            });
+
             const maxLabelLength = issueLabels.reduce((max, label) => {
                 const visibleLength = label.replace(/\x1b\[[0-9;]*m/g, '').length;
                 return Math.max(max, visibleLength);
             }, 0);
 
-            func.issues.forEach((issue, i) => {
+            sortedIssues.forEach((issue, i) => {
                 const paddedLabel = padEnd(issueLabels[i], maxLabelLength);
                 const issueLine = `${paddedLabel}: ${Ansi.gray(issue.description)}`;
-                lines.push(createBoxedLine(issueLine, TOTAL_WIDTH));
+                lines.push(issueLine);
             });
-        } else {
-             lines.push(createBoxedLine(`   ${Ansi.gray('No specific issues flagged for this function.')}`, TOTAL_WIDTH));
         }
     });
     
-    lines.push(Ansi.bold(`└${'─'.repeat(TOTAL_WIDTH - 2)}┘`));
     return lines;
 }
 
