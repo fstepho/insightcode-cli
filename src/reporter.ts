@@ -242,8 +242,6 @@ function generateStatsAndInsights(analysis: AnalysisResult): string[] {
 
     // --- Data Extraction ---
     const cycleCount = details.filter(d => d.dependencies.isInCycle).length;
-    const unstableCount = details.filter(d => d.dependencies.instability > 0.8).length;
-    const lowCohesionCount = details.filter(d => d.dependencies.cohesionScore < 0.5).length;
 
     const keyStats = [
         { label: 'Total Files', value: Ansi.white(stats.totalFiles.toString()) },
@@ -252,20 +250,20 @@ function generateStatsAndInsights(analysis: AnalysisResult): string[] {
     ];
 
     const archConcerns = [
-        { label: '🔴 Low Cohesion Files (SRP)', value: Ansi.white(lowCohesionCount.toString()) },
-        { label: '🟠 High Instability Files', value: Ansi.white(unstableCount.toString()) },
-        { label: '🟡 Files in Dep. Cycles', value: Ansi.white(cycleCount.toString()) },
+        { label: '🚨 High Maintenance Cost', value: Ansi.white(details.filter(d => d.healthScore < 40).length.toString()) },
+        { label: '🐌 Slow to Change Files', value: Ansi.white(details.filter(d => d.metrics.complexity > 30).length.toString()) },
+        { label: '🔗 Tightly Coupled Files', value: Ansi.white(cycleCount.toString()) },
     ];
 
     // --- Layout Configuration ---
     const widths = [51, 52];
     const keyStatsLabelWidth = 16;
-    const archConcernsLabelWidth = 35;
+    const archConcernsLabelWidth = 32;
 
     // --- Table Construction ---
     const lines = [
         Ansi.bold(`┌${'─'.repeat(widths[0] + 2)}┬${'─'.repeat(widths[1] + 2)}┐`),
-        createTableRow(['KEY STATS', 'ARCHITECTURAL CONCERNS'], widths),
+        createTableRow(['KEY STATS', 'BUSINESS IMPACT'], widths),
         createTableSeparator(widths),
     ];
 
