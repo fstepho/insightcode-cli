@@ -1,35 +1,35 @@
-# InsightCode Analysis Report: vue
+# InsightCode Analysis Report: uuid
 
 ## Project Information
 
-- **Name:** vue
-- **Type:** frontend framework
-- **Repository:** https://github.com/vuejs/core.git
-- **Version:** v3.5.17
-- **Stars:** 50.7k
-- **Category:** medium
+- **Name:** uuid
+- **Type:** utility library
+- **Repository:** https://github.com/uuidjs/uuid.git
+- **Version:** v11.1.0
+- **Stars:** 15k
+- **Category:** small
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-12T21:46:34.593Z
-- **Duration:** 28.14s
-- **Files Analyzed:** 253
+- **Timestamp:** 2025-07-13T00:46:41.421Z
+- **Duration:** 25.91s
+- **Files Analyzed:** 29
 - **Tool Version:** 0.6.1
 
 ## Quality Overview
 
-### Grade: 🔴 **D**
+### Grade: 🌟 **A**
 
-**112 critical files found requiring attention**
+**5 critical files found requiring attention**
 
 ### Quality Scores
 
 | Dimension | Score (Value) | Status |
 |:---|:---|:---|
-| Complexity | 41/100 | 🔴 Critical |
-| Duplication | 100/100 (2.8% detected) | 🟢 Excellent |
-| Maintainability | 64/100 | 🟠 Needs Improvement |
-| **Overall** | **63/100** | **🟠 Needs Improvement** |
+| Complexity | 95/100 | 🟢 Excellent |
+| Duplication | 95/100 (8.3% detected) | 🟢 Excellent |
+| Maintainability | 100/100 | 🟢 Excellent |
+| **Overall** | **97/100** | **🟢 Excellent** |
 
 ### 📊 Scoring Methodology
 
@@ -61,36 +61,60 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 | Metric | Value |
 |--------|-------|
-| Total Files | 253 |
-| Total Lines of Code | 43,917 |
-| Average Complexity | 30.6 |
-| Average LOC per File | 174 |
+| Total Files | 29 |
+| Total Lines of Code | 978 |
+| Average Complexity | 4.6 |
+| Average LOC per File | 34 |
 
 ## File Health Distribution
 
 | Health Status | Count | Percentage |
 |---------------|-------|------------|
-| 🟢 Excellent (90-100) | 114 | 45% |
-| 🟡 Good (70-89) | 19 | 8% |
-| 🟠 Moderate (50-69) | 8 | 3% |
-| 🔴 Poor (<50) | 112 | 44% |
+| 🟢 Excellent (90-100) | 20 | 69% |
+| 🟡 Good (70-89) | 4 | 14% |
+| 🟠 Moderate (50-69) | 0 | 0% |
+| 🔴 Poor (<50) | 5 | 17% |
 
 ## Critical Files Requiring Attention
 
 | File | Health | Issues (Crit/High) | Primary Concern |
 |------|--------|--------------------|----------------|
-| compiler-sfc/src/script/resolveType.ts | 0% | 11 (2 crit, 9 high) | Extreme complexity (480) |
-| compiler-sfc/src/compileScript.ts | 0% | 5 (2 crit, 3 high) | Extreme complexity (293) |
-| runtime-core/src/componentOptions.ts | 0% | 4 (2 crit, 2 high) | Extreme complexity (133) |
-| runtime-core/src/renderer.ts | 0% | 2 (2 crit, 0 high) | Extreme complexity (454) |
-| runtime-core/src/componentProps.ts | 0% | 6 (1 crit, 5 high) | Extreme complexity (172) |
-| compiler-core/src/parser.ts | 0% | 5 (1 crit, 4 high) | Extreme complexity (165) |
-| runtime-core/src/vnode.ts | 0% | 5 (1 crit, 4 high) | Extreme complexity (149) |
-| compiler-core/src/codegen.ts | 0% | 4 (1 crit, 3 high) | Extreme complexity (218) |
-| compiler-core/src/transforms/transformElement.ts | 0% | 4 (1 crit, 3 high) | Extreme complexity (188) |
-| compiler-core/src/utils.ts | 0% | 4 (1 crit, 3 high) | Extreme complexity (135) |
+| src/v3.ts | 0% | 1 (1 crit, 0 high) | Extreme duplication (69%) |
+| src/v5.ts | 0% | 1 (1 crit, 0 high) | Extreme duplication (69%) |
+| src/v1.ts | 50% | 1 (1 crit, 0 high) | Very High complexity (21) |
+| src/md5.ts | 31% | 1 (0 crit, 1 high) | Extreme duplication (50%) |
+| src/sha1.ts | 31% | 1 (0 crit, 1 high) | Extreme duplication (50%) |
+| src/md5-browser.ts | 70% | 1 (0 crit, 1 high) | Multiple quality issues |
 
 *⭐ indicates emblematic/core files*
+
+## 🎯 Deep Dive: Key Function Analysis
+
+| Function | File | Complexity | Lines | Key Issues |
+|:---|:---|:---|:---|:---|
+| `v1Bytes` | `src/v1.ts` | **8** | 61 | long-function, too-many-params, deep-nesting |
+| `v1` | `src/v1.ts` | **7** | 53 | long-function, deep-nesting |
+| `updateV1State` | `src/v1.ts` | **6** | 51 | long-function, deep-nesting |
+| `wordsToMd5` | `src/md5-browser.ts` | **2** | 95 | long-function |
+| `md5ff` | `src/md5-browser.ts` | **1** | 3 | too-many-params |
+
+## 📈 Code Pattern Analysis
+
+### ❗ Anti-Patterns & Code Smells
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Long Function | 2 | Should be split into smaller functions |
+| Too Many Params | 2 | Consider using object parameters |
+| Deep Nesting | 2 | Hard to read and test |
+
+### ✅ Good Practices Detected
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Type Safe | 7 | Reduces runtime errors |
+
+
 
 ## Dependency Analysis
 
@@ -98,21 +122,18 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 | File | Incoming Deps | Usage Rank | Role |
 |------|---------------|------------|------|
-| runtime-core/src/component.ts | 52 | 100th percentile | Core module |
-| runtime-core/src/warning.ts | 35 | 100th percentile | Core module |
-| runtime-core/src/vnode.ts | 33 | 99th percentile | Core module |
-| compiler-core/src/ast.ts | 25 | 99th percentile | Core module |
-| compiler-core/src/transform.ts | 23 | 98th percentile | Core module |
+| src/types.ts | 10 | 100th percentile | Type definitions |
+| src/stringify.ts | 8 | 96th percentile | Core module |
+| src/parse.ts | 4 | 89th percentile | Core module |
+| src/validate.ts | 4 | 89th percentile | Core module |
+| src/rng.ts | 3 | 82th percentile | Core module |
 
 ### Highly Unstable Files
 
 | File | Instability | Outgoing/Incoming |
 |------|-------------|-------------------|
-| compiler-core/src/compile.ts | 0.95 | 19/1 |
-| compiler-core/src/index.ts | 0.96 | 22/1 |
-| compiler-dom/src/index.ts | 1.00 | 13/0 |
-| compiler-ssr/src/index.ts | 1.00 | 10/0 |
-| reactivity/src/baseHandlers.ts | 0.86 | 6/1 |
+| src/index.ts | 1.00 | 15/0 |
+| src/uuid-bin.ts | 1.00 | 6/0 |
 
 ## Issue Analysis
 
@@ -120,17 +141,32 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 | Severity | Count | Top Affected Areas |
 |----------|-------|-------------------|
-| 🔴 Critical | 105 | runtime-core/src, compiler-core/src/transforms |
-| 🟠 High | 139 | runtime-core/src, compiler-core/src |
-| 🟡 Medium | 98 | runtime-core/src, reactivity/src |
+| 🔴 Critical | 3 | src |
+| 🟠 High | 3 | src |
+| 🟡 Medium | 5 | src |
 
 ### Most Common Issue Types
 
 | Issue Type | Occurrences | Typical Threshold Excess |
 |------------|-------------|-------------------------|
-| Complexity | 267 | 2.6x threshold |
-| Size | 64 | 1.5x threshold |
-| Duplication | 11 | 1.5x threshold |
+| Complexity | 7 | 1.2x threshold |
+| Duplication | 4 | 1.5x threshold |
+
+## Code Quality Patterns
+
+### Detected Patterns Summary
+
+#### Quality Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Long Function | 2 | Should be split into smaller functions |
+| Too Many Params | 2 | Consider using object parameters |
+| Deep Nesting | 2 | Hard to read and test |
+
+#### Architecture Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Type Safe | 7 | Reduces runtime errors |
 
 ## Actionable Recommendations
 
@@ -138,19 +174,16 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 These issues are relatively simple to fix and will quickly improve overall quality:
 
-- **File:** `reactivity/src/watch.ts` (Size: 150% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
-
-- **File:** `runtime-core/src/apiSetupHelpers.ts` (Size: 148% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
-
-- **File:** `compiler-sfc/src/compileTemplate.ts` (Size: 147% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
-
-- **File:** `compiler-sfc/src/rewriteDefault.ts` (Complexity: 140% over threshold)
+- **File:** `src/sha1-browser.ts` (Complexity: 130% over threshold)
   - **Suggestion:** Quick refactor to reduce complexity - achievable in under an hour.
 
-- **File:** `server-renderer/src/render.ts` (Complexity: 140% over threshold)
+- **File:** `src/v4.ts` (Complexity: 130% over threshold)
+  - **Suggestion:** Quick refactor to reduce complexity - achievable in under an hour.
+
+- **File:** `src/v7.ts` (Complexity: 120% over threshold)
+  - **Suggestion:** Quick refactor to reduce complexity - achievable in under an hour.
+
+- **File:** `src/v35.ts` (Complexity: 110% over threshold)
   - **Suggestion:** Quick refactor to reduce complexity - achievable in under an hour.
 
 

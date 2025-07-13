@@ -11,8 +11,8 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-12T21:46:34.748Z
-- **Duration:** 28.29s
+- **Timestamp:** 2025-07-13T00:47:22.929Z
+- **Duration:** 67.40s
 - **Files Analyzed:** 697
 - **Tool Version:** 0.6.1
 
@@ -92,6 +92,37 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 *⭐ indicates emblematic/core files*
 
+## 🎯 Deep Dive: Key Function Analysis
+
+| Function | File | Complexity | Lines | Key Issues |
+|:---|:---|:---|:---|:---|
+| `structuredTypeRelatedToWorker` | `compiler/checker.ts` | **222** | 604 | high-complexity, long-function, deep-nesting |
+| `pipelineEmitWithHintWorker` | `compiler/emitter.ts` | **220** | 475 | high-complexity, long-function, deep-nesting |
+| `checkGrammarModifiers` | `compiler/checker.ts` | **179** | 418 | high-complexity, long-function, deep-nesting |
+| `getSymbolDisplayPartsDocumentationAndSymbolKindWorker` | `services/symbolDisplay.ts` | **174** | 614 | high-complexity, long-function, too-many-params, deep-nesting |
+| `scan` | `compiler/scanner.ts` | **167** | 498 | high-complexity, long-function, deep-nesting |
+
+## 📈 Code Pattern Analysis
+
+### ❗ Anti-Patterns & Code Smells
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Long Function | 220 | Should be split into smaller functions |
+| Deep Nesting | 212 | Hard to read and test |
+| High Complexity | 121 | Error-prone and hard to maintain |
+| Too Many Params | 63 | Consider using object parameters |
+
+### ✅ Good Practices Detected
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Type Safe | 285 | Reduces runtime errors |
+| Error Handling | 42 | Good defensive programming |
+| Async Heavy | 6 | Ensure proper error handling |
+
+
+
 ## Dependency Analysis
 
 ### Hub Files (High Impact)
@@ -112,7 +143,7 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 | harness/evaluatorImpl.ts | 0.86 | 6/1 |
 | harness/fakesHosts.ts | 0.88 | 7/1 |
 | harness/vfsUtil.ts | 0.83 | 5/1 |
-| testRunner/compilerRunner.ts | 0.83 | 5/1 |
+| tsc/tsc.ts | 1.00 | 1/0 |
 
 ## Issue Analysis
 
@@ -132,6 +163,25 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 | Size | 238 | 2.1x threshold |
 | Duplication | 58 | 1.4x threshold |
 
+## Code Quality Patterns
+
+### Detected Patterns Summary
+
+#### Quality Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Long Function | 220 | Should be split into smaller functions |
+| Deep Nesting | 212 | Hard to read and test |
+| High Complexity | 121 | Error-prone and hard to maintain |
+| Too Many Params | 63 | Consider using object parameters |
+
+#### Architecture Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Type Safe | 285 | Reduces runtime errors |
+| Error Handling | 42 | Good defensive programming |
+| Async Heavy | 6 | Ensure proper error handling |
+
 ## Actionable Recommendations
 
 ### 🟠 Priority 2: Stabilize High-Impact Files
@@ -139,10 +189,12 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 These files are heavily used but highly unstable, propagating change risks:
 
 - **File:** `harness/harnessLanguageService.ts` (Instability: 0.77, Used by: 3)
-  - **Suggestion:** Reduce outgoing dependencies (current: 10). Apply Dependency Inversion Principle.
+  - 🎯 **Target Function:** `require` (Function Complexity: 6)
+  - **Suggestion:** This function likely contains many dependencies. Extract smaller helpers and apply Dependency Inversion.
 
 - **File:** `harness/harnessIO.ts` (Instability: 0.80, Used by: 2)
-  - **Suggestion:** Reduce outgoing dependencies (current: 8). Apply Dependency Inversion Principle.
+  - 🎯 **Target Function:** `runMultifileBaseline` (Function Complexity: 30)
+  - **Suggestion:** This function likely contains many dependencies. Extract smaller helpers and apply Dependency Inversion.
 
 - **File:** `testRunner/unittests/helpers/monorepoSymlinkedSiblingPackages.ts` (Instability: 0.78, Used by: 2)
   - **Suggestion:** Reduce outgoing dependencies (current: 7). Apply Dependency Inversion Principle.
@@ -153,16 +205,20 @@ These files are heavily used but highly unstable, propagating change risks:
 These issues are relatively simple to fix and will quickly improve overall quality:
 
 - **File:** `testRunner/compilerRunner.ts` (Size: 150% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
-
-- **File:** `services/codefixes/generateAccessors.ts` (Size: 149% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
+  - 🎯 **Focus Function:** `<anonymous>` (Complexity: 17)
+  - **Suggestion:** Addressing this function will help reduce the file's size issues.
 
 - **File:** `services/refactors/convertExport.ts` (Size: 149% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
+  - 🎯 **Focus Function:** `getInfo` (Complexity: 31)
+  - **Suggestion:** Addressing this function will help reduce the file's size issues.
+
+- **File:** `services/codefixes/generateAccessors.ts` (Size: 149% over threshold)
+  - 🎯 **Focus Function:** `generateAccessorFromProperty` (Complexity: 8)
+  - **Suggestion:** Addressing this function will help reduce the file's size issues.
 
 - **File:** `jsTyping/jsTyping.ts` (Size: 147% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
+  - 🎯 **Focus Function:** `discoverTypings` (Complexity: 12)
+  - **Suggestion:** Addressing this function will help reduce the file's size issues.
 
 - **File:** `testRunner/unittests/tscWatch/libraryResolution.ts` (Duplication: 147% over threshold)
   - **Suggestion:** Quick refactor to reduce duplication - achievable in under an hour.

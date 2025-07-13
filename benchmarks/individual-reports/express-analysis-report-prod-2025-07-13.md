@@ -1,35 +1,35 @@
-# InsightCode Analysis Report: jest
+# InsightCode Analysis Report: express
 
 ## Project Information
 
-- **Name:** jest
-- **Type:** testing framework
-- **Repository:** https://github.com/jestjs/jest.git
-- **Version:** v30.0.4
-- **Stars:** 44.8k
+- **Name:** express
+- **Type:** web framework
+- **Repository:** https://github.com/expressjs/express.git
+- **Version:** v5.1.0
+- **Stars:** 66.2k
 - **Category:** medium
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-12T21:46:35.616Z
-- **Duration:** 29.16s
-- **Files Analyzed:** 388
+- **Timestamp:** 2025-07-13T00:46:41.602Z
+- **Duration:** 26.09s
+- **Files Analyzed:** 7
 - **Tool Version:** 0.6.1
 
 ## Quality Overview
 
-### Grade: ⚠️ **C**
+### Grade: 🌟 **A**
 
-**115 critical files found requiring attention**
+**Good overall health with 1 file requiring attention**
 
 ### Quality Scores
 
 | Dimension | Score (Value) | Status |
 |:---|:---|:---|
-| Complexity | 55/100 | 🔴 Critical |
-| Duplication | 99/100 (2.4% detected) | 🟢 Excellent |
-| Maintainability | 74/100 | 🟡 Good |
-| **Overall** | **72/100** | **🟡 Good** |
+| Complexity | 90/100 | 🟢 Excellent |
+| Duplication | 100/100 (0.0% detected) | 🟢 Excellent |
+| Maintainability | 86/100 | 🟡 Good |
+| **Overall** | **91/100** | **🟢 Excellent** |
 
 ### 📊 Scoring Methodology
 
@@ -61,36 +61,45 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 | Metric | Value |
 |--------|-------|
-| Total Files | 388 |
-| Total Lines of Code | 44,580 |
-| Average Complexity | 16.9 |
-| Average LOC per File | 115 |
+| Total Files | 7 |
+| Total Lines of Code | 1,135 |
+| Average Complexity | 7.4 |
+| Average LOC per File | 162 |
 
 ## File Health Distribution
 
 | Health Status | Count | Percentage |
 |---------------|-------|------------|
-| 🟢 Excellent (90-100) | 229 | 59% |
-| 🟡 Good (70-89) | 32 | 8% |
-| 🟠 Moderate (50-69) | 12 | 3% |
-| 🔴 Poor (<50) | 115 | 30% |
+| 🟢 Excellent (90-100) | 5 | 71% |
+| 🟡 Good (70-89) | 1 | 14% |
+| 🟠 Moderate (50-69) | 0 | 0% |
+| 🔴 Poor (<50) | 1 | 14% |
 
 ## Critical Files Requiring Attention
 
 | File | Health | Issues (Crit/High) | Primary Concern |
 |------|--------|--------------------|----------------|
-| jest-mock/src/index.ts | 0% | 3 (2 crit, 1 high) | Extreme complexity (193) |
-| jest-runtime/src/index.ts | 0% | 2 (2 crit, 0 high) | Extreme complexity (330) |
-| expect/src/spyMatchers.ts | 0% | 2 (2 crit, 0 high) | Extreme complexity (80) |
-| jest-worker/src/workers/processChild.ts | 0% | 2 (2 crit, 0 high) | Very High complexity (43) |
-| pretty-format/src/index.ts | 0% | 4 (1 crit, 3 high) | Extreme complexity (119) |
-| jest-config/src/normalize.ts | 0% | 3 (1 crit, 2 high) | Extreme complexity (146) |
-| jest-diff/src/cleanupSemantic.ts | 0% | 3 (1 crit, 2 high) | Extreme complexity (93) |
-| jest-core/src/watch.ts | 0% | 3 (1 crit, 2 high) | Extreme complexity (67) |
-| jest-runner/src/runTest.ts | 0% | 3 (1 crit, 2 high) | Very High complexity (40) |
-| jest-cli/src/args.ts | 3% | 3 (1 crit, 2 high) | Very High complexity (27) |
+| ⭐ lib/response.js | 20% | 2 (1 crit, 1 high) | Very High complexity (22) |
 
 *⭐ indicates emblematic/core files*
+
+## 🎯 Deep Dive: Key Function Analysis
+
+| Function | File | Complexity | Lines | Key Issues |
+|:---|:---|:---|:---|:---|
+| `sendfile` | `lib/response.js` | **2** | 89 | long-function, deep-nesting |
+
+## 📈 Code Pattern Analysis
+
+### ❗ Anti-Patterns & Code Smells
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Long Function | 1 | Should be split into smaller functions |
+| High Complexity | 1 | Error-prone and hard to maintain |
+| Deep Nesting | 1 | Hard to read and test |
+
+
 
 ## Dependency Analysis
 
@@ -98,21 +107,13 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 | File | Incoming Deps | Usage Rank | Role |
 |------|---------------|------------|------|
-| jest-jasmine2/src/types.ts | 12 | 100th percentile | Type definitions |
-| jest-worker/src/types.ts | 12 | 100th percentile | Type definitions |
-| jest-jasmine2/src/jasmine/Spec.ts | 10 | 99th percentile | Core module |
-| jest-reporters/src/types.ts | 9 | 99th percentile | Type definitions |
-| pretty-format/src/types.ts | 9 | 99th percentile | Type definitions |
+| lib/utils.js | 2 | 100th percentile | Utilities |
 
 ### Highly Unstable Files
 
 | File | Instability | Outgoing/Incoming |
 |------|-------------|-------------------|
-| babel-jest/src/index.ts | 1.00 | 1/0 |
-| create-jest/src/index.ts | 1.00 | 1/0 |
-| create-jest/src/runCreate.ts | 0.83 | 5/1 |
-| expect/src/index.ts | 1.00 | 7/0 |
-| jest-changed-files/src/index.ts | 1.00 | 4/0 |
+| index.js | 1.00 | 1/0 |
 
 ## Issue Analysis
 
@@ -120,37 +121,46 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 | Severity | Count | Top Affected Areas |
 |----------|-------|-------------------|
-| 🔴 Critical | 105 | jest-reporters/src, expect/src |
-| 🟠 High | 81 | jest-core/src, jest-config/src |
-| 🟡 Medium | 76 | jest-core/src, jest-circus/src |
+| 🔴 Critical | 1 | lib |
+| 🟠 High | 1 | lib |
+| 🟡 Medium | 2 | lib |
 
 ### Most Common Issue Types
 
 | Issue Type | Occurrences | Typical Threshold Excess |
 |------------|-------------|-------------------------|
-| Complexity | 186 | 2.1x threshold |
-| Size | 58 | 1.5x threshold |
-| Duplication | 18 | 1.4x threshold |
+| Size | 2 | 1.4x threshold |
+| Complexity | 2 | 1.1x threshold |
+
+## Code Quality Patterns
+
+### Detected Patterns Summary
+
+#### Quality Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Long Function | 1 | Should be split into smaller functions |
+| High Complexity | 1 | Error-prone and hard to maintain |
+| Deep Nesting | 1 | Hard to read and test |
 
 ## Actionable Recommendations
+
+### 🔴 Priority 1: Refactor High-Complexity Core Functions
+
+These emblematic files have very high complexity that impacts maintainability:
+
+- **File:** `lib/response.js` (Complexity: 22)
+  - **Suggestion:** Apply the Single Responsibility Principle to decompose this file into smaller modules.
+
 
 ### 🟢 Quick Wins (< 1 hour each)
 
 These issues are relatively simple to fix and will quickly improve overall quality:
 
-- **File:** `jest-worker/src/workers/NodeThreadsWorker.ts` (Size: 149% over threshold)
+- **File:** `lib/application.js` (Size: 131% over threshold)
   - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
 
-- **File:** `jest-environment-node/src/index.ts` (Size: 145% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
-
-- **File:** `jest-core/src/runJest.ts` (Size: 143% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
-
-- **File:** `babel-jest/src/index.ts` (Complexity: 140% over threshold)
-  - **Suggestion:** Quick refactor to reduce complexity - achievable in under an hour.
-
-- **File:** `jest-console/src/NullConsole.ts` (Complexity: 140% over threshold)
+- **File:** `lib/view.js` (Complexity: 120% over threshold)
   - **Suggestion:** Quick refactor to reduce complexity - achievable in under an hour.
 
 

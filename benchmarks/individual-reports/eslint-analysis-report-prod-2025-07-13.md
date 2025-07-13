@@ -11,8 +11,8 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-12T21:46:35.039Z
-- **Duration:** 28.58s
+- **Timestamp:** 2025-07-13T00:47:24.171Z
+- **Duration:** 68.64s
 - **Files Analyzed:** 425
 - **Tool Version:** 0.6.1
 
@@ -92,6 +92,37 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 *⭐ indicates emblematic/core files*
 
+## 🎯 Deep Dive: Key Function Analysis
+
+| Function | File | Complexity | Lines | Key Issues |
+|:---|:---|:---|:---|:---|
+| `handleFixes` | `lib/rules/no-unused-vars.js` | **62** | 693 | high-complexity, long-function, deep-nesting |
+| `processOptions` | `lib/eslint/eslint-helpers.js` | **48** | 194 | high-complexity, long-function, deep-nesting |
+| `collectUnusedVariables` | `lib/rules/no-unused-vars.js` | **48** | 204 | high-complexity, long-function, deep-nesting |
+| `processOptions` | `lib/eslint/legacy-eslint.js` | **47** | 188 | high-complexity, long-function, deep-nesting |
+| `checkVariableDeclaration` | `lib/rules/one-var.js` | **42** | 192 | high-complexity, long-function, deep-nesting |
+
+## 📈 Code Pattern Analysis
+
+### ❗ Anti-Patterns & Code Smells
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Deep Nesting | 218 | Hard to read and test |
+| Long Function | 206 | Should be split into smaller functions |
+| High Complexity | 56 | Error-prone and hard to maintain |
+| Too Many Params | 2 | Consider using object parameters |
+
+### ✅ Good Practices Detected
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Error Handling | 24 | Good defensive programming |
+| Async Heavy | 6 | Ensure proper error handling |
+| Type Safe | 2 | Reduces runtime errors |
+
+
+
 ## Dependency Analysis
 
 ### Hub Files (High Impact)
@@ -132,6 +163,25 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 | Duplication | 192 | 1.4x threshold |
 | Size | 89 | 1.4x threshold |
 
+## Code Quality Patterns
+
+### Detected Patterns Summary
+
+#### Quality Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Deep Nesting | 218 | Hard to read and test |
+| Long Function | 206 | Should be split into smaller functions |
+| High Complexity | 56 | Error-prone and hard to maintain |
+| Too Many Params | 2 | Consider using object parameters |
+
+#### Architecture Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Error Handling | 24 | Good defensive programming |
+| Async Heavy | 6 | Ensure proper error handling |
+| Type Safe | 2 | Reduces runtime errors |
+
 ## Actionable Recommendations
 
 ### 🔴 Priority 1: Refactor High-Complexity Core Functions
@@ -139,13 +189,16 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 These emblematic files have very high complexity that impacts maintainability:
 
 - **File:** `lib/linter/linter.js` (Complexity: 229)
-  - **Suggestion:** Apply the Single Responsibility Principle to decompose this file into smaller modules.
+  - 🎯 **Target Function:** `verifyAndFix` (Function Complexity: 22)
+  - **Suggestion:** This function is the primary complexity driver. Break it down into smaller, single-responsibility helpers.
 
 - **File:** `lib/linter/code-path-analysis/code-path-analyzer.js` (Complexity: 186)
-  - **Suggestion:** Apply the Single Responsibility Principle to decompose this file into smaller modules.
+  - 🎯 **Target Function:** `preprocess` (Function Complexity: 38)
+  - **Suggestion:** This function is the primary complexity driver. Break it down into smaller, single-responsibility helpers.
 
 - **File:** `lib/rule-tester/rule-tester.js` (Complexity: 147)
-  - **Suggestion:** Apply the Single Responsibility Principle to decompose this file into smaller modules.
+  - 🎯 **Target Function:** `testInvalidTemplate` (Function Complexity: 40)
+  - **Suggestion:** This function is the primary complexity driver. Break it down into smaller, single-responsibility helpers.
 
 
 ### 🟠 Priority 2: Stabilize High-Impact Files
@@ -155,11 +208,13 @@ These files are heavily used but highly unstable, propagating change risks:
 - **File:** `lib/rules/index.js` (Instability: 0.98, Used by: 6)
   - **Suggestion:** Reduce outgoing dependencies (current: 291). Apply Dependency Inversion Principle.
 
-- **File:** `lib/cli-engine/cli-engine.js` (Instability: 0.78, Used by: 2)
-  - **Suggestion:** Reduce outgoing dependencies (current: 7). Apply Dependency Inversion Principle.
-
 - **File:** `lib/linter/linter.js` (Instability: 0.92, Used by: 2)
-  - **Suggestion:** Reduce outgoing dependencies (current: 24). Apply Dependency Inversion Principle.
+  - 🎯 **Target Function:** `verifyAndFix` (Function Complexity: 22)
+  - **Suggestion:** This function likely contains many dependencies. Extract smaller helpers and apply Dependency Inversion.
+
+- **File:** `lib/cli-engine/cli-engine.js` (Instability: 0.78, Used by: 2)
+  - 🎯 **Target Function:** `executeOnFiles` (Function Complexity: 18)
+  - **Suggestion:** This function likely contains many dependencies. Extract smaller helpers and apply Dependency Inversion.
 
 
 ### 🟢 Quick Wins (< 1 hour each)
@@ -167,13 +222,16 @@ These files are heavily used but highly unstable, propagating change risks:
 These issues are relatively simple to fix and will quickly improve overall quality:
 
 - **File:** `lib/rules/curly.js` (Size: 148% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
+  - 🎯 **Focus Function:** `needsSemicolon` (Complexity: 11)
+  - **Suggestion:** Addressing this function will help reduce the file's size issues.
 
 - **File:** `lib/rules/no-extra-boolean-cast.js` (Size: 145% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
+  - 🎯 **Focus Function:** `needsParens` (Complexity: 21)
+  - **Suggestion:** Addressing this function will help reduce the file's size issues.
 
 - **File:** `lib/rules/comma-style.js` (Size: 144% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
+  - 🎯 **Focus Function:** `validateCommaItemSpacing` (Complexity: 12)
+  - **Suggestion:** Addressing this function will help reduce the file's size issues.
 
 - **File:** `lib/rules/no-useless-call.js` (Duplication: 144% over threshold)
   - **Suggestion:** Quick refactor to reduce duplication - achievable in under an hour.

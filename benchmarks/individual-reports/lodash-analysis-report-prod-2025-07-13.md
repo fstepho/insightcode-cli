@@ -1,35 +1,35 @@
-# InsightCode Analysis Report: chalk
+# InsightCode Analysis Report: lodash
 
 ## Project Information
 
-- **Name:** chalk
+- **Name:** lodash
 - **Type:** utility library
-- **Repository:** https://github.com/chalk/chalk.git
-- **Version:** v5.4.1
-- **Stars:** 22.3k
+- **Repository:** https://github.com/lodash/lodash.git
+- **Version:** 4.17.21
+- **Stars:** 60.6k
 - **Category:** small
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-12T21:46:31.466Z
-- **Duration:** 25.03s
-- **Files Analyzed:** 5
+- **Timestamp:** 2025-07-13T00:46:42.759Z
+- **Duration:** 27.26s
+- **Files Analyzed:** 20
 - **Tool Version:** 0.6.1
 
 ## Quality Overview
 
-### Grade: 🌟 **A**
+### Grade: 💀 **F**
 
-**Good overall health with 1 file requiring attention**
+**3 critical files found requiring attention**
 
 ### Quality Scores
 
 | Dimension | Score (Value) | Status |
 |:---|:---|:---|
-| Complexity | 77/100 | 🟡 Good |
-| Duplication | 100/100 (0.0% detected) | 🟢 Excellent |
-| Maintainability | 100/100 | 🟢 Excellent |
-| **Overall** | **90/100** | **🟢 Excellent** |
+| Complexity | 6/100 | 🔴 Critical |
+| Duplication | 100/100 (0.9% detected) | 🟢 Excellent |
+| Maintainability | 7/100 | 🔴 Critical |
+| **Overall** | **30/100** | **🔴 Critical** |
 
 ### 📊 Scoring Methodology
 
@@ -61,39 +61,76 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 | Metric | Value |
 |--------|-------|
-| Total Files | 5 |
-| Total Lines of Code | 475 |
-| Average Complexity | 8.0 |
-| Average LOC per File | 95 |
+| Total Files | 20 |
+| Total Lines of Code | 8,879 |
+| Average Complexity | 98.3 |
+| Average LOC per File | 444 |
 
 ## File Health Distribution
 
 | Health Status | Count | Percentage |
 |---------------|-------|------------|
-| 🟢 Excellent (90-100) | 4 | 80% |
-| 🟡 Good (70-89) | 0 | 0% |
+| 🟢 Excellent (90-100) | 16 | 80% |
+| 🟡 Good (70-89) | 1 | 5% |
 | 🟠 Moderate (50-69) | 0 | 0% |
-| 🔴 Poor (<50) | 1 | 20% |
+| 🔴 Poor (<50) | 3 | 15% |
 
 ## Critical Files Requiring Attention
 
 | File | Health | Issues (Crit/High) | Primary Concern |
 |------|--------|--------------------|----------------|
-| ⭐ source/index.js | 46% | 1 (1 crit, 0 high) | Very High complexity (30) |
+| ⭐ lodash.js | 0% | 19 (2 crit, 17 high) | Extreme complexity (1818) |
+| fp/_baseConvert.js | 0% | 3 (1 crit, 2 high) | Extreme complexity (73) |
+| perf/perf.js | 9% | 2 (1 crit, 1 high) | Extremely large file (1639 LOC) |
+| fp/_mapping.js | 79% | 1 (0 crit, 1 high) | Large file (328 LOC) |
 
 *⭐ indicates emblematic/core files*
+
+## 🎯 Deep Dive: Key Function Analysis
+
+| Function | File | Complexity | Lines | Key Issues |
+|:---|:---|:---|:---|:---|
+| `compareAscending` | `lodash.js` | **32** | 29 | high-complexity, deep-nesting |
+| `baseClone` | `lodash.js` | **28** | 75 | high-complexity, long-function, deep-nesting |
+| `equalObjects` | `lodash.js` | **25** | 64 | high-complexity, long-function, deep-nesting |
+| `arrayLikeKeys` | `lodash.js` | **24** | 26 | high-complexity, deep-nesting |
+| `createWrap` | `lodash.js` | **24** | 54 | high-complexity, long-function, too-many-params, deep-nesting |
+
+## 📈 Code Pattern Analysis
+
+### ❗ Anti-Patterns & Code Smells
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Deep Nesting | 4 | Hard to read and test |
+| Long Function | 3 | Should be split into smaller functions |
+| High Complexity | 3 | Error-prone and hard to maintain |
+| Too Many Params | 1 | Consider using object parameters |
+
+### ✅ Good Practices Detected
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Error Handling | 2 | Good defensive programming |
+
+
 
 ## Dependency Analysis
 
 ### Hub Files (High Impact)
 
-*No significant hub files detected*
+| File | Incoming Deps | Usage Rank | Role |
+|------|---------------|------------|------|
+| fp/_mapping.js | 2 | 100th percentile | Core module |
 
 ### Highly Unstable Files
 
 | File | Instability | Outgoing/Incoming |
 |------|-------------|-------------------|
-| source/index.test-d.ts | 1.00 | 1/0 |
+| .markdown-doctest-setup.js | 1.00 | 1/0 |
+| fp/_convertBrowser.js | 1.00 | 1/0 |
+| lib/common/file.js | 1.00 | 1/0 |
+| lib/common/mapping.js | 1.00 | 2/0 |
 
 ## Issue Analysis
 
@@ -101,13 +138,33 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 | Severity | Count | Top Affected Areas |
 |----------|-------|-------------------|
-| 🔴 Critical | 1 | source |
+| 🔴 Critical | 4 | root, fp |
+| 🟠 High | 21 | root, fp |
+| 🟡 Medium | 9 | root |
 
 ### Most Common Issue Types
 
 | Issue Type | Occurrences | Typical Threshold Excess |
 |------------|-------------|-------------------------|
-| Complexity | 1 | 1.5x threshold |
+| Complexity | 30 | 4.9x threshold |
+| Size | 4 | 2.5x threshold |
+
+## Code Quality Patterns
+
+### Detected Patterns Summary
+
+#### Quality Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Deep Nesting | 4 | Hard to read and test |
+| Long Function | 3 | Should be split into smaller functions |
+| High Complexity | 3 | Error-prone and hard to maintain |
+| Too Many Params | 1 | Consider using object parameters |
+
+#### Architecture Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Error Handling | 2 | Good defensive programming |
 
 ## Actionable Recommendations
 
@@ -115,8 +172,18 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 These emblematic files have very high complexity that impacts maintainability:
 
-- **File:** `source/index.js` (Complexity: 30)
-  - **Suggestion:** Apply the Single Responsibility Principle to decompose this file into smaller modules.
+- **File:** `lodash.js` (Complexity: 1818)
+  - 🎯 **Target Function:** `compareAscending` (Function Complexity: 32)
+  - **Suggestion:** This function is the primary complexity driver. Break it down into smaller, single-responsibility helpers.
+
+
+### 🟢 Quick Wins (< 1 hour each)
+
+These issues are relatively simple to fix and will quickly improve overall quality:
+
+- **File:** `lodash.js` (Complexity: 130% over threshold)
+  - 🎯 **Target Function:** `compareAscending` (Function Complexity: 32)
+  - **Suggestion:** Break this function into smaller helpers to quickly reduce file complexity.
 
 
 ---

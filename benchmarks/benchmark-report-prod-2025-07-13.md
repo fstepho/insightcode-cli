@@ -1,8 +1,8 @@
 # InsightCode Benchmark Report - Production Code
 
-**Generated:** 2025-07-12T21:46:36.277Z
+**Generated:** 2025-07-13T00:47:29.364Z
 **Tool Version:** v0.6.0
-**Analysis Mode:** Production Code with Code Context
+**Analysis Mode:** Production Code
 
 ## Executive Summary
 
@@ -10,8 +10,8 @@
 - **Projects Analyzed:** 9
 - **Success Rate:** 9/9 (100%)
 - **Total Lines Analyzed:** 677,099
-- **Analysis Speed:** 22,719 lines/second
-- **Total Duration:** 29.80s
+- **Analysis Speed:** 9,174 lines/second
+- **Total Duration:** 73.81s
 
 ### Quality Distribution
 
@@ -110,13 +110,21 @@ Found 2745 critical/high severity issues across all projects:
 
 ### typescript
 - **deprecatedCompat/deprecate.ts**: Complexity (110% over threshold)
-- **jsTyping/jsTyping.ts**: Complexity (305% over threshold)
 - **compiler/binder.ts**: Complexity (5625% over threshold)
+- **compiler/binder.ts**: Size (326% over threshold)
 - *...and 1059 more issues*
 
 ## Code Pattern Analysis
 
 ### Most Common Patterns
+
+#### Quality Patterns
+| Pattern | Occurrences | Found In |
+|---------|-------------|----------|
+| Deep Nesting | 1139 | lodash, chalk, uuid +6 |
+| Long Function | 891 | lodash, uuid, express +5 |
+| High Complexity | 439 | lodash, express, vue +4 |
+| Too Many Params | 170 | lodash, uuid, vue +4 |
 
 ## Project Summaries
 

@@ -30,7 +30,6 @@
     "details": [
       {
         "file": ".markdown-doctest-setup.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/.markdown-doctest-setup.js",
         "metrics": {
           "complexity": 1,
           "loc": 8,
@@ -50,7 +49,6 @@
       },
       {
         "file": "lodash.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lodash.js",
         "metrics": {
           "complexity": 1818,
           "loc": 5970,
@@ -293,7 +291,6 @@
       },
       {
         "file": "fp/_baseConvert.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/fp/_baseConvert.js",
         "metrics": {
           "complexity": 73,
           "loc": 350,
@@ -336,7 +333,6 @@
       },
       {
         "file": "fp/_convertBrowser.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/fp/_convertBrowser.js",
         "metrics": {
           "complexity": 1,
           "loc": 8,
@@ -356,7 +352,6 @@
       },
       {
         "file": "fp/_mapping.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/fp/_mapping.js",
         "metrics": {
           "complexity": 1,
           "loc": 328,
@@ -384,7 +379,6 @@
       },
       {
         "file": "fp/placeholder.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/fp/placeholder.js",
         "metrics": {
           "complexity": 1,
           "loc": 1,
@@ -404,7 +398,6 @@
       },
       {
         "file": "perf/perf.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/perf/perf.js",
         "metrics": {
           "complexity": 20,
           "loc": 1639,
@@ -438,68 +431,7 @@
         "healthScore": 9
       },
       {
-        "file": "lib/fp/build-dist.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/fp/build-dist.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 41,
-          "functionCount": 1,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "lib/fp/build-doc.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/fp/build-doc.js",
-        "metrics": {
-          "complexity": 8,
-          "loc": 44,
-          "functionCount": 3,
-          "duplicationRatio": 0.02
-        },
-        "issues": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "lib/fp/build-modules.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/fp/build-modules.js",
-        "metrics": {
-          "complexity": 8,
-          "loc": 92,
-          "functionCount": 5,
-          "duplicationRatio": 0.02
-        },
-        "issues": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
         "file": "lib/common/file.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/common/file.js",
         "metrics": {
           "complexity": 4,
           "loc": 27,
@@ -519,7 +451,6 @@
       },
       {
         "file": "lib/common/mapping.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/common/mapping.js",
         "metrics": {
           "complexity": 1,
           "loc": 5,
@@ -539,7 +470,6 @@
       },
       {
         "file": "lib/common/minify.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/common/minify.js",
         "metrics": {
           "complexity": 5,
           "loc": 20,
@@ -559,7 +489,6 @@
       },
       {
         "file": "lib/common/uglify.options.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/common/uglify.options.js",
         "metrics": {
           "complexity": 1,
           "loc": 15,
@@ -579,7 +508,6 @@
       },
       {
         "file": "lib/common/util.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/common/util.js",
         "metrics": {
           "complexity": 4,
           "loc": 19,
@@ -598,8 +526,64 @@
         "healthScore": 100
       },
       {
+        "file": "lib/fp/build-dist.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 41,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/fp/build-doc.js",
+        "metrics": {
+          "complexity": 8,
+          "loc": 44,
+          "functionCount": 3,
+          "duplicationRatio": 0.02
+        },
+        "issues": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/fp/build-modules.js",
+        "metrics": {
+          "complexity": 8,
+          "loc": 92,
+          "functionCount": 5,
+          "duplicationRatio": 0.02
+        },
+        "issues": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
         "file": "lib/main/build-dist.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/main/build-dist.js",
         "metrics": {
           "complexity": 1,
           "loc": 17,
@@ -619,7 +603,6 @@
       },
       {
         "file": "lib/main/build-doc.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/main/build-doc.js",
         "metrics": {
           "complexity": 4,
           "loc": 49,
@@ -639,7 +622,6 @@
       },
       {
         "file": "lib/main/build-modules.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/main/build-modules.js",
         "metrics": {
           "complexity": 1,
           "loc": 19,
@@ -659,7 +641,6 @@
       },
       {
         "file": "lib/main/build-site.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/lib/main/build-site.js",
         "metrics": {
           "complexity": 8,
           "loc": 142,
@@ -679,7 +660,6 @@
       },
       {
         "file": "perf/asset/perf-ui.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash/perf/asset/perf-ui.js",
         "metrics": {
           "complexity": 5,
           "loc": 85,
@@ -722,14 +702,235 @@
         "version": "4.17.21"
       },
       "analysis": {
-        "timestamp": "2025-07-12T21:46:32.228Z",
-        "durationMs": 25763,
+        "timestamp": "2025-07-13T00:46:42.759Z",
+        "durationMs": 27223,
         "toolVersion": "0.6.1",
         "filesAnalyzed": 20,
         "duplicationMode": "legacy"
       }
     },
-    "codeContext": []
+    "codeContext": [
+      {
+        "file": "lodash.js",
+        "criticalFunctions": [
+          {
+            "name": "compareAscending",
+            "complexity": 32,
+            "lineCount": 29,
+            "parameterCount": 2,
+            "snippet": "function compareAscending(value, other) {\n      if (value !== other) {\n        var valIsDefined = value !== undefined,\n            valIsNull = value === null,\n            valIsReflexive = value === value,\n            valIsSymbol = isSymbol(value);\n        var othIsDefined = other !== undefined,\n            othIsNull = other === null,\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "high-complexity",
+                "severity": "high",
+                "description": "Complexity 32 exceeds recommended threshold of 15"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          },
+          {
+            "name": "baseClone",
+            "complexity": 28,
+            "lineCount": 75,
+            "parameterCount": 6,
+            "snippet": "function baseClone(value, bitmask, customizer, key, object, stack) {\n      var result,\n          isDeep = bitmask & CLONE_DEEP_FLAG,\n          isFlat = bitmask & CLONE_FLAT_FLAG,\n          isFull = bitmask & CLONE_SYMBOLS_FLAG;\n      if (customizer) {\n        result = object ? customizer(value, key, object, stack) : customizer(value);\n      }\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "high-complexity",
+                "severity": "high",
+                "description": "Complexity 28 exceeds recommended threshold of 15"
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "description": "Function has 75 lines, consider splitting"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          },
+          {
+            "name": "equalObjects",
+            "complexity": 25,
+            "lineCount": 64,
+            "parameterCount": 6,
+            "snippet": "function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {\n      var isPartial = bitmask & COMPARE_PARTIAL_FLAG,\n          objProps = getAllKeys(object),\n          objLength = objProps.length,\n          othProps = getAllKeys(other),\n          othLength = othProps.length;\n      if (objLength != othLength && !isPartial) {\n        return false;\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "high-complexity",
+                "severity": "high",
+                "description": "Complexity 25 exceeds recommended threshold of 15"
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "description": "Function has 64 lines, consider splitting"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          },
+          {
+            "name": "arrayLikeKeys",
+            "complexity": 24,
+            "lineCount": 26,
+            "parameterCount": 2,
+            "snippet": "function arrayLikeKeys(value, inherited) {\n      var isArr = isArray(value),\n          isArg = !isArr && isArguments(value),\n          isBuff = !isArr && !isArg && isBuffer(value),\n          isType = !isArr && !isArg && !isBuff && isTypedArray(value),\n          skipIndexes = isArr || isArg || isBuff || isType,\n          result = skipIndexes ? baseTimes(value.length, String) : [],\n          length = result.length;\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "high-complexity",
+                "severity": "high",
+                "description": "Complexity 24 exceeds recommended threshold of 15"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          },
+          {
+            "name": "createWrap",
+            "complexity": 24,
+            "lineCount": 54,
+            "parameterCount": 8,
+            "snippet": "function createWrap(func, bitmask, thisArg, partials, holders, argPos, ary, arity) {\n      var isBindKey = bitmask & WRAP_BIND_KEY_FLAG;\n      if (!isBindKey && typeof func != 'function') {\n        throw new TypeError(FUNC_ERROR_TEXT);\n      }\n      var length = partials ? partials.length : 0;\n      if (!length) {\n        bitmask &= ~(WRAP_PARTIAL_FLAG | WRAP_PARTIAL_RIGHT_FLAG);\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "high-complexity",
+                "severity": "high",
+                "description": "Complexity 24 exceeds recommended threshold of 15"
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "description": "Function has 54 lines, consider splitting"
+              },
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "description": "8 parameters, consider using object parameter"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          }
+        ],
+        "patterns": {
+          "quality": [
+            "long-function",
+            "high-complexity",
+            "too-many-params",
+            "deep-nesting"
+          ],
+          "architecture": [
+            "error-handling"
+          ],
+          "performance": [
+            "io-heavy",
+            "caching"
+          ],
+          "security": [
+            "input-validation"
+          ],
+          "testing": [
+            "test-file"
+          ]
+        }
+      },
+      {
+        "file": "fp/_baseConvert.js",
+        "criticalFunctions": [
+          {
+            "name": "baseConvert",
+            "complexity": 17,
+            "lineCount": 430,
+            "parameterCount": 4,
+            "snippet": "function baseConvert(util, name, func, options) {\n  var isLib = typeof name == 'function',\n      isObj = name === Object(name);\n  if (isObj) {\n    options = func;\n    func = name;\n    name = undefined;\n  }\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "description": "Function has 430 lines, consider splitting"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          }
+        ],
+        "patterns": {
+          "quality": [
+            "long-function",
+            "high-complexity",
+            "deep-nesting"
+          ],
+          "architecture": [],
+          "performance": [
+            "caching"
+          ],
+          "security": [],
+          "testing": [
+            "test-file"
+          ]
+        }
+      },
+      {
+        "file": "fp/_mapping.js",
+        "criticalFunctions": [],
+        "patterns": {
+          "quality": [
+            "deep-nesting"
+          ],
+          "architecture": [],
+          "performance": [
+            "caching"
+          ],
+          "security": [
+            "input-validation"
+          ],
+          "testing": []
+        }
+      },
+      {
+        "file": "perf/perf.js",
+        "criticalFunctions": [],
+        "patterns": {
+          "quality": [
+            "long-function",
+            "high-complexity",
+            "deep-nesting"
+          ],
+          "architecture": [
+            "error-handling"
+          ],
+          "performance": [
+            "caching"
+          ],
+          "security": [
+            "input-validation"
+          ],
+          "testing": [
+            "test-file"
+          ]
+        }
+      }
+    ]
   },
-  "durationMs": 25798
+  "durationMs": 27259
 }

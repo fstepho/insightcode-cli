@@ -11,8 +11,8 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-12T21:46:36.258Z
-- **Duration:** 29.80s
+- **Timestamp:** 2025-07-13T00:47:29.333Z
+- **Duration:** 73.81s
 - **Files Analyzed:** 1744
 - **Tool Version:** 0.6.1
 
@@ -92,6 +92,37 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 *⭐ indicates emblematic/core files*
 
+## 🎯 Deep Dive: Key Function Analysis
+
+| Function | File | Complexity | Lines | Key Issues |
+|:---|:---|:---|:---|:---|
+| `reifyCreateOperations` | `compiler/src/template/pipeline/src/phases/reify.ts` | **86** | 359 | high-complexity, long-function, deep-nesting |
+| `resolve` | `compiler-cli/src/ngtsc/annotations/component/src/handler.ts` | **84** | 501 | high-complexity, long-function, deep-nesting |
+| `getDateFormatter` | `common/src/i18n/format_date.ts` | **82** | 309 | high-complexity, long-function |
+| `transformExpressionsInOp` | `compiler/src/template/pipeline/ir/src/expression.ts` | **72** | 152 | high-complexity, long-function, deep-nesting |
+| `analyze` | `compiler-cli/src/ngtsc/annotations/component/src/handler.ts` | **59** | 487 | high-complexity, long-function, deep-nesting |
+
+## 📈 Code Pattern Analysis
+
+### ❗ Anti-Patterns & Code Smells
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Deep Nesting | 477 | Hard to read and test |
+| Long Function | 297 | Should be split into smaller functions |
+| High Complexity | 147 | Error-prone and hard to maintain |
+| Too Many Params | 84 | Consider using object parameters |
+
+### ✅ Good Practices Detected
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Type Safe | 640 | Reduces runtime errors |
+| Error Handling | 94 | Good defensive programming |
+| Async Heavy | 48 | Ensure proper error handling |
+
+
+
 ## Dependency Analysis
 
 ### Hub Files (High Impact)
@@ -112,7 +143,7 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 | benchpress/index.ts | 1.00 | 22/0 |
 | compiler/index.ts | 1.00 | 1/0 |
 | core/index.ts | 1.00 | 1/0 |
-| compiler-cli/index.ts | 0.86 | 12/2 |
+| elements/index.ts | 1.00 | 1/0 |
 
 ## Issue Analysis
 
@@ -132,6 +163,25 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 | Size | 261 | 1.5x threshold |
 | Duplication | 105 | 1.5x threshold |
 
+## Code Quality Patterns
+
+### Detected Patterns Summary
+
+#### Quality Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Deep Nesting | 477 | Hard to read and test |
+| Long Function | 297 | Should be split into smaller functions |
+| High Complexity | 147 | Error-prone and hard to maintain |
+| Too Many Params | 84 | Consider using object parameters |
+
+#### Architecture Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Type Safe | 640 | Reduces runtime errors |
+| Error Handling | 94 | Good defensive programming |
+| Async Heavy | 48 | Ensure proper error handling |
+
 ## Actionable Recommendations
 
 ### 🟠 Priority 2: Stabilize High-Impact Files
@@ -139,13 +189,15 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 These files are heavily used but highly unstable, propagating change risks:
 
 - **File:** `core/schematics/migrations/signal-queries-migration/migration.ts` (Instability: 0.75, Used by: 8)
-  - **Suggestion:** Reduce outgoing dependencies (current: 24). Apply Dependency Inversion Principle.
+  - 🎯 **Target Function:** `migrate` (Function Complexity: 15)
+  - **Suggestion:** This function likely contains many dependencies. Extract smaller helpers and apply Dependency Inversion.
 
 - **File:** `core/src/render3/view_ref.ts` (Instability: 0.71, Used by: 7)
   - **Suggestion:** Reduce outgoing dependencies (current: 17). Apply Dependency Inversion Principle.
 
 - **File:** `core/src/render3/component_ref.ts` (Instability: 0.88, Used by: 6)
-  - **Suggestion:** Reduce outgoing dependencies (current: 43). Apply Dependency Inversion Principle.
+  - 🎯 **Target Function:** `create` (Function Complexity: 10)
+  - **Suggestion:** This function likely contains many dependencies. Extract smaller helpers and apply Dependency Inversion.
 
 
 ### 🟢 Quick Wins (< 1 hour each)
@@ -156,16 +208,19 @@ These issues are relatively simple to fix and will quickly improve overall quali
   - **Suggestion:** Quick refactor to reduce duplication - achievable in under an hour.
 
 - **File:** `compiler-cli/src/perform_compile.ts` (Size: 148% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
+  - 🎯 **Focus Function:** `readConfiguration` (Complexity: 6)
+  - **Suggestion:** Addressing this function will help reduce the file's size issues.
 
 - **File:** `router/src/provide_router.ts` (Size: 148% over threshold)
   - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
 
 - **File:** `core/src/render3/node_selector_matcher.ts` (Size: 148% over threshold)
-  - **Suggestion:** Quick refactor to reduce size - achievable in under an hour.
+  - 🎯 **Focus Function:** `isNodeMatchingSelector` (Complexity: 30)
+  - **Suggestion:** Addressing this function will help reduce the file's size issues.
 
 - **File:** `language-service/src/refactorings/convert_to_signal_queries/apply_query_refactoring.ts` (Duplication: 147% over threshold)
-  - **Suggestion:** Quick refactor to reduce duplication - achievable in under an hour.
+  - 🎯 **Focus Function:** `applySignalQueriesRefactoring` (Complexity: 17)
+  - **Suggestion:** Addressing this function will help reduce the file's duplication issues.
 
 
 ---

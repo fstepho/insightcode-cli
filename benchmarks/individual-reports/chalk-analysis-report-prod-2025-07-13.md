@@ -1,35 +1,35 @@
-# InsightCode Analysis Report: lodash
+# InsightCode Analysis Report: chalk
 
 ## Project Information
 
-- **Name:** lodash
+- **Name:** chalk
 - **Type:** utility library
-- **Repository:** https://github.com/lodash/lodash.git
-- **Version:** 4.17.21
-- **Stars:** 60.6k
+- **Repository:** https://github.com/chalk/chalk.git
+- **Version:** v5.4.1
+- **Stars:** 22.3k
 - **Category:** small
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-12T21:46:32.228Z
-- **Duration:** 25.80s
-- **Files Analyzed:** 20
+- **Timestamp:** 2025-07-13T00:46:41.285Z
+- **Duration:** 25.78s
+- **Files Analyzed:** 5
 - **Tool Version:** 0.6.1
 
 ## Quality Overview
 
-### Grade: 💀 **F**
+### Grade: 🌟 **A**
 
-**3 critical files found requiring attention**
+**Good overall health with 1 file requiring attention**
 
 ### Quality Scores
 
 | Dimension | Score (Value) | Status |
 |:---|:---|:---|
-| Complexity | 6/100 | 🔴 Critical |
-| Duplication | 100/100 (0.9% detected) | 🟢 Excellent |
-| Maintainability | 7/100 | 🔴 Critical |
-| **Overall** | **30/100** | **🔴 Critical** |
+| Complexity | 77/100 | 🟡 Good |
+| Duplication | 100/100 (0.0% detected) | 🟢 Excellent |
+| Maintainability | 100/100 | 🟢 Excellent |
+| **Overall** | **90/100** | **🟢 Excellent** |
 
 ### 📊 Scoring Methodology
 
@@ -61,47 +61,49 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 | Metric | Value |
 |--------|-------|
-| Total Files | 20 |
-| Total Lines of Code | 8,879 |
-| Average Complexity | 98.3 |
-| Average LOC per File | 444 |
+| Total Files | 5 |
+| Total Lines of Code | 475 |
+| Average Complexity | 8.0 |
+| Average LOC per File | 95 |
 
 ## File Health Distribution
 
 | Health Status | Count | Percentage |
 |---------------|-------|------------|
-| 🟢 Excellent (90-100) | 16 | 80% |
-| 🟡 Good (70-89) | 1 | 5% |
+| 🟢 Excellent (90-100) | 4 | 80% |
+| 🟡 Good (70-89) | 0 | 0% |
 | 🟠 Moderate (50-69) | 0 | 0% |
-| 🔴 Poor (<50) | 3 | 15% |
+| 🔴 Poor (<50) | 1 | 20% |
 
 ## Critical Files Requiring Attention
 
 | File | Health | Issues (Crit/High) | Primary Concern |
 |------|--------|--------------------|----------------|
-| ⭐ lodash.js | 0% | 19 (2 crit, 17 high) | Extreme complexity (1818) |
-| fp/_baseConvert.js | 0% | 3 (1 crit, 2 high) | Extreme complexity (73) |
-| perf/perf.js | 9% | 2 (1 crit, 1 high) | Extremely large file (1639 LOC) |
-| fp/_mapping.js | 79% | 1 (0 crit, 1 high) | Large file (328 LOC) |
+| ⭐ source/index.js | 46% | 1 (1 crit, 0 high) | Very High complexity (30) |
 
 *⭐ indicates emblematic/core files*
+
+## 📈 Code Pattern Analysis
+
+### ❗ Anti-Patterns & Code Smells
+
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Deep Nesting | 1 | Hard to read and test |
+
+
 
 ## Dependency Analysis
 
 ### Hub Files (High Impact)
 
-| File | Incoming Deps | Usage Rank | Role |
-|------|---------------|------------|------|
-| fp/_mapping.js | 2 | 100th percentile | Core module |
+*No significant hub files detected*
 
 ### Highly Unstable Files
 
 | File | Instability | Outgoing/Incoming |
 |------|-------------|-------------------|
-| .markdown-doctest-setup.js | 1.00 | 1/0 |
-| fp/_convertBrowser.js | 1.00 | 1/0 |
-| lib/common/file.js | 1.00 | 1/0 |
-| lib/common/mapping.js | 1.00 | 2/0 |
+| source/index.test-d.ts | 1.00 | 1/0 |
 
 ## Issue Analysis
 
@@ -109,16 +111,22 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 | Severity | Count | Top Affected Areas |
 |----------|-------|-------------------|
-| 🔴 Critical | 4 | root, fp |
-| 🟠 High | 21 | root, fp |
-| 🟡 Medium | 9 | root |
+| 🔴 Critical | 1 | source |
 
 ### Most Common Issue Types
 
 | Issue Type | Occurrences | Typical Threshold Excess |
 |------------|-------------|-------------------------|
-| Complexity | 30 | 4.9x threshold |
-| Size | 4 | 2.5x threshold |
+| Complexity | 1 | 1.5x threshold |
+
+## Code Quality Patterns
+
+### Detected Patterns Summary
+
+#### Quality Patterns
+| Pattern | Occurrences | Implication |
+|---------|-------------|-------------|
+| Deep Nesting | 1 | Hard to read and test |
 
 ## Actionable Recommendations
 
@@ -126,16 +134,9 @@ InsightCode uses **internal hypothesis-based scoring** requiring empirical valid
 
 These emblematic files have very high complexity that impacts maintainability:
 
-- **File:** `lodash.js` (Complexity: 1818)
-  - **Suggestion:** Apply the Single Responsibility Principle to decompose this file into smaller modules.
-
-
-### 🟢 Quick Wins (< 1 hour each)
-
-These issues are relatively simple to fix and will quickly improve overall quality:
-
-- **File:** `lodash.js` (Complexity: 130% over threshold)
-  - **Suggestion:** Quick refactor to reduce complexity - achievable in under an hour.
+- **File:** `source/index.js` (Complexity: 30)
+  - **Note:** No specific functions identified for targeting (possibly many small functions).
+  - **Suggestion:** Review file architecture - consider if this complexity comes from too many responsibilities.
 
 
 ---

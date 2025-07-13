@@ -30,7 +30,6 @@
     "details": [
       {
         "file": "index.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/index.js",
         "metrics": {
           "complexity": 1,
           "loc": 2,
@@ -50,7 +49,6 @@
       },
       {
         "file": "lib/application.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/application.js",
         "metrics": {
           "complexity": 5,
           "loc": 262,
@@ -78,7 +76,6 @@
       },
       {
         "file": "lib/express.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/express.js",
         "metrics": {
           "complexity": 2,
           "loc": 34,
@@ -98,7 +95,6 @@
       },
       {
         "file": "lib/request.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/request.js",
         "metrics": {
           "complexity": 1,
           "loc": 160,
@@ -118,7 +114,6 @@
       },
       {
         "file": "lib/response.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/response.js",
         "metrics": {
           "complexity": 22,
           "loc": 468,
@@ -153,7 +148,6 @@
       },
       {
         "file": "lib/utils.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/utils.js",
         "metrics": {
           "complexity": 9,
           "loc": 119,
@@ -173,7 +167,6 @@
       },
       {
         "file": "lib/view.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express/lib/view.js",
         "metrics": {
           "complexity": 12,
           "loc": 90,
@@ -225,14 +218,57 @@
         "repository": "expressjs/express"
       },
       "analysis": {
-        "timestamp": "2025-07-12T21:46:31.944Z",
-        "durationMs": 25472,
+        "timestamp": "2025-07-13T00:46:41.602Z",
+        "durationMs": 26059,
         "toolVersion": "0.6.1",
         "filesAnalyzed": 7,
         "duplicationMode": "legacy"
       }
     },
-    "codeContext": []
+    "codeContext": [
+      {
+        "file": "lib/response.js",
+        "criticalFunctions": [
+          {
+            "name": "sendfile",
+            "complexity": 2,
+            "lineCount": 89,
+            "parameterCount": 4,
+            "snippet": "function sendfile(res, file, options, callback) {\n  var done = false;\n  var streaming;\n  function onaborted() {\n    if (done) return;\n    done = true;\n    var err = new Error('Request aborted');\n    err.code = 'ECONNABORTED';\n  // ... more code ...",
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "description": "Function has 89 lines, consider splitting"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "description": "Deep nesting detected, consider extracting sub-functions"
+              }
+            ]
+          }
+        ],
+        "patterns": {
+          "quality": [
+            "long-function",
+            "high-complexity",
+            "deep-nesting"
+          ],
+          "architecture": [],
+          "performance": [
+            "io-heavy",
+            "caching"
+          ],
+          "security": [
+            "input-validation"
+          ],
+          "testing": [
+            "test-file"
+          ]
+        }
+      }
+    ]
   },
-  "durationMs": 25499
+  "durationMs": 26088
 }

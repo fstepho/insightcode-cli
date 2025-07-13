@@ -25,7 +25,6 @@
     "details": [
       {
         "file": "benchmark.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/chalk/benchmark.js",
         "metrics": {
           "complexity": 1,
           "loc": 41,
@@ -45,7 +44,6 @@
       },
       {
         "file": "source/index.d.ts",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/chalk/source/index.d.ts",
         "metrics": {
           "complexity": 1,
           "loc": 89,
@@ -65,7 +63,6 @@
       },
       {
         "file": "source/index.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/chalk/source/index.js",
         "metrics": {
           "complexity": 30,
           "loc": 169,
@@ -93,7 +90,6 @@
       },
       {
         "file": "source/index.test-d.ts",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/chalk/source/index.test-d.ts",
         "metrics": {
           "complexity": 1,
           "loc": 148,
@@ -113,7 +109,6 @@
       },
       {
         "file": "source/utilities.js",
-        "absolutePath": "/Users/fstepho/dev/insightcode-cli/temp-analysis/chalk/source/utilities.js",
         "metrics": {
           "complexity": 7,
           "loc": 28,
@@ -157,14 +152,30 @@
         "repository": "chalk/chalk"
       },
       "analysis": {
-        "timestamp": "2025-07-12T21:46:31.466Z",
-        "durationMs": 24996,
+        "timestamp": "2025-07-13T00:46:41.285Z",
+        "durationMs": 25744,
         "toolVersion": "0.6.1",
         "filesAnalyzed": 5,
         "duplicationMode": "legacy"
       }
     },
-    "codeContext": []
+    "codeContext": [
+      {
+        "file": "source/index.js",
+        "criticalFunctions": [],
+        "patterns": {
+          "quality": [
+            "deep-nesting"
+          ],
+          "architecture": [],
+          "performance": [
+            "caching"
+          ],
+          "security": [],
+          "testing": []
+        }
+      }
+    ]
   },
-  "durationMs": 25029
+  "durationMs": 25778
 }
