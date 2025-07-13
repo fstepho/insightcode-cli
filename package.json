@@ -15,14 +15,13 @@
     "prepublishOnly": "npm run build",
     "benchmark:production": "tsx src/benchmark.ts --production",
     "benchmark:full": "tsx --max-old-space-size=8192 src/benchmark.ts",
-    "validate-docs": "node scripts/validate-markdown-examples.js",
-    "generate-examples": "node scripts/generate-numeric-examples.js",
-    "doc:test": "node scripts/doc-test-and-generate.js",
+    "validate-docs": "node scripts/validate-docs.js",
+    "generate-docs": "node scripts/validate-docs.js generate",
     "validate-coefficients": "node scripts/validate-coefficients.js",
     "validate-powers": "node scripts/validate-power-coefficients.js",
     "fix-weight-refs": "node scripts/fix-weight-references.js",
     "test:duplication-modes": "npm run build && node scripts/test-duplication-modes.js",
-    "qa": "npm run build && npm test && npm run validate-docs && npm run doc:test",
+    "qa": "npm run build && npm test && npm run validate-docs",
     "prepare": "husky"
   },
   "keywords": [
