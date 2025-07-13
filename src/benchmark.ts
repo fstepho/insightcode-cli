@@ -4,6 +4,7 @@ import * as path from 'path';
 import { AnalysisResult, EmblematicFiles, ReportResult, ReportSummary, ThresholdConfig } from '../src/types';
 import { analyze, AnalysisOptions } from './analyzer';
 import { getConfig } from './config.manager';
+import { defaultJsonReplacer } from './json-utils';
 import { generateAllIndividualReports, generateMarkdownReport } from './report-generator';
 import { execa, ExecaError } from 'execa';
 
@@ -546,9 +547,7 @@ async function main(): Promise<void> {
     if(!result.project || result.project === 'Unknown') return;
     const resultFilename = `${result.project}-analysis-result${modeSuffix}${dateSuffix}.json`;
     fs.writeFileSync(path.join(RESULTS_DIR + '/individual-reports', resultFilename), 
-    JSON.stringify(result, function(_key, val) {
-      return val && val.toFixed ? Number(val.toFixed(2)) : val;
-    }, 2));
+    JSON.stringify(result, defaultJsonReplacer, 2));
   });
 
   // Calculate summary
@@ -586,9 +585,7 @@ async function main(): Promise<void> {
   const summaryFilename = `benchmark-summary${modeSuffix}${dateSuffix}.json`;
   fs.writeFileSync(
     path.join(RESULTS_DIR, summaryFilename),
-    JSON.stringify(summary, function (_key, val) {
-      return val && val.toFixed ? Number(val.toFixed(2)) : val;
-    }, 2)
+    JSON.stringify(summary, defaultJsonReplacer, 2)
   );
 
   // Print summary

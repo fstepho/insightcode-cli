@@ -8,6 +8,8 @@ import { reportToTerminal } from './reporter';
 import { isCriticalFile, isPassingScore } from './scoring.utils';
 import { generateProjectReport } from './report-generator';
 import { getConfig } from './config.manager';
+import { generateCliOutput } from './reporterV2';
+import { defaultJsonReplacer } from './json-utils';
 
 /**
  * Wrapper helper pour vérifier si un fichier est critique
@@ -42,11 +44,7 @@ function outputCriticalFormat(results: AnalysisResult): void {
     details: results.details.filter(f => isFileCritical(f))
   };
   
-  console.log(JSON.stringify(criticalResult, function(key, val) {
-    // Filter out absolutePath from output
-    if (key === 'absolutePath') return undefined;
-    return val;
-  }, 2));
+  console.log(JSON.stringify(criticalResult, defaultJsonReplacer, 2));
 }
 
 function outputSummaryFormat(results: AnalysisResult): void {
@@ -138,11 +136,7 @@ async function runAnalysis(path: string, options: CliOptions) {
     // Handle output format
     switch (format) {
       case 'json':
-        console.log(JSON.stringify(results, function(key, val) {
-          // Filter out absolutePath from output
-          if (key === 'absolutePath') return undefined;
-          return val && val.toFixed ? Number(val.toFixed(2)) : val;
-        }, 2));
+        console.log(JSON.stringify(results, defaultJsonReplacer, 2));
         break;
       case 'ci':
         outputCiFormat(results);

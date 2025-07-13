@@ -78,7 +78,19 @@ export class ContextBuilder {
 
       for (const fileDetail of criticalFiles) {
         // Find corresponding AST data using absolute path
-        const astFile = astData.files.find(f => f.filePath === fileDetail.absolutePath);
+        // Try both absolute path and normalized path (without leading slash)
+        let astFile = astData.files.find(f => f.filePath === fileDetail.absolutePath);
+        if (!astFile) {
+          // Try without leading slash
+          const normalizedPath = fileDetail.absolutePath.startsWith('/') ? fileDetail.absolutePath.slice(1) : fileDetail.absolutePath;
+          astFile = astData.files.find(f => f.filePath === normalizedPath);
+        }
+        if (!astFile) {
+          // Try with leading slash added
+          const withSlash = fileDetail.absolutePath.startsWith('/') ? fileDetail.absolutePath : '/' + fileDetail.absolutePath;
+          astFile = astData.files.find(f => f.filePath === withSlash);
+        }
+        
 
         if (astFile) {
           try {
