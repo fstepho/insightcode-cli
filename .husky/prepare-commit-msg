@@ -3,29 +3,29 @@
 COMMIT_MSG_FILE=$1
 COMMIT_SOURCE=$2
 
-# Skip mode simple (NOUVEAU - 2 lignes)
+# Skip simple mode (NEW - 2 lines)
 if [ "$SKIP_AI_HOOK" = "true" ] || [ -f ".skip-ai-hook" ]; then
   exit 0
 fi
 
-# Lire le message de commit
+# Read the commit message
 COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
 
-# NOUVEAU: Détecter si c'est un message conventionnel (de VS Code AI)
-# et ajouter "ai:" devant pour déclencher l'analyse
+# NEW: Detect if it's a conventional message (from VS Code AI)
+# and add "ai:" prefix to trigger analysis
 if [[ "$COMMIT_MSG" =~ ^(feat|fix|chore|test|docs|refactor|perf|style|ci|build|revert)(\(.+\))?: ]] && [[ ! "$COMMIT_MSG" =~ ^ai: ]]; then
-  # Version portable (macOS et Linux)
+  # Portable version (macOS and Linux)
   echo "ai: $COMMIT_MSG" > "$COMMIT_MSG_FILE.tmp"
   mv "$COMMIT_MSG_FILE.tmp" "$COMMIT_MSG_FILE"
-  # Recharger le message modifié
+  # Reload the modified message
   COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
 fi
 
-# Si commit commence par "ai:", enrichir le contexte
+# If commit starts with "ai:", enrich the context
 if [[ "$COMMIT_MSG" =~ ^ai: ]]; then
   echo "🤖 Analyzing project for AI context..."
   
-  # Vérifications de base (NOUVEAU - protection)
+  # Basic checks (NEW - protection)
   if ! command -v jq &> /dev/null; then
     echo "⚠️  Warning: jq is not installed. Skipping analysis."
     exit 0
@@ -36,76 +36,83 @@ if [[ "$COMMIT_MSG" =~ ^ai: ]]; then
     exit 0
   fi
   
-  # Analyser le projet
-  ANALYSIS=$(npx insightcode ./src --json 2>/dev/null || echo '{}')
+  # Analyze the project and validate JSON
+  ANALYSIS_RAW=$(npx insightcode ./src --json 2>/dev/null || echo '{}')
   
-  # Vérifier si l'analyse a réussi (AMÉLIORATION)
-  if [ "$ANALYSIS" = "{}" ]; then
-    echo "⚠️  Warning: InsightCode analysis failed. Continuing without metrics."
+  # Validate that it's valid JSON
+  ANALYSIS=$(echo "$ANALYSIS_RAW" | jq -r '.' 2>/dev/null || echo '{}')
+  
+  # Check if analysis succeeded (IMPROVEMENT)
+  if [ "$ANALYSIS" = "{}" ] || [ -z "$ANALYSIS" ]; then
+    echo "⚠️  Warning: InsightCode analysis failed or returned invalid JSON. Continuing without metrics."
   else
-    # Extraire les métriques
+    # Extract metrics
     SCORE=$(echo "$ANALYSIS" | jq -r '.overview.scores.overall // "?"')
     GRADE=$(echo "$ANALYSIS" | jq -r '.overview.grade // "?"')
-    FILES=$(echo "$ANALYSIS" | jq -r '.overview.statistics.totalFiles // "?"')
+    FILES=$(echo "$ANALYSIS" | jq -r '.context.analysis.filesAnalyzed // "?"')
     LINES=$(echo "$ANALYSIS" | jq -r '.overview.statistics.totalLOC // "?"')
+    TOP_ISSUE=$(echo "$ANALYSIS" | jq -r '.details[0] // {} | "\(.file // "N/A") (complexity: \(.metrics.complexity // "N/A"))"')
     
-    # Date au format ISO
+    # Date in ISO format
     CURRENT_DATE=$(date "+%Y-%m-%d %H:%M")
     
-    # Créer le nouveau contenu pour Quick Status
+    # Create new content for Quick Status
     NEW_STATUS="<!-- GIT-HOOK:START -->
 Last Analysis: $CURRENT_DATE
 Score: $GRADE ($SCORE/100) | Files: $FILES | Lines: $LINES
-<!-- GIT-HOOK:END -->"
+Top Issue: $TOP_ISSUE
+<!-- GIT-HOOK:END -->" 
     
-    # Mettre à jour .ai.md avec sed
-    # D'abord, extraire tout avant GIT-HOOK:START
+    # Add new status to .ai.md
+    echo "Updating .ai.md with new status..."
+    # Update .ai.md with sed
+    # First, extract everything before GIT-HOOK:START
     sed -n '1,/<!-- GIT-HOOK:START -->/p' .ai.md | sed '$d' > .ai.md.new
     
-    # Ajouter le nouveau status
+    # Add the new status
     echo "$NEW_STATUS" >> .ai.md.new
     
-    # Ajouter tout après GIT-HOOK:END
+    # Add everything after GIT-HOOK:END
     sed -n '/<!-- GIT-HOOK:END -->/,$p' .ai.md | tail -n +2 >> .ai.md.new
     
-    # Remplacer le fichier
+    # Replace the file
     mv .ai.md.new .ai.md
     
-    # Ajouter le contexte au message de commit
+    # Add context to commit message
 
-    # Ajouter le contexte au message de commit
-    # Note: Ce score est InsightCode s'analysant lui-même pour les tests
+    # Add context to commit message
+    # Note: This score is InsightCode analyzing itself for tests
     echo "" >> "$COMMIT_MSG_FILE"
     echo "AI-Context: Score $SCORE/100 ($GRADE)" >> "$COMMIT_MSG_FILE"
     
-    # Stage le fichier modifié
+    # Stage the modified file
     git add .ai.md
   fi
 fi
 
-# Logger dans l'historique (sauf pour les merges)
+# Log to history (except for merges)
 if [[ "$COMMIT_SOURCE" != "merge" ]] && [[ ! -z "$COMMIT_MSG" ]]; then
-  # Extraire le message principal (première ligne)
+  # Extract main message (first line)
   MSG_LINE=$(head -1 "$COMMIT_MSG_FILE")
   DATE=$(date +%Y-%m-%d)
   
-  # Ajouter au log (AMÉLIORATION: support de tous les types)
+  # Add to log (IMPROVEMENT: support all types)
   if [[ "$MSG_LINE" =~ ^(ai|feat|fix|perf|chore|test|docs|refactor|style|ci|build|revert): ]]; then
-    # BUG FIX: Nettoyer le message en 2 étapes
-    # D'abord enlever "ai: " si présent
+    # BUG FIX: Clean message in 2 steps
+    # First remove "ai: " if present
     if [[ "$MSG_LINE" =~ ^ai: ]]; then
       MSG_LINE_CLEAN=$(echo "$MSG_LINE" | sed 's/^ai: //')
     else
       MSG_LINE_CLEAN="$MSG_LINE"
     fi
     
-    # Puis extraire le message après le type de commit
+    # Then extract message after commit type
     CLEAN_MSG=$(echo "$MSG_LINE_CLEAN" | sed 's/^[^:]*: //')
     
-    # Créer un fichier temporaire pour le nouveau log
+    # Create a temporary file for the new log
     cp .ai.md .ai.md.tmp
     
-    # Insérer après GIT-LOG:START
+    # Insert after GIT-LOG:START
     awk -v date="$DATE" -v msg="$CLEAN_MSG" '
       /<!-- GIT-LOG:START -->/ { 
         print
@@ -118,7 +125,7 @@ if [[ "$COMMIT_SOURCE" != "merge" ]] && [[ ! -z "$COMMIT_MSG" ]]; then
     
     rm .ai.md.tmp
     
-    # Limiter à 50 dernières entrées (AMÉLIORATION: 20 → 50)
+    # Limit to last 50 entries (IMPROVEMENT: 20 → 50)
     cp .ai.md .ai.md.tmp
     awk '
       BEGIN { count=0 }
