@@ -1,5 +1,6 @@
 // File: reporter.ts
-import { ReportResult, AnalysisResult, Overview, FileDetail, Issue, CodeContext, FunctionContext, QualityIssue } from './types';
+import { ReportResult, AnalysisResult, Overview, FileDetail, FileIssue, FunctionQualityIssue } from './types';
+import { formatK, truncatePath, padEnd } from './shared-report-utils';
 
 // -----------------------------------------------------------------------------
 // SECTION 0: CONFIGURATION
@@ -31,37 +32,6 @@ const Ansi = {
 // SECTION 2: FORMATTING AND LAYOUT HELPERS
 // -----------------------------------------------------------------------------
 
-/**
- * Pads a string with trailing spaces to a specific length, ignoring ANSI codes.
- */
-function padEnd(str: string, length: number): string {
-  const visibleLength = str.replace(/\x1b\[[0-9;]*m/g, '').length;
-  return str + ' '.repeat(Math.max(0, length - visibleLength));
-}
-
-/**
- * Truncates and formats a file path for concise display.
- */
-function truncatePath(filePath: string, maxLength: number): string {
-    if (filePath.length <= maxLength) {
-        return filePath;
-    }
-    const parts = filePath.split('/');
-    if (parts.length > 2) {
-        const end = parts.pop() || '';
-        const start = parts.shift() || '';
-        const shortPath = `${start}/.../${end}`;
-        if (shortPath.length <= maxLength) return shortPath;
-    }
-    return '...' + filePath.slice(-maxLength + 3);
-}
-
-/**
- * Formats a large number into a 'k' (thousands) format.
- */
-function formatK(num: number): string {
-    return num > 999 ? `${(num / 1000).toFixed(0)}k` : `${num}`;
-}
 
 /**
  * Creates a visual progress bar with neutral, less bright colors.
@@ -108,7 +78,7 @@ function createBoxedLine(content: string, totalWidth: number): string {
 /**
  * Formats an issue string to fit within a max length, abbreviating if necessary.
  */
-function formatIssueString(issue: Issue | undefined, maxLength: number): string {
+function formatIssueString(issue: FileIssue | undefined, maxLength: number): string {
     if (!issue) {
         return Ansi.gray('N/A');
     }
@@ -153,6 +123,28 @@ function formatGradeBadge(grade: 'A' | 'B' | 'C' | 'D' | 'F'): string {
     }
 }
 
+
+/**
+ * Returns an ANSI color code based on issue severity.
+ */
+function getSeverityColorCode(severity: 'critical' | 'high' | 'medium' | 'low'): number {
+  switch (severity) {
+    case 'critical': return 196; // Red
+    case 'high': return 196; // Red
+    case 'medium': return 208; // Orange
+    case 'low': return 220; // Yellow
+    default: return 244; // Gray
+  }
+}
+
+/**
+ * Returns an ANSI color function based on issue severity.
+ */
+function getSeverityColorForIssue(severity: 'high' | 'medium' | 'low'): (s: string) => string {
+    const colorCode = getSeverityColorCode(severity as 'critical' | 'high' | 'medium' | 'low');
+    return (s: string) => Ansi.color(colorCode, s);
+}
+
 /**
  * Formats the metrics string for the risky files table with right alignment.
  */
@@ -164,19 +156,12 @@ function formatMetrics(metrics: { complexity: number, duplicationRatio: number, 
 }
 
 /**
- * Returns an ANSI color function based on issue severity.
+ * Gets risky files sorted by health score.
  */
-function getSeverityColorForIssue(severity: 'high' | 'medium' | 'low'): (s: string) => string {
-    switch (severity) {
-        case 'high':
-            return Ansi.red;
-        case 'medium':
-            return Ansi.orange;
-        case 'low':
-            return Ansi.yellow;
-        default:
-            return Ansi.gray;
-    }
+function getRiskyFiles(details: FileDetail[], count: number = 6): FileDetail[] {
+    return [...details]
+        .sort((a, b) => a.healthScore - b.healthScore)
+        .slice(0, count);
 }
 
 
@@ -250,7 +235,7 @@ function generateStatsAndInsights(analysis: AnalysisResult): string[] {
     ];
 
     const archConcerns = [
-        { label: '🚨 High Maintenance Cost', value: Ansi.white(details.filter(d => d.healthScore < 40).length.toString()) },
+        { label: '🚨 High Maintenance Cost', value: Ansi.white(details.filter(d => d.healthScore < 50).length.toString()) },
         { label: '🐌 Slow to Change Files', value: Ansi.white(details.filter(d => d.metrics.complexity > 30).length.toString()) },
         { label: '🔗 Tightly Coupled Files', value: Ansi.white(cycleCount.toString()) },
     ];
@@ -279,9 +264,7 @@ function generateStatsAndInsights(analysis: AnalysisResult): string[] {
 }
 
 function generateRiskyFiles(details: FileDetail[]): string[] {
-    const riskyFiles = [...details]
-        .sort((a, b) => a.healthScore - b.healthScore)
-        .slice(0, 6);
+    const riskyFiles = getRiskyFiles(details, 6);
 
     // Adjusted column widths to ensure alignment
     const widths = [2, 46, 21, 28];
@@ -351,7 +334,7 @@ function generateDeepDive(analysis: AnalysisResult): string[] {
             lines.push(`   ${Ansi.bold('Detected Issues:')}`);
             
             const severityOrder = { high: 0, medium: 1, low: 2 };
-            const sortedIssues = [...func.issues].sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
+            const sortedIssues: FunctionQualityIssue[] = [...func.issues].sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
 
             const issueLabels = sortedIssues.map(issue => {
                 const colorFunc = getSeverityColorForIssue(issue.severity);

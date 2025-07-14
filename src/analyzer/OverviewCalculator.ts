@@ -7,7 +7,7 @@ import {
   calculateMaintainabilityScore, 
   calculateWeightedScore 
 } from '../scoring';
-import { getGrade } from '../scoring.utils';
+import { getGrade, isCriticalFile } from '../scoring.utils';
 
 /**
  * Calculates comprehensive overview from file details
@@ -26,7 +26,7 @@ export class OverviewCalculator {
       grade: getGrade(scores.overall),
       statistics,
       scores,
-      summary: this.generateSummary(scores.overall, fileDetails.filter(f => f.healthScore < 60).length)
+      summary: this.generateSummary(scores.overall, fileDetails.filter(f => isCriticalFile(f.healthScore)).length)
     };
   }
   

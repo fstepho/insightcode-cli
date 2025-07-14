@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import { CliOptions, AnalysisResult, FileDetail } from './types';
 import { analyze, AnalysisOptions } from './analyzer';
 import { isCriticalFile, isPassingScore } from './scoring.utils';
-import { generateProjectReport } from './report-generator';
+import { generateProjectReport } from './project-report-generator';
 import { getConfig } from './config.manager';
 import { generateCliOutput } from './reporter';
 import { defaultJsonReplacer } from './json-utils';

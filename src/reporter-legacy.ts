@@ -1,6 +1,7 @@
 // File: src/reporter.ts - Enhanced CLI Reporter with Perfect Alignment
 import chalk from 'chalk';
-import { AnalysisResult, FileDetail, Issue, Severity, IssueType, CodeContext, DuplicationMode } from './types';
+import { AnalysisResult, FileDetail, FileIssue, Severity, FileIssueType, CodeContext, DuplicationMode } from './types';
+import { getGrade, isCriticalFile, formatPercentage } from './scoring.utils';
 
 // Configuration for alignment
 const COLUMN_CONFIG = {
@@ -124,11 +125,15 @@ function formatFilePath(path: string, maxLength: number = 40): string {
  * Get color based on score - returns a chalk function compatible with v4
  */
 function getScoreColor(score: number) {
-  if (score >= 90) return chalk.green;
-  if (score >= 80) return chalk.greenBright; 
-  if (score >= 70) return chalk.yellow;
-  if (score >= 60) return chalk.red;
-  return chalk.redBright;
+  const grade = getGrade(score);
+  const colorMap = {
+    'A': chalk.green,
+    'B': chalk.greenBright,
+    'C': chalk.yellow,
+    'D': chalk.red,
+    'F': chalk.redBright
+  };
+  return colorMap[grade];
 }
 
 /**
@@ -179,11 +184,11 @@ export function reportToTerminal(result: AnalysisResult): void {
   console.log(createAlignedRow('Average File Size:', overview.statistics.avgLOC.toFixed(0) + ' lines'));
   
   const avgDuplication = overview.statistics.avgDuplicationRatio || 0;
-  console.log(createAlignedRow('Average Duplication:', (avgDuplication * 100).toFixed(1) + '%'));
+  console.log(createAlignedRow('Average Duplication:', formatPercentage(avgDuplication)));
   
   // Critical Files - with perfect sub-item alignment
   const criticalFiles = details
-    .filter(f => f.healthScore < 70)
+    .filter(f => isCriticalFile(f.healthScore))
     .sort((a, b) => a.healthScore - b.healthScore)
     .slice(0, 5);
   
@@ -205,11 +210,11 @@ export function reportToTerminal(result: AnalysisResult): void {
       if (mainIssue) {
         // Get the actual metric value based on issue type
         let actualValue = '';
-        if (mainIssue.type === IssueType.Complexity) {
+        if (mainIssue.type === FileIssueType.Complexity) {
           actualValue = `${file.metrics.complexity}`;
-        } else if (mainIssue.type === IssueType.Size) {
+        } else if (mainIssue.type === FileIssueType.Size) {
           actualValue = `${file.metrics.loc} lines`;
-        } else if (mainIssue.type === IssueType.Duplication) {
+        } else if (mainIssue.type === FileIssueType.Duplication) {
           actualValue = `${(file.metrics.duplicationRatio * 100).toFixed(1)}%`;
         }
         

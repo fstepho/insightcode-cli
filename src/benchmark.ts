@@ -5,7 +5,9 @@ import { AnalysisResult, EmblematicFiles, ReportResult, ReportSummary, Threshold
 import { analyze, AnalysisOptions } from './analyzer';
 import { getConfig } from './config.manager';
 import { defaultJsonReplacer } from './json-utils';
-import { generateAllIndividualReports, generateMarkdownReport } from './report-generator';
+import { generateProjectReport } from './project-report-generator';
+import { generateMarkdownReport } from './summary-report-generator';
+import { formatPercentage } from './scoring.utils';
 import { execa, ExecaError } from 'execa';
 
 // --- INTERFACES ---
@@ -586,7 +588,26 @@ async function main(): Promise<void> {
 
   // NOUVEAU : Générer les rapports individuels
   console.log(`\n📝 Generating individual project reports...`);
-  generateAllIndividualReports(results, RESULTS_DIR + '/individual-reports', production);
+  
+  // Créer le dossier des rapports individuels s'il n'existe pas
+  const individualReportsDir = path.join(RESULTS_DIR, 'individual-reports');
+  if (!fs.existsSync(individualReportsDir)) {
+    fs.mkdirSync(individualReportsDir, { recursive: true });
+  }
+  
+  // Générer un rapport pour chaque projet réussi
+  results.filter(r => !r.error).forEach(result => {
+    const reportContent = generateProjectReport(result);
+    // add production info to filename
+    const modeSuffixIndividual = production ? '-prod' : '-full';
+    const date = new Date().toISOString().split('T')[0];
+
+    const filename = `${result.project}-analysis-report${modeSuffixIndividual}-${date}.md`;
+    const filepath = path.join(individualReportsDir, filename);
+    
+    fs.writeFileSync(filepath, reportContent);
+    console.log(`  📄 Generated individual report: ${filename}`);
+  });
 
   // Save summary
   const summaryFilename = `benchmark-summary${modeSuffix}${dateSuffix}.json`;
@@ -603,7 +624,7 @@ async function main(): Promise<void> {
   console.log(`  - Real duration: ${(summary.realDuration / 1000).toFixed(2)}s`);
   console.log(`  - Analysis speed: ${formatNumber(Math.round(summary.totalLines / (summary.realDuration / 1000)))} lines/second`);
   console.log(`  - Average complexity: ${summary.avgComplexity.toFixed(2)}`);
-  console.log(`  - Average duplication: ${(summary.avgDuplication * 100).toFixed(2)}%`);
+  console.log(`  - Average duplication: ${formatPercentage(summary.avgDuplication, 2)}`);
   console.log(`  - Grade distribution: ${Object.entries(summary.gradeDistribution).map(([g, c]) => `${g}:${c}`).join(', ')}`);
   console.log(`\n📁 Results saved to: ${RESULTS_DIR}`);
 }
