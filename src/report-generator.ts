@@ -137,7 +137,7 @@ export function generateProjectReport(result: ReportResult): string {
     
     // Methodology Notes
     markdown += `\n### 📊 Scoring Methodology\n\n`;
-    markdown += generateScoringMethodologyNotes();
+    markdown += generateScoringMethodologyNotes(analysis);
     
     // Key Statistics
     markdown += `### Key Statistics\n\n`;
@@ -192,7 +192,16 @@ export function generateProjectReport(result: ReportResult): string {
     markdown += `- **Algorithm:** Enhanced 8-line literal pattern matching with 8+ token minimum, cross-file exact matches only\n`;
     markdown += `- **Focus:** Copy-paste duplication using MD5 hashing of normalized blocks (not structural similarity)\n`;
     markdown += `- **Philosophy:** Pragmatic approach using regex normalization - avoids false positives while catching actionable duplication\n`;
-    markdown += `- **Results:** Typically 0-15% duplication vs ~70% with structural detection tools, filtering imports/trivial declarations\n\n`;
+    
+    // Adapt results description based on duplication mode
+    const duplicationMode = analysis.context?.analysis?.duplicationMode || 'legacy';
+    if (duplicationMode === 'strict') {
+        markdown += `- **Mode:** STRICT mode active (≤3% = excellent, industry-standard thresholds)\n`;
+        markdown += `- **Results:** Typically 0-3% duplication with strict thresholds, aligning with SonarQube standards\n\n`;
+    } else {
+        markdown += `- **Results:** Typically 0-15% duplication vs ~70% with structural detection tools, filtering imports/trivial declarations\n\n`;
+    }
+    
     
     markdown += `### Complexity Calculation\n`;
     markdown += `- **Method:** McCabe Cyclomatic Complexity (1976) + Industry Best Practices\n`;
@@ -293,7 +302,7 @@ function generatePatternAnalysisSection(codeContexts: CodeContext[]): string {
 }
 
 
-function generateScoringMethodologyNotes(): string {
+function generateScoringMethodologyNotes(analysis?: AnalysisResult): string {
     let notes = `InsightCode uses **internal hypothesis-based scoring** requiring empirical validation:\n\n`;
     
     notes += `#### Overall Score Formula\n`;
@@ -303,11 +312,21 @@ function generateScoringMethodologyNotes(): string {
     notes += `|-----------|--------|--------------------------|\n`;
     notes += `| **Complexity** | **45%** | **McCabe (1976) thresholds:** ≤10 (low), 11-15 (medium), 16-20 (high), 21-50 (very high), >50 (extreme). Weight = internal hypothesis. |\n`;
     notes += `| **Maintainability** | **30%** | **File size impact hypothesis:** ≤200 LOC ideal. Weight = internal hypothesis (requires validation). |\n`;
-    notes += `| **Duplication** | **25%** | **⚠️ LEGACY thresholds (5x more permissive than industry):** ≤15% "excellent" vs SonarQube ≤3%. Weight = internal hypothesis. |\n\n`;
+    // Adapt duplication description based on mode
+    const duplicationMode = analysis?.context?.analysis?.duplicationMode || 'legacy';
+    if (duplicationMode === 'strict') {
+        notes += `| **Duplication** | **25%** | **Industry-standard thresholds:** ≤3% "excellent" aligned with SonarQube. Weight = internal hypothesis. |\n\n`;
+    } else {
+        notes += `| **Duplication** | **25%** | **⚠️ LEGACY thresholds (5x more permissive than industry):** ≤15% "excellent" vs SonarQube ≤3%. Weight = internal hypothesis. |\n\n`;
+    }
     
     notes += `#### ⚠️ Important Disclaimers\n`;
     notes += `**Project weights (45/30/25) are internal hypotheses requiring empirical validation, NOT industry standards.** These weights apply only to project-level aggregation. File Health Scores use unweighted penalty summation.\n\n`;
-    notes += `**Duplication thresholds are 5x more permissive than industry standards** (≤15% = "excellent" vs SonarQube ≤3%). Scores may appear inflated compared to standard tools.\n\n`;
+    
+    // Only show duplication threshold disclaimer in legacy mode
+    if (duplicationMode !== 'strict') {
+        notes += `**Duplication thresholds are 5x more permissive than industry standards** (≤15% = "excellent" vs SonarQube ≤3%). Scores may appear inflated compared to standard tools.\n\n`;
+    }
     
     notes += `#### Grade Scale (Academic Standard)\n`;
     notes += `**A** (90-100) • **B** (80-89) • **C** (70-79) • **D** (60-69) • **F** (<60)\n\n`;

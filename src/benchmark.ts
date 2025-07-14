@@ -292,6 +292,7 @@ const RESULTS_DIR = path.join(projectRoot, 'benchmarks');
 const args = process.argv.slice(2);
 const production = args.includes('--production');
 const sequential = args.includes('--sequential');
+const strictDuplication = args.includes('--strict-duplication');
 
 // --- UTILITY FUNCTIONS ---
 
@@ -377,7 +378,7 @@ async function runProjectAnalysis(
     projectPath: projectTempDir,
     thresholds,
     production,
-    strictDuplication: false
+    strictDuplication
   };
   
   const results = await analyze(analysisPath, analysisOptions);
@@ -470,6 +471,12 @@ async function main(): Promise<void> {
     console.log(`⚙️  Mode: Full Analysis (all files)`);
   }
   console.log(`🧠 Code Context: Enabled (extracting detailed AST data)`);
+  
+  if (strictDuplication) {
+    console.log(`🔧 Duplication Mode: Strict (industry standard thresholds)`);
+  } else {
+    console.log(`🔧 Duplication Mode: Legacy (permissive thresholds)`);
+  }
   
   if (sequential) {
     console.log(`🔄 Execution Mode: Sequential (one project at a time)`);
