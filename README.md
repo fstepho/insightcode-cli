@@ -62,8 +62,6 @@ insightcode --format=summary    # Brief overview
 insightcode --format=critical   # Only critical files
 insightcode --format=ci         # CI/CD friendly output
 ```
-# Note: We use self-analysis for testing and documentation,
-# not as a quality metric of the tool itself
 
 ## 📋 Requirements
 
