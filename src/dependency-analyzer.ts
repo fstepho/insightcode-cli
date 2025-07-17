@@ -476,7 +476,7 @@ export class UniversalDependencyAnalyzer {
       try {
         const rush = JSON.parse(fs.readFileSync(rushPath, 'utf8'));
         if (rush.projects) {
-          workspaces.push(...rush.projects.map((p: any) => p.projectFolder));
+          workspaces.push(...rush.projects.map((p: { projectFolder: string }) => p.projectFolder));
         }
       } catch (e) {
         // Log rush parsing errors for debugging

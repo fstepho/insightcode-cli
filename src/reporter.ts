@@ -1,6 +1,7 @@
 // File: reporter.ts
-import { ReportResult, AnalysisResult, Overview, FileDetail, FileIssue, FunctionQualityIssue } from './types';
+import { ReportResult, AnalysisResult, Overview, FileDetail, CodeIssue, Grade } from './types';
 import { formatK, truncatePath, padEnd } from './shared-report-utils';
+import { getGradeInfoByGrade, COMPLEXITY_LEVELS, GRADE_CONFIG, ISSUE_SEVERITY } from './scoring.utils';
 
 // -----------------------------------------------------------------------------
 // SECTION 0: CONFIGURATION
@@ -26,6 +27,12 @@ const Ansi = {
   orange: (s: string) => Ansi.color(208, s),
   yellow: (s: string) => Ansi.color(220, s),
   green: (s: string) => Ansi.color(77, s),
+  
+  // Grade-specific colors derived from GRADE_CONFIG
+  gradeColor: (grade: Grade, s: string) => {
+    const gradeInfo = getGradeInfoByGrade(grade);
+    return Ansi.color(gradeInfo.badgeColor, s);
+  },
 };
 
 // -----------------------------------------------------------------------------
@@ -78,7 +85,7 @@ function createBoxedLine(content: string, totalWidth: number): string {
 /**
  * Formats an issue string to fit within a max length, abbreviating if necessary.
  */
-function formatIssueString(issue: FileIssue | undefined, maxLength: number): string {
+function formatIssueString(issue: CodeIssue | undefined, maxLength: number): string {
     if (!issue) {
         return Ansi.gray('N/A');
     }
@@ -110,38 +117,23 @@ function formatIssueString(issue: FileIssue | undefined, maxLength: number): str
 /**
  * Creates a colored badge for the project grade.
  */
-function formatGradeBadge(grade: 'A' | 'B' | 'C' | 'D' | 'F'): string {
+function formatGradeBadge(grade: Grade): string {
     const blackText = (s: string) => Ansi.color(0, s);
     const gradeText = ` ${grade} `;
-    switch (grade) {
-        case 'A': return Ansi.bg_color(40, blackText(gradeText)); // Green
-        case 'B': return Ansi.bg_color(118, blackText(gradeText)); // Light Green
-        case 'C': return Ansi.bg_color(226, blackText(gradeText)); // Yellow
-        case 'D': return Ansi.bg_color(208, blackText(gradeText)); // Orange
-        case 'F': return Ansi.bg_color(196, blackText(gradeText)); // Red
-        default: return grade;
-    }
+    // Use centralized configuration
+    const gradeInfo = getGradeInfoByGrade(grade);
+    return Ansi.bg_color(gradeInfo.badgeColor, blackText(gradeText));
 }
 
 
-/**
- * Returns an ANSI color code based on issue severity.
- */
-function getSeverityColorCode(severity: 'critical' | 'high' | 'medium' | 'low'): number {
-  switch (severity) {
-    case 'critical': return 196; // Red
-    case 'high': return 196; // Red
-    case 'medium': return 208; // Orange
-    case 'low': return 220; // Yellow
-    default: return 244; // Gray
-  }
-}
+// NOTE: getSeverityColorCode moved to scoring.utils.ts - using centralized function
 
 /**
  * Returns an ANSI color function based on issue severity.
  */
-function getSeverityColorForIssue(severity: 'high' | 'medium' | 'low'): (s: string) => string {
-    const colorCode = getSeverityColorCode(severity as 'critical' | 'high' | 'medium' | 'low');
+function getSeverityColorForIssue(severity: string): (s: string) => string {
+    // Use direct access to ISSUE_SEVERITY configuration
+    const colorCode = ISSUE_SEVERITY[severity as 'critical' | 'high' | 'medium' | 'low'].getBadgeColor();
     return (s: string) => Ansi.color(colorCode, s);
 }
 
@@ -190,7 +182,7 @@ function generateOverview(overview: Overview): string[] {
     const widths = [24, 66, 10];
 
     const gradeBadge = formatGradeBadge(grade);
-    const overviewTitle = `OVERVIEW: GRADE ${gradeBadge}`;
+    const overviewTitle = `OVERVIEW: GRADE ${gradeBadge} ${Ansi.gray(`(${scores.overall})`)}`;
 
     lines.push(Ansi.bold(`┌${'─'.repeat(widths[0]+2)}┬${'─'.repeat(widths[1]+2)}┬${'─'.repeat(widths[2]+2)}┐`));
     lines.push(createTableRow([overviewTitle, Ansi.gray(summary), ''], widths));
@@ -200,10 +192,9 @@ function generateOverview(overview: Overview): string[] {
         { key: 'Complexity', score: scores.complexity, color: Ansi.orange },
         { key: 'Duplication', score: scores.duplication, color: Ansi.green },
         { key: 'Maintainability', score: scores.maintainability, color: Ansi.yellow },
-        { key: 'Overall Health', score: scores.overall, color: Ansi.yellow },
     ];
 
-    metrics.forEach(({ key, score, color }) => {
+    metrics.forEach(({ key, score, color }, index) => {
         const label = color(key);
         let scoreStr = color(score.toString());
 
@@ -215,6 +206,11 @@ function generateOverview(overview: Overview): string[] {
 
         const bar = createProgressBar(score, 64);
         lines.push(createTableRow([label, bar, scoreStr], widths));
+        
+        // Add spacing between progress bars, except after the last one
+        if (index < metrics.length - 1) {
+            lines.push(createTableRow(['', '', ''], widths));
+        }
     });
 
     lines.push(Ansi.bold(`└${'─'.repeat(widths[0]+2)}┴${'─'.repeat(widths[1]+2)}┴${'─'.repeat(widths[2]+2)}┘`));
@@ -235,8 +231,8 @@ function generateStatsAndInsights(analysis: AnalysisResult): string[] {
     ];
 
     const archConcerns = [
-        { label: '🚨 High Maintenance Cost', value: Ansi.white(details.filter(d => d.healthScore < 50).length.toString()) },
-        { label: '🐌 Slow to Change Files', value: Ansi.white(details.filter(d => d.metrics.complexity > 30).length.toString()) },
+        { label: '🚨 High Maintenance Cost', value: Ansi.white(details.filter(d => d.healthScore < GRADE_CONFIG.find(g => g.grade === 'D')!.threshold).length.toString()) },
+        { label: '🐌 Slow to Change Files', value: Ansi.white(details.filter(d => d.metrics.complexity > COMPLEXITY_LEVELS.high.maxThreshold).length.toString()) }, // Using "High" complexity threshold
         { label: '🔗 Tightly Coupled Files', value: Ansi.white(cycleCount.toString()) },
     ];
 
@@ -304,13 +300,12 @@ function generateDeepDive(analysis: AnalysisResult): string[] {
 
     const lines = [title, separator];
 
-    if (!analysis.codeContext || analysis.codeContext.length === 0) {
-        lines.push(Ansi.gray('No detailed function context available for this analysis.'));
-        return lines;
-    }
-
-    const allFunctions = analysis.codeContext.flatMap(context => 
-        context.criticalFunctions.map(func => ({ ...func, file: context.file }))
+    // Extract all functions from FileDetail.functions
+    const allFunctions = analysis.details.flatMap(detail => 
+        (detail.functions || []).map(func => ({
+            ...func,
+            file: detail.file
+        }))
     );
 
     const topFunctions = allFunctions
@@ -328,13 +323,14 @@ function generateDeepDive(analysis: AnalysisResult): string[] {
         }
         
         lines.push(`\n🎯 ${Ansi.bold(func.name)} in ${Ansi.yellow(truncatePath(func.file, 50))}`);
-        lines.push(`   ${Ansi.gray('Metrics:')} Complexity: ${Ansi.orange(func.complexity.toString())} | Lines: ${Ansi.orange(func.lineCount.toString())} | Params: ${Ansi.orange(func.parameterCount.toString())}`);
+        lines.push(`   ${Ansi.gray('Metrics:')} Complexity: ${Ansi.orange(func.complexity.toString())} | Lines: ${Ansi.orange(func.loc.toString())} | Params: ${Ansi.orange(func.parameterCount.toString())}`);
 
         if (func.issues.length > 0) {
             lines.push(`   ${Ansi.bold('Detected Issues:')}`);
             
-            const severityOrder = { high: 0, medium: 1, low: 2 };
-            const sortedIssues: FunctionQualityIssue[] = [...func.issues].sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
+            const severityOrder: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
+            const sortedIssues = [...func.issues].sort((a, b) => 
+                (severityOrder[a.severity] || 999) - (severityOrder[b.severity] || 999));
 
             const issueLabels = sortedIssues.map(issue => {
                 const colorFunc = getSeverityColorForIssue(issue.severity);

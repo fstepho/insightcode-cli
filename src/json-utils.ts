@@ -3,12 +3,15 @@
  * and format numeric values
  */
 export function createJsonReplacer(filterAbsolutePath: boolean = true) {
-  return function(key: string, val: any): any {
+  return function(key: string, val: unknown): unknown {
     // Filter out absolutePath from output if requested
     if (filterAbsolutePath && key === 'absolutePath') return undefined;
     
     // Format numeric values with fixed decimals
-    return val && val.toFixed ? Number(val.toFixed(2)) : val;
+    if (val && typeof val === 'number' && !Number.isInteger(val)) {
+      return Number(val.toFixed(2));
+    }
+    return val;
   };
 }
 

@@ -1,56 +1,25 @@
 // File: src/scoring.ts
 
-import { Issue, DuplicationConfig, FileDetail } from './types';
+import { FileIssue, FileDetail } from './types';
+import { DUPLICATION_LEVELS } from './scoring.utils';
+import { FILE_SIZE_THRESHOLDS, COMPLEXITY_SCORING_THRESHOLDS, DUPLICATION_SCORING_THRESHOLDS } from './thresholds.constants';
 import {
   PROJECT_SCORING_WEIGHTS,
   MAINTAINABILITY_SCORING_THRESHOLDS,
-  COMPLEXITY_LABEL_THRESHOLDS,
-  COMPLEXITY_COLOR_THRESHOLDS,
-  DUPLICATION_COLOR_THRESHOLDS,
-  HEALTH_PENALTY_CONSTANTS,
-  MAINTAINABILITY_COLOR_THRESHOLDS,
-  SEVERITY_COLOR_THRESHOLDS,
-  createDuplicationConfig,
-  createDuplicationScoringThresholds,
-  createDuplicationLabelThresholds,
-  createDuplicationPenaltyConstants
+  HEALTH_PENALTY_CONSTANTS
 } from './thresholds.constants';
 import { percentageToRatio, ratioToPercentage } from './scoring.utils';
 
 /**
  * Pure and autonomous functions for calculating scores from raw metrics.
- * v0.6.0 formulas use progressive curves (linear then exponential) 
+ * v0.6.0+ formulas use progressive curves (linear then exponential) 
  * without artificial caps for realistic evaluation of critical problems.
  */
 
 // --- Labeling functions (aligned with McCabe thresholds) ---
+// NOTE: getComplexityLabel and getDuplicationLabel moved to scoring.utils.ts for centralization
 
-export function getComplexityLabel(complexity: number): string {
-  // Aligned with McCabe research-based thresholds in constants.ts
-  if (complexity <= COMPLEXITY_LABEL_THRESHOLDS.LOW) return 'Low';
-  if (complexity <= COMPLEXITY_LABEL_THRESHOLDS.MEDIUM) return 'Medium';
-  if (complexity <= COMPLEXITY_LABEL_THRESHOLDS.HIGH) return 'High';
-  if (complexity <= COMPLEXITY_LABEL_THRESHOLDS.VERY_HIGH) return 'Very High';
-  return 'Extreme';
-}
-
-export function getDuplicationLabel(duplication: number, duplicationConfig?: DuplicationConfig): string {
-  const config = duplicationConfig || createDuplicationConfig(false);
-  const thresholds = createDuplicationLabelThresholds(config);
-  
-  // Aligned with dynamic thresholds based on mode (3/8/15 strict vs 15/30/50 legacy)
-  if (duplication <= thresholds.LOW) return 'Low';
-  if (duplication <= thresholds.MEDIUM) return 'Medium';
-  if (duplication <= thresholds.HIGH) return 'High';
-  return 'Very High';
-}
-
-export function getMaintainabilityLabel(score: number): string {
-  if (score >= 80) return 'Good';
-  if (score >= 60) return 'Acceptable';
-  if (score >= 40) return 'Poor';
-  return 'Very Poor';
-}
+// NOTE: getMaintainabilityLabel moved to scoring.utils.ts - use getMaintainabilityConfig(score).label
 
 // --- Dimension scoring functions (without artificial caps) ---
 
@@ -73,28 +42,34 @@ export function getMaintainabilityLabel(score: number): string {
  * respecting the Pareto principle and making technical debt visible.
  */
 export function calculateComplexityScore(complexity: number): number {
-  // Phase 1: McCabe "excellent" threshold - excellent code
-  if (complexity <= 10) return 100;
+  // Use empirically validated coefficients while maintaining table-driven configuration
+  const { EXCELLENT, CRITICAL, LINEAR_PENALTY_RATE, EXPONENTIAL_BASE, EXPONENTIAL_POWER, EXPONENTIAL_MULTIPLIER } = COMPLEXITY_SCORING_THRESHOLDS;
   
-  // Phase 2: Linear degradation (industry standard for moderate complexity)
-  if (complexity <= 20) {
-    return Math.round(100 - (complexity - 10) * 3); // 3 points per unit (100 → 70)
+  // Phase 1: McCabe "excellent" threshold - excellent code (≤10)
+  if (complexity <= EXCELLENT) {
+    return 100;
   }
   
-  // Phase 3: Quadratic penalty (reflects exponentially growing maintenance burden)
+  // Phase 2: Linear degradation using empirically validated rate (10-20)
+  if (complexity <= CRITICAL) {
+    // Calibration supérieure: 3 points lost per complexity unit (100→70 progression)
+    return Math.round(100 - (complexity - EXCELLENT) * LINEAR_PENALTY_RATE);
+  }
+  
+  // Phase 3: Quadratic penalty for very high complexity (20-50)
   if (complexity <= 50) {
-    const base = 70;
-    const range = complexity - 20; // 0-30 range
-    const quadraticPenalty = Math.pow(range / 30, 2) * 40; // Up to 40 points penalty
+    const base = 100 - (CRITICAL - EXCELLENT) * LINEAR_PENALTY_RATE; // 70 (from linear phase end)
+    const range = complexity - CRITICAL; // 0-30 range
+    const quadraticPenalty = Math.pow(range / 30, 2) * EXPONENTIAL_MULTIPLIER; // 40 points penalty
     return Math.round(base - quadraticPenalty);
   }
   
-  // Phase 4: Exponential penalty (extreme complexity = extreme penalties)
+  // Phase 4: Exponential penalty for extreme complexity (>50)
   // Ensures functions with complexity 100+ get near-zero scores
   // and complexity 1000+ get zero scores (following Pareto principle)
-  const base = 30;
+  const base = EXPONENTIAL_BASE;
   const range = complexity - 50;
-  const exponentialPenalty = Math.pow(range / 50, 1.8) * 30;
+  const exponentialPenalty = Math.pow(range / 50, EXPONENTIAL_POWER) * EXPONENTIAL_BASE;
   const score = base - exponentialPenalty;
   
   return Math.max(0, Math.round(score));
@@ -114,20 +89,25 @@ export function calculateComplexityScore(complexity: number): number {
  * RESEARCH BASIS: Config alignment varies by mode - legacy optimized for brownfield,
  * strict aligned with industry standards (SonarQube quality gates).
  */
-export function calculateDuplicationScore(duplicationRatio: number, duplicationConfig?: DuplicationConfig): number {
+export function calculateDuplicationScore(duplicationRatio: number, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
   const percentage = ratioToPercentage(duplicationRatio);
+  const mode = duplicationMode;
   
-  // Use provided config or default to legacy mode
-  const config = duplicationConfig || createDuplicationConfig(false);
-  const thresholds = createDuplicationScoringThresholds(config);
+  // Use centralized configuration from DUPLICATION_LEVELS
+  const excellentThreshold = mode === 'strict' ? 
+    DUPLICATION_LEVELS.strict.excellent.maxThreshold : 
+    DUPLICATION_LEVELS.legacy.excellent.maxThreshold;
   
   // Return 100 if below excellent threshold (varies by mode: 3% strict vs 15% legacy)
-  if (percentage <= thresholds.EXCELLENT) return 100;
+  if (percentage <= excellentThreshold) return 100;
   
-  // Exponential decay beyond excellent threshold, calibrated for high and critical levels
+  // Exponential decay beyond excellent threshold, using DUPLICATION_SCORING constants
+  const exponentialMultiplier = DUPLICATION_SCORING_THRESHOLDS.EXPONENTIAL_MULTIPLIER;
+  const exponentialPower = DUPLICATION_SCORING_THRESHOLDS.EXPONENTIAL_POWER;
+  
   const score = 100 * Math.exp(
-    -thresholds.EXPONENTIAL_MULTIPLIER * 
-    Math.pow(percentage - thresholds.EXCELLENT, thresholds.EXPONENTIAL_POWER)
+    -exponentialMultiplier * 
+    Math.pow(percentage - excellentThreshold, exponentialPower)
   );
   return Math.max(0, Math.round(score));
 }
@@ -183,35 +163,11 @@ export function calculateWeightedScore(
 
 // --- Color level functions (aligned with research thresholds) ---
 
-export function getComplexityColorLevel(complexity: number): 'green' | 'yellow' | 'red' | 'redBold' {
-    // Aligned with McCabe research thresholds
-    if (complexity <= COMPLEXITY_COLOR_THRESHOLDS.GREEN) return 'green';
-    if (complexity <= COMPLEXITY_COLOR_THRESHOLDS.YELLOW) return 'yellow';
-    if (complexity <= COMPLEXITY_COLOR_THRESHOLDS.RED) return 'red';
-    return 'redBold';
-}
+// NOTE: getComplexityColorLevel and getDuplicationColorLevel moved to scoring.utils.ts for centralization
 
-export function getDuplicationColorLevel(duplication: number): 'green' | 'yellow' | 'red' | 'redBold' {
-    // Aligned with constants.ts thresholds (15/30/50)
-    if (duplication <= DUPLICATION_COLOR_THRESHOLDS.GREEN) return 'green';
-    if (duplication <= DUPLICATION_COLOR_THRESHOLDS.YELLOW) return 'yellow';
-    if (duplication <= DUPLICATION_COLOR_THRESHOLDS.RED) return 'red';
-    return 'redBold';
-}
+// NOTE: getMaintainabilityColorLevel moved to scoring.utils.ts - use getMaintainabilityConfig(score).color
 
-export function getMaintainabilityColorLevel(score: number): 'green' | 'yellow' | 'red' | 'redBold' {
-    if (score >= MAINTAINABILITY_COLOR_THRESHOLDS.GREEN) return 'green';
-    if (score >= MAINTAINABILITY_COLOR_THRESHOLDS.YELLOW) return 'yellow';
-    if (score >= MAINTAINABILITY_COLOR_THRESHOLDS.RED) return 'red';
-    return 'redBold';
-}
-
-export function getSeverityColorLevel(ratio: number): 'green' | 'yellow' | 'red' | 'redBold' {
-    if (ratio >= SEVERITY_COLOR_THRESHOLDS.RED_BOLD) return 'redBold';
-    if (ratio >= SEVERITY_COLOR_THRESHOLDS.RED) return 'red';
-    if (ratio >= SEVERITY_COLOR_THRESHOLDS.YELLOW) return 'yellow';
-    return 'green';
-}
+// NOTE: getSeverityColorLevel removed - use getSeverityColor from scoring.utils.ts
 
 // --- Calcul du Score de Santé (sans caps de pénalité) ---
 
@@ -231,35 +187,42 @@ function getComplexityPenalty(complexity: number): number {
   // For extreme complexity (>100), add catastrophic penalties to emphasize technical debt
   // This makes complexity 1000+ clearly distinguishable from complexity 100
   if (complexity > 100) {
-    const extremePenalty = Math.pow((complexity - 100) / 100, 1.5) * 50;
+    const extremePenalty = Math.pow((complexity - 100) / 100, HEALTH_PENALTY_CONSTANTS.COMPLEXITY.EXPONENTIAL_POWER) * 50;
     return basePenalty + extremePenalty;
   }
   
   return basePenalty;
 }
 
-export function getDuplicationPenalty(duplicationRatio: number, duplicationConfig?: DuplicationConfig): number {
-  const config = duplicationConfig || createDuplicationConfig(false);
-  const constants = createDuplicationPenaltyConstants(config);
+export function getDuplicationPenalty(duplicationRatio: number, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
+  const mode = duplicationMode;
+  
+  // Use centralized configuration from DUPLICATION_LEVELS
+  const excellentThreshold = mode === 'strict' ? 
+    DUPLICATION_LEVELS.strict.excellent.maxThreshold : 
+    DUPLICATION_LEVELS.legacy.excellent.maxThreshold;
+  const highThreshold = mode === 'strict' ? 
+    DUPLICATION_LEVELS.strict.good.maxThreshold : 
+    DUPLICATION_LEVELS.legacy.good.maxThreshold;
   
   // Threshold varies by mode: 3% (strict) vs 15% (legacy)
-  if (duplicationRatio <= percentageToRatio(constants.EXCELLENT_THRESHOLD)) return 0;
+  if (duplicationRatio <= percentageToRatio(excellentThreshold)) return 0;
   
   // Progressive penalty without artificial caps
   const percentage = ratioToPercentage(duplicationRatio);
   
-  if (percentage <= constants.HIGH_THRESHOLD) {
+  if (percentage <= highThreshold) {
     // Linear penalty up to high threshold (8% strict vs 30% legacy)
-    return (percentage - constants.EXCELLENT_THRESHOLD) * constants.LINEAR_MULTIPLIER;
+    return (percentage - excellentThreshold) * HEALTH_PENALTY_CONSTANTS.DUPLICATION.LINEAR_MULTIPLIER;
   }
   
   // Exponential penalty beyond high threshold - NO CAP!
   // High duplication should devastate the score
-  const basePenalty = constants.LINEAR_MAX_PENALTY;
+  const basePenalty = HEALTH_PENALTY_CONSTANTS.DUPLICATION.LINEAR_MAX_PENALTY;
   const exponentialPenalty = Math.pow(
-    (percentage - constants.HIGH_THRESHOLD) / constants.EXPONENTIAL_DENOMINATOR, 
-    constants.EXPONENTIAL_POWER
-  ) * constants.EXPONENTIAL_MULTIPLIER;
+    (percentage - highThreshold) / HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_DENOMINATOR, 
+    HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_POWER
+  ) * HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_MULTIPLIER;
   
   return basePenalty + exponentialPenalty; // Can exceed 50+ for extreme duplication
 }
@@ -286,7 +249,7 @@ function getSizePenalty(loc: number): number {
   return basePenalty + exponentialPenalty; // Can exceed 40+ for massive files
 }
 
-function getIssuesPenalty(issues: Issue[]): number {
+function getIssuesPenalty(issues: FileIssue[]): number {
   const constants = HEALTH_PENALTY_CONSTANTS.ISSUES;
   
   // Issues penalty without artificial caps - following Pareto principle
@@ -318,11 +281,11 @@ export function calculateHealthScore(file: {
     loc: number; 
     duplicationRatio: number;
   }; 
-  issues: Issue[]; 
-}, duplicationConfig?: DuplicationConfig): number {
+  issues: FileIssue[]; 
+}, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
   
   const complexityPenalty = getComplexityPenalty(file.metrics.complexity);
-  const duplicationPenalty = getDuplicationPenalty(file.metrics.duplicationRatio, duplicationConfig);
+  const duplicationPenalty = getDuplicationPenalty(file.metrics.duplicationRatio, duplicationMode);
   const sizePenalty = getSizePenalty(file.metrics.loc);
   const issuesPenalty = getIssuesPenalty(file.issues);
   
@@ -335,10 +298,13 @@ export function calculateHealthScore(file: {
  * Calculate criticism score for a file using original hypothesis weights
  * Higher score = more problematic file = more weight in final scores
  * 
- * Original weights from pre-v0.6.0:
+ * Synchronized with calculateHealthScore to use actual file.issues array
+ * instead of approximating issue count from metrics.
+ * 
+ * Weights:
  * - Impact (dependencies): 2.0 (most important)
  * - Complexity: 1.0 
- * - Issues count: 0.5
+ * - Weighted issues by severity: 0.5 (critical×4, high×3, medium×2, low×1)
  * - Base score: 1 (to avoid zero weights)
  */
 export function calculateCriticismScore(file: FileDetail): number {
@@ -351,15 +317,17 @@ export function calculateCriticismScore(file: FileDetail): number {
                  (file.dependencies?.outgoingDependencies || 0) + 
                  (file.dependencies?.isInCycle ? 5 : 0); // Penalty for circular dependencies
   
-  // Count issues (we don't have explicit issues array in new structure, so approximate)
-  // High complexity, high duplication, or large files are "issues"
-  let issueCount = 0;
-  if (file.metrics.complexity > 10) issueCount++;
-  if (file.metrics.duplicationRatio > 0.1) issueCount++; // 10% duplication threshold
-  if (file.metrics.loc > 500) issueCount++; // Large file threshold
+  // Use actual issues array instead of approximation - synchronized with calculateHealthScore
+  const criticalIssues = file.issues.filter(i => i.severity === 'critical').length;
+  const highIssues = file.issues.filter(i => i.severity === 'high').length;
+  const mediumIssues = file.issues.filter(i => i.severity === 'medium').length;
+  const lowIssues = file.issues.filter(i => i.severity === 'low').length;
+  
+  // Weight by severity for more accurate criticism scoring
+  const weightedIssueScore = (criticalIssues * 4) + (highIssues * 3) + (mediumIssues * 2) + (lowIssues * 1);
   
   return (impact * impactWeight) + 
          (file.metrics.complexity * complexityWeight) + 
-         (issueCount * issueWeight) + 
+         (weightedIssueScore * issueWeight) + 
          1; // Base score to avoid zero weights
 }

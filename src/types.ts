@@ -1,6 +1,11 @@
-// File: src/types.ts - v0.6.0 Type Definitions
+// File: src/types.ts
 
 // ==================== VALIDATION TYPES ====================
+
+/**
+ * Centralized Grade type for all code quality grades
+ */
+export type Grade = 'A' | 'B' | 'C' | 'D' | 'F';
 
 /**
  * Ratio value constrained to 0-1 range
@@ -43,10 +48,7 @@ export function validateScore(value: number): Score {
 /**
  * Duplication analysis mode
  */
-export enum DuplicationMode {
-  Legacy = 'legacy',    // Permissive thresholds (15%/30%/50%) for brownfield/legacy analysis
-  Strict = 'strict'     // Industry-standard thresholds (3%/8%/15%) aligned with SonarQube/Google
-}
+export type DuplicationMode = 'legacy' | 'strict';
 
 /**
  * Duplication mode configuration
@@ -62,11 +64,6 @@ export interface DuplicationConfig {
 
 // ==================== ENUMS ====================
 
-export enum IssueType {
-  Complexity = 'complexity',
-  Duplication = 'duplication',
-  Size = 'size'
-}
 
 export enum Severity {
   Critical = 'critical',
@@ -78,14 +75,13 @@ export enum Severity {
 // ==================== CORE INTERFACES ====================
 
 /**
- * Root structure returned by analysis - v0.6.0 Pure Data
+ * Root structure returned by analysis
  * No recommendations - 100% calculable client-side
  */
 export interface AnalysisResult {
   context: Context;
   overview: Overview;
   details: FileDetail[];
-  codeContext?: CodeContext[];
 }
 
 /**
@@ -112,14 +108,14 @@ export interface Context {
  * Overview - WHAT Summary
  */
 export interface Overview {
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: Grade;
   
   statistics: {
     totalFiles: number;
     totalLOC: number;
     avgComplexity: number;
     avgLOC: number;
-    avgDuplicationRatio?: number; // Average duplication ratio (0-1)
+    avgDuplicationRatio?: Ratio; // Average duplication ratio (0-1) - consistent with FileDetail
   };
   
   scores: {
@@ -148,53 +144,113 @@ export interface FileDetail {
   
   dependencies: FileDependencyAnalysis
   
-  issues: Issue[];
+  issues: FileIssue[];              // Issues niveau fichier SEULEMENT
+  functions?: FunctionAnalysis[];    // REMPLACE functionIssues
   
   healthScore: Score;   // 0-100 (100 = perfect)
 }
 
 /**
- * Issues found in files - Simplified structure for v0.6.0
- * No effortHours - too contextual to calculate automatically
+ * Base issue types that apply to both files and functions
  */
-export interface Issue {
-  type: IssueType;
-  severity: Severity;
-  line: number;
-  threshold: number;
-  excessRatio: number;    // How much over threshold - used for ROI sorting
-  
-  // Optional enriched location for certain issue types
-  endLine?: number;
-  column?: number;
-  function?: string;
+export type BaseIssueType = 
+  | 'complexity' 
+  | 'duplication' 
+  | 'size';
+
+/**
+ * Pattern types specific to functions only
+ */
+export type FunctionPatternType = 
+  | QualityPattern
+  | ArchitecturePattern  
+  | PerformancePattern
+  | SecurityPattern
+  | TestingPattern;
+
+/**
+ * File-level issue types (only base metrics)
+ */
+export type FileIssueType = BaseIssueType;
+
+/**
+ * Function-level issue types (base metrics + patterns)
+ */
+export type FunctionIssueType = BaseIssueType | FunctionPatternType;
+
+/**
+ * All possible issue types in the unified architecture
+ */
+export type IssueType = FileIssueType | FunctionIssueType;
+
+/**
+ * File-level issue for base metrics (complexity, duplication, size) at file scope
+ */
+export interface FileIssue {
+  type: FileIssueType;
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  location: {
+    file: string;
+    line: number;
+    column?: number;
+    endLine?: number;
+  };
+  description: string;
+  threshold?: number; // For metric-based issues
+  excessRatio?: number; // How much over threshold - used for ROI sorting
 }
 
 /**
- * Code context focused on critical functions and patterns
+ * Function-level issue for base metrics + patterns within specific functions
  */
-export interface CodeContext {
-  file: string;
-  criticalFunctions: FunctionContext[];
-  patterns: FilePatterns;
+export interface FunctionIssue {
+  type: FunctionIssueType;
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  location: {
+    file: string;
+    line: number;
+    column?: number;
+    endLine?: number;
+    function: string; // Required for function-level issues
+  };
+  description: string;
+  threshold?: number; // For metric-based issues (complexity, size thresholds)
+  excessRatio?: number; // How much over threshold - used for ROI sorting
 }
 
-export interface FunctionContext {
+/**
+ * Detailed analysis of a single function
+ */
+export interface FunctionAnalysis {
   name: string;
+  line: number;
+  endLine?: number;
   complexity: number;
-  lineCount: number;
+  loc: number;
   parameterCount: number;
-  snippet: string;
-  issues: QualityIssue[];
+  issues: FunctionIssue[];  // Les issues de cette fonction
+  snippet?: string;         // Code snippet pour fonctions critiques
 }
 
-export interface FilePatterns {
-  quality: QualityPattern[];
-  architecture: ArchitecturePattern[];
-  performance: PerformancePattern[];
-  security: SecurityPattern[];
-  testing: TestingPattern[];
+/**
+ * Unified issue interface for both file-level and function-level issues
+ * Maintains backward compatibility while supporting the new separation
+ */
+export interface CodeIssue {
+  type: IssueType;
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  location: {
+    file: string;
+    line: number;
+    column?: number;
+    endLine?: number;
+    function?: string; // Optional for backward compatibility
+  };
+  description: string;
+  threshold?: number; // For metric-based issues
+  excessRatio?: number; // How much over threshold - used for ROI sorting
 }
+
 
 export type QualityPattern = 
   | 'deep-nesting'
@@ -234,11 +290,8 @@ export type TestingPattern =
   | 'integration-test'
   | 'unit-test';
 
-export interface QualityIssue {
-  type: QualityPattern;
-  severity: 'low' | 'medium' | 'high';
-  description: string;
-}
+// Legacy alias for backward compatibility during transition
+export type FunctionQualityIssue = CodeIssue;
 
 // ==================== CLI & CONFIGURATION ====================
 
@@ -296,7 +349,7 @@ export interface ThresholdConfig {
  */
 export interface CiFormat {
   passed: boolean;
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: Grade;
   score: Score;
   criticalCount: number;
 }
@@ -401,7 +454,7 @@ export interface ReportSummary {
   realDuration: number;  // Temps réel d'exécution parallèle
   totalLines: number;
   avgComplexity: number;
-  avgDuplication: number;
+  avgDuplication: Ratio; // Average duplication ratio (0-1) - consistent with FileDetail
   gradeDistribution: Record<string, number>;
   modeCategory: 'production' | 'full';
 }

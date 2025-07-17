@@ -137,7 +137,7 @@ export function validateUser(user: any) {
     // FIX: Pass all required arguments
     const results = await analyze(files, tempDir, DEFAULT_THRESHOLDS);
     
-    // Should have reasonable duplication handling (may be 100% if not detected due to stricter v0.6.0 criteria)
+    // Should have reasonable duplication handling (may be 100% if not detected due to stricter v0.6.0+ criteria)
     expect(results.overview.scores.duplication).toBeGreaterThanOrEqual(0);
     expect(results.overview.scores.duplication).toBeLessThanOrEqual(100);
   });
@@ -458,11 +458,11 @@ export function validateTitle(title: string): boolean {
       const files = await parseDirectory(tempDir);
       const results = await analyze(files, tempDir, DEFAULT_THRESHOLDS);
 
-      // Should have reasonable duplication handling (may be 100% if not detected due to stricter v0.6.0 criteria)
+      // Should have reasonable duplication handling (may be 100% if not detected due to stricter v0.6.0+ criteria)
       expect(results.overview.scores.duplication).toBeGreaterThanOrEqual(0);
       expect(results.overview.scores.duplication).toBeLessThanOrEqual(100);
       
-      // May or may not have duplication issues due to stricter v0.6.0 criteria
+      // May or may not have duplication issues due to stricter v0.6.0+ criteria
       const hasduplicationIssues = results.details.some(file => 
         file.issues.some(issue => issue.type === 'duplication')
       );

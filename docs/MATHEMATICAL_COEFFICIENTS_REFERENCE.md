@@ -14,8 +14,8 @@ This document provides a quick reference for all mathematical coefficients used 
 |-------------|-------|---------|---------------|---------|
 | **Complexity Exponential** | `1.8` | `Math.pow(range/50, 1.8)` | Moderate exponential (80% of quadratic) | ⚠️ Needs validation |
 | **Duplication Exponential** | `1.8` | `Math.pow(range/10, 1.8)` (mode-aware) | Same as complexity - mode-specific thresholds | ⚠️ Needs validation |
-| **Size Exponential** | `1.3` | `Math.pow(range/1000, 1.3)` | Gentler than quality penalties | ⚠️ Inconsistent |
-| **Health Score Complexity** | `1.5` | `Math.pow(range/20, 1.5)` | Moderate growth | ⚠️ Different from main |
+| **Size Exponential** | `1.8` | `Math.pow(range/1000, 1.8)` | Harmonized with all penalties | ✅ Consistent |
+| **Health Score Complexity** | `1.8` | `Math.pow(range/20, 1.8)` | Harmonized growth | ✅ Unified |
 | **Quadratic** | `2.0` | `Math.pow(range/30, 2)` | Standard quadratic acceleration | ✅ Mathematical standard |
 
 ### **Multipliers (Penalty Magnitudes)**
@@ -54,8 +54,8 @@ This document provides a quick reference for all mathematical coefficients used 
 ### **CRITICAL (Immediate Action Required)**
 
 1. **Power 1.8 Validation**
-   - **Issue**: Used for both complexity and duplication - suspicious coincidence
-   - **Test**: Compare 1.5 vs 1.8 vs 2.0 against expert judgment on 50+ cases
+   - **Issue**: Harmonized across all penalty types - needs validation
+   - **Test**: Validate harmonized 1.8 power against expert judgment on 50+ cases
    - **Impact**: Core scoring algorithm accuracy
 
 2. **Range Denominator 50**
@@ -71,9 +71,9 @@ This document provides a quick reference for all mathematical coefficients used 
 ### **HIGH (Quarterly Review)**
 
 1. **Power Harmonization**
-   - **Issue**: Inconsistent powers (1.3, 1.5, 1.8, 2.0) across penalty types
-   - **Test**: Systematic comparison of unified vs differentiated schemes
-   - **Impact**: Mathematical consistency
+   - **Status**: ✅ **COMPLETED** - All exponential penalties harmonized to 1.8
+   - **Result**: Mathematical consistency achieved across all penalty types
+   - **Impact**: Unified exponential behavior system-wide
 
 2. **Size Denominator 1000**
    - **Issue**: May be too forgiving for massive files (2000+ LOC)
@@ -142,5 +142,5 @@ interface CoefficientTest {
 
 ---
 
-*Reference document v0.6.0 - Updated with comprehensive coefficient analysis*
+*Reference document v0.7.0 - Updated with comprehensive coefficient analysis*
 *See: `docs/MATHEMATICAL_COEFFICIENTS_JUSTIFICATION.md` for detailed analysis*

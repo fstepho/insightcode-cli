@@ -1,6 +1,6 @@
 // analyzer/ContextGenerator.ts - Analysis context generation
 
-import { Context, FileDetail, DuplicationConfig } from '../types';
+import { Context, FileDetail } from '../types';
 import { getProjectInfo } from '../projectInfo';
 import { normalizeProjectPath } from '../utils';
 
@@ -13,7 +13,7 @@ export class ContextGenerator {
     projectPath: string,
     fileDetails: FileDetail[],
     startTime: number,
-    duplicationConfig: DuplicationConfig
+    duplicationMode: 'strict' | 'legacy' = 'legacy'
   ): Context {
     const endTime = Date.now();
     const duration = endTime - startTime;
@@ -27,7 +27,7 @@ export class ContextGenerator {
         version: projectInfo.version,
         repository: projectInfo.repository
       },
-      analysis: this.getAnalysisMetadata(fileDetails, duration, duplicationConfig)
+      analysis: this.getAnalysisMetadata(fileDetails, duration, duplicationMode)
     };
   }
   
@@ -60,14 +60,14 @@ export class ContextGenerator {
   private static getAnalysisMetadata(
     fileDetails: FileDetail[],
     duration: number,
-    duplicationConfig: DuplicationConfig
+    duplicationMode: 'strict' | 'legacy' = 'legacy'
   ) {
     return {
       timestamp: new Date().toISOString(),
       durationMs: duration,
       toolVersion: require('../../package.json').version,
       filesAnalyzed: fileDetails.length,
-      duplicationMode: duplicationConfig.mode
+      duplicationMode: duplicationMode
     };
   }
   

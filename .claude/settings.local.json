@@ -12,7 +12,8 @@
       "Bash(npm test:*)",
       "Bash(npx tsc:*)",
       "Bash(npm run test:integration:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(npm run:*)"
     ],
     "deny": []
   }

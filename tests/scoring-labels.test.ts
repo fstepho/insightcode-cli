@@ -1,10 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { 
   getComplexityLabel, 
-  getDuplicationLabel, 
-  getMaintainabilityLabel,
+  getDuplicationLabel,
   getComplexityColorLevel,
-  getDuplicationColorLevel,
+  getDuplicationColorLevel
+} from '../src/scoring.utils';
+import { 
+  getMaintainabilityLabel,
   getMaintainabilityColorLevel,
   getSeverityColorLevel
 } from '../src/scoring';

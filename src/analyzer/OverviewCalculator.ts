@@ -1,25 +1,26 @@
 // analyzer/OverviewCalculator.ts - Centralized overview calculation
 
-import { Overview, FileDetail, DuplicationConfig, validateScore } from '../types';
+import { Overview, FileDetail, validateScore } from '../types';
 import { 
   calculateComplexityScore, 
   calculateDuplicationScore, 
   calculateMaintainabilityScore, 
-  calculateWeightedScore 
+  calculateWeightedScore,
+  calculateCriticismScore 
 } from '../scoring';
-import { getGrade, isCriticalFile } from '../scoring.utils';
+import { getGrade, isCriticalFile, GRADE_CONFIG, COMPLEXITY_LEVELS, getDuplicationThreshold } from '../scoring.utils';
 
 /**
  * Calculates comprehensive overview from file details
  */
 export class OverviewCalculator {
   
-  static calculate(fileDetails: FileDetail[], duplicationConfig: DuplicationConfig): Overview {
+  static calculate(fileDetails: FileDetail[], duplicationMode: 'strict' | 'legacy' = 'legacy'): Overview {
     if (fileDetails.length === 0) {
       return this.createEmptyOverview();
     }
 
-    const scores = this.calculateComponentScores(fileDetails, duplicationConfig);
+    const scores = this.calculateComponentScores(fileDetails, duplicationMode);
     const statistics = this.calculateStatistics(fileDetails);
     
     return {
@@ -49,7 +50,7 @@ export class OverviewCalculator {
    * 
    * NOTE: No outlier masking - extreme values receive extreme penalties
    */
-  private static calculateComponentScores(fileDetails: FileDetail[], duplicationConfig: DuplicationConfig) {
+  private static calculateComponentScores(fileDetails: FileDetail[], duplicationMode: 'strict' | 'legacy' = 'legacy') {
     // Calculate weighted scores using criticism-based approach
     let weightedComplexityScore = 0;
     let weightedDuplicationScore = 0;
@@ -58,24 +59,24 @@ export class OverviewCalculator {
 
     // First pass: calculate total criticism score
     fileDetails.forEach(file => {
-      const criticismScore = this.calculateCriticismScore(file);
+      const criticismScore = calculateCriticismScore(file);
       totalCriticismScore += criticismScore;
     });
 
     // Second pass: calculate weighted scores
     if (totalCriticismScore > 0) {
       fileDetails.forEach(file => {
-        const criticismScore = this.calculateCriticismScore(file);
+        const criticismScore = calculateCriticismScore(file);
         const weight = criticismScore / totalCriticismScore;
         
         weightedComplexityScore += calculateComplexityScore(file.metrics.complexity) * weight;
-        weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio, duplicationConfig) * weight;
+        weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio, duplicationMode) * weight;
         weightedMaintainabilityScore += calculateMaintainabilityScore(file.metrics.loc, file.metrics.functionCount) * weight;
       });
     } else {
       // Fallback to simple averages
       weightedComplexityScore = fileDetails.reduce((sum, f) => sum + calculateComplexityScore(f.metrics.complexity), 0) / fileDetails.length;
-      weightedDuplicationScore = fileDetails.reduce((sum, f) => sum + calculateDuplicationScore(f.metrics.duplicationRatio, duplicationConfig), 0) / fileDetails.length;
+      weightedDuplicationScore = fileDetails.reduce((sum, f) => sum + calculateDuplicationScore(f.metrics.duplicationRatio, duplicationMode), 0) / fileDetails.length;
       weightedMaintainabilityScore = fileDetails.reduce((sum, f) => sum + calculateMaintainabilityScore(f.metrics.loc, f.metrics.functionCount), 0) / fileDetails.length;
     }
     
@@ -101,31 +102,15 @@ export class OverviewCalculator {
    * Calculate criticism score for a file
    * Higher score = more problematic file = more weight in final scores
    * 
+   * Synchronized with calculateHealthScore to use actual file.issues array
+   * instead of approximating issue count from metrics.
+   * 
    * Weights:
    * - Impact (dependencies): 2.0 (most important)
    * - Complexity: 1.0 
-   * - Issues count: 0.5
+   * - Weighted issues by severity: 0.5 (critical×4, high×3, medium×2, low×1)
    * - Base score: 1 (to avoid zero weights)
    */
-  private static calculateCriticismScore(file: FileDetail): number {
-    const complexityWeight = 1.0;
-    const impactWeight = 2.0;
-    const issueWeight = 0.5;
-    
-    const impact = (file.dependencies?.incomingDependencies || 0) + 
-                   (file.dependencies?.outgoingDependencies || 0) + 
-                   (file.dependencies?.isInCycle ? 5 : 0);
-    
-    let issueCount = 0;
-    if (file.metrics.complexity > 10) issueCount++;
-    if (file.metrics.duplicationRatio > 0.1) issueCount++;
-    if (file.metrics.loc > 500) issueCount++;
-    
-    return (impact * impactWeight) + 
-           (file.metrics.complexity * complexityWeight) + 
-           (issueCount * issueWeight) + 
-           1;
-  }
   
   /**
    * Calculates file statistics
@@ -155,7 +140,7 @@ export class OverviewCalculator {
    */
   private static createEmptyOverview(): Overview {
     return {
-      grade: 'F',
+      grade: GRADE_CONFIG[GRADE_CONFIG.length - 1].grade, // Use lowest grade from config
       statistics: {
         totalFiles: 0,
         totalLOC: 0,

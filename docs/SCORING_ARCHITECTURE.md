@@ -63,11 +63,11 @@ DUPLICATION: 0.25        // Internal hypothesis - Technical debt indicator (requ
 COMPLEXITY_SCORING_THRESHOLDS: {
   EXCELLENT: 10,              // <= 10 = 100 points (McCabe "good")
   CRITICAL: 20,               // Transition point for phases
-  LINEAR_PENALTY_RATE: 4,     // 4 points lost per complexity unit
+  LINEAR_PENALTY_RATE: 3,     // 3 points lost per complexity unit (superior calibration)
   EXPONENTIAL_BASE: 30,       // Base score for exponential phase
-  EXPONENTIAL_POWER: 1.5,     // Moderate exponential growth
+  EXPONENTIAL_POWER: 1.8,     // Harmonized exponential growth across all penalties
   EXPONENTIAL_MULTIPLIER: 40, // Penalty magnitude for high complexity
-  MIN_SCORE: 60              // Score floor for actionable results
+  // NO MIN_SCORE - allows scores to reach 0 for extreme complexity (aligned with "no artificial caps" philosophy)
   // Implements Rules of the Art: Linear → Quadratic → Exponential
   // Phase 1 (≤10): Excellent (100 points)
   // Phase 2 (10-20): Linear degradation (100 → 70 points)  
@@ -97,9 +97,9 @@ DUPLICATION_COLOR_THRESHOLDS: {
 ```typescript
 DUPLICATION_DETECTION_CONSTANTS: {
   BLOCK_SIZE: 8,              // Internal convention (reduces false positives) - not a formal standard
-  MIN_TOKENS: 8,              // Internal convention (cognitive load optimization)
-  MIN_BLOCK_LENGTH: 50,       // Internal convention (practical detection threshold)
-  MIN_CONTENT_LENGTH: 30      // Internal convention (significance threshold for content analysis)
+  MIN_TOKENS: 20,             // Internal convention (realistic for 8-line blocks)
+  MIN_BLOCK_LENGTH: 40,       // Internal convention (practical detection threshold)
+  MIN_CONTENT_LENGTH: 25      // Internal convention (significance threshold for content analysis)
 }
 ```
 
@@ -110,7 +110,7 @@ HEALTH_PENALTY_CONSTANTS: {
     EXCELLENT_THRESHOLD: 10,
     CRITICAL_THRESHOLD: 20,
     // NO CAPS - extreme complexity gets extreme penalties (Pareto principle)
-    // Example: Complexity 176 → Penalty 133 (catastrophic)
+    // Example: Complexity 176 → Penalty 131 (catastrophic)
   },
   DUPLICATION: { 
     // Mode-aware thresholds (v0.6.0+):

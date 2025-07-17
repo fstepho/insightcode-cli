@@ -39,7 +39,7 @@
 
   Coefficients techniques
 
-  1. Puissance 1.8 : Utilisée 2x (complexité et size penalty) - valider indépendance
+  1. Puissance 1.8 : ✅ Harmonisée sur tous les types de pénalités pour cohérence mathématique
   2. Seuil 200 LOC : "Heuristic" psychologique - valider contre maintenance burden
   3. Exponential denominator 10 : Pour duplication - tester avec projets haute
   duplication

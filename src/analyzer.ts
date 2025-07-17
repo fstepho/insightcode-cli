@@ -14,13 +14,11 @@ import {
 export { AnalysisOptions } from './types';
 import { astBuilder, ASTBuildOptions, ASTBuildResult } from './ast-builder';
 import { fileDetailBuilder } from './file-detail-builder';
-import { contextBuilder } from './context-builder';
 import { detectDuplication } from './duplication';
 import { UniversalDependencyAnalyzer } from './dependency-analyzer';
 import { calculateHealthScore } from './scoring';
-import { createDuplicationConfig } from './thresholds.constants';
+// createDuplicationConfig removed - use mode string directly
 import { getConfig } from './config.manager';
-import { ProjectDiscovery } from './analyzer/ProjectDiscovery';
 import { OverviewCalculator } from './analyzer/OverviewCalculator';
 import { ContextGenerator } from './analyzer/ContextGenerator';
 
@@ -39,7 +37,6 @@ class AnalysisContext {
   astData?: ASTBuildResult;
   rawFileDetails?: FileDetail[];
   processedFileDetails?: FileDetail[];
-  codeContext?: AnalysisResult['codeContext'];
   overview?: Overview;
   context?: Context;
 }
@@ -67,7 +64,6 @@ export async function analyze(
     await executeFileDetailStep(context);
     await executeMetricsProcessingStep(context);
     await executeOverviewCalculationStep(context);
-    await executeContextExtractionStep(context);
     await executeContextGenerationStep(context);
     
     return assembleResult(context);
@@ -124,7 +120,7 @@ async function executeMetricsProcessingStep(context: AnalysisContext): Promise<v
     throw new Error('Raw file details or AST data not available');
   }
   
-  const duplicationConfig = createDuplicationConfig(context.options.strictDuplication || false);
+  const duplicationMode = context.options.strictDuplication ? 'strict' : 'legacy';
   
   // 1. Detect duplication
   const filesWithDuplication = detectDuplication(context.rawFileDetails, getConfig());
@@ -154,7 +150,7 @@ async function executeMetricsProcessingStep(context: AnalysisContext): Promise<v
       isInCycle: false
     };
     
-    const healthScore = validateScore(calculateHealthScore(file, duplicationConfig));
+    const healthScore = validateScore(calculateHealthScore(file, duplicationMode));
     
     return {
       ...file,
@@ -182,27 +178,10 @@ async function executeOverviewCalculationStep(context: AnalysisContext): Promise
     throw new Error('Processed file details not available');
   }
   
-  const duplicationConfig = createDuplicationConfig(context.options.strictDuplication || false);
-  context.overview = OverviewCalculator.calculate(context.processedFileDetails, duplicationConfig);
+  const duplicationMode = context.options.strictDuplication ? 'strict' : 'legacy';
+  context.overview = OverviewCalculator.calculate(context.processedFileDetails, duplicationMode);
 }
 
-/**
- * Step 5: Extract code context (optional)
- */
-async function executeContextExtractionStep(context: AnalysisContext): Promise<void> {
-  if (context.options.format === 'terminal') {
-    console.log('🧠 Extracting code context...');
-  }
-  
-  if (!context.processedFileDetails || !context.astData) {
-    throw new Error('Processed file details or AST data not available');
-  }
-  
-  context.codeContext = await contextBuilder.build(context.processedFileDetails, context.astData, {
-    projectPath: context.options.projectPath,
-    enabled: true
-  });
-}
 
 /**
  * Step 6: Generate analysis context metadata
@@ -212,12 +191,12 @@ async function executeContextGenerationStep(context: AnalysisContext): Promise<v
     throw new Error('Processed file details not available');
   }
   
-  const duplicationConfig = createDuplicationConfig(context.options.strictDuplication || false);
+  const duplicationMode = context.options.strictDuplication ? 'strict' : 'legacy';
   context.context = ContextGenerator.generate(
     context.options.projectPath,
     context.processedFileDetails,
     context.startTime,
-    duplicationConfig
+    duplicationMode
   );
 }
 
@@ -232,7 +211,6 @@ function assembleResult(context: AnalysisContext): AnalysisResult {
   return {
     details: context.processedFileDetails,
     overview: context.overview,
-    context: context.context,
-    ...(context.codeContext && { codeContext: context.codeContext })
+    context: context.context
   };
 }

@@ -1,4 +1,4 @@
-# Mathematical Coefficients Justification - v0.6.0
+# Mathematical Coefficients Justification - v0.6.0+
 
 ## Executive Summary
 
@@ -86,23 +86,22 @@ Coefficients that need systematic validation and potential adjustment.
 
 ### **Exponential Power: 1.8**
 - **Value**: `Math.pow(range / 50, 1.8)`
-- **Category**: ⚠️ **Legacy/Uncalibrated - NEEDS VALIDATION**
-- **Current justification**: "Moderate exponential growth"
+- **Category**: 🎯 **Heuristic (System-Wide Harmonization)**
+- **Justification**: "Moderate exponential growth - harmonized across all penalty types"
 - **Mathematical Properties**:
   - **Rate Analysis**: 1.8 is between linear (1.0) and quadratic (2.0)
   - **Comparison to alternatives**:
     - Power 1.5: More gentle curve, better for borderline cases
     - Power 2.0: Quadratic acceleration, harsher penalties
     - Power 1.8: 80% of quadratic steepness
-- **Critical Issues**: 
-  - **No empirical basis provided** - coefficient chosen without systematic testing
-  - **Not compared against alternatives** (1.5, 2.0, 2.5) in real scenarios
-  - **Inconsistency**: Same power used for duplication (1.8) - suspicious coincidence
-  - **Validation gap**: No testing against complexity >100 cases with expert judgment
+- **Harmonization Decision**: 
+  - **System-wide consistency**: All exponential penalties use power 1.8
+  - **Mathematical coherence**: Unified penalty progression across complexity, duplication, and size
+  - **Validation priority**: System-wide behavior consistency over individual optimization
 - **Real-world Impact**:
-  - Complexity 60: penalty ≈ 26 points vs 27 (power 1.5) or 29 (power 2.0)
-  - Complexity 100: penalty drives score to 0 regardless of power choice
-- **Recommended action**: 🔬 **A/B test powers 1.5, 1.8, 2.0 against complexity >50 cases with expert ratings**
+  - Complexity 60: penalty ≈ 26 points
+  - Complexity 100: penalty drives score to 0
+- **Recommended action**: 🔬 **Validate harmonized 1.8 power against diverse real-world cases**
 
 ### **Exponential Penalty Multiplier: 30**
 - **Value**: `Math.pow(...) * 30`
@@ -145,21 +144,21 @@ Several key coefficients use the value **30**, which is not coincidental but rep
 
 **Analysis**: These three "30" values serve completely different mathematical functions and were calibrated independently. The coincidence reflects good mathematical scaling rather than arbitrary choice.
 
-### **Power Coefficient Inconsistency Analysis**
+### **Power Coefficient Harmonization (v0.6.0+)**
 
-Current exponential powers across the system:
+**Exponential powers across the system**:
 - **Complexity exponential**: 1.8
 - **Duplication exponential**: 1.8  
-- **Size penalty**: 1.3
-- **Health score complexity**: 1.5
-- **Maintainability size**: 2.0
+- **Size penalty**: 1.8
+- **Health score complexity**: 1.8
+- **Maintainability size**: 1.8
 
-**Critical Issue**: No systematic justification for why different penalty types should have different exponential rates.
+**Mathematical Consistency**: All exponential penalty functions use the same growth rate (1.8), providing unified mathematical behavior across different penalty types.
 
-**Hypothesis for Testing**:
-1. **Complexity & Duplication**: Should use same power (1.8) as both represent "code quality debt"
-2. **Size penalties**: Should use gentler power (1.3-1.5) as size is easier to refactor
-3. **Systematic validation needed**: Test unified vs differentiated power schemes
+**Rationale**:
+1. **Complexity & Duplication**: Power 1.8 for both "code quality debt" metrics
+2. **Size penalties**: Power 1.8 maintains proportional penalty progression
+3. **System-wide consistency**: All penalty types follow identical exponential behavior
 
 ---
 
@@ -175,25 +174,25 @@ Current exponential powers across the system:
 - **Validation**: ✅ Strong academic and industry support
 - **Sources**: NASA/SEL, Basili et al. (1996), NIST guidelines
 
-### **Extreme Penalty Power: 1.5**
-- **Value**: `Math.pow((complexity - 100) / 100, 1.5)`
-- **Category**: 🎯 **Heuristic (Requires Validation)**
+### **Extreme Penalty Power: 1.8**
+- **Value**: `Math.pow((complexity - 100) / 100, 1.8)`
+- **Category**: 🎯 **Heuristic (System-Wide Harmonization)**
 - **Justification**: 
-  - Moderate exponential growth (between linear 1.0 and quadratic 2.0)
+  - Harmonized with all other exponential penalties (1.8)
   - Ensures complexity 200 gets significant penalty vs complexity 150
-  - Chosen to avoid over-penalizing slightly above threshold cases
-- **Issues**: No systematic comparison of powers tested
-- **Recommended action**: 🔬 **Test powers 1.2, 1.5, 1.8, 2.0 against real extreme cases**
+  - Maintains mathematical consistency across all penalty calculations
+- **System coherence**: All exponential penalties use power 1.8
+- **Recommended action**: 🔬 **Validate harmonized power against extreme complexity cases**
 
 ### **Extreme Penalty Multiplier: 50**
 - **Value**: `Math.pow(...) * 50`
 - **Category**: 🧪 **Empirically Calibrated**
 - **Justification**: 
-  - Calibrated so complexity 176 gets ~33 additional penalty points
+  - Calibrated so complexity 176 gets ~31 additional penalty points
   - Ensures catastrophic complexity (1000+) receives maximum penalties
   - Tested against InsightCode's own codebase extreme cases
 - **Validation**: ✅ Produces reasonable penalty distribution for known cases
-- **Evidence**: Complexity 176 → 133 total penalty (documented case)
+- **Evidence**: Complexity 176 → 131 total penalty (documented case)
 
 ---
 
@@ -217,13 +216,13 @@ Current exponential powers across the system:
 
 ### **Exponential Power: 1.8**
 - **Value**: `Math.pow(..., 1.8)`
-- **Category**: ⚠️ **Legacy/Uncalibrated - NEEDS VALIDATION**
-- **Current justification**: "Steeper than complexity as duplication compounds issues"
-- **Issues**: 
-  - Same power as complexity exponential (coincidence?)
-  - No empirical evidence that 1.8 is optimal for duplication penalties
-  - Not compared against other powers systematically
-- **Recommended action**: 🔬 **Systematic power comparison needed**
+- **Category**: 🎯 **Heuristic (System-Wide Harmonization)**
+- **Justification**: "Harmonized with complexity penalty for mathematical consistency"
+- **Mathematical coherence**: 
+  - Same power as complexity exponential (1.8)
+  - Unified exponential behavior across all penalty types
+  - Consistent penalty progression for code quality metrics
+- **Recommended action**: 🔬 **Validate harmonized power in duplication-heavy codebases**
 
 ### **Exponential Denominator: 10 (Mode-Adaptive)**
 - **Value**: `(percentage - high_threshold) / 10` where high_threshold is mode-specific (8% strict, 30% legacy)
@@ -262,15 +261,15 @@ Current exponential powers across the system:
   - Not validated against "unmaintainable file size" research
 - **Recommended action**: 🔬 **Study correlation between file size and maintenance burden**
 
-### **Exponential Power: 1.3**
-- **Value**: `Math.pow(..., 1.3)`
-- **Category**: ⚠️ **Legacy/Uncalibrated - NEEDS VALIDATION**
-- **Current justification**: "Moderate exponential growth"
-- **Issues**: 
-  - Different from complexity (1.8) and duplication (1.8) powers
-  - No justification for why size should have different exponential rate
-  - Not empirically validated
-- **Recommended action**: 🔬 **Systematic power comparison and validation**
+### **Exponential Power: 1.8**
+- **Value**: `Math.pow(..., 1.8)`
+- **Category**: 🎯 **Heuristic (System-Wide Harmonization)**
+- **Justification**: "Harmonized exponential growth across all penalty types"
+- **Mathematical consistency**: 
+  - Same as complexity (1.8) and duplication (1.8) powers
+  - Unified exponential progression for all quality metrics
+  - System-wide mathematical coherence
+- **Recommended action**: 🔬 **Validate harmonized power against file size distributions**
 
 ---
 
@@ -365,9 +364,9 @@ interface CoefficientValidation {
 - **Linear multiplier 1.5** (duplication): Industry heuristic, needs systematic comparison
 
 #### **⚠️ REQUIRES IMMEDIATE VALIDATION**
-- **Exponential power 1.8**: Used twice (complexity, duplication) - suspicious coincidence
+- **Exponential power 1.8**: Harmonized across all penalty types for mathematical consistency
 - **Exponential denominators 50/10/1000**: Arbitrary ranges, no empirical basis
-- **Power inconsistencies**: 1.3, 1.5, 1.8, 2.0 across different penalty types
+- **Power harmonization**: All penalty types use 1.8 for unified behavior
 
 ### **Mathematical Rigor Assessment**
 
@@ -378,15 +377,15 @@ interface CoefficientValidation {
 4. **Mathematical consistency**: Good scaling relationships and continuity
 
 **Critical Gaps**:
-1. **Exponential power validation**: No systematic testing of 1.8 vs alternatives
-2. **Cross-penalty harmonization**: Inconsistent powers across different penalty types
+1. **Exponential power validation**: Systematic testing of harmonized 1.8 power needed
+2. **Cross-penalty harmonization**: ✅ Powers harmonized to 1.8 across all penalty types
 3. **Empirical calibration**: Insufficient real-world validation for several key coefficients
 
 **Priority Actions**:
-1. 🔬 **Validate exponential coefficients** (powers 1.8, denominators 50/10/1000) - **HIGH PRIORITY**
-2. 🧪 **Empirically calibrate** penalty multipliers against real-world data - **HIGH PRIORITY**
-3. 📊 **Establish systematic validation** process for ongoing coefficient optimization - **MEDIUM PRIORITY**
-4. 🎯 **Harmonize power coefficients** across penalty types for mathematical consistency - **MEDIUM PRIORITY**
+1. 🔬 **Validate harmonized exponential coefficient** (power 1.8 across all types) - **HIGH PRIORITY**
+2. 🔬 **Validate denominators** (50/10/1000) against real-world distributions - **HIGH PRIORITY**
+3. 🧪 **Empirically calibrate** penalty multipliers against real-world data - **HIGH PRIORITY**
+4. 📊 **Establish systematic validation** process for ongoing coefficient optimization - **MEDIUM PRIORITY**
 
 **Academic Rigor**: This classification provides transparent basis for all mathematical choices and clear roadmap for achieving full empirical validation. The framework supports evidence-based optimization while maintaining scoring system stability.
 

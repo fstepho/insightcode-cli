@@ -75,8 +75,8 @@ lodash.filter(data, fn) // → .filter(VAR, VAR)
 ```
 
 ### 4. Conservative Filtering
-- Minimum 50 characters after normalization
-- Minimum 8 tokens (meaningful code)
+- Minimum 40 characters after normalization
+- Minimum 20 tokens (meaningful code)
 - Blocks must appear 2+ times to count
 - Cross-file detection only (no intra-file duplicates)
 

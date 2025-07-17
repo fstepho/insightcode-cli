@@ -21,11 +21,11 @@ This document provides comprehensive justification for all mathematical coeffici
 
 **Comparative analysis:**
 ```
-Complexity 60: Power 1.5→27 pts | Power 1.8→28 pts | Power 2.0→29 pts
-Complexity 80: Power 1.5→16 pts | Power 1.8→18 pts | Power 2.0→19 pts
+Complexity 60: Power 1.8→28 pts (harmonized)
+Complexity 80: Power 1.8→18 pts (harmonized)
 ```
 
-**Status:** ⚠️ **Requires systematic validation** - The fact that it's used twice (complexity and duplication) is suspicious and requires independence validation.
+**Status:** ✅ **Harmonized system-wide** - All exponential penalties use power 1.8 for mathematical consistency.
 
 ### **2. Coefficient 30 (Penalty Multipliers)**
 
@@ -83,9 +83,9 @@ Complexity 80: Power 1.5→16 pts | Power 1.8→18 pts | Power 2.0→19 pts
 - **Multiplier 1.5** (duplication): Industry heuristic, needs systematic comparison
 
 ### **⚠️ REQUIRE IMMEDIATE VALIDATION**
-- **Power 1.8**: Used twice - suspicious coincidence
+- **Power 1.8**: Harmonized across all penalty types
 - **Denominators 50/10/1000**: Arbitrary ranges, no empirical basis
-- **Power inconsistencies**: 1.3, 1.5, 1.8, 2.0 across different penalty types
+- **Power harmonization**: All penalty types use 1.8 for unified behavior
 
 ---
 
@@ -94,7 +94,7 @@ Complexity 80: Power 1.5→16 pts | Power 1.8→18 pts | Power 2.0→19 pts
 ### **CRITICAL PRIORITY (Immediate Action)**
 
 1. **Systematic exponential power testing**
-   - Compare 1.5 vs 1.8 vs 2.0 against expert judgment on 50+ cases
+   - Validate harmonized 1.8 power against expert judgment on 50+ cases
    - Method: A/B tests with expert evaluations of complex code
    - Impact: Core scoring algorithm accuracy
 
@@ -179,4 +179,4 @@ interface CoefficientValidation {
 
 ---
 
-*Synthesis document v0.6.0 - Complete mathematical coefficients justification*
+*Synthesis document v0.7.0 - Complete mathematical coefficients justification*

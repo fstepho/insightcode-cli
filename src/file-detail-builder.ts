@@ -1,10 +1,11 @@
 // File: src/file-detail-builder.ts - FileDetail Construction Module
 
-import { FileDetail, Issue, IssueType, Severity } from './types';
+import { FileDetail, FileIssue } from './types';
 import { ASTBuildResult } from './ast-builder';
 import { getConfig } from './config.manager';
 import { SourceFile, SyntaxKind, Node } from 'ts-morph';
 import { isFunctionLike } from './ast-helpers';
+import { functionAnalyzer } from './function-analyzer';
 
 export interface FileDetailBuildOptions {
   projectPath: string;
@@ -43,7 +44,8 @@ export class FileDetailBuilder {
     const complexity = this.calculateComplexity(sourceFile);
     const functionCount = this.countFunctions(sourceFile);
     const fileType = this.classifyFileType(normalizedPath);
-    const issues = this.extractIssues(sourceFile, complexity, loc, fileType);
+    const { fileIssues } = this.extractIssues(sourceFile, complexity, loc, fileType, normalizedPath);
+    const functions = functionAnalyzer.buildFunctionAnalysis(sourceFile, normalizedPath);
 
     return {
       file: normalizedPath,
@@ -54,7 +56,8 @@ export class FileDetailBuilder {
         functionCount,
         duplicationRatio: 0, // Calculated later by duplication detection
       },
-      issues,
+      issues: fileIssues,
+      functions,
       dependencies: {
         incomingDependencies: 0,
         outgoingDependencies: 0,
@@ -451,8 +454,8 @@ export class FileDetailBuilder {
    * @param fileType - Classification of file type
    * @returns Array of detected issues
    */
-  private extractIssues(sf: SourceFile, fileComplexity: number, fileLOC: number, fileType: string): Issue[] {
-    const issues: Issue[] = [];
+  private extractIssues(sf: SourceFile, fileComplexity: number, fileLOC: number, fileType: string, filePath: string): { fileIssues: FileIssue[] } {
+    const fileIssues: FileIssue[] = [];
     const thresholds = getConfig();
     
     // Get thresholds for this file type
@@ -461,26 +464,38 @@ export class FileDetailBuilder {
     
     // File-level complexity issues
     if (complexityThresholds.critical && fileComplexity > complexityThresholds.critical) {
-      issues.push({
-        type: IssueType.Complexity,
-        severity: Severity.Critical,
-        line: 1,
+      fileIssues.push({
+        type: 'complexity',
+        severity: 'critical',
+        location: {
+          file: filePath,
+          line: 1
+        },
+        description: `File complexity ${fileComplexity} exceeds critical threshold`,
         threshold: complexityThresholds.critical,
         excessRatio: fileComplexity / complexityThresholds.critical
       });
     } else if (fileComplexity > complexityThresholds.high) {
-      issues.push({
-        type: IssueType.Complexity,
-        severity: Severity.High,
-        line: 1,
+      fileIssues.push({
+        type: 'complexity',
+        severity: 'high',
+        location: {
+          file: filePath,
+          line: 1
+        },
+        description: `File complexity ${fileComplexity} exceeds high threshold`,
         threshold: complexityThresholds.high,
         excessRatio: fileComplexity / complexityThresholds.high
       });
     } else if (fileComplexity > complexityThresholds.medium) {
-      issues.push({
-        type: IssueType.Complexity,
-        severity: Severity.Medium,
-        line: 1,
+      fileIssues.push({
+        type: 'complexity',
+        severity: 'medium',
+        location: {
+          file: filePath,
+          line: 1
+        },
+        description: `File complexity ${fileComplexity} exceeds medium threshold`,
         threshold: complexityThresholds.medium,
         excessRatio: fileComplexity / complexityThresholds.medium
       });
@@ -488,57 +503,48 @@ export class FileDetailBuilder {
     
     // File-level size issues
     if (sizeThresholds.critical && fileLOC > sizeThresholds.critical) {
-      issues.push({
-        type: IssueType.Size,
-        severity: Severity.Critical,
-        line: 1,
+      fileIssues.push({
+        type: 'size',
+        severity: 'critical',
+        location: {
+          file: filePath,
+          line: 1
+        },
+        description: `File size ${fileLOC} lines exceeds critical threshold`,
         threshold: sizeThresholds.critical,
         excessRatio: fileLOC / sizeThresholds.critical
       });
     } else if (fileLOC > sizeThresholds.high) {
-      issues.push({
-        type: IssueType.Size,
-        severity: Severity.High,
-        line: 1,
+      fileIssues.push({
+        type: 'size',
+        severity: 'high',
+        location: {
+          file: filePath,
+          line: 1
+        },
+        description: `File size ${fileLOC} lines exceeds high threshold`,
         threshold: sizeThresholds.high,
         excessRatio: fileLOC / sizeThresholds.high
       });
     } else if (fileLOC > sizeThresholds.medium) {
-      issues.push({
-        type: IssueType.Size,
-        severity: Severity.Medium,
-        line: 1,
+      fileIssues.push({
+        type: 'size',
+        severity: 'medium',
+        location: {
+          file: filePath,
+          line: 1
+        },
+        description: `File size ${fileLOC} lines exceeds medium threshold`,
         threshold: sizeThresholds.medium,
         excessRatio: fileLOC / sizeThresholds.medium
       });
     }
 
-    // Function-level complexity issues (additional detection)
-    sf.forEachDescendant(node => {
-      if (node.getKind() === SyntaxKind.FunctionDeclaration) {
-        const fn = node.asKind(SyntaxKind.FunctionDeclaration);
-        if (fn) {
-          const fnComplexity = this.calculateFunctionComplexity(fn);
-          
-          // Use same thresholds but scaled down for individual functions
-          const fnThreshold = Math.max(10, Math.floor(complexityThresholds.high / 2));
-          
-          if (fnComplexity > fnThreshold) {
-            issues.push({
-              type: IssueType.Complexity,
-              severity: fnComplexity > fnThreshold * 1.5 ? Severity.High : Severity.Medium,
-              line: fn.getStartLineNumber(),
-              threshold: fnThreshold,
-              excessRatio: fnComplexity / fnThreshold,
-              function: fn.getName() || 'anonymous'
-            });
-          }
-        }
-      }
-    });
+    // Function-level issues are now handled by function-analyzer.ts
 
-    return issues;
+    return { fileIssues };
   }
+
 }
 
 /**

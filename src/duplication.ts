@@ -3,7 +3,7 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
-import { FileDetail, ThresholdConfig, IssueType, Severity } from './types';
+import { FileDetail, ThresholdConfig, FileIssue } from './types';
 import { DUPLICATION_DETECTION_CONSTANTS } from './thresholds.constants';
 import { percentageToRatio, ratioToPercentage } from './scoring.utils';
 
@@ -255,33 +255,45 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
     const duplicationRatio = Math.min(percentageToRatio(duplicationPercentage), 1.0); // Cap at 100%
     
     
-    // Generate duplication issues according to v0.6.0 specs
+    // Generate duplication issues according to v0.6.0+ specs
     // For now, we'll assume 'production' type - this could be enhanced to detect file type
     const duplicationThresholds = thresholds.duplication.production;
     
-    const updatedIssues = [...file.issues];
+    const updatedIssues: FileIssue[] = [...file.issues];
     
     if (duplicationThresholds.critical && duplicationRatio > percentageToRatio(duplicationThresholds.critical)) {
       updatedIssues.push({
-        type: IssueType.Duplication,
-        severity: Severity.Critical,
-        line: 1,
+        type: 'duplication',
+        severity: 'critical',
+        location: {
+          file: file.file,
+          line: 1
+        },
+        description: `Duplication ratio ${(duplicationRatio * 100).toFixed(1)}% exceeds critical threshold`,
         threshold: percentageToRatio(duplicationThresholds.critical), // Store as ratio
         excessRatio: duplicationRatio / percentageToRatio(duplicationThresholds.critical)
       });
     } else if (duplicationRatio > percentageToRatio(duplicationThresholds.high)) {
       updatedIssues.push({
-        type: IssueType.Duplication,
-        severity: Severity.High,
-        line: 1,
+        type: 'duplication',
+        severity: 'high',
+        location: {
+          file: file.file,
+          line: 1
+        },
+        description: `Duplication ratio ${(duplicationRatio * 100).toFixed(1)}% exceeds high threshold`,
         threshold: percentageToRatio(duplicationThresholds.high), // Store as ratio
         excessRatio: duplicationRatio / percentageToRatio(duplicationThresholds.high)
       });
     } else if (duplicationRatio > percentageToRatio(duplicationThresholds.medium)) {
       updatedIssues.push({
-        type: IssueType.Duplication,
-        severity: Severity.Medium,
-        line: 1,
+        type: 'duplication',
+        severity: 'medium',
+        location: {
+          file: file.file,
+          line: 1
+        },
+        description: `Duplication ratio ${(duplicationRatio * 100).toFixed(1)}% exceeds medium threshold`,
         threshold: percentageToRatio(duplicationThresholds.medium), // Store as ratio
         excessRatio: duplicationRatio / percentageToRatio(duplicationThresholds.medium)
       });
@@ -291,7 +303,7 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
       ...file,
       metrics: { 
         ...file.metrics, 
-        duplicationRatio: duplicationRatio // Store as ratio (0-1) for v0.6.0
+        duplicationRatio: duplicationRatio // Store as ratio (0-1) for v0.6.0+
       },
       issues: updatedIssues
     };

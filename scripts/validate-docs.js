@@ -296,7 +296,7 @@ function validateExample(example) {
         const basePenalty = 100 - score;
         let extremePenalty = 0;
         if (example.input > 100) {
-          extremePenalty = Math.round(Math.pow((example.input - 100) / 100, 1.5) * 50);
+          extremePenalty = Math.round(Math.pow((example.input - 100) / 100, 1.8) * 50);
         }
         const actualPenalty = basePenalty + extremePenalty;
         
@@ -562,7 +562,7 @@ function generateHealthExamples() {
     const complexityPenalty = 100 - complexityScore;
     let extremePenalty = 0;
     if (example.complexity > 100) {
-      extremePenalty = Math.round(Math.pow((example.complexity - 100) / 100, 1.5) * 50);
+      extremePenalty = Math.round(Math.pow((example.complexity - 100) / 100, 1.8) * 50);
     }
     
     let sizePenalty = 0;
@@ -571,7 +571,7 @@ function generateHealthExamples() {
         sizePenalty = Math.round((example.loc - 200) / 15);
       } else {
         const basePenalty = 20;
-        const exponentialPenalty = Math.pow((example.loc - 500) / 1000, 1.3) * 8;
+        const exponentialPenalty = Math.pow((example.loc - 500) / 1000, 1.8) * 8;
         sizePenalty = Math.round(basePenalty + exponentialPenalty);
       }
     }

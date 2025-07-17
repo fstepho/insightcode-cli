@@ -1,4 +1,4 @@
-# Health Score Methodology - v0.6.0
+# Health Score Methodology - v0.6.0+
 
 ## Executive Summary
 
@@ -18,14 +18,14 @@ InsightCode's **Health Score** (0-100) uses progressive penalties **without arti
 
 ```typescript
 // Required imports for the implementation (v0.6.0+)
-import { Issue, DuplicationConfig } from './types';
-import { createDuplicationConfig, createDuplicationPenaltyConstants } from './thresholds.constants';
-import { percentageToRatio, ratioToPercentage } from './scoring.utils';
+import { FileIssue, FileDetail } from './types';
+import { HEALTH_PENALTY_CONSTANTS } from './thresholds.constants';
+import { DUPLICATION_LEVELS, percentageToRatio, ratioToPercentage } from './scoring.utils';
 
-function calculateHealthScore(file: FileDetail, duplicationConfig?: DuplicationConfig): number {
+function calculateHealthScore(file: FileDetail, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
   // Progressive penalties WITHOUT CAPS (following Pareto principle)
   const complexityPenalty = getComplexityPenalty(file.metrics.complexity);
-  const duplicationPenalty = getDuplicationPenalty(file.metrics.duplicationRatio, duplicationConfig);
+  const duplicationPenalty = getDuplicationPenalty(file.metrics.duplicationRatio, duplicationMode);
   const sizePenalty = getSizePenalty(file.metrics.loc);
   const issuesPenalty = getIssuesPenalty(file.issues);
   
@@ -48,7 +48,7 @@ function getComplexityPenalty(complexity: number): number {
   
   // For extreme complexity (>100), add catastrophic penalties
   if (complexity > 100) {
-    const extremePenalty = Math.pow((complexity - 100) / 100, 1.5) * 50;
+    const extremePenalty = Math.pow((complexity - 100) / 100, 1.8) * 50;
     return basePenalty + extremePenalty; // NO CAP!
   }
   
@@ -89,7 +89,7 @@ function calculateComplexityScore(complexity: number): number {
 | **≤ 10** | `100` | 1→100, 5→100, 10→100 | **100** | McCabe "excellent" |
 | **11-15** | `100 - (complexity - 10) × 3` | 11→97, 15→85 | **97-85** | NASA acceptable (≤15 for critical software) |
 | **16-20** | `100 - (complexity - 10) × 3` | 16→82, 20→70 | **82-70** | Above NASA threshold (Internally Acceptable) |
-| **21-50** | `70 - ((complexity-20)/30)² × 40` | 21→68, 30→66, 50→30 | **68-30** | NIST "high risk" |
+| **21-50** | `70 - ((complexity-20)/30)² × 40` | 21→70, 30→66, 50→30 | **70-30** | NIST "high risk" |
 | **51+** | `30 - ((complexity-50)/50)^1.8 × 30` | 60→28, 100→0, 176→0 | **28-0** | Unmaintainable |
 
 **Source**: McCabe (1976), NASA/SEL (1994), NIST guidelines
@@ -100,7 +100,7 @@ function calculateComplexityScore(complexity: number): number {
 - Complexity 20 → Score: 70 → Penalty: 30 (acceptable) 
 - Complexity 50 → Score: 30 → Penalty: 70 (poor)
 - Complexity 100 → Score: 0 → Penalty: 100 (critical)
-- **Complexity 176 → Score: 0 → Base Penalty: 100 + Extreme: 33 = 133 (catastrophic)**
+- **Complexity 176 → Score: 0 → Base Penalty: 100 + Extreme: 31 = 131 (catastrophic)**
 
 ### 2. Size Penalty
 ```typescript
@@ -122,7 +122,7 @@ function getSizePenalty(loc: number): number {
   const basePenalty = constants.LINEAR_MAX_PENALTY;
   const exponentialPenalty = Math.pow(
     (loc - constants.HIGH_THRESHOLD) / constants.EXPONENTIAL_DENOMINATOR, // EXPONENTIAL_DENOMINATOR = 1000
-    constants.EXPONENTIAL_POWER  // EXPONENTIAL_POWER = 1.3
+    constants.EXPONENTIAL_POWER  // EXPONENTIAL_POWER = 1.8 (harmonized)
   ) * constants.EXPONENTIAL_MULTIPLIER; // EXPONENTIAL_MULTIPLIER = 8
   
   return basePenalty + exponentialPenalty; // Can exceed 40+ for massive files
@@ -131,30 +131,33 @@ function getSizePenalty(loc: number): number {
 
 ### 3. Duplication Penalty (Mode-Aware v0.6.0+)
 ```typescript
-function getDuplicationPenalty(duplicationRatio: number, duplicationConfig?: DuplicationConfig): number {
-  const config = duplicationConfig || createDuplicationConfig(false); // Default to legacy
-  const constants = createDuplicationPenaltyConstants(config);
+function getDuplicationPenalty(duplicationRatio: number, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
+  // Use centralized configuration from DUPLICATION_LEVELS
+  const excellentThreshold = duplicationMode === 'strict' ? 
+    DUPLICATION_LEVELS.strict.excellent.maxThreshold : 
+    DUPLICATION_LEVELS.legacy.excellent.maxThreshold;
   
   // Threshold varies by mode: 3% (strict) vs 15% (legacy)
-  if (duplicationRatio <= percentageToRatio(constants.EXCELLENT_THRESHOLD)) return 0;
+  if (duplicationRatio <= percentageToRatio(excellentThreshold)) return 0;
   
   // Progressive penalty without artificial caps
   const percentage = ratioToPercentage(duplicationRatio);
   
-  // constants.HIGH_THRESHOLD: 8% (strict) vs 30% (legacy)
-  if (percentage <= constants.HIGH_THRESHOLD) {
-    // Linear penalty up to 30%
-    // constants.LINEAR_MULTIPLIER = 1.5
-    return (percentage - constants.EXCELLENT_THRESHOLD) * constants.LINEAR_MULTIPLIER;
+  const highThreshold = duplicationMode === 'strict' ? 
+    DUPLICATION_LEVELS.strict.good.maxThreshold : 
+    DUPLICATION_LEVELS.legacy.good.maxThreshold;
+  
+  if (percentage <= highThreshold) {
+    // Linear penalty up to high threshold (8% strict vs 30% legacy)
+    return (percentage - excellentThreshold) * HEALTH_PENALTY_CONSTANTS.DUPLICATION.LINEAR_MULTIPLIER;
   }
   
-  // Exponential penalty beyond 30% - NO CAP!
-  // constants.LINEAR_MAX_PENALTY = 22.5
-  const basePenalty = constants.LINEAR_MAX_PENALTY;
+  // Exponential penalty beyond high threshold - NO CAP!
+  const basePenalty = HEALTH_PENALTY_CONSTANTS.DUPLICATION.LINEAR_MAX_PENALTY;
   const exponentialPenalty = Math.pow(
-    (percentage - constants.HIGH_THRESHOLD) / constants.EXPONENTIAL_DENOMINATOR, // EXPONENTIAL_DENOMINATOR = 10
-    constants.EXPONENTIAL_POWER  // EXPONENTIAL_POWER = 1.8
-  ) * constants.EXPONENTIAL_MULTIPLIER; // EXPONENTIAL_MULTIPLIER = 10
+    (percentage - highThreshold) / HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_DENOMINATOR,
+    HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_POWER
+  ) * HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_MULTIPLIER;
   
   return basePenalty + exponentialPenalty; // Can exceed 50+ for extreme duplication
 }
@@ -229,7 +232,7 @@ function getIssuesPenalty(issues: Issue[]): number {
 | File | Complexity | LOC | Health Score | Penalty Analysis |
 |------|------------|-----|--------------|------------------|
 | `context-builder.ts` | 97 | 315 | **0** | Complexity: 97, Size: 8, Total: 105 |
-| `dependency-analyzer.ts` | 176 | 834 | **0** | Complexity: 133, Size: 22, Total: 155 |
+| `dependency-analyzer.ts` | 176 | 834 | **0** | Complexity: 131, Size: 23, Total: 154 |
 | `file-detail-builder.ts` | 80 | 300 | **11** | Complexity: 82, Size: 7, Total: 89 |
 
 ### Why Health Score = 0 is Mathematically Correct
@@ -239,16 +242,16 @@ function getIssuesPenalty(issues: Issue[]): number {
 Complexity 176:
 - calculateComplexityScore(176) = 0 (exponential phase)
 - Base penalty: 100 - 0 = 100
-- Extreme penalty: Math.pow((176-100)/100, 1.5) * 50 ≈ 33
-- Total complexity penalty: 133
+- Extreme penalty: Math.pow((176-100)/100, 1.8) * 50 ≈ 31
+- Total complexity penalty: 131
 
 Size 834 LOC:
 - Base penalty: 20 (for 500+ LOC)
-- Exponential penalty: Math.pow((834-500)/1000, 1.3) * 8 ≈ 2
-- Total size penalty: 22
+- Exponential penalty: Math.pow((834-500)/1000, 1.8) * 8 ≈ 3
+- Total size penalty: 23
 
-Total Penalty: 133 + 22 = 155
-Health Score: Math.max(0, 100 - 155) = 0
+Total Penalty: 131 + 23 = 154
+Health Score: Math.max(0, 100 - 154) = 0
 ```
 
 **context-builder.ts Analysis (exact calculation):**
@@ -300,7 +303,7 @@ The extreme scores reflect **real technical debt** that requires immediate atten
 
 These scores serve their purpose: **making technical debt visible and actionable**.
 
-## Summary of Model Completions (v0.6.0)
+## Summary of Model Completions (v0.6.0+)
 
 ### ✅ **Completed Requirements**
 

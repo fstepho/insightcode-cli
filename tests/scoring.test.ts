@@ -7,7 +7,7 @@ import {
   calculateHealthScore
 } from '../src/scoring';
 import { getGrade } from '../src/scoring.utils';
-import { Issue, IssueType, Severity } from '../src/types';
+import { FileIssue, FileIssueType, Severity } from '../src/types';
 
 describe('Scoring Algorithms', () => {
   describe('calculateComplexityScore', () => {
@@ -200,8 +200,8 @@ describe('Scoring Algorithms', () => {
   });
 
   describe('calculateHealthScore', () => {
-    const createMockIssue = (severity: Severity): Issue => ({
-      type: IssueType.Complexity,
+    const createMockIssue = (severity: Severity): FileIssue => ({
+      type: FileIssueType.Complexity,
       severity,
       line: 1,
       threshold: 10,

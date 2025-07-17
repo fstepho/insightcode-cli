@@ -4,6 +4,13 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
+## 2025-07-17: v0.7.0 Enhanced Report Generator and Function-Level Analysis
+**Decision**: Implement enhanced report generator with function-level critical issue tracking, improved markdown generation for insights/findings, and introduce centralized grading config (GRADE_CONFIG).
+**Reason**: Need better granularity in code analysis at the function level. Previous reporting lacked detailed function-level insights. Centralized grading configuration ensures consistency across the codebase.
+**Impact**: More actionable insights with function-level issue tracking. Better report quality with improved markdown generation. Increased type safety with unified Grade type. Cleaner codebase with removal of legacy configs. Industry-aligned grading standards.
+
+---
+
 ## 2025-07-13: CHANGELOG format compliance with Keep a Changelog
 **Decision**: Restructure CHANGELOG.md to strictly follow Keep a Changelog format with standard sections (Added/Changed/Removed/Fixed) instead of custom emoji sections.
 **Reason**: Keep a Changelog is the industry standard. Our custom format with emojis and verbose descriptions was non-standard and harder to parse. Standard format improves readability and tool compatibility.
@@ -67,8 +74,14 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
-## 2025-07-12: Duplication Detection Algorithm Update (8-line blocks)
-**Decision**: Update duplication detection from 5-line to 8-line sliding window blocks, with enhanced filtering (50 characters minimum, 8 tokens minimum).
+## 2025-07-17: Duplication Detection Algorithm Parameters Fix (8-line blocks, 20 tokens)
+**Decision**: Fix duplication detection parameters from incompatible 6-line/50-token to balanced 8-line/20-token configuration.
+**Reason**: Previous 6-line blocks only produced ~16 tokens on average, but required 50 tokens minimum, causing 0% duplication detection for all projects. Mathematical incompatibility between block size and token requirements.
+**Impact**: Restored realistic duplication detection (2-5% for large projects). Express/Chalk still show 0.0% due to very small project size (7 and 5 files respectively), which is realistic for micro-libraries.
+
+## 2025-07-12: Duplication Detection Algorithm Update (8-line blocks) [SUPERSEDED]
+**Decision**: ~~Update duplication detection from 5-line to 8-line sliding window blocks, with enhanced filtering (50 characters minimum, 8 tokens minimum).~~
+**Status**: **SUPERSEDED** - Token requirement was too high for 8-line blocks.
 **Reason**: Better balance between detection accuracy and performance. 8-line blocks catch more meaningful duplication patterns while filtering out trivial code snippets. Aligns with enhanced detection algorithm implemented in v0.6.0+.
 **Impact**: More accurate duplication detection with fewer false positives. All documentation updated to reflect 8-line implementation. Maintains philosophy of pragmatic, content-based detection versus structural similarity.
 
@@ -245,7 +258,7 @@ Format: **Date | Decision | Reason | Impact**
 ---
 
 ## 2025-07-03: Conservative duplication detection accepted (UPDATED)
-**Decision**: Keep 8-line block detection with enhanced filtering (50+ characters, 8+ tokens minimum).
+**Decision**: Keep 8-line block detection with enhanced filtering (40+ characters, 20+ tokens minimum).
 **Reason**: Better balance between precision and recall. 8-line blocks catch meaningful duplication while enhanced filtering reduces false positives from trivial code.
 **Impact**: More accurate actionable duplication detection, aligned with pragmatic philosophy focused on refactorable duplicates.
 

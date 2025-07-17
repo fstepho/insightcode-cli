@@ -2,12 +2,12 @@
  * Générateur de rapports synthétiques multi-projets
  */
 
-import { ReportResult, ReportSummary, FileIssue } from './types';
-import { isFileEmblematic, formatPercentage } from './scoring.utils';
+import { ReportResult, ReportSummary } from './types';
+import { isFileEmblematic, formatPercentage, GRADE_CONFIG } from './scoring.utils';
 import { 
     formatNumber, 
     capitalize, 
-    generatePatternTable 
+    getPatternCategory
 } from './shared-report-utils';
 
 /**
@@ -20,7 +20,7 @@ export function generateMarkdownReport(results: ReportResult[], summary: ReportS
     // Header du rapport
     let markdown = `# InsightCode Benchmark Report - ${mode}\n\n`;
     markdown += `**Generated:** ${timestamp}\n`;
-    markdown += `**Tool Version:** v0.6.0\n`;
+    markdown += `**Tool Version:** v0.7.0\n`;
     markdown += `**Analysis Mode:** ${mode}\n\n`;
     
     // Executive Summary
@@ -83,11 +83,11 @@ function generateGradeDistributionChart(distribution: Record<string, number>): s
     let markdown = `| Grade | Projects | Visual |\n`;
     markdown += `|-------|----------|--------|\n`;
     
-    const grades = ['A', 'B', 'C', 'D', 'F'];
-    grades.forEach(grade => {
-        const count = distribution[grade] || 0;
+    // Use centralized configuration
+    GRADE_CONFIG.forEach(gradeInfo => {
+        const count = distribution[gradeInfo.grade] || 0;
         const bar = '█'.repeat(count * 2);
-        markdown += `| ${grade} | ${count} | ${bar} |\n`;
+        markdown += `| ${gradeInfo.grade} | ${count} | ${bar} |\n`;
     });
     
     markdown += `\n`;
@@ -102,10 +102,26 @@ function generateGlobalInsights(results: ReportResult[], summary: ReportSummary)
         .sort((a, b) => b.analysis.overview.scores.overall - a.analysis.overview.scores.overall)
         .slice(0, 3);
     
-    // Most common issues
-    const allIssues = successfulResults.flatMap(r => 
-        r.analysis.details.flatMap(d => d.issues)
-    );
+    // Count critical issues across both file and function levels
+    function getCriticalIssueCount(results: ReportResult[]): number {
+        let count = 0;
+        results.forEach(result => {
+            if (!result.error) {
+                // File-level critical issues
+                result.analysis.details.forEach(detail => {
+                    count += detail.issues.filter(i => i.severity === 'critical').length;
+                });
+                
+                // Function-level critical issues - ADAPTED for new structure
+                result.analysis.details.forEach(detail => {
+                    detail.functions?.forEach(func => {
+                        count += func.issues.filter(i => i.severity === 'critical' || i.severity === 'high').length;
+                    });
+                });
+            }
+        });
+        return count;
+    }
     
     let markdown = `### Key Findings\n\n`;
     
@@ -113,8 +129,8 @@ function generateGlobalInsights(results: ReportResult[], summary: ReportSummary)
     const avgScore = successfulResults.reduce((sum, r) => sum + r.analysis.overview.scores.overall, 0) / successfulResults.length;
     markdown += `- **Average Code Quality Score:** ${Math.round(avgScore)}%\n`;
     markdown += `- **Code Duplication Rate:** ${formatPercentage(summary.avgDuplication)}\n`;
-    markdown += `- **Most Common Issue Type:** ${getMostCommonIssueType(allIssues)}\n`;
-    markdown += `- **Critical Issues Found:** ${allIssues.filter(i => i.severity === 'critical').length}\n\n`;
+    markdown += `- **Most Common Issue Type:** ${getMostCommonIssueType(successfulResults)}\n`;
+    markdown += `- **Critical Issues Found:** ${getCriticalIssueCount(successfulResults)}\n\n`;
     
     // Top performers
     markdown += `### Highest Quality Projects\n\n`;
@@ -127,14 +143,32 @@ function generateGlobalInsights(results: ReportResult[], summary: ReportSummary)
     return markdown;
 }
 
-function getMostCommonIssueType(issues: FileIssue[]): string {
+function getMostCommonIssueType(results: ReportResult[]): string {
     const typeCounts = new Map<string, number>();
-    issues.forEach(issue => {
-        typeCounts.set(issue.type, (typeCounts.get(issue.type) || 0) + 1);
+    
+    // Collect both file-level and function-level issues
+    results.forEach(result => {
+        if (!result.error) {
+            // File-level issues
+            result.analysis.details.forEach(detail => {
+                detail.issues.forEach(issue => {
+                    typeCounts.set(issue.type, (typeCounts.get(issue.type) || 0) + 1);
+                });
+            });
+            
+            // ADAPTED: Function-level issues from FileDetail.functions
+            result.analysis.details.forEach(detail => {
+                detail.functions?.forEach(func => {
+                    func.issues.forEach(issue => {
+                        typeCounts.set(issue.type, (typeCounts.get(issue.type) || 0) + 1);
+                    });
+                });
+            });
+        }
     });
     
     const sorted = Array.from(typeCounts.entries()).sort((a, b) => b[1] - a[1]);
-    return sorted.length > 0 ? capitalize(sorted[0][0]) : 'None';
+    return sorted.length > 0 ? capitalize(sorted[0][0].replace('-', ' ')) : 'None';
 }
 
 function generateCategorySection(results: ReportResult[], category: string): string {
@@ -153,19 +187,51 @@ function generateCategorySection(results: ReportResult[], category: string): str
 function generateCriticalFindings(results: ReportResult[]): string {
     const successfulResults = results.filter(r => !r.error);
     
-    // Collect all critical issues with context
-    const criticalIssues = successfulResults.flatMap(r => 
-        r.analysis.details.flatMap(d => 
-            d.issues
-                .filter(i => i.severity === 'critical' || i.severity === 'high')
-                .map(i => ({
-                    project: r.project,
-                    file: d.file,
-                    issue: i,
-                    isEmblematic: isFileEmblematic(d.file, r.emblematicFiles)
-                }))
-        )
-    );
+    // Collect all critical issues with context from both file and function levels
+    const criticalIssues: Array<{
+        project: string;
+        file: string;
+        issue: { type: string; severity: string; excessRatio?: number };
+        isEmblematic: boolean;
+        source: 'file' | 'function';
+        functionName?: string;
+    }> = [];
+    
+    // Collect critical issues from both file-level and function-level
+    successfulResults.forEach(r => {
+        // File-level critical issues
+        r.analysis.details.forEach(detail => {
+            detail.issues
+                .filter(issue => issue.severity === 'critical' || issue.severity === 'high')
+                .forEach(issue => {
+                    criticalIssues.push({
+                        project: r.project,
+                        file: detail.file,
+                        issue: { type: issue.type, severity: issue.severity, excessRatio: issue.excessRatio || 1 },
+                        isEmblematic: isFileEmblematic(detail.file, r.emblematicFiles),
+                        source: 'file'
+                    });
+                });
+        });
+        
+        // Function-level critical issues - ADAPTED for new structure
+        r.analysis.details.forEach(detail => {
+            detail.functions?.forEach(func => {
+                func.issues
+                    .filter(issue => issue.severity === 'critical' || issue.severity === 'high')
+                    .forEach(issue => {
+                        criticalIssues.push({
+                            project: r.project,
+                            file: detail.file,
+                            issue: { type: issue.type, severity: issue.severity, excessRatio: 1 },
+                            isEmblematic: isFileEmblematic(detail.file, r.emblematicFiles),
+                            source: 'function',
+                            functionName: func.name
+                        });
+                    });
+            });
+        });
+    });
     
     let markdown = `Found ${criticalIssues.length} critical/high severity issues across all projects:\n\n`;
     
@@ -181,20 +247,21 @@ function generateCriticalFindings(results: ReportResult[]): string {
         markdown += `### ${project}\n`;
         issues.slice(0, 3).forEach(item => {
             const emblematicMark = item.isEmblematic ? ' ⭐' : '';
-            markdown += `- **${item.file}**${emblematicMark}: ${capitalize(item.issue.type)} `;
-            markdown += `(${Math.round(item.issue.excessRatio * 100)}% over threshold)\n`;
+            const sourceIndicator = item.source === 'function' ? ` in \`${item.functionName}\`` : '';
+            const excessInfo = item.issue.excessRatio ? `(${Math.round(item.issue.excessRatio * 100)}% over threshold)` : '';
+            markdown += `- **${item.file}**${emblematicMark}: ${capitalize(item.issue.type.replace('-', ' '))}${sourceIndicator} ${excessInfo}\n`;
         });
         if (issues.length > 3) {
             markdown += `- *...and ${issues.length - 3} more issues*\n`;
         }
-        markdown += `\n`;
+        markdown += '\n';
     });
     
     return markdown;
 }
 
 function generateGlobalPatternAnalysis(results: ReportResult[]): string {
-    const successfulResults = results.filter(r => !r.error && r.analysis.codeContext);
+    const successfulResults = results.filter(r => !r.error);
     
     // Aggregate patterns across all projects
     const patternStats = {
@@ -204,26 +271,20 @@ function generateGlobalPatternAnalysis(results: ReportResult[]): string {
     };
     
     successfulResults.forEach(result => {
-        result.analysis.codeContext?.forEach((context) => {
-            context.patterns.quality.forEach(p => {
-                const stat = patternStats.quality.get(p) || { count: 0, projects: new Set() };
-                stat.count++;
-                stat.projects.add(result.project);
-                patternStats.quality.set(p, stat);
-            });
-            
-            context.patterns.architecture.forEach(p => {
-                const stat = patternStats.architecture.get(p) || { count: 0, projects: new Set() };
-                stat.count++;
-                stat.projects.add(result.project);
-                patternStats.architecture.set(p, stat);
-            });
-            
-            context.patterns.performance.forEach(p => {
-                const stat = patternStats.performance.get(p) || { count: 0, projects: new Set() };
-                stat.count++;
-                stat.projects.add(result.project);
-                patternStats.performance.set(p, stat);
+        // ADAPTED: Extract patterns from function issues instead of codeContext
+        result.analysis.details.forEach(detail => {
+            detail.functions?.forEach(func => {
+                func.issues.forEach(issue => {
+                    // Categorize issue types into pattern categories
+                    const category = getPatternCategory(issue.type);
+                    if (category) {
+                        const categoryMap = patternStats[category as keyof typeof patternStats];
+                        const stat = categoryMap.get(issue.type) || { count: 0, projects: new Set() };
+                        stat.count++;
+                        stat.projects.add(result.project);
+                        categoryMap.set(issue.type, stat);
+                    }
+                });
             });
         });
     });

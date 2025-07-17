@@ -17,7 +17,7 @@ npm run benchmark              # Full codebase analysis
 npm run benchmark:production    # Production code only
 ```
 
-**Latest Benchmark:** July 12, 2025 (v0.6.0)
+**Latest Benchmark:** July 17, 2025 (v0.7.0)
 - **9 projects analyzed** (Angular, Chalk, ESLint, Express, Jest, Lodash, TypeScript, UUID, Vue)
 - **677,099 lines** processed in 29.80 seconds
 - **Analysis speed:** 22,719 lines/second
@@ -25,7 +25,7 @@ npm run benchmark:production    # Production code only
 
 Results are automatically saved to `benchmarks/` with detailed individual reports.
 
-## 📐 Methodology (v0.6.0+)
+## 📐 Methodology (v0.7.0+)
 
 ### Health Score System
 
@@ -69,6 +69,13 @@ Final Score = Math.max(0, Health Score)
 - **30% Maintainability** - Development velocity impact
 - **25% Duplication** - Technical debt indicator
 
+**Architectural Criticality Weighting**:
+Each file receives a "criticism score" determining its weight in final project scores:
+```
+CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues × 0.5) + 1
+```
+Where Dependencies = incomingDeps + outgoingDeps + (isInCycle ? 5 : 0)
+
 **Grade Thresholds** (Academic standard):
 - A: 90-100 points
 - B: 80-89 points
@@ -97,7 +104,7 @@ Final Score = Math.max(0, Health Score)
 - **Block size**: 8 lines minimum for significance
 - **Token threshold**: 8+ tokens to filter trivial matches
 
-## 📈 Latest Benchmark Results (July 12, 2025)
+## 📈 Latest Benchmark Results (July 17, 2025)
 
 ### Production Code Analysis - Grade Distribution
 
@@ -155,8 +162,9 @@ Final Score = Math.max(0, Health Score)
 ### Case Study: Lodash's Deliberate Architecture
 
 **Current Analysis** (July 2025):
-- **Complexity**: 1,818 (extreme)
-- **Health Score**: 0/100 (F grade)
+- **File Complexity**: 1,818 (extreme)
+- **Individual Health Score**: 0/100 (F grade)
+- **Project Complexity Score**: 7/100 (weighted by architectural criticality)
 - **Critical Issues**: 25
 
 **Historical Context**: Lodash's monolithic design was deliberate:
@@ -220,14 +228,8 @@ We prioritize **actionable insights** over structural pattern detection.
 ## 📁 Benchmark History
 
 ### Recent Benchmarks
-- `benchmark-report-prod-with-context-2025-07-12.md` - **Latest** v0.6.0 production analysis
-- `benchmark-report-prod-with-context-2025-07-11.md` - v0.6.0 production analysis
-- `benchmark-summary-prod-with-context-2025-07-12.json` - Machine-readable summary
-
-### Archived Results
-- `archives/benchmark-2025-06-29.md` - v0.5.x full codebase analysis  
-- `archives/benchmark-2025-06-28.md` - v0.5.x production-only analysis
-- `archives/benchmark-explanations-*.md` - Detailed methodology explanations
+- `benchmark-report-prod-2025-07-16.md` - **Latest** v0.7.0 production analysis
+- `benchmark-summary-prod-2025-07-16.json` - Machine-readable summary
 
 ## 🎯 Benchmark Validation
 

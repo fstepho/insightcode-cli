@@ -104,84 +104,14 @@ function testKeyCoefficients() {
     console.log(row);
   });
   
-/**
- * Test different exponential powers for complexity scoring
- */
-function testComplexityPowers() {
-  console.log('🧪 TESTING COMPLEXITY EXPONENTIAL POWERS\n');
-  
-  const powers = [1.2, 1.5, 1.8, 2.0, 2.5];
-  const testComplexities = [60, 100, 200, 500];
-  
-  console.log('Complexity | Power 1.2 | Power 1.5 | Power 1.8 | Power 2.0 | Power 2.5');
-  console.log('-----------|-----------|-----------|-----------|-----------|----------');
-  
-  testComplexities.forEach(complexity => {
-    let row = `${complexity.toString().padEnd(10)} |`;
-    
-    powers.forEach(power => {
-      // Simulate exponential phase calculation with different powers
-      const base = 30;
-      const range = complexity - 50;
-      const exponentialPenalty = Math.pow(range / 50, power) * 30;
-      const score = Math.max(0, Math.round(base - exponentialPenalty));
-      
-      row += ` ${score.toString().padEnd(9)} |`;
-    });
-    
-    console.log(row);
-  });
-  
-  console.log('\n📊 Analysis:');
-  console.log('- Power 1.2: Too gentle for extreme complexity');
-  console.log('- Power 1.5: CURRENT - Moderate progression');
-  console.log('- Power 1.8: Steeper decline, good for highlighting extremes');
-  console.log('- Power 2.0: Quadratic - rapid decline');
   console.log('\n📊 KEY FINDINGS:');
-  console.log('• Power 1.8: Creates steeper penalties than 1.5, gentler than 2.0');
+  console.log('• Power 1.8: Harmonized across all penalty types');
   console.log('• Multiplier 30: Appropriate for driving extreme complexity to 0');
   console.log('• Multiplier 40: Well-calibrated for gradual quadratic degradation');
-  console.log('• Critical issue: Power 1.8 used twice - needs validation of independence');
+  console.log('• ✅ All powers harmonized to 1.8 for mathematical consistency');
   console.log();
 }
 
-/**
- * Test different exponential powers for complexity scoring
- */
-function testComplexityPowers() {
-  console.log('🧪 TESTING COMPLEXITY EXPONENTIAL POWERS\n');
-  
-  const powerOptions = [1.2, 1.5, 1.8, 2.0, 2.5];
-  const complexityLevels = [60, 100, 200, 500];
-  
-  console.log('Complexity | Power 1.2 | Power 1.5 | Power 1.8 | Power 2.0 | Power 2.5');
-  console.log('-----------|-----------|-----------|-----------|-----------|----------');
-  
-  complexityLevels.forEach(complexity => {
-    let row = `${complexity.toString().padEnd(10)} |`;
-    
-    powerOptions.forEach(power => {
-      // Simulate exponential phase calculation with different powers
-      const base = 30;
-      const range = complexity - 50;
-      const exponentialPenalty = Math.pow(range / 50, power) * 30;
-      const score = Math.max(0, Math.round(base - exponentialPenalty));
-      
-      row += ` ${score.toString().padEnd(9)} |`;
-    });
-    
-    console.log(row);
-  });
-  
-  console.log('\n📊 Analysis:');
-  console.log('- Power 1.2: Too gentle for extreme complexity');
-  console.log('- Power 1.5: CURRENT - Moderate progression');
-  console.log('- Power 1.8: Steeper decline, good for highlighting extremes');
-  console.log('- Power 2.0: Quadratic - rapid decline');
-  console.log('- Power 2.5: Very aggressive - may over-penalize');
-  console.log('\n💡 Recommendation: Test 1.5 vs 1.8 against expert judgment\n');
-}
-}
 
 /**
  * Test different duplication penalty coefficients
@@ -253,9 +183,9 @@ function generateRecommendations() {
   console.log('\n🎯 COEFFICIENT OPTIMIZATION RECOMMENDATIONS\n');
   
   console.log('HIGH PRIORITY (Immediate Action Required):');
-  console.log('1. 🔬 Test exponential powers 1.5 vs 1.8 vs 2.0');
-  console.log('   - Current inconsistency: complexity (1.8) vs size (1.3)');
-  console.log('   - Method: A/B test against expert ratings of 50+ complexity cases');
+  console.log('1. 🔬 Validate harmonized exponential power 1.8');
+  console.log('   - ✅ All powers harmonized to 1.8 for mathematical consistency');
+  console.log('   - Method: A/B test harmonized system against expert ratings of 50+ cases');
   console.log('');
   
   console.log('2. 📊 Validate duplication exponential denominator (10)');

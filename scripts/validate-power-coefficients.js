@@ -87,7 +87,7 @@ function analyzeOptimalPowers() {
   console.log('- Power 1.5: More forgiving, may be too gentle for extreme cases');
   console.log('- Power 1.6: Balanced, good progression');
   console.log('- Power 1.7: Moderate-steep, reasonable penalties');
-  console.log('- Power 1.8: CURRENT - steep but not excessive');
+  console.log('- Power 1.8: HARMONIZED - unified across all penalty types');
   console.log('- Power 1.9: Aggressive, may over-penalize');
   console.log('- Power 2.0: Quadratic - very aggressive');
   
@@ -97,10 +97,10 @@ function analyzeOptimalPowers() {
   console.log('- Complexity harder to refactor → could use steeper power (1.8-1.9)');
   
   console.log('\n💡 RECOMMENDATIONS:');
-  console.log('1. Test against real codebases with known quality issues');
-  console.log('2. Survey expert developers for penalty "reasonableness"');
-  console.log('3. Consider differentiated powers: Complexity=1.8, Duplication=1.7');
-  console.log('4. A/B test in production with user feedback');
+  console.log('1. Test harmonized 1.8 power against real codebases with known quality issues');
+  console.log('2. Survey expert developers for penalty "reasonableness" with unified 1.8 power');
+  console.log('3. ✅ IMPLEMENTED: All powers harmonized to 1.8 for mathematical consistency');
+  console.log('4. A/B test harmonized system in production with user feedback');
 }
 
 /**

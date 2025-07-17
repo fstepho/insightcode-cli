@@ -1,12 +1,12 @@
-# InsightCode Scoring Thresholds: Justification - v0.6.0
+# InsightCode Scoring Thresholds: Justification - v0.6.0+
 
 ## Executive Summary
 
 This document provides comprehensive justification for the scoring thresholds and methodology used in InsightCode v0.6.0. Our approach implements **industry best practices** following the **Rules of the Art**: Linear → Quadratic → Exponential progression, validated against empirical data from 9 popular open-source projects representing over 670,000 lines of production code.
 
-## Methodology Overview - v0.6.0
+## Methodology Overview - v0.6.0+
 
-InsightCode v0.6.0 implements a **research-based weighted scoring model** that respects fundamental software engineering principles:
+InsightCode v0.6.0+ implements a **research-based weighted scoring model** that respects fundamental software engineering principles:
 
 ### 🏛️ **Foundational Principles**
 1. **Pareto Principle (80/20)**: 20% of code causes 80% of problems - extreme complexity receives extreme penalties
@@ -59,7 +59,7 @@ Avg Complexity | Projects | Avg Grade
 - **Microsoft**: Uses 15 as a warning threshold in Visual Studio.
 - **SonarQube**: Default thresholds align with our boundaries.
 
-### v0.6.0 Rules of the Art Implementation
+### v0.6.0+ Rules of the Art Implementation
 
 **Methodology**: Linear → Quadratic → Exponential progression following industry best practices
 
@@ -231,10 +231,15 @@ insightcode
 | **30-50%** | 70→30 pts | **Poor**: Strong correlation with system decay |
 | **>50%** | 30→0 pts | **Critical**: Extreme duplication = extreme penalties (Pareto) |
 
-**Real-World Validation:**
-- **TypeScript Compiler**: 0% detected (excellent literal hygiene)
-- **Vue Framework**: 0% detected (good modularization)  
-- **Industry Average**: 0-3% for modern codebases, 0-15% for legacy systems
+**Real-World Validation (v0.7.0 Parameters: 8-line blocks, 20 tokens):**
+- **TypeScript Compiler**: 2.4% detected (realistic for large codebase)
+- **Angular Framework**: 2.8% detected (good modularization)  
+- **ESLint**: 3.5% detected (industry standard threshold)
+- **Vue Framework**: 0.9% detected (excellent modularization)
+- **Jest**: 1.6% detected (good test framework hygiene)
+- **Express**: 0.0% detected (realistic for 7-file micro-library)
+- **Chalk**: 0.0% detected (realistic for 5-file utility)
+- **Industry Average**: 2-5% for modern codebases, 0-15% for legacy systems
 - **Mode Selection Impact**: Same codebase will receive different scores based on selected thresholds
 
 ---
@@ -305,7 +310,7 @@ Our grade boundaries align with established academic and industry assessment pra
 |---|---|
 | v0.2.0 | Initial thresholds validated against empirical research |
 | v0.4.0 | Shift to criticality-weighted scoring model |
-| **v0.6.0** | **🏛️ Rules of the Art Implementation: Linear → Quadratic → Exponential** |
+| **v0.6.0+** | **🏛️ Rules of the Art Implementation: Linear → Quadratic → Exponential** |
 | | **🚫 Eliminated all artificial caps and logarithmic scaling** |
 | | **✅ Full compliance with Pareto Principle and ISO/IEC 25010** |
 | | **📊 Enhanced duplication detection (8-line blocks, literal matching)** |

@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 
-describe('Parser v0.6.0', () => {
+describe('Parser v0.6.0+', () => {
   let tempDir: string;
   
   beforeEach(() => {

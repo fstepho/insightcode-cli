@@ -443,7 +443,9 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 
 ## 🗺️ Roadmap
 
-### What's New (v0.6.0) ✅ **Major Release - BREAKING CHANGES**
+### What's New (v0.7.0) ✅
+
+### v0.6.0 ✅ **Major Release - BREAKING CHANGES**
 - **🚨 CLI Interface Redesign**: Analysis is now the default action - `analyze` subcommand removed
 - **🚨 Flag Renaming**: `--exclude-utility` → `--production` for better clarity  
 - **🚨 Removed Features**: `--with-context` flag no longer available
@@ -464,7 +466,7 @@ The `--json` flag outputs comprehensive analysis results in a structured format:
 - **Enhanced JSON Output**: Complete metrics exposure for CI/CD and external tools
 - **Academic Methodology**: Research-based best practices for metric aggregation
 
-### v0.7.0 🔮 Future Development
+### v0.8.0 🔮 Future Development
 - **Enhanced Duplication Detection**: More sophisticated algorithm with contextual awareness
 - **JSX/TSX Support**: Full React/Vue component analysis capabilities  
 - **Interactive HTML Reports**: Rich visualizations with architectural diagrams
@@ -498,7 +500,7 @@ npm run build             # Build for production
 
 ### Development Guidelines
 - Keep it simple (KISS principle)
-- Maximum 5 npm dependencies
+- Maximum 7 npm dependencies
 - Performance and accuracy first
 - Test critical paths
 

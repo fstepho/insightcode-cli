@@ -2,7 +2,7 @@
 
 ## 🎯 Quick Answer
 
-**Current project weights (v0.6.0):**
+**Current project weights (v0.6.0+):**
 - **45%** Complexity (internal hypothesis)
 - **30%** Maintainability (internal hypothesis) 
 - **25%** Duplication (internal hypothesis)
