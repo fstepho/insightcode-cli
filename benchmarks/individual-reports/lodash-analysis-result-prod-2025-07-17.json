@@ -1,0 +1,5077 @@
+{
+  "project": "lodash",
+  "repo": "https://github.com/lodash/lodash.git",
+  "type": "utility library",
+  "stars": "60.6k",
+  "stableVersion": "4.17.21",
+  "description": "JavaScript utility library",
+  "category": "small",
+  "emblematicFiles": {
+    "coreFiles": [
+      "lodash.js",
+      "index.js"
+    ],
+    "architecturalFiles": [
+      "fp.js",
+      "core.js"
+    ],
+    "performanceCriticalFiles": [
+      "isEqual.js",
+      "cloneDeep.js",
+      "debounce.js"
+    ],
+    "complexAlgorithmFiles": [
+      "get.js",
+      "set.js",
+      "merge.js"
+    ]
+  },
+  "analysis": {
+    "details": [
+      {
+        "file": ".markdown-doctest-setup.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 8,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lodash.js",
+        "metrics": {
+          "complexity": 1818,
+          "loc": 5970,
+          "functionCount": 493,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "location": {
+              "file": "lodash.js",
+              "line": 1
+            },
+            "description": "File complexity 1818 exceeds critical threshold",
+            "threshold": 20,
+            "excessRatio": 90.9
+          },
+          {
+            "type": "size",
+            "severity": "critical",
+            "location": {
+              "file": "lodash.js",
+              "line": 1
+            },
+            "description": "File size 5970 lines exceeds critical threshold",
+            "threshold": 1000,
+            "excessRatio": 5.97
+          }
+        ],
+        "functions": [
+          {
+            "name": "arrayAggregator",
+            "line": 505,
+            "endLine": 514,
+            "complexity": 3,
+            "loc": 10,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "arrayEach",
+            "line": 525,
+            "endLine": 535,
+            "complexity": 4,
+            "loc": 11,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 525,
+                  "function": "arrayEach"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "arrayEachRight",
+            "line": 546,
+            "endLine": 555,
+            "complexity": 4,
+            "loc": 10,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 546,
+                  "function": "arrayEachRight"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "arrayEvery",
+            "line": 567,
+            "endLine": 577,
+            "complexity": 4,
+            "loc": 11,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 567,
+                  "function": "arrayEvery"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "arrayFilter",
+            "line": 588,
+            "endLine": 601,
+            "complexity": 4,
+            "loc": 14,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 588,
+                  "function": "arrayFilter"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "arrayIncludesWith",
+            "line": 626,
+            "endLine": 636,
+            "complexity": 4,
+            "loc": 11,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 626,
+                  "function": "arrayIncludesWith"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "arrayReduce",
+            "line": 689,
+            "endLine": 700,
+            "complexity": 5,
+            "loc": 12,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "arrayReduceRight",
+            "line": 714,
+            "endLine": 723,
+            "complexity": 5,
+            "loc": 10,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "arraySome",
+            "line": 735,
+            "endLine": 745,
+            "complexity": 4,
+            "loc": 11,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 735,
+                  "function": "arraySome"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseFindKey",
+            "line": 789,
+            "endLine": 798,
+            "complexity": 1,
+            "loc": 10,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 789,
+                  "function": "baseFindKey"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseFindIndex",
+            "line": 811,
+            "endLine": 821,
+            "complexity": 5,
+            "loc": 11,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 811,
+                  "function": "baseFindIndex"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseIndexOfWith",
+            "line": 848,
+            "endLine": 858,
+            "complexity": 3,
+            "loc": 11,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 848,
+                  "function": "baseIndexOfWith"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseReduce",
+            "line": 924,
+            "endLine": 931,
+            "complexity": 1,
+            "loc": 8,
+            "parameterCount": 5,
+            "issues": []
+          },
+          {
+            "name": "baseSum",
+            "line": 962,
+            "endLine": 974,
+            "complexity": 4,
+            "loc": 13,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 962,
+                  "function": "baseSum"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "countHolders",
+            "line": 1105,
+            "endLine": 1115,
+            "complexity": 3,
+            "loc": 11,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1105,
+                  "function": "countHolders"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "mapToArray",
+            "line": 1205,
+            "endLine": 1213,
+            "complexity": 1,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1205,
+                  "function": "mapToArray"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          },
+          {
+            "name": "replaceHolders",
+            "line": 1238,
+            "endLine": 1252,
+            "complexity": 4,
+            "loc": 15,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1238,
+                  "function": "replaceHolders"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "strictIndexOf",
+            "line": 1298,
+            "endLine": 1308,
+            "complexity": 3,
+            "loc": 11,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1298,
+                  "function": "strictIndexOf"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "strictLastIndexOf",
+            "line": 1320,
+            "endLine": 1328,
+            "complexity": 3,
+            "loc": 9,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1320,
+                  "function": "strictLastIndexOf"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "lodash",
+            "line": 1690,
+            "endLine": 1700,
+            "complexity": 6,
+            "loc": 11,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1690,
+                  "function": "lodash"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "LodashWrapper",
+            "line": 1742,
+            "endLine": 1748,
+            "complexity": 1,
+            "loc": 7,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1742,
+                  "function": "LodashWrapper"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "well-named",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1742,
+                  "function": "LodashWrapper"
+                },
+                "description": "Function name \"LodashWrapper\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "LazyWrapper",
+            "line": 1827,
+            "endLine": 1835,
+            "complexity": 1,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1827,
+                  "function": "LazyWrapper"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "well-named",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1827,
+                  "function": "LazyWrapper"
+                },
+                "description": "Function name \"LazyWrapper\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "lazyClone",
+            "line": 1845,
+            "endLine": 1854,
+            "complexity": 1,
+            "loc": 10,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1845,
+                  "function": "lazyClone"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "lazyReverse",
+            "line": 1864,
+            "endLine": 1874,
+            "complexity": 2,
+            "loc": 11,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1864,
+                  "function": "lazyReverse"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "lazyValue",
+            "line": 1884,
+            "endLine": 1931,
+            "complexity": 13,
+            "loc": 48,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1884,
+                  "function": "lazyValue"
+                },
+                "description": "Function complexity 13 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.3
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1884,
+                  "function": "lazyValue"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1884,
+                  "function": "lazyValue"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "Hash",
+            "line": 1946,
+            "endLine": 1955,
+            "complexity": 3,
+            "loc": 10,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1946,
+                  "function": "Hash"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "well-named",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1946,
+                  "function": "Hash"
+                },
+                "description": "Function name \"Hash\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "hashClear",
+            "line": 1964,
+            "endLine": 1967,
+            "complexity": 2,
+            "loc": 4,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1964,
+                  "function": "hashClear"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "hashDelete",
+            "line": 1979,
+            "endLine": 1983,
+            "complexity": 3,
+            "loc": 5,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1979,
+                  "function": "hashDelete"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "hashGet",
+            "line": 1994,
+            "endLine": 2001,
+            "complexity": 4,
+            "loc": 8,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 1994,
+                  "function": "hashGet"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "hashHas",
+            "line": 2012,
+            "endLine": 2015,
+            "complexity": 2,
+            "loc": 4,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2012,
+                  "function": "hashHas"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "hashSet",
+            "line": 2027,
+            "endLine": 2032,
+            "complexity": 4,
+            "loc": 6,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2027,
+                  "function": "hashSet"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "ListCache",
+            "line": 2050,
+            "endLine": 2059,
+            "complexity": 3,
+            "loc": 10,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2050,
+                  "function": "ListCache"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "well-named",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2050,
+                  "function": "ListCache"
+                },
+                "description": "Function name \"ListCache\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "listCacheClear",
+            "line": 2068,
+            "endLine": 2071,
+            "complexity": 1,
+            "loc": 4,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2068,
+                  "function": "listCacheClear"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "listCacheDelete",
+            "line": 2082,
+            "endLine": 2097,
+            "complexity": 3,
+            "loc": 16,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2082,
+                  "function": "listCacheDelete"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "listCacheGet",
+            "line": 2108,
+            "endLine": 2113,
+            "complexity": 2,
+            "loc": 6,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2108,
+                  "function": "listCacheGet"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "listCacheHas",
+            "line": 2124,
+            "endLine": 2126,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2124,
+                  "function": "listCacheHas"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "listCacheSet",
+            "line": 2138,
+            "endLine": 2149,
+            "complexity": 2,
+            "loc": 12,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2138,
+                  "function": "listCacheSet"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "MapCache",
+            "line": 2167,
+            "endLine": 2176,
+            "complexity": 3,
+            "loc": 10,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2167,
+                  "function": "MapCache"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "well-named",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2167,
+                  "function": "MapCache"
+                },
+                "description": "Function name \"MapCache\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "mapCacheClear",
+            "line": 2185,
+            "endLine": 2192,
+            "complexity": 2,
+            "loc": 8,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2185,
+                  "function": "mapCacheClear"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "mapCacheDelete",
+            "line": 2203,
+            "endLine": 2207,
+            "complexity": 2,
+            "loc": 5,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2203,
+                  "function": "mapCacheDelete"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "mapCacheSet",
+            "line": 2245,
+            "endLine": 2252,
+            "complexity": 2,
+            "loc": 8,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2245,
+                  "function": "mapCacheSet"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "SetCache",
+            "line": 2271,
+            "endLine": 2279,
+            "complexity": 3,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2271,
+                  "function": "SetCache"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "well-named",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2271,
+                  "function": "SetCache"
+                },
+                "description": "Function name \"SetCache\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "setCacheAdd",
+            "line": 2291,
+            "endLine": 2294,
+            "complexity": 1,
+            "loc": 4,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2291,
+                  "function": "setCacheAdd"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "setCacheHas",
+            "line": 2305,
+            "endLine": 2307,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2305,
+                  "function": "setCacheHas"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "Stack",
+            "line": 2322,
+            "endLine": 2325,
+            "complexity": 1,
+            "loc": 4,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2322,
+                  "function": "Stack"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "well-named",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2322,
+                  "function": "Stack"
+                },
+                "description": "Function name \"Stack\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "stackClear",
+            "line": 2334,
+            "endLine": 2337,
+            "complexity": 1,
+            "loc": 4,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2334,
+                  "function": "stackClear"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "stackDelete",
+            "line": 2348,
+            "endLine": 2354,
+            "complexity": 1,
+            "loc": 7,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2348,
+                  "function": "stackDelete"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "stackGet",
+            "line": 2365,
+            "endLine": 2367,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2365,
+                  "function": "stackGet"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "stackHas",
+            "line": 2378,
+            "endLine": 2380,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2378,
+                  "function": "stackHas"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "stackSet",
+            "line": 2392,
+            "endLine": 2406,
+            "complexity": 4,
+            "loc": 15,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2392,
+                  "function": "stackSet"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2392,
+                  "function": "stackSet"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "arrayLikeKeys",
+            "line": 2425,
+            "endLine": 2450,
+            "complexity": 24,
+            "loc": 26,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2425,
+                  "function": "arrayLikeKeys"
+                },
+                "description": "Function complexity 24 exceeds recommended threshold",
+                "threshold": 20,
+                "excessRatio": 1.2
+              },
+              {
+                "type": "high-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2425,
+                  "function": "arrayLikeKeys"
+                },
+                "description": "Complexity 24 exceeds recommended threshold of 20"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2425,
+                  "function": "arrayLikeKeys"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ],
+            "snippet": "function arrayLikeKeys(value, inherited) {\n      var isArr = isArray(value),\n          isArg = !isArr && isArguments(value),\n          isBuff = !isArr && !isArg && isBuffer(value),\n          isType = !isArr && !isArg && !isBuff && isTypedArray(value),\n          skipIndexes = isArr || isArg || isBuff || isType,\n          result = skipIndexes ? baseTimes(value.length, String) : [],\n          length = result.length;\n  // ... more code ..."
+          },
+          {
+            "name": "assocIndexOf",
+            "line": 2529,
+            "endLine": 2537,
+            "complexity": 3,
+            "loc": 9,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2529,
+                  "function": "assocIndexOf"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseAggregator",
+            "line": 2550,
+            "endLine": 2555,
+            "complexity": 1,
+            "loc": 6,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "baseClamp",
+            "line": 2634,
+            "endLine": 2644,
+            "complexity": 6,
+            "loc": 11,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2634,
+                  "function": "baseClamp"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseClone",
+            "line": 2662,
+            "endLine": 2736,
+            "complexity": 28,
+            "loc": 75,
+            "parameterCount": 6,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2662,
+                  "function": "baseClone"
+                },
+                "description": "Function complexity 28 exceeds recommended threshold",
+                "threshold": 20,
+                "excessRatio": 1.4
+              },
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2662,
+                  "function": "baseClone"
+                },
+                "description": "Function has 75 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.5
+              },
+              {
+                "type": "high-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2662,
+                  "function": "baseClone"
+                },
+                "description": "Complexity 28 exceeds recommended threshold of 20"
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2662,
+                  "function": "baseClone"
+                },
+                "description": "Function has 75 lines, consider splitting for better maintainability"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2662,
+                  "function": "baseClone"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ],
+            "snippet": "function baseClone(value, bitmask, customizer, key, object, stack) {\n      var result,\n          isDeep = bitmask & CLONE_DEEP_FLAG,\n          isFlat = bitmask & CLONE_FLAT_FLAG,\n          isFull = bitmask & CLONE_SYMBOLS_FLAG;\n      if (customizer) {\n        result = object ? customizer(value, key, object, stack) : customizer(value);\n      }\n  // ... more code ..."
+          },
+          {
+            "name": "baseConformsTo",
+            "line": 2760,
+            "endLine": 2776,
+            "complexity": 6,
+            "loc": 17,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2760,
+                  "function": "baseConformsTo"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseDifference",
+            "line": 2806,
+            "endLine": 2849,
+            "complexity": 14,
+            "loc": 44,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2806,
+                  "function": "baseDifference"
+                },
+                "description": "Function complexity 14 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.4
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2806,
+                  "function": "baseDifference"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseExtremum",
+            "line": 2899,
+            "endLine": 2916,
+            "complexity": 6,
+            "loc": 18,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2899,
+                  "function": "baseExtremum"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseFill",
+            "line": 2928,
+            "endLine": 2944,
+            "complexity": 8,
+            "loc": 17,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "baseFilter",
+            "line": 2954,
+            "endLine": 2962,
+            "complexity": 1,
+            "loc": 9,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2954,
+                  "function": "baseFilter"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseFlatten",
+            "line": 2975,
+            "endLine": 2996,
+            "complexity": 8,
+            "loc": 22,
+            "parameterCount": 5,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 2975,
+                  "function": "baseFlatten"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseIntersection",
+            "line": 3174,
+            "endLine": 3225,
+            "complexity": 21,
+            "loc": 52,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3174,
+                  "function": "baseIntersection"
+                },
+                "description": "Function complexity 21 exceeds recommended threshold",
+                "threshold": 20,
+                "excessRatio": 1.05
+              },
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3174,
+                  "function": "baseIntersection"
+                },
+                "description": "Function has 52 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.04
+              },
+              {
+                "type": "high-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3174,
+                  "function": "baseIntersection"
+                },
+                "description": "Complexity 21 exceeds recommended threshold of 20"
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3174,
+                  "function": "baseIntersection"
+                },
+                "description": "Function has 52 lines, consider splitting for better maintainability"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3174,
+                  "function": "baseIntersection"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ],
+            "snippet": "function baseIntersection(arrays, iteratee, comparator) {\n      var includes = comparator ? arrayIncludesWith : arrayIncludes,\n          length = arrays[0].length,\n          othLength = arrays.length,\n          othIndex = othLength,\n          caches = Array(othLength),\n          maxLength = Infinity,\n          result = [];\n  // ... more code ..."
+          },
+          {
+            "name": "baseInverter",
+            "line": 3238,
+            "endLine": 3243,
+            "complexity": 1,
+            "loc": 6,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "baseIsEqual",
+            "line": 3309,
+            "endLine": 3317,
+            "complexity": 7,
+            "loc": 9,
+            "parameterCount": 5,
+            "issues": []
+          },
+          {
+            "name": "baseIsEqualDeep",
+            "line": 3333,
+            "endLine": 3376,
+            "complexity": 23,
+            "loc": 44,
+            "parameterCount": 6,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3333,
+                  "function": "baseIsEqualDeep"
+                },
+                "description": "Function complexity 23 exceeds recommended threshold",
+                "threshold": 20,
+                "excessRatio": 1.15
+              },
+              {
+                "type": "high-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3333,
+                  "function": "baseIsEqualDeep"
+                },
+                "description": "Complexity 23 exceeds recommended threshold of 20"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3333,
+                  "function": "baseIsEqualDeep"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ],
+            "snippet": "function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {\n      var objIsArr = isArray(object),\n          othIsArr = isArray(other),\n          objTag = objIsArr ? arrayTag : getTag(object),\n          othTag = othIsArr ? arrayTag : getTag(other);\n      objTag = objTag == argsTag ? objectTag : objTag;\n      othTag = othTag == argsTag ? objectTag : othTag;\n      var objIsObj = objTag == objectTag,\n  // ... more code ..."
+          },
+          {
+            "name": "baseIsMatch",
+            "line": 3399,
+            "endLine": 3441,
+            "complexity": 14,
+            "loc": 43,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3399,
+                  "function": "baseIsMatch"
+                },
+                "description": "Function complexity 14 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.4
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3399,
+                  "function": "baseIsMatch"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseKeys",
+            "line": 3524,
+            "endLine": 3535,
+            "complexity": 5,
+            "loc": 12,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3524,
+                  "function": "baseKeys"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseKeysIn",
+            "line": 3544,
+            "endLine": 3557,
+            "complexity": 6,
+            "loc": 14,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3544,
+                  "function": "baseKeysIn"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseMerge",
+            "line": 3638,
+            "endLine": 3658,
+            "complexity": 2,
+            "loc": 21,
+            "parameterCount": 5,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3638,
+                  "function": "baseMerge"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseMergeDeep",
+            "line": 3675,
+            "endLine": 3735,
+            "complexity": 20,
+            "loc": 61,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3675,
+                  "function": "baseMergeDeep"
+                },
+                "description": "Function complexity 20 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 2
+              },
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3675,
+                  "function": "baseMergeDeep"
+                },
+                "description": "Function has 61 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.22
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3675,
+                  "function": "baseMergeDeep"
+                },
+                "description": "Function has 61 lines, consider splitting for better maintainability"
+              },
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3675,
+                  "function": "baseMergeDeep"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3675,
+                  "function": "baseMergeDeep"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseOrderBy",
+            "line": 3763,
+            "endLine": 3790,
+            "complexity": 2,
+            "loc": 28,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3763,
+                  "function": "baseOrderBy"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "basePickBy",
+            "line": 3816,
+            "endLine": 3830,
+            "complexity": 3,
+            "loc": 15,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3816,
+                  "function": "basePickBy"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "basePullAll",
+            "line": 3856,
+            "endLine": 3881,
+            "complexity": 8,
+            "loc": 26,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3856,
+                  "function": "basePullAll"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "basePullAt",
+            "line": 3892,
+            "endLine": 3908,
+            "complexity": 6,
+            "loc": 17,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3892,
+                  "function": "basePullAt"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseRange",
+            "line": 3934,
+            "endLine": 3944,
+            "complexity": 4,
+            "loc": 11,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "baseRepeat",
+            "line": 3954,
+            "endLine": 3972,
+            "complexity": 7,
+            "loc": 19,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 3954,
+                  "function": "baseRepeat"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseSet",
+            "line": 4020,
+            "endLine": 4052,
+            "complexity": 12,
+            "loc": 33,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4020,
+                  "function": "baseSet"
+                },
+                "description": "Function complexity 12 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.2
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4020,
+                  "function": "baseSet"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseSlice",
+            "line": 4104,
+            "endLine": 4123,
+            "complexity": 7,
+            "loc": 20,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "baseSortedIndex",
+            "line": 4156,
+            "endLine": 4175,
+            "complexity": 10,
+            "loc": 20,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4156,
+                  "function": "baseSortedIndex"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseSortedIndexBy",
+            "line": 4190,
+            "endLine": 4231,
+            "complexity": 22,
+            "loc": 42,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4190,
+                  "function": "baseSortedIndexBy"
+                },
+                "description": "Function complexity 22 exceeds recommended threshold",
+                "threshold": 20,
+                "excessRatio": 1.1
+              },
+              {
+                "type": "high-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4190,
+                  "function": "baseSortedIndexBy"
+                },
+                "description": "Complexity 22 exceeds recommended threshold of 20"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4190,
+                  "function": "baseSortedIndexBy"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ],
+            "snippet": "function baseSortedIndexBy(array, value, iteratee, retHighest) {\n      var low = 0,\n          high = array == null ? 0 : array.length;\n      if (high === 0) {\n        return 0;\n      }\n      value = iteratee(value);\n      var valIsNaN = value !== value,\n  // ... more code ..."
+          },
+          {
+            "name": "baseSortedUniq",
+            "line": 4242,
+            "endLine": 4258,
+            "complexity": 6,
+            "loc": 17,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4242,
+                  "function": "baseSortedUniq"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseToString",
+            "line": 4286,
+            "endLine": 4300,
+            "complexity": 7,
+            "loc": 15,
+            "parameterCount": 1,
+            "issues": []
+          },
+          {
+            "name": "baseUniq",
+            "line": 4311,
+            "endLine": 4361,
+            "complexity": 17,
+            "loc": 51,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4311,
+                  "function": "baseUniq"
+                },
+                "description": "Function complexity 17 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.7
+              },
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4311,
+                  "function": "baseUniq"
+                },
+                "description": "Function has 51 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.02
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4311,
+                  "function": "baseUniq"
+                },
+                "description": "Function has 51 lines, consider splitting for better maintainability"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4311,
+                  "function": "baseUniq"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseUpdate",
+            "line": 4387,
+            "endLine": 4389,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "baseWhile",
+            "line": 4402,
+            "endLine": 4412,
+            "complexity": 10,
+            "loc": 11,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "baseXor",
+            "line": 4444,
+            "endLine": 4463,
+            "complexity": 7,
+            "loc": 20,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4444,
+                  "function": "baseXor"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "compareAscending",
+            "line": 4650,
+            "endLine": 4678,
+            "complexity": 32,
+            "loc": 29,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4650,
+                  "function": "compareAscending"
+                },
+                "description": "Function complexity 32 exceeds recommended threshold",
+                "threshold": 20,
+                "excessRatio": 1.6
+              },
+              {
+                "type": "high-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4650,
+                  "function": "compareAscending"
+                },
+                "description": "Complexity 32 exceeds recommended threshold of 20"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4650,
+                  "function": "compareAscending"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ],
+            "snippet": "function compareAscending(value, other) {\n      if (value !== other) {\n        var valIsDefined = value !== undefined,\n            valIsNull = value === null,\n            valIsReflexive = value === value,\n            valIsSymbol = isSymbol(value);\n        var othIsDefined = other !== undefined,\n            othIsNull = other === null,\n  // ... more code ..."
+          },
+          {
+            "name": "compareMultiple",
+            "line": 4694,
+            "endLine": 4719,
+            "complexity": 5,
+            "loc": 26,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4694,
+                  "function": "compareMultiple"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "composeArgs",
+            "line": 4732,
+            "endLine": 4754,
+            "complexity": 6,
+            "loc": 23,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4732,
+                  "function": "composeArgs"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "composeArgsRight",
+            "line": 4767,
+            "endLine": 4791,
+            "complexity": 6,
+            "loc": 25,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4767,
+                  "function": "composeArgsRight"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "copyObject",
+            "line": 4822,
+            "endLine": 4846,
+            "complexity": 6,
+            "loc": 25,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4822,
+                  "function": "copyObject"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createAssigner",
+            "line": 4896,
+            "endLine": 4920,
+            "complexity": 1,
+            "loc": 25,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4896,
+                  "function": "createAssigner"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createBaseEach",
+            "line": 4930,
+            "endLine": 4949,
+            "complexity": 1,
+            "loc": 20,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4930,
+                  "function": "createBaseEach"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createBaseFor",
+            "line": 4958,
+            "endLine": 4973,
+            "complexity": 1,
+            "loc": 16,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 4958,
+                  "function": "createBaseFor"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createCtor",
+            "line": 5044,
+            "endLine": 5067,
+            "complexity": 1,
+            "loc": 24,
+            "parameterCount": 1,
+            "issues": []
+          },
+          {
+            "name": "createCurry",
+            "line": 5078,
+            "endLine": 5104,
+            "complexity": 1,
+            "loc": 27,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5078,
+                  "function": "createCurry"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "wrapper",
+            "line": 5081,
+            "endLine": 5102,
+            "complexity": 9,
+            "loc": 22,
+            "parameterCount": 0,
+            "issues": []
+          },
+          {
+            "name": "createFind",
+            "line": 5113,
+            "endLine": 5124,
+            "complexity": 1,
+            "loc": 12,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5113,
+                  "function": "createFind"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createFlow",
+            "line": 5133,
+            "endLine": 5185,
+            "complexity": 1,
+            "loc": 53,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5133,
+                  "function": "createFlow"
+                },
+                "description": "Function has 53 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.06
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5133,
+                  "function": "createFlow"
+                },
+                "description": "Function has 53 lines, consider splitting for better maintainability"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5133,
+                  "function": "createFlow"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createHybrid",
+            "line": 5206,
+            "endLine": 5258,
+            "complexity": 2,
+            "loc": 53,
+            "parameterCount": 10,
+            "issues": [
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5206,
+                  "function": "createHybrid"
+                },
+                "description": "Function has 53 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.06
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5206,
+                  "function": "createHybrid"
+                },
+                "description": "Function has 53 lines, consider splitting for better maintainability"
+              },
+              {
+                "type": "too-many-params",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5206,
+                  "function": "createHybrid"
+                },
+                "description": "10 parameters, consider using object parameter or builder pattern"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5206,
+                  "function": "createHybrid"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ],
+            "snippet": "function createHybrid(func, bitmask, thisArg, partials, holders, partialsRight, holdersRight, argPos, ary, arity) {\n      var isAry = bitmask & WRAP_ARY_FLAG,\n          isBind = bitmask & WRAP_BIND_FLAG,\n          isBindKey = bitmask & WRAP_BIND_KEY_FLAG,\n          isCurried = bitmask & (WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG),\n          isFlip = bitmask & WRAP_FLIP_FLAG,\n          Ctor = isBindKey ? undefined : createCtor(func);\n      function wrapper() {\n  // ... more code ..."
+          },
+          {
+            "name": "wrapper",
+            "line": 5214,
+            "endLine": 5256,
+            "complexity": 18,
+            "loc": 43,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5214,
+                  "function": "wrapper"
+                },
+                "description": "Function complexity 18 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.8
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5214,
+                  "function": "wrapper"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createMathOperation",
+            "line": 5282,
+            "endLine": 5306,
+            "complexity": 1,
+            "loc": 25,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5282,
+                  "function": "createMathOperation"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createOver",
+            "line": 5315,
+            "endLine": 5325,
+            "complexity": 1,
+            "loc": 11,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5315,
+                  "function": "createOver"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createPartial",
+            "line": 5361,
+            "endLine": 5382,
+            "complexity": 1,
+            "loc": 22,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5361,
+                  "function": "createPartial"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "wrapper",
+            "line": 5365,
+            "endLine": 5380,
+            "complexity": 7,
+            "loc": 16,
+            "parameterCount": 0,
+            "issues": []
+          },
+          {
+            "name": "createRange",
+            "line": 5391,
+            "endLine": 5407,
+            "complexity": 1,
+            "loc": 17,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5391,
+                  "function": "createRange"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createRelationalOperation",
+            "line": 5416,
+            "endLine": 5424,
+            "complexity": 1,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5416,
+                  "function": "createRelationalOperation"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createRecurry",
+            "line": 5443,
+            "endLine": 5467,
+            "complexity": 9,
+            "loc": 25,
+            "parameterCount": 10,
+            "issues": [
+              {
+                "type": "too-many-params",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5443,
+                  "function": "createRecurry"
+                },
+                "description": "10 parameters, consider using object parameter or builder pattern"
+              }
+            ],
+            "snippet": "function createRecurry(func, bitmask, wrapFunc, placeholder, thisArg, partials, holders, argPos, ary, arity) {\n      var isCurry = bitmask & WRAP_CURRY_FLAG,\n          newHolders = isCurry ? holders : undefined,\n          newHoldersRight = isCurry ? undefined : holders,\n          newPartials = isCurry ? partials : undefined,\n          newPartialsRight = isCurry ? undefined : partials;\n      bitmask |= (isCurry ? WRAP_PARTIAL_FLAG : WRAP_PARTIAL_RIGHT_FLAG);\n      bitmask &= ~(isCurry ? WRAP_PARTIAL_RIGHT_FLAG : WRAP_PARTIAL_FLAG);\n  // ... more code ..."
+          },
+          {
+            "name": "createRound",
+            "line": 5476,
+            "endLine": 5492,
+            "complexity": 1,
+            "loc": 17,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5476,
+                  "function": "createRound"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createToPairs",
+            "line": 5512,
+            "endLine": 5523,
+            "complexity": 1,
+            "loc": 12,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5512,
+                  "function": "createToPairs"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "createWrap",
+            "line": 5550,
+            "endLine": 5603,
+            "complexity": 24,
+            "loc": 54,
+            "parameterCount": 8,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5550,
+                  "function": "createWrap"
+                },
+                "description": "Function complexity 24 exceeds recommended threshold",
+                "threshold": 20,
+                "excessRatio": 1.2
+              },
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5550,
+                  "function": "createWrap"
+                },
+                "description": "Function has 54 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.08
+              },
+              {
+                "type": "high-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5550,
+                  "function": "createWrap"
+                },
+                "description": "Complexity 24 exceeds recommended threshold of 20"
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5550,
+                  "function": "createWrap"
+                },
+                "description": "Function has 54 lines, consider splitting for better maintainability"
+              },
+              {
+                "type": "too-many-params",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5550,
+                  "function": "createWrap"
+                },
+                "description": "8 parameters, consider using object parameter or builder pattern"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5550,
+                  "function": "createWrap"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5550,
+                  "function": "createWrap"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ],
+            "snippet": "function createWrap(func, bitmask, thisArg, partials, holders, argPos, ary, arity) {\n      var isBindKey = bitmask & WRAP_BIND_KEY_FLAG;\n      if (!isBindKey && typeof func != 'function') {\n        throw new TypeError(FUNC_ERROR_TEXT);\n      }\n      var length = partials ? partials.length : 0;\n      if (!length) {\n        bitmask &= ~(WRAP_PARTIAL_FLAG | WRAP_PARTIAL_RIGHT_FLAG);\n  // ... more code ..."
+          },
+          {
+            "name": "customDefaultsAssignIn",
+            "line": 5617,
+            "endLine": 5623,
+            "complexity": 4,
+            "loc": 7,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "customDefaultsMerge",
+            "line": 5639,
+            "endLine": 5647,
+            "complexity": 3,
+            "loc": 9,
+            "parameterCount": 6,
+            "issues": []
+          },
+          {
+            "name": "equalArrays",
+            "line": 5675,
+            "endLine": 5735,
+            "complexity": 17,
+            "loc": 61,
+            "parameterCount": 6,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5675,
+                  "function": "equalArrays"
+                },
+                "description": "Function complexity 17 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.7
+              },
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5675,
+                  "function": "equalArrays"
+                },
+                "description": "Function has 61 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.22
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5675,
+                  "function": "equalArrays"
+                },
+                "description": "Function has 61 lines, consider splitting for better maintainability"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5675,
+                  "function": "equalArrays"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "equalByTag",
+            "line": 5754,
+            "endLine": 5817,
+            "complexity": 22,
+            "loc": 64,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5754,
+                  "function": "equalByTag"
+                },
+                "description": "Function complexity 22 exceeds recommended threshold",
+                "threshold": 20,
+                "excessRatio": 1.1
+              },
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5754,
+                  "function": "equalByTag"
+                },
+                "description": "Function has 64 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.28
+              },
+              {
+                "type": "high-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5754,
+                  "function": "equalByTag"
+                },
+                "description": "Complexity 22 exceeds recommended threshold of 20"
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5754,
+                  "function": "equalByTag"
+                },
+                "description": "Function has 64 lines, consider splitting for better maintainability"
+              },
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5754,
+                  "function": "equalByTag"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern"
+              }
+            ],
+            "snippet": "function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {\n      switch (tag) {\n        case dataViewTag:\n          if ((object.byteLength != other.byteLength) ||\n              (object.byteOffset != other.byteOffset)) {\n            return false;\n          }\n          object = object.buffer;\n  // ... more code ..."
+          },
+          {
+            "name": "equalObjects",
+            "line": 5832,
+            "endLine": 5895,
+            "complexity": 25,
+            "loc": 64,
+            "parameterCount": 6,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5832,
+                  "function": "equalObjects"
+                },
+                "description": "Function complexity 25 exceeds recommended threshold",
+                "threshold": 20,
+                "excessRatio": 1.25
+              },
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5832,
+                  "function": "equalObjects"
+                },
+                "description": "Function has 64 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.28
+              },
+              {
+                "type": "high-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5832,
+                  "function": "equalObjects"
+                },
+                "description": "Complexity 25 exceeds recommended threshold of 20"
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5832,
+                  "function": "equalObjects"
+                },
+                "description": "Function has 64 lines, consider splitting for better maintainability"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5832,
+                  "function": "equalObjects"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ],
+            "snippet": "function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {\n      var isPartial = bitmask & COMPARE_PARTIAL_FLAG,\n          objProps = getAllKeys(object),\n          objLength = objProps.length,\n          othProps = getAllKeys(other),\n          othLength = othProps.length;\n      if (objLength != othLength && !isPartial) {\n        return false;\n  // ... more code ..."
+          },
+          {
+            "name": "getFuncName",
+            "line": 5949,
+            "endLine": 5962,
+            "complexity": 5,
+            "loc": 14,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 5949,
+                  "function": "getFuncName"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "getRawTag",
+            "line": 6048,
+            "endLine": 6066,
+            "complexity": 4,
+            "loc": 19,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6048,
+                  "function": "getRawTag"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6048,
+                  "function": "getRawTag"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          },
+          {
+            "name": "getView",
+            "line": 6144,
+            "endLine": 6160,
+            "complexity": 6,
+            "loc": 17,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "hasPath",
+            "line": 6183,
+            "endLine": 6203,
+            "complexity": 11,
+            "loc": 21,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6183,
+                  "function": "hasPath"
+                },
+                "description": "Function complexity 11 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.1
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6183,
+                  "function": "hasPath"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "initCloneByTag",
+            "line": 6249,
+            "endLine": 6283,
+            "complexity": 20,
+            "loc": 35,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6249,
+                  "function": "initCloneByTag"
+                },
+                "description": "Function complexity 20 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 2
+              }
+            ]
+          },
+          {
+            "name": "isIndex",
+            "line": 6324,
+            "endLine": 6332,
+            "complexity": 8,
+            "loc": 9,
+            "parameterCount": 2,
+            "issues": []
+          },
+          {
+            "name": "isIterateeCall",
+            "line": 6344,
+            "endLine": 6356,
+            "complexity": 6,
+            "loc": 13,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "isKey",
+            "line": 6366,
+            "endLine": 6377,
+            "complexity": 10,
+            "loc": 12,
+            "parameterCount": 2,
+            "issues": []
+          },
+          {
+            "name": "matchesStrictComparable",
+            "line": 6470,
+            "endLine": 6478,
+            "complexity": 1,
+            "loc": 9,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6470,
+                  "function": "matchesStrictComparable"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "memoizeCapped",
+            "line": 6488,
+            "endLine": 6498,
+            "complexity": 1,
+            "loc": 11,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6488,
+                  "function": "memoizeCapped"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "mergeData",
+            "line": 6516,
+            "endLine": 6569,
+            "complexity": 22,
+            "loc": 54,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6516,
+                  "function": "mergeData"
+                },
+                "description": "Function complexity 22 exceeds recommended threshold",
+                "threshold": 20,
+                "excessRatio": 1.1
+              },
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6516,
+                  "function": "mergeData"
+                },
+                "description": "Function has 54 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.08
+              },
+              {
+                "type": "high-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6516,
+                  "function": "mergeData"
+                },
+                "description": "Complexity 22 exceeds recommended threshold of 20"
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6516,
+                  "function": "mergeData"
+                },
+                "description": "Function has 54 lines, consider splitting for better maintainability"
+              }
+            ],
+            "snippet": "function mergeData(data, source) {\n      var bitmask = data[1],\n          srcBitmask = source[1],\n          newBitmask = bitmask | srcBitmask,\n          isCommon = newBitmask < (WRAP_BIND_FLAG | WRAP_BIND_KEY_FLAG | WRAP_ARY_FLAG);\n      var isCombo =\n        ((srcBitmask == WRAP_ARY_FLAG) && (bitmask == WRAP_CURRY_FLAG)) ||\n        ((srcBitmask == WRAP_ARY_FLAG) && (bitmask == WRAP_REARG_FLAG) && (data[7].length <= source[8])) ||\n  // ... more code ..."
+          },
+          {
+            "name": "nativeKeysIn",
+            "line": 6580,
+            "endLine": 6588,
+            "complexity": 3,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6580,
+                  "function": "nativeKeysIn"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "overRest",
+            "line": 6610,
+            "endLine": 6629,
+            "complexity": 2,
+            "loc": 20,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6610,
+                  "function": "overRest"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6610,
+                  "function": "overRest"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          },
+          {
+            "name": "shortOut",
+            "line": 6747,
+            "endLine": 6765,
+            "complexity": 1,
+            "loc": 19,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6747,
+                  "function": "shortOut"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "toSource",
+            "line": 6832,
+            "endLine": 6842,
+            "complexity": 4,
+            "loc": 11,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6832,
+                  "function": "toSource"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "updateWrapDetails",
+            "line": 6852,
+            "endLine": 6860,
+            "complexity": 1,
+            "loc": 9,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6852,
+                  "function": "updateWrapDetails"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "chunk",
+            "line": 6903,
+            "endLine": 6921,
+            "complexity": 7,
+            "loc": 19,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "compact",
+            "line": 6938,
+            "endLine": 6951,
+            "complexity": 4,
+            "loc": 14,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 6938,
+                  "function": "compact"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "drop",
+            "line": 7111,
+            "endLine": 7118,
+            "complexity": 6,
+            "loc": 8,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "dropRight",
+            "line": 7145,
+            "endLine": 7153,
+            "complexity": 6,
+            "loc": 9,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "fill",
+            "line": 7266,
+            "endLine": 7276,
+            "complexity": 6,
+            "loc": 11,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "lastIndexOf",
+            "line": 7699,
+            "endLine": 7712,
+            "complexity": 6,
+            "loc": 14,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "remove",
+            "line": 7911,
+            "endLine": 7930,
+            "complexity": 5,
+            "loc": 20,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 7911,
+                  "function": "remove"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "slice",
+            "line": 7975,
+            "endLine": 7989,
+            "complexity": 8,
+            "loc": 15,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "sortedIndexOf",
+            "line": 8057,
+            "endLine": 8066,
+            "complexity": 5,
+            "loc": 10,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 8057,
+                  "function": "sortedIndexOf"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "sortedLastIndexOf",
+            "line": 8135,
+            "endLine": 8144,
+            "complexity": 4,
+            "loc": 10,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 8135,
+                  "function": "sortedLastIndexOf"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "take",
+            "line": 8233,
+            "endLine": 8239,
+            "complexity": 6,
+            "loc": 7,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "takeRight",
+            "line": 8266,
+            "endLine": 8274,
+            "complexity": 6,
+            "loc": 9,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "unzip",
+            "line": 8529,
+            "endLine": 8543,
+            "complexity": 3,
+            "loc": 15,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 8529,
+                  "function": "unzip"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "wrapperCommit",
+            "line": 8959,
+            "endLine": 8961,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 8959,
+                  "function": "wrapperCommit"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "wrapperNext",
+            "line": 8985,
+            "endLine": 8993,
+            "complexity": 3,
+            "loc": 9,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 8985,
+                  "function": "wrapperNext"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "wrapperPlant",
+            "line": 9041,
+            "endLine": 9059,
+            "complexity": 3,
+            "loc": 19,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 9041,
+                  "function": "wrapperPlant"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "wrapperReverse",
+            "line": 9081,
+            "endLine": 9097,
+            "complexity": 3,
+            "loc": 17,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 9081,
+                  "function": "wrapperReverse"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 9081,
+                  "function": "wrapperReverse"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "wrapperValue",
+            "line": 9113,
+            "endLine": 9115,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 9113,
+                  "function": "wrapperValue"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "includes",
+            "line": 9499,
+            "endLine": 9510,
+            "complexity": 8,
+            "loc": 12,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "orderBy",
+            "line": 9654,
+            "endLine": 9666,
+            "complexity": 7,
+            "loc": 13,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "size",
+            "line": 9910,
+            "endLine": 9922,
+            "complexity": 6,
+            "loc": 13,
+            "parameterCount": 1,
+            "issues": []
+          },
+          {
+            "name": "after",
+            "line": 10058,
+            "endLine": 10068,
+            "complexity": 3,
+            "loc": 11,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 10058,
+                  "function": "after"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "before",
+            "line": 10110,
+            "endLine": 10125,
+            "complexity": 3,
+            "loc": 16,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 10110,
+                  "function": "before"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "debounce",
+            "line": 10372,
+            "endLine": 10495,
+            "complexity": 8,
+            "loc": 124,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "size",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 10372,
+                  "function": "debounce"
+                },
+                "description": "Function has 124 lines (critical), consider breaking into smaller functions",
+                "threshold": 100,
+                "excessRatio": 1.24
+              },
+              {
+                "type": "long-function",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 10372,
+                  "function": "debounce"
+                },
+                "description": "Function has 124 lines (critical), consider breaking into smaller functions"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 10372,
+                  "function": "debounce"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 10372,
+                  "function": "debounce"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ],
+            "snippet": "function debounce(func, wait, options) {\n      var lastArgs,\n          lastThis,\n          maxWait,\n          result,\n          timerId,\n          lastCallTime,\n          lastInvokeTime = 0,\n  // ... more code ..."
+          },
+          {
+            "name": "debounced",
+            "line": 10468,
+            "endLine": 10491,
+            "complexity": 5,
+            "loc": 24,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 10468,
+                  "function": "debounced"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "memoize",
+            "line": 10608,
+            "endLine": 10626,
+            "complexity": 6,
+            "loc": 19,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 10608,
+                  "function": "memoize"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 10608,
+                  "function": "memoize"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          },
+          {
+            "name": "spread",
+            "line": 10905,
+            "endLine": 10919,
+            "complexity": 4,
+            "loc": 15,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 10905,
+                  "function": "spread"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "throttle",
+            "line": 10965,
+            "endLine": 10981,
+            "complexity": 6,
+            "loc": 17,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "eq",
+            "line": 11252,
+            "endLine": 11254,
+            "complexity": 3,
+            "loc": 3,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "well-named",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 11252,
+                  "function": "eq"
+                },
+                "description": "Function name \"eq\" is too short, use descriptive names"
+              }
+            ]
+          },
+          {
+            "name": "isEmpty",
+            "line": 11547,
+            "endLine": 11569,
+            "complexity": 14,
+            "loc": 23,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 11547,
+                  "function": "isEmpty"
+                },
+                "description": "Function complexity 14 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.4
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 11547,
+                  "function": "isEmpty"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "isError",
+            "line": 11659,
+            "endLine": 11666,
+            "complexity": 6,
+            "loc": 8,
+            "parameterCount": 1,
+            "issues": []
+          },
+          {
+            "name": "isPlainObject",
+            "line": 12104,
+            "endLine": 12115,
+            "complexity": 7,
+            "loc": 12,
+            "parameterCount": 1,
+            "issues": []
+          },
+          {
+            "name": "toArray",
+            "line": 12387,
+            "endLine": 12401,
+            "complexity": 8,
+            "loc": 15,
+            "parameterCount": 1,
+            "issues": []
+          },
+          {
+            "name": "toFinite",
+            "line": 12426,
+            "endLine": 12436,
+            "complexity": 7,
+            "loc": 11,
+            "parameterCount": 1,
+            "issues": []
+          },
+          {
+            "name": "toNumber",
+            "line": 12525,
+            "endLine": 12544,
+            "complexity": 12,
+            "loc": 20,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 12525,
+                  "function": "toNumber"
+                },
+                "description": "Function complexity 12 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.2
+              }
+            ]
+          },
+          {
+            "name": "result",
+            "line": 13691,
+            "endLine": 13711,
+            "complexity": 6,
+            "loc": 21,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 13691,
+                  "function": "result"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "setWith",
+            "line": 13769,
+            "endLine": 13772,
+            "complexity": 3,
+            "loc": 4,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "transform",
+            "line": 13856,
+            "endLine": 13877,
+            "complexity": 10,
+            "loc": 22,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 13856,
+                  "function": "transform"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "updateWith",
+            "line": 13965,
+            "endLine": 13968,
+            "complexity": 3,
+            "loc": 4,
+            "parameterCount": 4,
+            "issues": []
+          },
+          {
+            "name": "clamp",
+            "line": 14049,
+            "endLine": 14063,
+            "complexity": 6,
+            "loc": 15,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "random",
+            "line": 14146,
+            "endLine": 14183,
+            "complexity": 14,
+            "loc": 38,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 14146,
+                  "function": "random"
+                },
+                "description": "Function complexity 14 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.4
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 14146,
+                  "function": "random"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "parseInt",
+            "line": 14545,
+            "endLine": 14552,
+            "complexity": 5,
+            "loc": 8,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 14545,
+                  "function": "parseInt"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "split",
+            "line": 14655,
+            "endLine": 14674,
+            "complexity": 12,
+            "loc": 20,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 14655,
+                  "function": "split"
+                },
+                "description": "Function complexity 12 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.2
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 14655,
+                  "function": "split"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "template",
+            "line": 14838,
+            "endLine": 14953,
+            "complexity": 19,
+            "loc": 116,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 14838,
+                  "function": "template"
+                },
+                "description": "Function complexity 19 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.9
+              },
+              {
+                "type": "size",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 14838,
+                  "function": "template"
+                },
+                "description": "Function has 116 lines (critical), consider breaking into smaller functions",
+                "threshold": 100,
+                "excessRatio": 1.16
+              },
+              {
+                "type": "long-function",
+                "severity": "high",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 14838,
+                  "function": "template"
+                },
+                "description": "Function has 116 lines (critical), consider breaking into smaller functions"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 14838,
+                  "function": "template"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 14838,
+                  "function": "template"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ],
+            "snippet": "function template(string, options, guard) {\n      var settings = lodash.templateSettings;\n      if (guard && isIterateeCall(string, options, guard)) {\n        options = undefined;\n      }\n      string = toString(string);\n      options = assignInWith({}, options, settings, customDefaultsAssignIn);\n      var imports = assignInWith({}, options.imports, settings.imports, customDefaultsAssignIn),\n  // ... more code ..."
+          },
+          {
+            "name": "trim",
+            "line": 15027,
+            "endLine": 15041,
+            "complexity": 6,
+            "loc": 15,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "trimEnd",
+            "line": 15062,
+            "endLine": 15074,
+            "complexity": 6,
+            "loc": 13,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "trimStart",
+            "line": 15095,
+            "endLine": 15107,
+            "complexity": 6,
+            "loc": 13,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "truncate",
+            "line": 15146,
+            "endLine": 15200,
+            "complexity": 18,
+            "loc": 55,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 15146,
+                  "function": "truncate"
+                },
+                "description": "Function complexity 18 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.8
+              },
+              {
+                "type": "size",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 15146,
+                  "function": "truncate"
+                },
+                "description": "Function has 55 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.1
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 15146,
+                  "function": "truncate"
+                },
+                "description": "Function has 55 lines, consider splitting for better maintainability"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 15146,
+                  "function": "truncate"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "cond",
+            "line": 15395,
+            "endLine": 15415,
+            "complexity": 3,
+            "loc": 21,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 15395,
+                  "function": "cond"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "mixin",
+            "line": 15778,
+            "endLine": 15812,
+            "complexity": 7,
+            "loc": 35,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 15778,
+                  "function": "mixin"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lodash.js",
+                  "line": 15778,
+                  "function": "mixin"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 0
+      },
+      {
+        "file": "fp/_baseConvert.js",
+        "metrics": {
+          "complexity": 73,
+          "loc": 350,
+          "functionCount": 18,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "location": {
+              "file": "fp/_baseConvert.js",
+              "line": 1
+            },
+            "description": "File complexity 73 exceeds critical threshold",
+            "threshold": 20,
+            "excessRatio": 3.65
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "location": {
+              "file": "fp/_baseConvert.js",
+              "line": 1
+            },
+            "description": "File size 350 lines exceeds high threshold",
+            "threshold": 300,
+            "excessRatio": 1.17
+          }
+        ],
+        "functions": [
+          {
+            "name": "flatSpread",
+            "line": 76,
+            "endLine": 96,
+            "complexity": 1,
+            "loc": 21,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 76,
+                  "function": "flatSpread"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "wrapImmutable",
+            "line": 107,
+            "endLine": 121,
+            "complexity": 1,
+            "loc": 15,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 107,
+                  "function": "wrapImmutable"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "baseConvert",
+            "line": 138,
+            "endLine": 567,
+            "complexity": 17,
+            "loc": 430,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 138,
+                  "function": "baseConvert"
+                },
+                "description": "Function complexity 17 exceeds medium threshold",
+                "threshold": 10,
+                "excessRatio": 1.7
+              },
+              {
+                "type": "size",
+                "severity": "high",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 138,
+                  "function": "baseConvert"
+                },
+                "description": "Function has 430 lines (critical), consider breaking into smaller functions",
+                "threshold": 100,
+                "excessRatio": 4.3
+              },
+              {
+                "type": "long-function",
+                "severity": "high",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 138,
+                  "function": "baseConvert"
+                },
+                "description": "Function has 430 lines (critical), consider breaking into smaller functions"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 138,
+                  "function": "baseConvert"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "single-responsibility",
+                "severity": "high",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 138,
+                  "function": "baseConvert"
+                },
+                "description": "Function has 3 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ],
+            "snippet": "function baseConvert(util, name, func, options) {\n  var isLib = typeof name == 'function',\n      isObj = name === Object(name);\n  if (isObj) {\n    options = func;\n    func = name;\n    name = undefined;\n  }\n  // ... more code ..."
+          },
+          {
+            "name": "castCap",
+            "line": 277,
+            "endLine": 289,
+            "complexity": 5,
+            "loc": 13,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 277,
+                  "function": "castCap"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "castFixed",
+            "line": 315,
+            "endLine": 323,
+            "complexity": 6,
+            "loc": 9,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "castRearg",
+            "line": 334,
+            "endLine": 338,
+            "complexity": 6,
+            "loc": 5,
+            "parameterCount": 3,
+            "issues": []
+          },
+          {
+            "name": "cloneByPath",
+            "line": 348,
+            "endLine": 368,
+            "complexity": 8,
+            "loc": 21,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 348,
+                  "function": "cloneByPath"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "overArg",
+            "line": 443,
+            "endLine": 457,
+            "complexity": 1,
+            "loc": 15,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 443,
+                  "function": "overArg"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 443,
+                  "function": "overArg"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          },
+          {
+            "name": "wrap",
+            "line": 468,
+            "endLine": 516,
+            "complexity": 10,
+            "loc": 49,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "fp/_baseConvert.js",
+                  "line": 468,
+                  "function": "wrap"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 2,
+          "incomingDependencies": 1,
+          "instability": 0.67,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 0
+      },
+      {
+        "file": "fp/_convertBrowser.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 8,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "fp/_mapping.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 328,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "size",
+            "severity": "high",
+            "location": {
+              "file": "fp/_mapping.js",
+              "line": 1
+            },
+            "description": "File size 328 lines exceeds high threshold",
+            "threshold": 300,
+            "excessRatio": 1.09
+          }
+        ],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 2,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 100,
+          "isInCycle": false
+        },
+        "healthScore": 79
+      },
+      {
+        "file": "fp/placeholder.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "perf/perf.js",
+        "metrics": {
+          "complexity": 20,
+          "loc": 1639,
+          "functionCount": 7,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "location": {
+              "file": "perf/perf.js",
+              "line": 1
+            },
+            "description": "File complexity 20 exceeds high threshold",
+            "threshold": 15,
+            "excessRatio": 1.33
+          },
+          {
+            "type": "size",
+            "severity": "critical",
+            "location": {
+              "file": "perf/perf.js",
+              "line": 1
+            },
+            "description": "File size 1639 lines exceeds critical threshold",
+            "threshold": 1000,
+            "excessRatio": 1.64
+          }
+        ],
+        "functions": [
+          {
+            "name": "log",
+            "line": 181,
+            "endLine": 187,
+            "complexity": 2,
+            "loc": 7,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "perf/perf.js",
+                  "line": 181,
+                  "function": "log"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "run",
+            "line": 194,
+            "endLine": 201,
+            "complexity": 6,
+            "loc": 8,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "perf/perf.js",
+                  "line": 194,
+                  "function": "run"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "well-named",
+                "severity": "low",
+                "location": {
+                  "file": "perf/perf.js",
+                  "line": 194,
+                  "function": "run"
+                },
+                "description": "Function name \"run\" is too generic, use a more descriptive name"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 8
+      },
+      {
+        "file": "lib/common/file.js",
+        "metrics": {
+          "complexity": 4,
+          "loc": 27,
+          "functionCount": 4,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "globTemplate",
+            "line": 32,
+            "endLine": 37,
+            "complexity": 1,
+            "loc": 6,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/common/file.js",
+                  "line": 32,
+                  "function": "globTemplate"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.67,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/mapping.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 5,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 2,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.33,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/minify.js",
+        "metrics": {
+          "complexity": 5,
+          "loc": 20,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "minify",
+            "line": 24,
+            "endLine": 37,
+            "complexity": 5,
+            "loc": 14,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/common/minify.js",
+                  "line": 24,
+                  "function": "minify"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.67,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/uglify.options.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 15,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/util.js",
+        "metrics": {
+          "complexity": 4,
+          "loc": 19,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "Hash",
+            "line": 15,
+            "endLine": 21,
+            "complexity": 1,
+            "loc": 7,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/common/util.js",
+                  "line": 15,
+                  "function": "Hash"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              },
+              {
+                "type": "well-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/common/util.js",
+                  "line": 15,
+                  "function": "Hash"
+                },
+                "description": "Function name \"Hash\" should start with a verb in camelCase"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/fp/build-dist.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 41,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/fp/build-doc.js",
+        "metrics": {
+          "complexity": 8,
+          "loc": 44,
+          "functionCount": 3,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "toFuncList",
+            "line": 45,
+            "endLine": 63,
+            "complexity": 6,
+            "loc": 19,
+            "parameterCount": 1,
+            "issues": []
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/fp/build-modules.js",
+        "metrics": {
+          "complexity": 8,
+          "loc": 92,
+          "functionCount": 5,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "build",
+            "line": 113,
+            "endLine": 148,
+            "complexity": 1,
+            "loc": 36,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/fp/build-modules.js",
+                  "line": 113,
+                  "function": "build"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/fp/build-modules.js",
+                  "line": 113,
+                  "function": "build"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/main/build-dist.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 17,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/main/build-doc.js",
+        "metrics": {
+          "complexity": 4,
+          "loc": 49,
+          "functionCount": 3,
+          "duplicationRatio": 0.06
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 77
+      },
+      {
+        "file": "lib/main/build-modules.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 19,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/main/build-site.js",
+        "metrics": {
+          "complexity": 8,
+          "loc": 142,
+          "functionCount": 7,
+          "duplicationRatio": 0.07
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "autoLink",
+            "line": 40,
+            "endLine": 49,
+            "complexity": 1,
+            "loc": 10,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/main/build-site.js",
+                  "line": 40,
+                  "function": "autoLink"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "repairMarkyHeaders",
+            "line": 96,
+            "endLine": 111,
+            "complexity": 1,
+            "loc": 16,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/main/build-site.js",
+                  "line": 96,
+                  "function": "repairMarkyHeaders"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "pure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/main/build-site.js",
+                  "line": 96,
+                  "function": "repairMarkyHeaders"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "tidyHighlights",
+            "line": 119,
+            "endLine": 164,
+            "complexity": 1,
+            "loc": 46,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/main/build-site.js",
+                  "line": 119,
+                  "function": "tidyHighlights"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "build",
+            "line": 173,
+            "endLine": 222,
+            "complexity": 2,
+            "loc": 50,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "single-responsibility",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/main/build-site.js",
+                  "line": 173,
+                  "function": "build"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 77
+      },
+      {
+        "file": "perf/asset/perf-ui.js",
+        "metrics": {
+          "complexity": 5,
+          "loc": 85,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      }
+    ],
+    "overview": {
+      "grade": "F",
+      "statistics": {
+        "totalFiles": 20,
+        "totalLOC": 8879,
+        "avgComplexity": 98.3,
+        "avgLOC": 444,
+        "avgDuplicationRatio": 0.01
+      },
+      "scores": {
+        "complexity": 7,
+        "duplication": 100,
+        "maintainability": 8,
+        "overall": 31
+      },
+      "summary": "6 critical files found requiring attention"
+    },
+    "context": {
+      "project": {
+        "name": "lodash",
+        "path": "/Users/fstepho/dev/insightcode-cli/temp-analysis/lodash",
+        "version": "4.17.21"
+      },
+      "analysis": {
+        "timestamp": "2025-07-17T18:54:53.752Z",
+        "durationMs": 64883,
+        "toolVersion": "0.7.0",
+        "filesAnalyzed": 20,
+        "duplicationMode": "strict"
+      }
+    }
+  },
+  "durationMs": 64918
+}
