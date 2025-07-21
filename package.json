@@ -22,7 +22,8 @@
     "fix-weight-refs": "node scripts/fix-weight-references.js",
     "test:duplication-modes": "npm run build && node scripts/test-duplication-modes.js",
     "qa": "npm run build && npm test && npm run validate-docs",
-    "prepare": "husky"
+    "prepare": "husky",
+    "knip": "knip"
   },
   "keywords": [
     "typescript",
@@ -53,15 +54,15 @@
     "enhanced-resolve": "^5.18.2",
     "execa": "^9.6.0",
     "fast-glob": "^3.3.3",
-    "ts-morph": "^26.0.0",
-    "typescript": "^5.8.3"
+    "ts-morph": "^26.0.0"
   },
   "devDependencies": {
-    "@types/enhanced-resolve": "^5.0.2",
-    "@types/node": "^24.0.12",
+    "@types/node": "^24.0.15",
     "@vitest/coverage-v8": "^3.2.4",
     "husky": "^9.1.7",
+    "knip": "^5.62.0",
     "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   },
   "overrides": {
