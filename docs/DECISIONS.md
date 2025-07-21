@@ -4,10 +4,24 @@ Format: **Date | Decision | Reason | Impact**
 
 ---
 
-## 2025-07-17: v0.7.0 Enhanced Report Generator and Function-Level Analysis
-**Decision**: Implement enhanced report generator with function-level critical issue tracking, improved markdown generation for insights/findings, and introduce centralized grading config (GRADE_CONFIG).
-**Reason**: Need better granularity in code analysis at the function level. Previous reporting lacked detailed function-level insights. Centralized grading configuration ensures consistency across the codebase.
+## 2025-07-21: v0.7.0 Complete - Enhanced Report Generator and Terminology Harmonization
+**Decision**: Implement enhanced report generator, function-level critical issue tracking, improved markdown generation, centralized grading config (GRADE_CONFIG), and comprehensive terminology harmonization across scoring and analysis components.
+**Reason**: Need better granularity in code analysis at the function level. Previous reporting lacked detailed function-level insights. Centralized grading configuration ensures consistency across the codebase. Terminology inconsistencies between "scoring" and "analysis" caused confusion in codebase navigation.
 **Impact**: More actionable insights with function-level issue tracking. Better report quality with improved markdown generation. Increased type safety with unified Grade type. Cleaner codebase with removal of legacy configs. Industry-aligned grading standards.
+
+---
+
+## 2025-07-21: Strict Duplication Mode Implementation
+**Decision**: Implement strict duplication detection mode with more rigorous thresholds alongside existing legacy mode.
+**Reason**: Different projects have different quality standards. Some teams need stricter duplication detection for critical applications while others prefer the existing balanced approach.
+**Impact**: Enhanced flexibility for different project types. Better detection of meaningful duplications in high-quality codebases. Maintains backward compatibility with legacy mode as default.
+
+---
+
+## 2025-07-21: Reporter and Scoring Modules Architectural Refactor
+**Decision**: Refactor reporter and scoring modules for improved structure and harmonization, centralizing scoring utilities and enhancing type safety.
+**Reason**: Previous architecture had scattered scoring logic and inconsistent interfaces between reporter and scoring components. Need better separation of concerns and centralized utility functions.
+**Impact**: Improved maintainability with clearer module boundaries. Better code reusability with centralized scoring utilities. Enhanced type safety and consistency across scoring operations. Easier testing and debugging of scoring logic.
 
 ---
 

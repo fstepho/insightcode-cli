@@ -17,10 +17,10 @@ npm run benchmark              # Full codebase analysis
 npm run benchmark:production    # Production code only
 ```
 
-**Latest Benchmark:** July 17, 2025 (v0.7.0)
+**Latest Benchmark:** July 21, 2025 (v0.7.0)
 - **9 projects analyzed** (Angular, Chalk, ESLint, Express, Jest, Lodash, TypeScript, UUID, Vue)
-- **677,099 lines** processed in 29.80 seconds
-- **Analysis speed:** 22,719 lines/second
+- **677,099 lines** processed in 70.31 seconds
+- **Analysis speed:** 9,630 lines/second
 - **Success rate:** 100% (9/9 projects)
 
 Results are automatically saved to `benchmarks/` with detailed individual reports.
@@ -108,17 +108,17 @@ Where:
 - **Block size**: 8 lines minimum for significance
 - **Token threshold**: 8+ tokens to filter trivial matches
 
-## 📈 Latest Benchmark Results (July 17, 2025)
+## 📈 Latest Benchmark Results (July 21, 2025)
 
 ### Production Code Analysis - Grade Distribution
 
 | Grade | Projects | Percentage |
 |-------|----------|------------|
 | **A** | 3 projects | 33% |
-| **B** | 0 projects | 0% |
+| **B** | 4 projects | 44% |
 | **C** | 2 projects | 22% |
-| **D** | 2 projects | 22% |
-| **F** | 2 projects | 22% |
+| **D** | 0 projects | 0% |
+| **F** | 0 projects | 0% |
 
 ### Top Performers
 
@@ -127,39 +127,39 @@ Where:
    - 978 LOC across 29 files
    - Average complexity: 4.6
 
-2. **Express** (Grade A, 91/100)
+2. **Express** (Grade A, 94/100)
    - Excellent: Well-structured web framework
    - 1,135 LOC across 7 files
    - Average complexity: 7.4
 
-3. **Chalk** (Grade A, 90/100)
+3. **Chalk** (Grade A, 93/100)
    - Excellent: Clean terminal styling library
    - 475 LOC across 5 files
    - Average complexity: 8.0
 
 ### Performance Statistics
-- **Analysis speed**: 22,719 lines/second
-- **Average code quality**: 69/100
-- **Average duplication rate**: 4.4%
-- **Most critical issues**: Complexity (1,121 issues found)
+- **Analysis speed**: 9,630 lines/second
+- **Average code quality**: 86/100
+- **Average duplication rate**: 1.7%
+- **Most critical issues**: Deep nesting (2,829 issues found)
 - **Largest project**: TypeScript (316,214 LOC, 697 files)
 
 ### Project Size Analysis
 
 **Small Projects** (lodash, chalk, uuid):
-- Average score: 72/100
+- Average score: 91/100
 - Average complexity: 37.0
-- Observation: Small size doesn't guarantee quality
+- Observation: Small projects achieving excellent quality
 
 **Medium Projects** (express, vue, jest):
-- Average score: 75/100
+- Average score: 84/100
 - Average complexity: 18.3
 - Observation: Best balance of features vs maintainability
 
 **Large Projects** (angular, eslint, typescript):
-- Average score: 59/100
+- Average score: 82/100
 - Average complexity: 43.4
-- Observation: Scale challenges impact quality metrics
+- Observation: Large projects maintaining high quality standards
 
 ## 🔍 Understanding the Results: Context Matters
 
@@ -232,8 +232,9 @@ We prioritize **actionable insights** over structural pattern detection.
 ## 📁 Benchmark History
 
 ### Recent Benchmarks
-- `benchmark-report-prod-2025-07-16.md` - **Latest** v0.7.0 production analysis
-- `benchmark-summary-prod-2025-07-16.json` - Machine-readable summary
+- `benchmark-report-prod-2025-07-21.md` - **Latest** v0.7.0 production analysis
+- `benchmark-summary-prod-2025-07-21.json` - Machine-readable summary
+- `benchmark-report-full-2025-07-21.md` - Complete codebase analysis (including tests)
 
 ## 🎯 Benchmark Validation
 
@@ -252,7 +253,7 @@ We prioritize **actionable insights** over structural pattern detection.
 - **677K+ lines analyzed** across diverse project types
 - **100% success rate** on complex, real-world codebases
 - **Consistent results** across multiple benchmark runs
-- **Performance proven** at 22K+ lines/second analysis speed
+- **Performance proven** at 9K+ lines/second analysis speed with v0.7.0 enhancements
 
 ---
 

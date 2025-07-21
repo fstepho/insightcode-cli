@@ -5,21 +5,29 @@ All notable changes to InsightCode CLI will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.0] - 2025-07-17
+## [0.7.0] - 2025-07-21
 
 ### Added
-- **Enhanced Report Generator**: Function-level critical issue tracking
+- **Enhanced Report Generator**: Function-level critical issue tracking with centralized config
 - **Improved Markdown Generation**: Better insights and findings presentation
-- **Centralized Grading Config**: Introduced GRADE_CONFIG for consistency
+- **Centralized Grading Config**: Introduced GRADE_CONFIG for consistency across components
 - **Unified Grade Type**: Added type-safe Grade type definition
 - **Function-Level Analysis**: Enhanced complexity metrics with distinct operation counting
+- **Strict Duplication Mode**: Added strict duplication detection with rigorous thresholds
+- **Enhanced Scoring Utilities**: New centralized scoring functions and utilities
 
 ### Changed
-- **Refactored Configurations**: Centralized duplication thresholds and scoring logic
-- **Removed Legacy Configs**: Simplified codebase for clarity
+- **Refactored Reporter and Scoring Modules**: Improved structure and harmonization for better maintainability
+- **Terminology Harmonization**: Updated scoring and analysis terminology for clarity and consistency
+- **Configuration Tests**: Refactored duplication mode tests to use new scoring utilities and configurations
+- **Dependencies Update**: Updated package.json and package-lock.json for improved dependencies and features
+- **Removed Legacy Configs**: Simplified codebase for clarity and reduced technical debt
 - **Aligned Grading**: Grading now aligned with industry standards
 - **Improved Type Definitions**: Separated file-level vs. function-level issues
-- **Updated Version**: Project version updated to 0.7.0 across all components
+
+### Fixed
+- **Commit Message Handling**: Improved processing and validation of commit messages
+- **Session Log Updates**: Enhanced session logging with recent terminology changes
 
 
 ## [0.6.0] - 2025-07-13
