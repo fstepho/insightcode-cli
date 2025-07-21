@@ -1,0 +1,264 @@
+{
+  "project": "chalk",
+  "repo": "https://github.com/chalk/chalk.git",
+  "type": "utility library",
+  "stars": "22.3k",
+  "stableVersion": "v5.4.1",
+  "description": "Terminal string styling library",
+  "category": "small",
+  "emblematicFiles": {
+    "coreFiles": [
+      "source/index.js",
+      "index.js"
+    ],
+    "architecturalFiles": [
+      "source/templates.js"
+    ],
+    "performanceCriticalFiles": [
+      "source/utilities.js"
+    ],
+    "complexAlgorithmFiles": [
+      "source/vendor/ansi-styles/index.js"
+    ]
+  },
+  "analysis": {
+    "details": [
+      {
+        "file": "benchmark.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 41,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "source/index.d.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 89,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "source/index.js",
+        "metrics": {
+          "complexity": 30,
+          "loc": 169,
+          "functionCount": 10,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "location": {
+              "file": "source/index.js",
+              "line": 1
+            },
+            "description": "File complexity 30 exceeds critical threshold",
+            "threshold": 50,
+            "excessRatio": 0.6
+          }
+        ],
+        "functions": [
+          {
+            "name": "<anonymous>",
+            "line": 35,
+            "endLine": 38,
+            "complexity": 1,
+            "loc": 4,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "source/index.js",
+                  "line": 35,
+                  "function": "<anonymous>"
+                },
+                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "applyOptions",
+            "line": 24,
+            "endLine": 32,
+            "complexity": 8,
+            "loc": 9,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "source/index.js",
+                  "line": 24,
+                  "function": "applyOptions"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          },
+          {
+            "name": "getModelAnsi",
+            "line": 74,
+            "endLine": 92,
+            "complexity": 5,
+            "loc": 19,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "source/index.js",
+                  "line": 74,
+                  "function": "getModelAnsi"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "applyStyle",
+            "line": 168,
+            "endLine": 200,
+            "complexity": 8,
+            "loc": 33,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "source/index.js",
+                  "line": 168,
+                  "function": "applyStyle"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 67,
+          "isInCycle": false
+        },
+        "healthScore": 46
+      },
+      {
+        "file": "source/index.test-d.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 148,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "source/utilities.js",
+        "metrics": {
+          "complexity": 7,
+          "loc": 28,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "stringEncaseCRLFWithFirstIndex",
+            "line": 21,
+            "endLine": 33,
+            "complexity": 4,
+            "loc": 13,
+            "parameterCount": 4,
+            "issues": []
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 67,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      }
+    ],
+    "overview": {
+      "grade": "A",
+      "statistics": {
+        "totalFiles": 5,
+        "totalLOC": 475,
+        "avgComplexity": 8,
+        "avgLOC": 95,
+        "avgDuplicationRatio": 0
+      },
+      "scores": {
+        "complexity": 84,
+        "duplication": 100,
+        "maintainability": 100,
+        "overall": 93
+      },
+      "summary": "Good overall health with 1 file requiring attention"
+    },
+    "context": {
+      "project": {
+        "name": "chalk",
+        "path": "/Users/fstepho/dev/insightcode-cli/temp-analysis/chalk",
+        "version": "5.4.1",
+        "repository": "chalk/chalk"
+      },
+      "analysis": {
+        "timestamp": "2025-07-21T16:18:18.369Z",
+        "durationMs": 64191,
+        "toolVersion": "0.7.0",
+        "filesAnalyzed": 5,
+        "duplicationMode": "legacy"
+      }
+    }
+  },
+  "durationMs": 64226
+}

@@ -1,0 +1,1517 @@
+{
+  "project": "uuid",
+  "repo": "https://github.com/uuidjs/uuid.git",
+  "type": "utility library",
+  "stars": "15k",
+  "stableVersion": "v11.1.0",
+  "description": "UUID generation library",
+  "category": "small",
+  "emblematicFiles": {
+    "coreFiles": [
+      "dist/index.js",
+      "src/index.js"
+    ],
+    "architecturalFiles": [
+      "src/v1.js",
+      "src/v4.js"
+    ],
+    "performanceCriticalFiles": [
+      "src/rng.js"
+    ],
+    "complexAlgorithmFiles": [
+      "src/v3.js",
+      "src/v5.js"
+    ]
+  },
+  "analysis": {
+    "details": [
+      {
+        "file": "prettier.config.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 7,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "wdio.conf.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 82,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/index.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 15,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 15,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/max.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/md5-browser.ts",
+        "metrics": {
+          "complexity": 16,
+          "loc": 135,
+          "functionCount": 12,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "location": {
+              "file": "src/md5-browser.ts",
+              "line": 1
+            },
+            "description": "File complexity 16 exceeds high threshold",
+            "threshold": 20,
+            "excessRatio": 0.8
+          }
+        ],
+        "functions": [
+          {
+            "name": "wordsToMd5",
+            "line": 54,
+            "endLine": 148,
+            "complexity": 2,
+            "loc": 95,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "src/md5-browser.ts",
+                  "line": 54,
+                  "function": "wordsToMd5"
+                },
+                "description": "Function has 95 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.9
+              }
+            ]
+          },
+          {
+            "name": "md5cmn",
+            "line": 185,
+            "endLine": 187,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 6,
+            "issues": []
+          },
+          {
+            "name": "md5ff",
+            "line": 189,
+            "endLine": 191,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "src/md5-browser.ts",
+                  "line": 189,
+                  "function": "md5ff"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern"
+              }
+            ]
+          },
+          {
+            "name": "md5gg",
+            "line": 193,
+            "endLine": 195,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "src/md5-browser.ts",
+                  "line": 193,
+                  "function": "md5gg"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern"
+              }
+            ]
+          },
+          {
+            "name": "md5hh",
+            "line": 197,
+            "endLine": 199,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "src/md5-browser.ts",
+                  "line": 197,
+                  "function": "md5hh"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern"
+              }
+            ]
+          },
+          {
+            "name": "md5ii",
+            "line": 201,
+            "endLine": 203,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "src/md5-browser.ts",
+                  "line": 201,
+                  "function": "md5ii"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 70
+      },
+      {
+        "file": "src/md5.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 10,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "md5",
+            "line": 3,
+            "endLine": 11,
+            "complexity": 3,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/md5.ts",
+                  "line": 3,
+                  "function": "md5"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/native-browser.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 3,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/native.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 2,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/nil.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/parse.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 26,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "parse",
+            "line": 3,
+            "endLine": 36,
+            "complexity": 3,
+            "loc": 34,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "src/parse.ts",
+                  "line": 3,
+                  "function": "parse"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 4,
+          "instability": 0.2,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 89,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/regex.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/rng-browser.ts",
+        "metrics": {
+          "complexity": 5,
+          "loc": 13,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "rng",
+            "line": 9,
+            "endLine": 22,
+            "complexity": 5,
+            "loc": 14,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/rng-browser.ts",
+                  "line": 9,
+                  "function": "rng"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/rng.ts",
+        "metrics": {
+          "complexity": 2,
+          "loc": 10,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 3,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 82,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/sha1-browser.ts",
+        "metrics": {
+          "complexity": 13,
+          "loc": 91,
+          "functionCount": 3,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "location": {
+              "file": "src/sha1-browser.ts",
+              "line": 1
+            },
+            "description": "File complexity 13 exceeds medium threshold",
+            "threshold": 15,
+            "excessRatio": 0.87
+          }
+        ],
+        "functions": [
+          {
+            "name": "f",
+            "line": 3,
+            "endLine": 14,
+            "complexity": 5,
+            "loc": 12,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/sha1-browser.ts",
+                  "line": 3,
+                  "function": "f"
+                },
+                "description": "Function name \"f\" is too short, use descriptive names"
+              }
+            ]
+          },
+          {
+            "name": "ROTL",
+            "line": 16,
+            "endLine": 18,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/sha1-browser.ts",
+                  "line": 16,
+                  "function": "ROTL"
+                },
+                "description": "Function name \"ROTL\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "sha1",
+            "line": 20,
+            "endLine": 108,
+            "complexity": 7,
+            "loc": 89,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "src/sha1-browser.ts",
+                  "line": 20,
+                  "function": "sha1"
+                },
+                "description": "Function has 89 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.78
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/sha1-browser.ts",
+                  "line": 20,
+                  "function": "sha1"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 85
+      },
+      {
+        "file": "src/sha1.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 10,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "sha1",
+            "line": 3,
+            "endLine": 11,
+            "complexity": 3,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/sha1.ts",
+                  "line": 3,
+                  "function": "sha1"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/stringify.ts",
+        "metrics": {
+          "complexity": 4,
+          "loc": 37,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "unsafeStringify",
+            "line": 13,
+            "endLine": 41,
+            "complexity": 1,
+            "loc": 29,
+            "parameterCount": 2,
+            "issues": []
+          },
+          {
+            "name": "stringify",
+            "line": 43,
+            "endLine": 56,
+            "complexity": 3,
+            "loc": 14,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "src/stringify.ts",
+                  "line": 43,
+                  "function": "stringify"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 8,
+          "instability": 0.11,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 96,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/types.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 21,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 10,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 100,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/uuid-bin.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 72,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "usage",
+            "line": 10,
+            "endLine": 23,
+            "complexity": 1,
+            "loc": 14,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/uuid-bin.ts",
+                  "line": 10,
+                  "function": "usage"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 6,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/v1.ts",
+        "metrics": {
+          "complexity": 21,
+          "loc": 120,
+          "functionCount": 3,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "location": {
+              "file": "src/v1.ts",
+              "line": 1
+            },
+            "description": "File complexity 21 exceeds critical threshold",
+            "threshold": 50,
+            "excessRatio": 0.42
+          }
+        ],
+        "functions": [
+          {
+            "name": "v1",
+            "line": 33,
+            "endLine": 85,
+            "complexity": 7,
+            "loc": 53,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 33,
+                  "function": "v1"
+                },
+                "description": "Function has 53 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.06
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 33,
+                  "function": "v1"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 33,
+                  "function": "v1"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 33,
+                  "function": "v1"
+                },
+                "description": "Function name \"v1\" is too short, use descriptive names"
+              }
+            ]
+          },
+          {
+            "name": "updateV1State",
+            "line": 89,
+            "endLine": 139,
+            "complexity": 6,
+            "loc": 51,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 89,
+                  "function": "updateV1State"
+                },
+                "description": "Function has 51 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.02
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 89,
+                  "function": "updateV1State"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "v1Bytes",
+            "line": 141,
+            "endLine": 201,
+            "complexity": 8,
+            "loc": 61,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 141,
+                  "function": "v1Bytes"
+                },
+                "description": "Function has 61 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.22
+              },
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 141,
+                  "function": "v1Bytes"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern"
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 141,
+                  "function": "v1Bytes"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 141,
+                  "function": "v1Bytes"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 141,
+                  "function": "v1Bytes"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 3,
+          "instability": 0.5,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 82,
+          "isInCycle": false
+        },
+        "healthScore": 50
+      },
+      {
+        "file": "src/v1ToV6.ts",
+        "metrics": {
+          "complexity": 4,
+          "loc": 30,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "_v1ToV6",
+            "line": 23,
+            "endLine": 45,
+            "complexity": 1,
+            "loc": 23,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v1ToV6.ts",
+                  "line": 23,
+                  "function": "_v1ToV6"
+                },
+                "description": "Function name \"_v1ToV6\" should start with a verb in camelCase"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 2,
+          "instability": 0.6,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/v3.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 27,
+          "functionCount": 1,
+          "duplicationRatio": 0.5
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "low",
+            "location": {
+              "file": "src/v3.ts",
+              "line": 1
+            },
+            "description": "Duplication ratio 50.0% exceeds excellent threshold",
+            "threshold": 0.15,
+            "excessRatio": 3.33
+          }
+        ],
+        "functions": [
+          {
+            "name": "v3",
+            "line": 19,
+            "endLine": 26,
+            "complexity": 1,
+            "loc": 8,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v3.ts",
+                  "line": 19,
+                  "function": "v3"
+                },
+                "description": "Function name \"v3\" is too short, use descriptive names"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 2,
+          "instability": 0.6,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 23
+      },
+      {
+        "file": "src/v35.ts",
+        "metrics": {
+          "complexity": 11,
+          "loc": 45,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "location": {
+              "file": "src/v35.ts",
+              "line": 1
+            },
+            "description": "File complexity 11 exceeds medium threshold",
+            "threshold": 15,
+            "excessRatio": 0.73
+          }
+        ],
+        "functions": [
+          {
+            "name": "v35",
+            "line": 23,
+            "endLine": 64,
+            "complexity": 9,
+            "loc": 42,
+            "parameterCount": 6,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v35.ts",
+                  "line": 23,
+                  "function": "v35"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v35.ts",
+                  "line": 23,
+                  "function": "v35"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 2,
+          "instability": 0.6,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 91
+      },
+      {
+        "file": "src/v4.ts",
+        "metrics": {
+          "complexity": 13,
+          "loc": 38,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "location": {
+              "file": "src/v4.ts",
+              "line": 1
+            },
+            "description": "File complexity 13 exceeds medium threshold",
+            "threshold": 15,
+            "excessRatio": 0.87
+          }
+        ],
+        "functions": [
+          {
+            "name": "v4",
+            "line": 12,
+            "endLine": 47,
+            "complexity": 13,
+            "loc": 36,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "high-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v4.ts",
+                  "line": 12,
+                  "function": "v4"
+                },
+                "description": "Complexity 13 exceeds medium threshold of 10",
+                "threshold": 10,
+                "excessRatio": 1.3
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v4.ts",
+                  "line": 12,
+                  "function": "v4"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v4.ts",
+                  "line": 12,
+                  "function": "v4"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v4.ts",
+                  "line": 12,
+                  "function": "v4"
+                },
+                "description": "Function name \"v4\" is too short, use descriptive names"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 4,
+          "incomingDependencies": 2,
+          "instability": 0.67,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 85
+      },
+      {
+        "file": "src/v5.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 27,
+          "functionCount": 1,
+          "duplicationRatio": 0.5
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "low",
+            "location": {
+              "file": "src/v5.ts",
+              "line": 1
+            },
+            "description": "Duplication ratio 50.0% exceeds excellent threshold",
+            "threshold": 0.15,
+            "excessRatio": 3.33
+          }
+        ],
+        "functions": [
+          {
+            "name": "v5",
+            "line": 19,
+            "endLine": 26,
+            "complexity": 1,
+            "loc": 8,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v5.ts",
+                  "line": 19,
+                  "function": "v5"
+                },
+                "description": "Function name \"v5\" is too short, use descriptive names"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 2,
+          "instability": 0.6,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 23
+      },
+      {
+        "file": "src/v6.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 28,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "v6",
+            "line": 12,
+            "endLine": 37,
+            "complexity": 3,
+            "loc": 26,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v6.ts",
+                  "line": 12,
+                  "function": "v6"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v6.ts",
+                  "line": 12,
+                  "function": "v6"
+                },
+                "description": "Function name \"v6\" is too short, use descriptive names"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 4,
+          "incomingDependencies": 2,
+          "instability": 0.67,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/v6ToV1.ts",
+        "metrics": {
+          "complexity": 4,
+          "loc": 30,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "_v6ToV1",
+            "line": 23,
+            "endLine": 45,
+            "complexity": 1,
+            "loc": 23,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v6ToV1.ts",
+                  "line": 23,
+                  "function": "_v6ToV1"
+                },
+                "description": "Function name \"_v6ToV1\" should start with a verb in camelCase"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 1,
+          "instability": 0.75,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/v7.ts",
+        "metrics": {
+          "complexity": 12,
+          "loc": 83,
+          "functionCount": 3,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "location": {
+              "file": "src/v7.ts",
+              "line": 1
+            },
+            "description": "File complexity 12 exceeds medium threshold",
+            "threshold": 15,
+            "excessRatio": 0.8
+          }
+        ],
+        "functions": [
+          {
+            "name": "v7",
+            "line": 18,
+            "endLine": 45,
+            "complexity": 2,
+            "loc": 28,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v7.ts",
+                  "line": 18,
+                  "function": "v7"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v7.ts",
+                  "line": 18,
+                  "function": "v7"
+                },
+                "description": "Function name \"v7\" is too short, use descriptive names"
+              }
+            ]
+          },
+          {
+            "name": "updateV7State",
+            "line": 49,
+            "endLine": 70,
+            "complexity": 3,
+            "loc": 22,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v7.ts",
+                  "line": 49,
+                  "function": "updateV7State"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "v7Bytes",
+            "line": 72,
+            "endLine": 121,
+            "complexity": 7,
+            "loc": 50,
+            "parameterCount": 5,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v7.ts",
+                  "line": 72,
+                  "function": "v7Bytes"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v7.ts",
+                  "line": 72,
+                  "function": "v7Bytes"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v7.ts",
+                  "line": 72,
+                  "function": "v7Bytes"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 3,
+          "incomingDependencies": 2,
+          "instability": 0.6,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 57,
+          "isInCycle": false
+        },
+        "healthScore": 88
+      },
+      {
+        "file": "src/validate.ts",
+        "metrics": {
+          "complexity": 2,
+          "loc": 5,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 4,
+          "instability": 0.2,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 89,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/version.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 8,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "version",
+            "line": 3,
+            "endLine": 9,
+            "complexity": 3,
+            "loc": 7,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "src/version.ts",
+                  "line": 3,
+                  "function": "version"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 29,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      }
+    ],
+    "overview": {
+      "grade": "A",
+      "statistics": {
+        "totalFiles": 29,
+        "totalLOC": 978,
+        "avgComplexity": 4.62,
+        "avgLOC": 34,
+        "avgDuplicationRatio": 0.03
+      },
+      "scores": {
+        "complexity": 97,
+        "duplication": 92,
+        "maintainability": 100,
+        "overall": 97
+      },
+      "summary": "4 critical files found requiring attention"
+    },
+    "context": {
+      "project": {
+        "name": "uuid",
+        "path": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid",
+        "version": "11.1.0",
+        "repository": "https://github.com/uuidjs/uuid.git"
+      },
+      "analysis": {
+        "timestamp": "2025-07-21T16:18:18.666Z",
+        "durationMs": 64487,
+        "toolVersion": "0.7.0",
+        "filesAnalyzed": 29,
+        "duplicationMode": "legacy"
+      }
+    }
+  },
+  "durationMs": 64520
+}
