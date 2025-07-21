@@ -2,7 +2,7 @@
  * JSON replacer function to filter out absolutePath from output
  * and format numeric values
  */
-export function createJsonReplacer(filterAbsolutePath: boolean = true) {
+function createJsonReplacer(filterAbsolutePath: boolean = true) {
   return function(key: string, val: unknown): unknown {
     // Filter out absolutePath from output if requested
     if (filterAbsolutePath && key === 'absolutePath') return undefined;

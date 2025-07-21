@@ -18,11 +18,6 @@ export type Ratio = number;
 export type Score = number;
 
 /**
- * Count value constrained to >= 0
- */
-export type Count = number;
-
-/**
  * Validates and returns a ratio (0-1)
  */
 export function validateRatio(value: number): Ratio {
@@ -50,17 +45,6 @@ export function validateScore(value: number): Score {
  */
 export type DuplicationMode = 'legacy' | 'strict';
 
-/**
- * Duplication mode configuration
- */
-export interface DuplicationConfig {
-  mode: DuplicationMode;
-  thresholds: {
-    excellent: number;
-    high: number;
-    critical: number;
-  };
-}
 
 // ==================== ENUMS ====================
 
@@ -176,7 +160,7 @@ export type FileIssueType = BaseIssueType;
 /**
  * Function-level issue types (base metrics + patterns)
  */
-export type FunctionIssueType = BaseIssueType | FunctionPatternType;
+export type FunctionIssueType = FunctionPatternType;
 
 /**
  * All possible issue types in the unified architecture
@@ -236,7 +220,7 @@ export interface FunctionAnalysis {
  * Unified issue interface for both file-level and function-level issues
  * Maintains backward compatibility while supporting the new separation
  */
-export interface CodeIssue {
+export interface FunctionQualityIssue {
   type: IssueType;
   severity: 'critical' | 'high' | 'medium' | 'low';
   location: {
@@ -290,9 +274,6 @@ export type TestingPattern =
   | 'integration-test'
   | 'unit-test';
 
-// Legacy alias for backward compatibility during transition
-export type FunctionQualityIssue = CodeIssue;
-
 // ==================== CLI & CONFIGURATION ====================
 
 /**
@@ -301,7 +282,7 @@ export type FunctionQualityIssue = CodeIssue;
 export interface AnalysisOptions {
   format: 'json' | 'ci' | 'critical' | 'summary' | 'markdown' | 'terminal';
   projectPath: string;
-  thresholds: ThresholdConfig;
+  // thresholds removed - using global configurations from scoring.utils.ts instead
   production?: boolean;
   strictDuplication?: boolean;
 }
@@ -318,29 +299,7 @@ export interface CliOptions {
 /**
  * Configuration thresholds for issue detection
  */
-export interface ThresholdConfig {
-  complexity: {
-    production: { medium: number; high: number; critical?: number };
-    test: { medium: number; high: number; critical?: number };
-    utility: { medium: number; high: number; critical?: number };
-    example?: { medium: number; high: number; critical?: number };
-    config?: { medium: number; high: number; critical?: number };
-  };
-  size: {
-    production: { medium: number; high: number; critical?: number };
-    test: { medium: number; high: number; critical?: number };
-    utility: { medium: number; high: number; critical?: number };
-    example?: { medium: number; high: number; critical?: number };
-    config?: { medium: number; high: number; critical?: number };
-  };
-  duplication: {
-    production: { medium: number; high: number; critical?: number };
-    test: { medium: number; high: number; critical?: number };
-    utility: { medium: number; high: number; critical?: number };
-    example?: { medium: number; high: number; critical?: number };
-    config?: { medium: number; high: number; critical?: number };
-  };
-}
+// ThresholdConfig removed - using table-driven configurations from scoring.utils.ts instead
 
 // ==================== OUTPUT FORMATS ====================
 
@@ -351,10 +310,9 @@ export interface CiFormat {
   passed: boolean;
   grade: Grade;
   score: Score;
-  criticalCount: number;
+  issues: number;
+  critical: number;
 }
-
-
 
 /**
  * Configuration pour l'analyse universelle de dépendances.

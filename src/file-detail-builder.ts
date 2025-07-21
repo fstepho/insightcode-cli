@@ -2,7 +2,8 @@
 
 import { FileDetail, FileIssue } from './types';
 import { ASTBuildResult } from './ast-builder';
-import { getConfig } from './config.manager';
+import { COMPLEXITY_CONFIG, getComplexityConfig } from './scoring.utils';
+import { FILE_SIZE_THRESHOLDS } from './thresholds.constants';
 import { SourceFile, SyntaxKind, Node } from 'ts-morph';
 import { isFunctionLike } from './ast-helpers';
 import { functionAnalyzer } from './function-analyzer';
@@ -14,7 +15,7 @@ export interface FileDetailBuildOptions {
 /**
  * Extracts FileDetail information from AST data
  */
-export class FileDetailBuilder {
+class FileDetailBuilder {
 
   async build(astData: ASTBuildResult, options: FileDetailBuildOptions): Promise<FileDetail[]> {
     const fileDetails: FileDetail[] = [];
@@ -456,88 +457,49 @@ export class FileDetailBuilder {
    */
   private extractIssues(sf: SourceFile, fileComplexity: number, fileLOC: number, fileType: string, filePath: string): { fileIssues: FileIssue[] } {
     const fileIssues: FileIssue[] = [];
-    const thresholds = getConfig();
     
-    // Get thresholds for this file type
-    const complexityThresholds = thresholds.complexity[fileType as keyof typeof thresholds.complexity] || thresholds.complexity.production;
-    const sizeThresholds = thresholds.size[fileType as keyof typeof thresholds.size] || thresholds.size.production;
+    // File-level complexity issues - using global COMPLEXITY_CONFIG
+    const complexityConfig = getComplexityConfig(fileComplexity);
     
-    // File-level complexity issues
-    if (complexityThresholds.critical && fileComplexity > complexityThresholds.critical) {
+    // Only create issue if complexity exceeds "low" threshold (>10)
+    if (fileComplexity > COMPLEXITY_CONFIG[0].maxThreshold) {
       fileIssues.push({
         type: 'complexity',
-        severity: 'critical',
+        severity: complexityConfig.severity,
         location: {
           file: filePath,
           line: 1
         },
-        description: `File complexity ${fileComplexity} exceeds critical threshold`,
-        threshold: complexityThresholds.critical,
-        excessRatio: fileComplexity / complexityThresholds.critical
-      });
-    } else if (fileComplexity > complexityThresholds.high) {
-      fileIssues.push({
-        type: 'complexity',
-        severity: 'high',
-        location: {
-          file: filePath,
-          line: 1
-        },
-        description: `File complexity ${fileComplexity} exceeds high threshold`,
-        threshold: complexityThresholds.high,
-        excessRatio: fileComplexity / complexityThresholds.high
-      });
-    } else if (fileComplexity > complexityThresholds.medium) {
-      fileIssues.push({
-        type: 'complexity',
-        severity: 'medium',
-        location: {
-          file: filePath,
-          line: 1
-        },
-        description: `File complexity ${fileComplexity} exceeds medium threshold`,
-        threshold: complexityThresholds.medium,
-        excessRatio: fileComplexity / complexityThresholds.medium
+        description: `File complexity ${fileComplexity} exceeds ${complexityConfig.severity} threshold`,
+        threshold: complexityConfig.maxThreshold,
+        excessRatio: fileComplexity / complexityConfig.maxThreshold
       });
     }
     
-    // File-level size issues
-    if (sizeThresholds.critical && fileLOC > sizeThresholds.critical) {
-      fileIssues.push({
-        type: 'size',
-        severity: 'critical',
-        location: {
-          file: filePath,
-          line: 1
-        },
-        description: `File size ${fileLOC} lines exceeds critical threshold`,
-        threshold: sizeThresholds.critical,
-        excessRatio: fileLOC / sizeThresholds.critical
-      });
-    } else if (fileLOC > sizeThresholds.high) {
-      fileIssues.push({
-        type: 'size',
-        severity: 'high',
-        location: {
-          file: filePath,
-          line: 1
-        },
-        description: `File size ${fileLOC} lines exceeds high threshold`,
-        threshold: sizeThresholds.high,
-        excessRatio: fileLOC / sizeThresholds.high
-      });
-    } else if (fileLOC > sizeThresholds.medium) {
-      fileIssues.push({
-        type: 'size',
-        severity: 'medium',
-        location: {
-          file: filePath,
-          line: 1
-        },
-        description: `File size ${fileLOC} lines exceeds medium threshold`,
-        threshold: sizeThresholds.medium,
-        excessRatio: fileLOC / sizeThresholds.medium
-      });
+    // File-level size issues - using global FILE_SIZE_THRESHOLDS
+    // Define progressive thresholds similar to complexity
+    const sizeThresholds = [
+      { threshold: 200, severity: 'medium' as const },   // Medium: 200-300 LOC (Clean Code recommendation)
+      { threshold: FILE_SIZE_THRESHOLDS.LARGE, severity: 'high' as const },      // High: 300-1000 LOC
+      { threshold: FILE_SIZE_THRESHOLDS.EXTREMELY_LARGE, severity: 'critical' as const } // Critical: >1000 LOC
+    ];
+    
+    // Find the appropriate severity based on file size
+    for (const sizeConfig of sizeThresholds.reverse()) {
+      if (fileLOC > sizeConfig.threshold) {
+        fileIssues.push({
+          type: 'size',
+          severity: sizeConfig.severity,
+          location: {
+            file: filePath,
+            line: 1
+          },
+          description: `File size ${fileLOC} lines exceeds ${sizeConfig.severity} threshold`,
+          threshold: sizeConfig.threshold,
+          excessRatio: fileLOC / sizeConfig.threshold
+        });
+        break; // Only add one issue for size
+      }
     }
 
     // Function-level issues are now handled by function-analyzer.ts

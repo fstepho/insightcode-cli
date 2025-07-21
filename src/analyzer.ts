@@ -13,12 +13,12 @@ import {
 // Export AnalysisOptions for other modules
 export { AnalysisOptions } from './types';
 import { astBuilder, ASTBuildOptions, ASTBuildResult } from './ast-builder';
-import { fileDetailBuilder } from './file-detail-builder';
+import { fileDetailBuilder, FileDetailBuildOptions } from './file-detail-builder';
 import { detectDuplication } from './duplication';
 import { UniversalDependencyAnalyzer } from './dependency-analyzer';
 import { calculateHealthScore } from './scoring';
 // createDuplicationConfig removed - use mode string directly
-import { getConfig } from './config.manager';
+// config.manager removed - using global configurations from scoring.utils.ts
 import { OverviewCalculator } from './analyzer/OverviewCalculator';
 import { ContextGenerator } from './analyzer/ContextGenerator';
 
@@ -97,10 +97,10 @@ async function executeFileDetailStep(context: AnalysisContext): Promise<void> {
   }
 
   if (!context.astData) throw new Error('AST data not available');
-  
-  context.rawFileDetails = await fileDetailBuilder.build(context.astData, {
-    projectPath: context.options.projectPath
-  });
+  const options: FileDetailBuildOptions = {
+    projectPath: context.inputPath
+  };
+  context.rawFileDetails = await fileDetailBuilder.build(context.astData, options);
 }
 
 /**
@@ -120,10 +120,9 @@ async function executeMetricsProcessingStep(context: AnalysisContext): Promise<v
     throw new Error('Raw file details or AST data not available');
   }
   
-  const duplicationMode = context.options.strictDuplication ? 'strict' : 'legacy';
-  
   // 1. Detect duplication
-  const filesWithDuplication = detectDuplication(context.rawFileDetails, getConfig());
+  const duplicationMode = context.options.strictDuplication ? 'strict' : 'legacy';
+  const filesWithDuplication = detectDuplication(context.rawFileDetails, duplicationMode);
   
   // 2. Analyze dependencies  
   // Use the analysis path as project root, not the git repo root

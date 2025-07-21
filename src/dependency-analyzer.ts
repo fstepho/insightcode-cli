@@ -10,14 +10,8 @@ import {
   FileDetail,
   FrameworkHint 
 } from './types';
-import { DependencyResolver } from './dependency-resolver';
+import { DependencyResolver, ImportInfo } from './dependency-resolver';
 import { DependencyGraph } from './dependency-graph';
-
-// Type helper pour la migration
-export type DependencyAnalysisFunction = (
-  files: FileDetail[], 
-  projectRoot?: string
-) => Promise<Map<string, number>>;
 
 /**
  * Analyseur universel de dépendances pour projets open source.
@@ -271,7 +265,7 @@ export class UniversalDependencyAnalyzer {
     }
 
     // Extraire les imports
-    const imports = this.resolver.extractImports(sourceFile);
+    const imports: ImportInfo[] = this.resolver.extractImports(sourceFile);
     
     // Résoudre tous les imports
     const resolutionPromises = imports.map(async importInfo => {

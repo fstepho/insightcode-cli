@@ -11,7 +11,7 @@ export interface ImportInfo {
   resolved: string | null;
 }
 
-export interface ResolverConfig {
+interface ResolverConfig {
   extensions: string[];
   aliases: Record<string, string>;
   followSymlinks: boolean;

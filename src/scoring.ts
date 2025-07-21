@@ -2,13 +2,13 @@
 
 import { FileIssue, FileDetail } from './types';
 import { DUPLICATION_LEVELS } from './scoring.utils';
-import { FILE_SIZE_THRESHOLDS, COMPLEXITY_SCORING_THRESHOLDS, DUPLICATION_SCORING_THRESHOLDS } from './thresholds.constants';
+import { COMPLEXITY_SCORING_THRESHOLDS } from './thresholds.constants';
 import {
   PROJECT_SCORING_WEIGHTS,
   MAINTAINABILITY_SCORING_THRESHOLDS,
   HEALTH_PENALTY_CONSTANTS
 } from './thresholds.constants';
-import { percentageToRatio, ratioToPercentage } from './scoring.utils';
+import { percentageToRatio, ratioToPercentage, DUPLICATION_SCORING } from './scoring.utils';
 
 /**
  * Pure and autonomous functions for calculating scores from raw metrics.
@@ -102,8 +102,8 @@ export function calculateDuplicationScore(duplicationRatio: number, duplicationM
   if (percentage <= excellentThreshold) return 100;
   
   // Exponential decay beyond excellent threshold, using DUPLICATION_SCORING constants
-  const exponentialMultiplier = DUPLICATION_SCORING_THRESHOLDS.EXPONENTIAL_MULTIPLIER;
-  const exponentialPower = DUPLICATION_SCORING_THRESHOLDS.EXPONENTIAL_POWER;
+  const exponentialMultiplier = DUPLICATION_SCORING.EXPONENTIAL_MULTIPLIER;
+  const exponentialPower = DUPLICATION_SCORING.EXPONENTIAL_POWER;
   
   const score = 100 * Math.exp(
     -exponentialMultiplier * 
@@ -187,7 +187,7 @@ function getComplexityPenalty(complexity: number): number {
   // For extreme complexity (>100), add catastrophic penalties to emphasize technical debt
   // This makes complexity 1000+ clearly distinguishable from complexity 100
   if (complexity > 100) {
-    const extremePenalty = Math.pow((complexity - 100) / 100, HEALTH_PENALTY_CONSTANTS.COMPLEXITY.EXPONENTIAL_POWER) * 50;
+    const extremePenalty = Math.pow((complexity - 100) / 100, HEALTH_PENALTY_CONSTANTS.COMPLEXITY.EXPONENTIAL_POWER) * HEALTH_PENALTY_CONSTANTS.COMPLEXITY.EXPONENTIAL_MULTIPLIER;
     return basePenalty + extremePenalty;
   }
   
@@ -228,38 +228,35 @@ export function getDuplicationPenalty(duplicationRatio: number, duplicationMode:
 }
 
 function getSizePenalty(loc: number): number {
-  const constants = HEALTH_PENALTY_CONSTANTS.SIZE;
   
-  if (loc <= constants.EXCELLENT_THRESHOLD) return 0;
+  if (loc <= HEALTH_PENALTY_CONSTANTS.SIZE.EXCELLENT_THRESHOLD) return 0;
   
   // Progressive penalty following internal convention (Clean Code inspired)
-  if (loc <= constants.HIGH_THRESHOLD) {
+  if (loc <= HEALTH_PENALTY_CONSTANTS.SIZE.HIGH_THRESHOLD) {
     // Linear penalty up to 500 LOC
-    return (loc - constants.EXCELLENT_THRESHOLD) / constants.LINEAR_DIVISOR;
+    return (loc - HEALTH_PENALTY_CONSTANTS.SIZE.EXCELLENT_THRESHOLD) / HEALTH_PENALTY_CONSTANTS.SIZE.LINEAR_DIVISOR;
   }
   
   // Exponential penalty for massive files - NO CAP!
   // Files with 5000+ LOC should be severely penalized
-  const basePenalty = constants.LINEAR_MAX_PENALTY;
+  const basePenalty = HEALTH_PENALTY_CONSTANTS.SIZE.LINEAR_MAX_PENALTY;
   const exponentialPenalty = Math.pow(
-    (loc - constants.HIGH_THRESHOLD) / constants.EXPONENTIAL_DENOMINATOR, 
-    constants.EXPONENTIAL_POWER
-  ) * constants.EXPONENTIAL_MULTIPLIER;
+    (loc - HEALTH_PENALTY_CONSTANTS.SIZE.HIGH_THRESHOLD) / HEALTH_PENALTY_CONSTANTS.SIZE.EXPONENTIAL_DENOMINATOR, 
+    HEALTH_PENALTY_CONSTANTS.SIZE.EXPONENTIAL_POWER
+  ) * HEALTH_PENALTY_CONSTANTS.SIZE.EXPONENTIAL_MULTIPLIER;
   
   return basePenalty + exponentialPenalty; // Can exceed 40+ for massive files
 }
 
 function getIssuesPenalty(issues: FileIssue[]): number {
-  const constants = HEALTH_PENALTY_CONSTANTS.ISSUES;
-  
   // Issues penalty without artificial caps - following Pareto principle
   const penalty = issues.reduce((currentPenalty, issue) => {
     switch (issue.severity) {
-      case 'critical': return currentPenalty + constants.CRITICAL_PENALTY;
-      case 'high': return currentPenalty + constants.HIGH_PENALTY;
-      case 'medium': return currentPenalty + constants.MEDIUM_PENALTY;
-      case 'low': return currentPenalty + constants.LOW_PENALTY;
-      default: return currentPenalty + constants.DEFAULT_PENALTY;
+      case 'critical': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.CRITICAL_PENALTY;
+      case 'high': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.HIGH_PENALTY;
+      case 'medium': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.MEDIUM_PENALTY;
+      case 'low': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.LOW_PENALTY;
+      default: return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.DEFAULT_PENALTY;
     }
   }, 0);
   

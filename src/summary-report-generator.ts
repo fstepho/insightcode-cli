@@ -7,8 +7,9 @@ import { isFileEmblematic, formatPercentage, GRADE_CONFIG } from './scoring.util
 import { 
     formatNumber, 
     capitalize, 
-    getPatternCategory
-} from './shared-report-utils';
+    getPatternCategory,
+    PatternCategory
+} from './markdown-report-utils';
 
 /**
  * Génère le rapport markdown synthétique multi-projets
@@ -276,7 +277,7 @@ function generateGlobalPatternAnalysis(results: ReportResult[]): string {
             detail.functions?.forEach(func => {
                 func.issues.forEach(issue => {
                     // Categorize issue types into pattern categories
-                    const category = getPatternCategory(issue.type);
+                    const category: PatternCategory | null = getPatternCategory(issue.type);
                     if (category) {
                         const categoryMap = patternStats[category as keyof typeof patternStats];
                         const stat = categoryMap.get(issue.type) || { count: 0, projects: new Set() };

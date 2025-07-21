@@ -70,7 +70,7 @@ export interface ASTBuildResult {
 /**
  * AST Builder - Responsible for discovering files and building the AST
  */
-export class ASTBuilder {
+class ASTBuilder {
   
   /**
    * Build AST for all files in the given directory

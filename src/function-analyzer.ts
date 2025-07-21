@@ -17,7 +17,7 @@ import { COMPLEXITY_LEVELS } from './scoring.utils';
  * Dedicated analyzer for building comprehensive function analysis
  * Centralizes all function-level analysis logic in one place
  */
-export class FunctionAnalyzer {
+class FunctionAnalyzer {
 
   /**
    * Build comprehensive function analysis from source file
@@ -137,103 +137,47 @@ export class FunctionAnalyzer {
   ): FunctionIssue[] {
     const issues: FunctionIssue[] = [];
 
-    // === BASE METRICS ISSUES ===
+    // === QUALITY PATTERNS ===
 
-    // Complexity issues
+    // High Complexity Pattern
     if (complexity > (COMPLEXITY_LEVELS.veryHigh.maxThreshold)) {
       issues.push({
-        type: 'complexity',
+        type: 'high-complexity',
         severity: 'critical',
         location: {
           file: filePath,
           line: node.getStartLineNumber(),
           function: getFunctionName(node)
         },
-        description: `Function complexity ${complexity} exceeds critical threshold`,
+        description: `Complexity ${complexity} exceeds critical threshold of ${COMPLEXITY_LEVELS.veryHigh.maxThreshold}`,
         threshold: COMPLEXITY_LEVELS.veryHigh.maxThreshold,
         excessRatio: complexity / (COMPLEXITY_LEVELS.veryHigh.maxThreshold)
       });
     } else if (complexity > (COMPLEXITY_LEVELS.high.maxThreshold)) {
       issues.push({
-        type: 'complexity',
+        type: 'high-complexity',
         severity: 'high',
         location: {
           file: filePath,
           line: node.getStartLineNumber(),
           function: getFunctionName(node)
         },
-        description: `Function complexity ${complexity} exceeds recommended threshold`,
+        description: `Complexity ${complexity} exceeds recommended threshold of ${COMPLEXITY_LEVELS.high.maxThreshold}`,
         threshold: COMPLEXITY_LEVELS.high.maxThreshold,
         excessRatio: complexity / (COMPLEXITY_LEVELS.high.maxThreshold)
       });
     } else if (complexity > (COMPLEXITY_LEVELS.low.maxThreshold)) {
       issues.push({
-        type: 'complexity',
+        type: 'high-complexity',
         severity: 'medium',
         location: {
           file: filePath,
           line: node.getStartLineNumber(),
           function: getFunctionName(node)
         },
-        description: `Function complexity ${complexity} exceeds medium threshold`,
+        description: `Complexity ${complexity} exceeds medium threshold of ${COMPLEXITY_LEVELS.low.maxThreshold}`,
         threshold: COMPLEXITY_LEVELS.low.maxThreshold,
         excessRatio: complexity / (COMPLEXITY_LEVELS.low.maxThreshold)
-      });
-    }
-
-    // Size issues
-    if (lineCount > CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES * 2) {
-      issues.push({
-        type: 'size',
-        severity: 'high',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: `Function has ${lineCount} lines (critical), consider breaking into smaller functions`,
-        threshold: CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES * 2,
-        excessRatio: lineCount / (CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES * 2)
-      });
-    } else if (lineCount > CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES) {
-      issues.push({
-        type: 'size',
-        severity: 'medium',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: `Function has ${lineCount} lines, consider splitting for better maintainability`,
-        threshold: CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES,
-        excessRatio: lineCount / CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES
-      });
-    }
-
-    // === QUALITY PATTERNS ===
-
-    // High Complexity Pattern (distinct from base complexity)
-    if (complexity > (COMPLEXITY_LEVELS.veryHigh.maxThreshold)) {
-      issues.push({
-        type: 'high-complexity',
-        severity: 'high',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: `Complexity ${complexity} exceeds critical threshold of ${COMPLEXITY_LEVELS.veryHigh.maxThreshold}`
-      });
-    } else if (complexity > (COMPLEXITY_LEVELS.high.maxThreshold)) {
-      issues.push({
-        type: 'high-complexity',
-        severity: 'medium',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: `Complexity ${complexity} exceeds recommended threshold of ${COMPLEXITY_LEVELS.high.maxThreshold}`
       });
     }
 
@@ -247,7 +191,9 @@ export class FunctionAnalyzer {
           line: node.getStartLineNumber(),
           function: getFunctionName(node)
         },
-        description: `Function has ${lineCount} lines (critical), consider breaking into smaller functions`
+        description: `Function has ${lineCount} lines, consider breaking into smaller functions`,
+        threshold: CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES * 2,
+        excessRatio: lineCount / (CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES * 2)
       });
     } else if (lineCount > CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES) {
       issues.push({
@@ -258,7 +204,9 @@ export class FunctionAnalyzer {
           line: node.getStartLineNumber(),
           function: getFunctionName(node)
         },
-        description: `Function has ${lineCount} lines, consider splitting for better maintainability`
+        description: `Function has ${lineCount} lines, consider splitting for better maintainability`,
+        threshold: CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES,
+        excessRatio: lineCount / CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES
       });
     }
 

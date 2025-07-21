@@ -2,35 +2,40 @@
  * Générateur de rapports pour un projet individuel
  */
 
-import { AnalysisResult, FileDetail, FunctionAnalysis, FunctionIssue, ReportResult, EmblematicFiles, Grade } from './types';
+import { AnalysisResult, FileDetail, FunctionIssue, ReportResult, EmblematicFiles, Grade, DuplicationMode } from './types';
 import { 
-    getScoreStatus, 
-    getSeverityEmoji, 
     getAverageExcessRatio, 
-    getPrimaryConcern, 
-    getRecommendationForFile, 
-    getCriticalFiles, 
     generateHealthDistribution,
-    isFileEmblematic,
-    getGradeInfoByGrade,
-    GRADE_CONFIG,
     ratioToPercentage,
-    formatPercentage
+    formatPercentage,
+    ISSUE_SEVERITY,
+    GRADE_CONFIG
 } from './scoring.utils';
+import {
+    formatGradeDisplay,
+    getFormattedScoreStatus,
+    inferFileRole,
+    FunctionWithFile,
+    // Deep Dive harmonization
+    prepareDeepDiveData,
+    formatFunctionIssuesForDeepDive,
+    // Risky Files harmonization
+    prepareRiskyFilesData,
+    RiskyFileDisplayInfo
+} from './report-utils';
 import { FILE_SIZE_THRESHOLDS, IMPROVEMENT_SUGGESTION_THRESHOLDS } from './thresholds.constants';
 import {
     formatNumber,
     capitalize,
     getTopAffectedAreas,
     generatePatternTable,
-    inferFileRole,
     generateSection,
     isQualityPattern,
-    isArchitecturePattern
-} from './shared-report-utils';
+    isArchitecturePattern,
+    getPatternImplication
+} from './markdown-report-utils';
 
-// Type for function analysis with file information
-type FunctionWithFile = FunctionAnalysis & { file: string };
+// FunctionWithFile type moved to shared-analysis-utils.ts
 
 /**
  * Génère un rapport détaillé pour un seul projet
@@ -56,18 +61,9 @@ export function generateProjectReport(result: ReportResult): string {
     markdown += `- **Files Analyzed:** ${analysis.context.analysis.filesAnalyzed}\n`;
     markdown += `- **Tool Version:** ${analysis.context.analysis.toolVersion}\n\n`;
     
-    // Executive Summary
-    markdown += `## Executive Summary\n\n`;
-    markdown += generateExecutiveSummary(analysis, result.emblematicFiles);
-    
-    // Overview with Visual Grade
-    markdown += `## Quality Overview\n\n`;
-    markdown += generateGradeVisual(analysis.overview.grade);
-    markdown += `\n**${analysis.overview.summary}**\n\n`;
-    
-    // Detailed Scores
-    markdown += `### Quality Scores\n\n`;
-    markdown += generateScoreTable(analysis.overview.scores, analysis.overview.statistics.avgDuplicationRatio);
+    // Quality Summary
+    markdown += `## Quality Summary\n\n`;
+    markdown += generateQualitySummary(analysis, result.emblematicFiles);
     
     // Methodology Notes
     markdown += `\n### 📊 Scoring Methodology\n\n`;
@@ -86,19 +82,17 @@ export function generateProjectReport(result: ReportResult): string {
     markdown += `## File Health Distribution\n\n`;
     markdown += generateHealthDistribution(analysis.details);
     
-    // Critical Files
-    const criticalFiles = getCriticalFiles(analysis.details, result.emblematicFiles);
-    if (criticalFiles.length > 0) {
+    // Critical Files - using harmonized risky files logic
+    const riskyFilesData = prepareRiskyFilesData(analysis.details, result.emblematicFiles);
+    if (riskyFilesData.hasData) {
         markdown += `## Critical Files Requiring Attention\n\n`;
-        markdown += generateCriticalFilesSection(criticalFiles, result.emblematicFiles);
+        markdown += generateCriticalFilesSection(riskyFilesData.files);
     }
     
-    // Function Deep Dive - ADAPTED to use FileDetail.functions
-    const functionsAnalysis = analysis.details.flatMap((detail: FileDetail) => 
-        detail.functions?.map((func: FunctionAnalysis) => ({ ...func, file: detail.file })) || []
-    );
-    if (functionsAnalysis.length > 0) {
-        markdown += generateFunctionDeepDiveSection(functionsAnalysis);
+    // Function Deep Dive - using harmonized Deep Dive logic
+    const deepDiveData = prepareDeepDiveData(analysis.details);
+    if (deepDiveData.hasData) {
+        markdown += generateFunctionDeepDiveSection(deepDiveData.functions);
     }
     
     // Dependency Analysis
@@ -107,23 +101,23 @@ export function generateProjectReport(result: ReportResult): string {
     
     // Issue Analysis
     markdown += `## Issue Analysis\n\n`;
-    markdown += generateIssueAnalysis(analysis.details, functionsAnalysis);
+    markdown += generateIssueAnalysis(analysis.details, deepDiveData.functions);
     
-    // Pattern Analysis - ADAPTED to use FileDetail.functions  
-    if (functionsAnalysis.length > 0) {
-        markdown += generatePatternAnalysis(functionsAnalysis);
+    // Pattern Analysis - using harmonized Deep Dive data
+    if (deepDiveData.hasData) {
+        markdown += generatePatternAnalysis(deepDiveData.functions);
     }
     
     // Technical Notes
     markdown += `\n---\n`;
     markdown += `## 🔬 Technical Notes\n\n`;
     markdown += `### Duplication Detection\n`;
-    markdown += `- **Algorithm:** Enhanced 8-line literal pattern matching with 8+ token minimum, cross-file exact matches only\n`;
+    markdown += `- **Algorithm:** Enhanced 8-line literal pattern matching with 20+ token minimum, cross-file exact matches only\n`;
     markdown += `- **Focus:** Copy-paste duplication using MD5 hashing of normalized blocks (not structural similarity)\n`;
     markdown += `- **Philosophy:** Pragmatic approach using regex normalization - avoids false positives while catching actionable duplication\n`;
     
     // Adapt results description based on duplication mode
-    const duplicationMode = analysis.context?.analysis?.duplicationMode || 'legacy';
+    const duplicationMode: DuplicationMode = analysis.context?.analysis?.duplicationMode || 'legacy';
     if (duplicationMode === 'strict') {
         markdown += `- **Mode:** STRICT mode active (≤3% = excellent, industry-standard thresholds)\n`;
         markdown += `- **Results:** Typically 0-3% duplication with strict thresholds, aligning with SonarQube standards\n\n`;
@@ -147,28 +141,43 @@ export function generateProjectReport(result: ReportResult): string {
 
 // Helper functions specific to project reports
 
+function generateQualitySummary(
+  analysis: AnalysisResult,
+  emblematicFiles?: EmblematicFiles
+): string {
+  // 1. Visual grade header (e.g. “Grade: 🟡 C”)
+  let out = generateGradeVisual(analysis.overview.grade) + '\n';
+
+  // 2. Executive-style bullet (primary concern, context, etc.)
+  //    — we reuse the existing logic but strip its own grade line to avoid repetition.
+  out += generateExecutiveSummary(analysis, emblematicFiles) + '\n';
+
+  // 3. Compact score table (complexity / maintainability / duplication / overall)
+  out += generateScoreTable(
+    analysis.overview.scores,
+    analysis.overview.statistics.avgDuplicationRatio
+  );
+
+  return out;
+}
+
 function generateExecutiveSummary(analysis: AnalysisResult, emblematicFiles?: EmblematicFiles): string {
-    const grade = analysis.overview.grade;
-    const score = analysis.overview.scores.overall;
-    const criticalFiles = getCriticalFiles(analysis.details, emblematicFiles);
+    const riskyFilesData = prepareRiskyFilesData(analysis.details, emblematicFiles);
+    const criticalFiles = riskyFilesData.files;
     
-    // Determine health status (remove emoji for cleaner executive summary)
-    const healthStatus = getScoreStatus(score).replace(/^.+ /, '');
-    
-    let summary = `**Grade ${grade} (${score}/100)** - ${healthStatus}.\n\n`;
+    let summary = '';
     
     // Identify the biggest problem
     if (criticalFiles.length > 0) {
         const worstFile = criticalFiles[0];
-        const primaryConcern = getPrimaryConcern(worstFile);
-        const isEmblematic = isFileEmblematic(worstFile.file, emblematicFiles);
+        const primaryConcern = worstFile.primaryConcern;
+        const isEmblematic = worstFile.isEmblematic;
         const emblemMark = isEmblematic ? ' (core file)' : '';
         
         summary += `**🚨 Primary Concern:** ${primaryConcern} in \`${worstFile.file}\`${emblemMark}.\n\n`;
         
-        // Priority action
-        const recommendation = getRecommendationForFile(worstFile);
-        summary += `**🎯 Priority Action:** ${recommendation}\n\n`;
+        // Priority action - removed as requested (no recommendations per file)
+        summary += `**🎯 Priority Action:** See function-level analysis for specific improvements.\n\n`;
         
         // Additional context if multiple critical files
         if (criticalFiles.length > 1) {
@@ -195,107 +204,80 @@ function generateExecutiveSummary(analysis: AnalysisResult, emblematicFiles?: Em
 }
 
 function generateGradeVisual(grade: Grade): string {
-    // Use centralized configuration
-    const gradeInfo = getGradeInfoByGrade(grade);
-    return `### Grade: ${gradeInfo.visualEmoji} **${grade}**\n`;
+    // Use centralized display formatting
+    const gradeDisplay = formatGradeDisplay(grade);
+    return `### Grade: ${gradeDisplay.visual}\n`;
 }
 
 function generateScoreTable(scores: AnalysisResult['overview']['scores'], avgDuplicationRatio?: number): string { 
-    const getStatus = getScoreStatus;
-    
-   let table = `| Dimension | Score (Value) | Status |\n`;
+    let table = `| Dimension | Score (Value) | Status |\n`;
     table += `|:---|:---|:---|\n`;
 
     // AFFICHE SYSTÉMATIQUEMENT LE POURCENTAGE DE DUPLICATION
     const dupPercent = formatPercentage(avgDuplicationRatio || 0);
     const duplicationText = `${scores.duplication}/100 (${dupPercent} detected)`;
 
-    table += `| Complexity | ${scores.complexity}/100 | ${getStatus(scores.complexity)} |\n`;
-    table += `| Duplication | ${duplicationText} | ${getStatus(scores.duplication)} |\n`;
-    table += `| Maintainability | ${scores.maintainability}/100 | ${getStatus(scores.maintainability)} |\n`;
-    table += `| **Overall** | **${scores.overall}/100** | **${getStatus(scores.overall)}** |\n`;
+    // Use centralized score status formatting for consistency
+    table += `| Complexity | ${scores.complexity}/100 | ${getFormattedScoreStatus(scores.complexity).full} |\n`;
+    table += `| Duplication | ${duplicationText} | ${getFormattedScoreStatus(scores.duplication).full} |\n`;
+    table += `| Maintainability | ${scores.maintainability}/100 | ${getFormattedScoreStatus(scores.maintainability).full} |\n`;
+    table += `| **Overall** | **${scores.overall}/100** | **${getFormattedScoreStatus(scores.overall).full}** |\n`;
     return table;
 }
-
 function generateScoringMethodologyNotes(analysis?: AnalysisResult): string {
-    let notes = `InsightCode combines **research-based thresholds** with **hypothesis-driven weighting**:\n\n`;
-    
-    notes += `#### Overall Score Formula\n`;
-    notes += `\`(Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)\`\n\n`;
-    
-    notes += `| Dimension | Weight | Foundation & Thresholds |\n`;
-    notes += `|-----------|--------|--------------------------|\n`;
-    notes += `| **Complexity** | **45%** | **McCabe (1976) thresholds:** ≤10 (low), 11-15 (medium), 16-20 (high), 21-50 (very high), >50 (extreme). Weight = internal hypothesis. |\n`;
-    notes += `| **Maintainability** | **30%** | **File size impact:** ≤200 LOC ideal (Clean Code principles). Weight = internal hypothesis. |\n`;
-    // Adapt duplication description based on mode
-    const duplicationMode = analysis?.context?.analysis?.duplicationMode || 'legacy';
+    const duplicationMode: DuplicationMode = analysis?.context?.analysis?.duplicationMode || 'legacy';
+
+    let notes = `InsightCode combines **research-based thresholds** with **criticality-weighted aggregation**, following the **Pareto principle**.\n\n`;
+
+    notes += `#### 🔧 Overall Score Formula\n`;
+    notes += `\`\`\`\n`;
+    notes += `Overall Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)\n`;
+    notes += `\`\`\`\n\n`;
+
+    notes += `#### 🧮 Metric Breakdown\n`;
+    notes += `| Metric | Weight | Thresholds & Basis |\n`;
+    notes += `|--------|--------|---------------------|\n`;
+    notes += `| **Complexity** | 45% | McCabe (1976): ≤10 = low, >50 = extreme. Penalized quadratically to exponentially. |\n`;
+    notes += `| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |\n`;
     if (duplicationMode === 'strict') {
-        notes += `| **Duplication** | **25%** | **Industry-standard thresholds:** ≤3% "excellent" aligned with SonarQube. Weight = internal hypothesis. |\n\n`;
+        notes += `| **Duplication** | 25% | Strict threshold ≤3% (SonarQube-aligned). |\n`;
     } else {
-        notes += `| **Duplication** | **25%** | **⚠️ LEGACY thresholds (more permissive):** ≤15% "excellent" vs SonarQube ≤3%. Weight = internal hypothesis. |\n\n`;
+        notes += `| **Duplication** | 25% | ⚠️ Legacy threshold ≤15% considered "excellent" (brownfield projects). |\n`;
     }
-    
-    notes += `#### 📊 Score Interpretation\n`;
-    notes += `**Important:** Project scores use architectural criticality weighting, not simple averages. Here's why extreme complexity can still yield moderate project scores:\n\n`;
-    
-    notes += `**Example - Lodash Case:**\n`;
-    notes += `- **lodash.js:** Complexity 1818 → Individual score 0, but CriticismScore ~1823\n`;
-    notes += `- **19 other files:** Complexity ~5 → Individual scores ~100, CriticismScore ~12 each\n`;
-    notes += `- **Weighted result:** (0×89%) + (100×11%) = ~7 final score\n\n`;
-    
-    notes += `**Key Distinctions:**\n`;
-    notes += `- **Raw Metrics:** Average complexity, total LOC (arithmetic means)\n`;
-    notes += `- **Weighted Scores:** Architectural importance influences final project scores\n`;
-    notes += `- **Individual Files:** Use penalty-based health scores (0-100)\n\n`;
-    
-    notes += `#### ⚠️ Methodology Notes\n`;
-    notes += `- **Thresholds:** Research-based (McCabe 1976, Clean Code, SonarQube standards)\n`;
-    notes += `- **Weights:** Internal hypotheses (45/30/25) requiring empirical validation\n`;
-    notes += `- **Aggregation:** Criticality-weighted to identify architecturally important files\n\n`;
-    
-    // Only show duplication threshold disclaimer in legacy mode
-    if (duplicationMode !== 'strict') {
-        notes += `**Note:** Legacy mode uses more permissive duplication thresholds (≤15% = "excellent" vs SonarQube ≤3%) for brownfield projects.\n\n`;
-    }
-    
-    notes += `#### Grade Scale (Academic Standard)\n`;
-    // Generate grade scale dynamically from GRADE_CONFIG
-    const gradeScale = GRADE_CONFIG.map(config => `**${config.grade}** (${config.range})`).join(' • ');
-    notes += `${gradeScale}\n\n`;
-    
-    notes += `#### Aggregation Method\n`;
-    notes += `- **Project-level:** Architectural criticality weighting identifies most impactful files\n`;
-    notes += `- **File-level:** Penalty-based (100 - penalties) with progressive penalties for extreme values\n`;
-    notes += `- **Philosophy:** Pareto principle - identify the 20% of code causing 80% of problems\n\n`;
-    
-    notes += `#### 🔍 Architectural Criticality Formula\n`;
-    notes += `Each file receives a "criticism score" that determines its weight in final project scores:\n\n`;
+    notes += `\n`;
+
+    notes += `#### 🧠 Aggregation Strategy\n`;
+    notes += `- **File-level health:** 100 - penalties (progressive, no caps or masking).\n`;
+    notes += `- **Project-level score:** Weighted by **architectural criticality**, not arithmetic average.\n\n`;
+
+    notes += `#### 🧭 Architectural Criticality Formula\n`;
+    notes += `Each file’s weight is computed as:\n`;
     notes += `\`\`\`\n`;
     notes += `CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues × 0.5) + 1\n`;
-    notes += `\`\`\`\n\n`;
-    notes += `**Components:**\n`;
-    notes += `- **Dependencies:** incomingDeps + outgoingDeps + (isInCycle ? 5 : 0)\n`;
-    notes += `- **Complexity:** File cyclomatic complexity\n`;
-    notes += `- **WeightedIssues:** (critical×4) + (high×3) + (medium×2) + (low×1)\n`;
-    notes += `- **Base:** +1 to avoid zero weights\n\n`;
-    notes += `**Final Project Score:** Each dimension is weighted by file criticality, then combined using 45/30/25 weights.\n\n`;
-    
+    notes += `\`\`\`\n`;
+    notes += `- **Dependencies:** incoming + outgoing + cycle penalty (if any)\n`;
+    notes += `- **WeightedIssues:** critical×4 + high×3 + medium×2 + low×1\n`;
+    notes += `- **Base +1** avoids zero weighting\n\n`;
+
+    notes += `#### 🎓 Grade Scale\n`;
+    const gradeScale = GRADE_CONFIG.map(config => `**${config.grade}** (${config.range})`).join(' • ');
+    notes += `${gradeScale}\n\n`;
+
     return notes;
 }
 
-function generateCriticalFilesSection(criticalFiles: FileDetail[], emblematicFiles?: EmblematicFiles): string {
-    let markdown = `| File | Health | Primary Concern & Recommendation |\n`;
-    markdown += `|------|--------|-----------------------------------|\n`;
+
+function generateCriticalFilesSection(riskyFiles: RiskyFileDisplayInfo[]): string {
+    let markdown = `| File | Health | Primary Concern |\n`;
+    markdown += `|------|--------|-----------------|\n`;
     
-    criticalFiles.forEach(file => {
-        const isEmblematic = isFileEmblematic(file.file, emblematicFiles);
-        const fileLabel = isEmblematic ? `⭐ ${file.file}` : file.file;
+    riskyFiles.forEach(riskyFile => {
+        const fileLabel = riskyFile.isEmblematic ? `⭐ ${riskyFile.file}` : riskyFile.file;
         
-        const primaryConcern = getPrimaryConcern(file);
-        const recommendation = getRecommendationForFile(file);
-        const combinedInfo = `${primaryConcern} <br/> 🎯 **Action:** ${recommendation}`;
+        // Use standardized primary concern (without recommendations as requested)
+        const primaryConcern = riskyFile.primaryConcern;
         
-        markdown += `| ${fileLabel} | ${file.healthScore}% | ${combinedInfo} |\n`;
+        markdown += `| ${fileLabel} | ${riskyFile.healthScore}% | ${primaryConcern} |\n`;
     });
     
     markdown += `\n*⭐ indicates emblematic/core files*\n\n`;
@@ -303,22 +285,19 @@ function generateCriticalFilesSection(criticalFiles: FileDetail[], emblematicFil
 }
 
 function generateFunctionDeepDiveSection(functionsWithFile: FunctionWithFile[]): string {
-    // Get top 5 most complex functions
-    const topFunctions = functionsWithFile
-        .sort((a, b) => b.complexity - a.complexity)
-        .slice(0, 5);
-
-    if (topFunctions.length === 0) {
+    // Functions are already filtered and sorted by the harmonized prepareDeepDiveData()
+    if (functionsWithFile.length === 0) {
         return '';
     }
 
-    const rows = topFunctions.map(func => {
-        const issues = func.issues.map((i: FunctionIssue) => i.type).join(', ');
-        return `| \`${func.name}\` | \`${func.file}\` | **${func.complexity}** | ${func.loc} | ${issues || '_None_'} |`;
+    const rows = functionsWithFile.map(func => {
+        // Use harmonized issue formatting for consistency with implications
+        const issueData = formatFunctionIssuesForDeepDive(func, 'markdown');
+        return `| \`${func.name}\` | \`${func.file}\` | **${func.complexity}** | ${func.loc} | ${issueData.issuesSummaryWithImplications} |`;
     });
 
     const table = [
-        `| Function | File | Complexity | Lines | Key Issues |`,
+        `| Function | File | Complexity | Lines | Key Issues (Implications) |`,
         `|:---|:---|:---|:---|:---|`,
         ...rows
     ].join('\n');
@@ -428,35 +407,10 @@ function generateIssueAnalysis(details: FileDetail[], functionsWithFile: Functio
             const fileCount = fileIssues.filter(i => i.severity === severity).length;
             const funcCount = functionIssues.filter(i => i.severity === severity).length;
             const topAreas = getTopAffectedAreas(allIssues.filter(i => i.severity === severity));
-            markdown += `| ${getSeverityEmoji(severity)} ${capitalize(severity)} | ${count} | ${fileCount} | ${funcCount} | ${topAreas} |\n`;
+            markdown += `| ${ISSUE_SEVERITY[severity].emoji} ${capitalize(severity)} | ${count} | ${fileCount} | ${funcCount} | ${topAreas} |\n`;
         }
     });
-    
-    // Most common issue types - function-level detail
-    if (functionIssues.length > 0) {
-        markdown += `\n### Function-Level Issue Details\n\n`;
-        const functionTypeCount = new Map<string, { count: number; functions: string[] }>();
-        functionIssues.forEach(issue => {
-            const key = issue.type;
-            const current = functionTypeCount.get(key) || { count: 0, functions: [] };
-            current.count++;
-            current.functions.push(`${issue.function} (${issue.file})`);
-            functionTypeCount.set(key, current);
-        });
-        
-        const sortedFunctionTypes = Array.from(functionTypeCount.entries())
-            .sort((a, b) => b[1].count - a[1].count)
-            .slice(0, 5);
-        
-        markdown += `| Issue Pattern | Functions Affected | Examples |\n`;
-        markdown += `|---------------|-------------------|----------|\n`;
-        
-        sortedFunctionTypes.forEach(([type, data]) => {
-            const examples = data.functions.slice(0, 2).join(', ');
-            const moreText = data.count > 2 ? ` +${data.count - 2} more` : '';
-            markdown += `| ${capitalize(type.replace('-', ' '))} | ${data.count} | ${examples}${moreText} |\n`;
-        });
-    }
+  
     
     // Legacy file-level types for compatibility
     markdown += `\n### File-Level Issue Types\n\n`;
@@ -470,14 +424,48 @@ function generateIssueAnalysis(details: FileDetail[], functionsWithFile: Functio
         .slice(0, 5);
     
     if (sortedFileTypes.length > 0) {
-        markdown += `| Issue Type | Occurrences | Typical Threshold Excess |\n`;
-        markdown += `|------------|-------------|-------------------------|\n`;
+        markdown += `| Issue Type | Occurrences | Threshold Excess | Implication |\n`;
+        markdown += `|------------|-------------|------------------|-------------|\n`;
         
         sortedFileTypes.forEach(([type, count]) => {
             const filteredIssues = fileIssues.filter(i => i.type === type && i.excessRatio !== undefined) as Array<typeof fileIssues[0] & {excessRatio: number}>;
         const avgExcess = filteredIssues.length > 0 ? getAverageExcessRatio(filteredIssues) : 0;
-            markdown += `| ${capitalize(type)} | ${count} | ${avgExcess}x threshold |\n`;
+          const implication = getPatternImplication(type, 'quality');
+          markdown += `| ${capitalize(type)} | ${count} | ${avgExcess}x threshold | ${implication} |\n`;
         });
+    }
+    
+    // Add function-level issues analysis
+    markdown += `\n### Function-Level Issue Types\n\n`;
+    const functionTypeCount = new Map<string, number>();
+    functionIssues.forEach(issue => {
+        functionTypeCount.set(issue.type, (functionTypeCount.get(issue.type) || 0) + 1);
+    });
+    
+    const sortedFunctionTypes = Array.from(functionTypeCount.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+    
+    if (sortedFunctionTypes.length > 0) {
+        markdown += `| Issue Pattern | Occurrences | Most Affected Functions | Implication |\n`;
+        markdown += `|---------------|-------------|-------------------------|-------------|\n`;
+        
+        sortedFunctionTypes.forEach(([type, count]) => {
+            // Find functions with this issue type
+            const affectedFunctions = functionIssues
+                .filter(i => i.type === type)
+                .map(i => i.function)
+                .slice(0, 2); // Show up to 2 function names
+            
+            const functionList = affectedFunctions.length > 0 
+                ? `\`${affectedFunctions.join('`, `')}\`` + (functionIssues.filter(i => i.type === type).length > 2 ? '...' : '')
+                : '_Various_';
+                
+            const implication = getPatternImplication(type, 'quality');
+            markdown += `| ${capitalize(type)} | ${count} | ${functionList} | ${implication} |\n`;
+        });
+    } else {
+        markdown += `*No significant function-level issues detected*\n`;
     }
     
     markdown += `\n`;
@@ -493,7 +481,7 @@ function generatePatternAnalysis(functionsWithFile: FunctionWithFile[]): string 
         architecture: new Map<string, number>()
     };
     
-    // ADAPTED: Extract patterns from function issues instead of codeContext
+    // Extract patterns from function issues using centralized function data
     functionsWithFile.forEach((func) => {
         func.issues.forEach((issue: FunctionIssue) => {
             // Categorize issue types into pattern categories using type guards
@@ -504,15 +492,7 @@ function generatePatternAnalysis(functionsWithFile: FunctionWithFile[]): string 
             }
         });
     });
-    
-    // Anti-patterns (vraiment négatifs seulement)
-    const antiPatterns = Array.from(patternCounts.quality.entries())
-        .filter(([pattern]) => ['deep-nesting', 'long-function', 'high-complexity', 'too-many-params', 'god-function'].includes(pattern));
-    
-    if (antiPatterns.length > 0) {
-        markdown += `### ❗ Anti-Patterns & Code Smells\n\n`;
-        markdown += generatePatternTable(new Map(antiPatterns), 'quality');
-    }
+
     
     // Good practices (patterns positifs)
     const architecturePractices = Array.from(patternCounts.architecture.entries())

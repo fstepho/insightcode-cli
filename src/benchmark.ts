@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import * as fs from 'fs';
 import * as path from 'path';
-import { AnalysisResult, EmblematicFiles, ReportResult, ReportSummary, ThresholdConfig } from '../src/types';
+import { AnalysisResult, EmblematicFiles, ReportResult, ReportSummary } from '../src/types';
 import { analyze, AnalysisOptions } from './analyzer';
-import { getConfig } from './config.manager';
+// config.manager removed - using global configurations from scoring.utils.ts
 import { defaultJsonReplacer } from './json-utils';
 import { generateProjectReport } from './project-report-generator';
 import { generateMarkdownReport } from './summary-report-generator';
@@ -361,7 +361,7 @@ function determineAnalysisPath(project: Project, projectTempDir: string, product
  * Exécute le moteur d'analyse sur les fichiers d'un projet.
  * @param analysisPath - Le chemin exact du répertoire à analyser.
  * @param projectTempDir - Le chemin de base du projet (pour le contexte de l'analyse).
- * @param thresholds - La configuration des seuils de qualité.
+ * thresholds removed - using global configurations from scoring.utils.ts
  * @param production - Flag pour exclure les fichiers utilitaires.
  * @param timestamp - Une fonction pour obtenir un timestamp formaté pour les logs.
  * @returns Le résultat brut de l'analyse.
@@ -369,7 +369,7 @@ function determineAnalysisPath(project: Project, projectTempDir: string, product
 async function runProjectAnalysis(
   analysisPath: string,
   projectTempDir: string,
-  thresholds: ThresholdConfig,
+  // thresholds removed - using global configurations from scoring.utils.ts
   production: boolean,
   timestamp: () => string
 ): Promise<AnalysisResult> {
@@ -378,7 +378,6 @@ async function runProjectAnalysis(
   const analysisOptions: AnalysisOptions = {
     format: 'markdown', // Default format for CLI
     projectPath: projectTempDir,
-    thresholds,
     production,
     strictDuplication
   };
@@ -409,7 +408,7 @@ async function analyzeProject(project: Project, index: number, total: number): P
 
     // 2. Détermination des chemins et configuration
     console.log(`  🔍 [${timestamp()}] Starting direct analysis...`);
-    const thresholds = getConfig();
+    // thresholds removed - using global configurations from scoring.utils.ts
     const { analysisPath, pathInfo, pathMode } = determineAnalysisPath(project, projectTempDir, production);
     console.log(`  📁 [${timestamp()}] Analysis path: ${pathInfo} (${pathMode})`);
 
@@ -417,7 +416,6 @@ async function analyzeProject(project: Project, index: number, total: number): P
     const analysisResult = await runProjectAnalysis(
       analysisPath,
       projectTempDir,
-      thresholds,
       production,
       timestamp
     );

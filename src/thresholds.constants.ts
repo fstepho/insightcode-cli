@@ -1,6 +1,6 @@
 // File: src/thresholds.constants.ts
 
-import { ThresholdConfig } from './types';
+// ThresholdConfig removed - using scoring.utils.ts configurations instead
 
 /**
  * Type-safe threshold values
@@ -22,15 +22,6 @@ export const FILE_SIZE_THRESHOLDS = {
 } as const;
 
 /**
- * Function analysis threshold constants for centralized configuration
- */
-export const FUNCTION_ANALYSIS_THRESHOLDS = {
-  COMPLEXITY: 5,        // Function complexity threshold for issue detection
-  LOC: 20,             // Function LOC threshold for issue detection
-  PARAMETER_COUNT: 3    // Function parameter count threshold for issue detection
-} as const;
-
-/**
  * Improvement suggestion threshold constants for centralized configuration
  */
 export const IMPROVEMENT_SUGGESTION_THRESHOLDS = {
@@ -46,32 +37,10 @@ export const IMPROVEMENT_SUGGESTION_THRESHOLDS = {
  */
 export const CRITICAL_HEALTH_SCORE: HealthScoreThreshold = 80;
 
-// Les seuils par défaut pour la création d'Issues.
-// Research-based thresholds following McCabe (1976), NASA/SEL (1994), and industry best practices
-export const DEFAULT_THRESHOLDS: ThresholdConfig = {
-  complexity: {
-    // McCabe recommendations: 10 (moderate), 15 (high), 20+ (critical)
-    production: { medium: 10, high: 15, critical: 20 },
-    test: { medium: 15, high: 20, critical: 25 }, // Higher tolerance for test complexity
-    utility: { medium: 12, high: 18, critical: 25 },
-    example: { medium: 20, high: 30, critical: 40 }, // Examples can be more complex
-    config: { medium: 15, high: 25, critical: 35 }
-  },
-  size: {
-    production: { medium: 200, high: 300, critical: 1000 },
-    test: { medium: 300, high: 500, critical: 1500 },
-    utility: { medium: 250, high: 400, critical: 1200 },
-    example: { medium: 150, high: 250, critical: 800 },
-    config: { medium: 300, high: 500, critical: 1500 }
-  },
-  duplication: {
-    production: { medium: 15, high: 30, critical: 50 },
-    test: { medium: 25, high: 50, critical: 70 },
-    utility: { medium: 20, high: 40, critical: 60 },
-    example: { medium: 50, high: 80, critical: 90 },
-    config: { medium: 30, high: 60, critical: 80 }
-  }
-};
+// DEFAULT_THRESHOLDS removed - use configurations from scoring.utils.ts instead:
+// - COMPLEXITY_CONFIG for complexity thresholds
+// - DUPLICATION_CONFIG_LEGACY/STRICT for duplication thresholds
+// - Individual constants for size and other thresholds
 
 /**
  * Type-safe scoring weights
@@ -137,15 +106,6 @@ export const COMPLEXITY_SCORING_THRESHOLDS = {
 } as const;
 
 /**
- * Duplication scoring thresholds aligned with DEFAULT_THRESHOLDS
- */
-export const DUPLICATION_SCORING_THRESHOLDS = {
-  EXCELLENT: 15,              // Legacy mode excellent threshold
-  EXPONENTIAL_MULTIPLIER: 0.003, // 0.003 (empirical): provides smooth decay curve for duplication penalties without being too harsh
-  EXPONENTIAL_POWER: 1.8         // Power 1.8: harmonized with complexity scoring for mathematical consistency
-} as const;
-
-/**
  * Maintainability scoring thresholds based on Martin Clean Code (2008)
  */
 export const MAINTAINABILITY_SCORING_THRESHOLDS = {
@@ -198,19 +158,14 @@ export const MAINTAINABILITY_SCORING_THRESHOLDS = {
  * 
  * See: docs/MATHEMATICAL_COEFFICIENTS_JUSTIFICATION.md for comprehensive analysis
  */
+
+
 export const HEALTH_PENALTY_CONSTANTS = {
   COMPLEXITY: {
-    EXCELLENT_THRESHOLD: 10,
-    CRITICAL_THRESHOLD: 20,
-    LINEAR_MULTIPLIER: 2,        // 2x multiplier: provides noticeable but not excessive penalty for moderate complexity
-    LINEAR_MAX_PENALTY: 20,      // Cap at 20 points: prevents linear penalties from dominating the score
-    EXPONENTIAL_DENOMINATOR: 20, // Denominator 20: controls the rate of exponential growth for high complexity
-    EXPONENTIAL_POWER: 1.8,      // Power 1.8: harmonized with complexity scoring for mathematical consistency
-    EXPONENTIAL_MULTIPLIER: 25,  // Multiplier 25: ensures significant penalties for extreme complexity while maintaining score range
+    EXPONENTIAL_POWER: 1.8,      // Power 1.8: harmonized with complexity scoring for mathematical consistency,
+    EXPONENTIAL_MULTIPLIER: 50,   // Multiplier 50: calibrated against InsightCode's complexity 176 → penalty 31 case
   },
   DUPLICATION: {
-    EXCELLENT_THRESHOLD: 15,
-    HIGH_THRESHOLD: 30,
     LINEAR_MULTIPLIER: 1.5,      // 1.5x multiplier: gentler than complexity as duplication is often easier to fix - INDUSTRY HEURISTIC
     LINEAR_MAX_PENALTY: 22.5,    // Cap at 22.5 points: slightly higher than complexity to account for maintenance burden
     EXPONENTIAL_DENOMINATOR: 10, // Denominator 10: faster exponential growth for high duplication - MAY BE TOO AGGRESSIVE
@@ -250,21 +205,6 @@ export const DUPLICATION_DETECTION_CONSTANTS = {
 // Derived from GRADE_CONFIG to avoid desynchronization
 
 /**
- * Color thresholds for maintainability and severity using enums
- */
-export const MAINTAINABILITY_COLOR_THRESHOLDS = {
-  GREEN: 80,   // 80+: excellent maintainability score
-  YELLOW: 60,  // 60-79: good maintainability score
-  RED: 40      // <60: poor maintainability score
-} as const;
-
-export const SEVERITY_COLOR_THRESHOLDS = {
-  RED_BOLD: 10,         // 10+: critical severity requiring immediate attention
-  RED: 5,              // 5-9: high severity issues
-  YELLOW: 2.5          // 2.5-4: medium severity issues
-} as const;
-
-/**
  * Context extraction and function analysis thresholds
  */
 export const CONTEXT_EXTRACTION_THRESHOLDS = {
@@ -285,12 +225,3 @@ export const CONVERSION_CONSTANTS = {
   PERCENTAGE_TO_RATIO: 0.01,
   MS_TO_SECONDS: 1000,
 }
-
-// createDuplicationConfig removed - use mode string directly with DUPLICATION_LEVELS
-// from scoring.utils.ts for consistent table-driven approach
-
-// createDuplicationScoringThresholds removed - use DUPLICATION_SCORING_THRESHOLDS 
-// and DUPLICATION_LEVELS for consistent table-driven approach
-
-// createDuplicationPenaltyConstants removed - use DUPLICATION_LEVELS from scoring.utils.ts
-// for consistent table-driven approach

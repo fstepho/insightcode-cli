@@ -3,9 +3,9 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
-import { FileDetail, ThresholdConfig, FileIssue } from './types';
+import { FileDetail, FileIssue } from './types';
 import { DUPLICATION_DETECTION_CONSTANTS } from './thresholds.constants';
-import { percentageToRatio, ratioToPercentage } from './scoring.utils';
+import { percentageToRatio, ratioToPercentage, getDuplicationThresholds } from './scoring.utils';
 
 /**
  * Interface for files with optional content (used in tests)
@@ -141,7 +141,7 @@ function normalizeBlock(block: string): string {
  * @param thresholds Configuration thresholds
  * @returns Files with duplication ratios
  */
-export function detectDuplication(files: FileDetail[], thresholds: ThresholdConfig): FileDetail[] {
+export function detectDuplication(files: FileDetail[], mode: 'strict' | 'legacy' = 'legacy'): FileDetail[] {
   // Enhanced structural detection - larger blocks for meaningful patterns
   const blockSize = DUPLICATION_DETECTION_CONSTANTS.BLOCK_SIZE; // Increased from 3 to catch real duplication patterns
   const minTokens = DUPLICATION_DETECTION_CONSTANTS.MIN_TOKENS; // Realistic minimum for 8-line JS/TS blocks
@@ -257,46 +257,38 @@ export function detectDuplication(files: FileDetail[], thresholds: ThresholdConf
     
     // Generate duplication issues according to v0.6.0+ specs
     // For now, we'll assume 'production' type - this could be enhanced to detect file type
-    const duplicationThresholds = thresholds.duplication.production;
+    const duplicationThresholds = getDuplicationThresholds(mode);
     
     const updatedIssues: FileIssue[] = [...file.issues];
     
-    if (duplicationThresholds.critical && duplicationRatio > percentageToRatio(duplicationThresholds.critical)) {
-      updatedIssues.push({
-        type: 'duplication',
-        severity: 'critical',
-        location: {
-          file: file.file,
-          line: 1
-        },
-        description: `Duplication ratio ${(duplicationRatio * 100).toFixed(1)}% exceeds critical threshold`,
-        threshold: percentageToRatio(duplicationThresholds.critical), // Store as ratio
-        excessRatio: duplicationRatio / percentageToRatio(duplicationThresholds.critical)
-      });
-    } else if (duplicationRatio > percentageToRatio(duplicationThresholds.high)) {
-      updatedIssues.push({
-        type: 'duplication',
-        severity: 'high',
-        location: {
-          file: file.file,
-          line: 1
-        },
-        description: `Duplication ratio ${(duplicationRatio * 100).toFixed(1)}% exceeds high threshold`,
-        threshold: percentageToRatio(duplicationThresholds.high), // Store as ratio
-        excessRatio: duplicationRatio / percentageToRatio(duplicationThresholds.high)
-      });
-    } else if (duplicationRatio > percentageToRatio(duplicationThresholds.medium)) {
-      updatedIssues.push({
-        type: 'duplication',
-        severity: 'medium',
-        location: {
-          file: file.file,
-          line: 1
-        },
-        description: `Duplication ratio ${(duplicationRatio * 100).toFixed(1)}% exceeds medium threshold`,
-        threshold: percentageToRatio(duplicationThresholds.medium), // Store as ratio
-        excessRatio: duplicationRatio / percentageToRatio(duplicationThresholds.medium)
-      });
+    // Find the appropriate threshold based on duplication percentage
+    const currentDuplicationPercentage = duplicationRatio * 100;
+    
+    for (const threshold of duplicationThresholds) {
+      if (currentDuplicationPercentage > threshold.maxThreshold) {
+        // Map severity from threshold category to issue severity
+        const severityMap = {
+          'excellent': 'low',
+          'good': 'medium', 
+          'poor': 'high',
+          'critical': 'critical'
+        } as const;
+        
+        const severity = severityMap[threshold.category] || 'medium';
+        
+        updatedIssues.push({
+          type: 'duplication',
+          severity,
+          location: {
+            file: file.file,
+            line: 1
+          },
+          description: `Duplication ratio ${currentDuplicationPercentage.toFixed(1)}% exceeds ${threshold.label.toLowerCase()} threshold`,
+          threshold: percentageToRatio(threshold.maxThreshold), // Store as ratio
+          excessRatio: duplicationRatio / percentageToRatio(threshold.maxThreshold)
+        });
+        break; // Take the first (highest) threshold exceeded
+      }
     }
     
     return {

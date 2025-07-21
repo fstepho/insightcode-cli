@@ -2,11 +2,11 @@
 // File: src/cli.ts
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { CliOptions, AnalysisResult, FileDetail } from './types';
+import { CliOptions, AnalysisResult, FileDetail, CiFormat } from './types';
 import { analyze, AnalysisOptions } from './analyzer';
 import { isCriticalFile, isPassingScore } from './scoring.utils';
 import { generateProjectReport } from './project-report-generator';
-import { getConfig } from './config.manager';
+// config.manager removed - using global configurations from scoring.utils.ts
 import { generateCliOutput } from './reporter';
 import { defaultJsonReplacer } from './json-utils';
 
@@ -21,12 +21,12 @@ const program = new Command();
 
 // Format output functions
 function outputCiFormat(results: AnalysisResult): void {
-  const ciResult = {
+  const ciResult : CiFormat = {
     passed: isPassingScore(results.overview.scores.overall),
     grade: results.overview.grade,
     score: results.overview.scores.overall,
     issues: results.details.reduce((total, file) => total + file.issues.length, 0),
-    critical: results.details.filter(f => isFileCritical(f)).length
+    critical: results.details.filter(f => isFileCritical(f)).length,
   };
   
   console.log(JSON.stringify(ciResult, null, 2));
@@ -98,7 +98,7 @@ program
   .version('0.7.0')
   .argument('[path]', 'Path to analyze (default: current directory)', '.')
   .option('-j, --json', 'Output as JSON')
-  .option('-f, --format <format>', 'Output format: json, ci, critical, summary, report (default: terminal)')
+  .option('-f, --format <format>', 'Output format: json, ci, critical, summary, markdown (default: terminal)')
   .option('-e, --exclude <patterns...>', 'Exclude patterns (e.g., "**/*.spec.ts")')
   .option('--production', 'Exclude test, example, and utility directories from analysis')
   .option('--strict-duplication', 'Use strict duplication thresholds (3%/8%/15%) aligned with industry standards (SonarQube, Google). Default uses legacy permissive thresholds (15%/30%/50%)')
@@ -114,7 +114,7 @@ async function runAnalysis(path: string, options: CliOptions) {
     if (!options.json && !options.format) {
       console.log(chalk.blue('🔍 Analyzing code quality...'));
     }
-    const thresholds = getConfig();
+    // thresholds removed - using global configurations from scoring.utils.ts
     
     const format = options.format || (options.json ? 'json' : 'terminal');
     
@@ -123,7 +123,6 @@ async function runAnalysis(path: string, options: CliOptions) {
     const analysisOptions: AnalysisOptions = {
       format: format,
       projectPath: path,
-      thresholds,
       production: options.production,
       strictDuplication: options.strictDuplication
     };
