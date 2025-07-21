@@ -9,20 +9,6 @@ import {
   HEALTH_PENALTY_CONSTANTS
 } from './thresholds.constants';
 import { percentageToRatio, ratioToPercentage, DUPLICATION_SCORING } from './scoring.utils';
-
-/**
- * Pure and autonomous functions for calculating scores from raw metrics.
- * v0.6.0+ formulas use progressive curves (linear then exponential) 
- * without artificial caps for realistic evaluation of critical problems.
- */
-
-// --- Labeling functions (aligned with McCabe thresholds) ---
-// NOTE: getComplexityLabel and getDuplicationLabel moved to scoring.utils.ts for centralization
-
-// NOTE: getMaintainabilityLabel moved to scoring.utils.ts - use getMaintainabilityConfig(score).label
-
-// --- Dimension scoring functions (without artificial caps) ---
-
 /**
  * Converts cyclomatic complexity to a score from 0 to 100 according to industry best practices.
  * Uses progressive degradation following the gold standard: Linear → Quadratic → Exponential.
@@ -159,17 +145,6 @@ export function calculateWeightedScore(
          (maintainabilityScore * PROJECT_SCORING_WEIGHTS.MAINTAINABILITY) + 
          (duplicationScore * PROJECT_SCORING_WEIGHTS.DUPLICATION);
 }
-
-
-// --- Color level functions (aligned with research thresholds) ---
-
-// NOTE: getComplexityColorLevel and getDuplicationColorLevel moved to scoring.utils.ts for centralization
-
-// NOTE: getMaintainabilityColorLevel moved to scoring.utils.ts - use getMaintainabilityConfig(score).color
-
-// NOTE: getSeverityColorLevel removed - use getSeverityColor from scoring.utils.ts
-
-// --- Calcul du Score de Santé (sans caps de pénalité) ---
 
 /**
  * Fonctions de pénalité individuelles progressives sans plafonds artificiels.
