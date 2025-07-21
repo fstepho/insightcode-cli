@@ -1,6 +1,6 @@
 # InsightCode Benchmark Report - Production Code
 
-**Generated:** 2025-07-21T16:18:24.545Z
+**Generated:** 2025-07-21T22:11:08.510Z
 **Tool Version:** v0.7.0
 **Analysis Mode:** Production Code
 
@@ -10,8 +10,8 @@
 - **Projects Analyzed:** 9
 - **Success Rate:** 9/9 (100%)
 - **Total Lines Analyzed:** 677,099
-- **Analysis Speed:** 9,630 lines/second
-- **Total Duration:** 70.31s
+- **Analysis Speed:** 9,428 lines/second
+- **Total Duration:** 71.82s
 
 ### Quality Distribution
 
@@ -107,9 +107,9 @@ Found 3385 critical/high severity issues across all projects:
 - *...and 288 more issues*
 
 ### typescript
-- **deprecatedCompat/deprecate.ts**: Complexity (44% over threshold)
-- **harness/client.ts**: Complexity (100% over threshold)
-- **harness/client.ts**: Size (306% over threshold)
+- **compiler/binder.ts**: Complexity (100% over threshold)
+- **compiler/binder.ts**: Size (326% over threshold)
+- **compiler/builder.ts**: Complexity (100% over threshold)
 - *...and 1304 more issues*
 
 ## 📈 Pattern Analysis
@@ -123,7 +123,7 @@ Found 3385 critical/high severity issues across all projects:
 | Impure function | 7012 | lodash, uuid, express +5 |
 | Poorly named | 2837 | lodash, chalk, uuid +6 |
 | Long function | 2237 | lodash, uuid, express +5 |
-| High complexity | 2156 | lodash, uuid, vue +4 |
+| Medium complexity | 1536 | lodash, uuid, vue +4 |
 
 ## Project Summaries
 

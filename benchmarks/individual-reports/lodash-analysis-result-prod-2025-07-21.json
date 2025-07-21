@@ -546,7 +546,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -1295,7 +1295,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -1492,7 +1492,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -1584,7 +1584,7 @@
             "parameterCount": 7,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -1747,7 +1747,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -1870,7 +1870,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -2258,7 +2258,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -2543,7 +2543,7 @@
             "parameterCount": 6,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -2736,7 +2736,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -2768,7 +2768,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3493,7 +3493,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3561,7 +3561,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3650,7 +3650,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3702,7 +3702,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3734,7 +3734,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3816,7 +3816,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3994,7 +3994,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "fp/_baseConvert.js",
@@ -4427,179 +4427,6 @@
         "healthScore": 100
       },
       {
-        "file": "lib/common/file.js",
-        "metrics": {
-          "complexity": 4,
-          "loc": 27,
-          "functionCount": 4,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [
-          {
-            "name": "globTemplate",
-            "line": 32,
-            "endLine": 37,
-            "complexity": 1,
-            "loc": 6,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "multiple-responsibilities",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/common/file.js",
-                  "line": 32,
-                  "function": "globTemplate"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "outgoingDependencies": 1,
-          "incomingDependencies": 0,
-          "instability": 1,
-          "cohesionScore": 0.67,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "lib/common/mapping.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 5,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "outgoingDependencies": 2,
-          "incomingDependencies": 0,
-          "instability": 1,
-          "cohesionScore": 0.33,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "lib/common/minify.js",
-        "metrics": {
-          "complexity": 5,
-          "loc": 20,
-          "functionCount": 1,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [
-          {
-            "name": "minify",
-            "line": 24,
-            "endLine": 37,
-            "complexity": 5,
-            "loc": 14,
-            "parameterCount": 4,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/common/minify.js",
-                  "line": 24,
-                  "function": "minify"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "outgoingDependencies": 1,
-          "incomingDependencies": 1,
-          "instability": 0.5,
-          "cohesionScore": 0.67,
-          "percentileUsageRank": 50,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "lib/common/uglify.options.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 15,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "outgoingDependencies": 0,
-          "incomingDependencies": 1,
-          "instability": 0,
-          "cohesionScore": 1,
-          "percentileUsageRank": 50,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "lib/common/util.js",
-        "metrics": {
-          "complexity": 4,
-          "loc": 19,
-          "functionCount": 2,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [
-          {
-            "name": "Hash",
-            "line": 15,
-            "endLine": 21,
-            "complexity": 1,
-            "loc": 7,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "multiple-responsibilities",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/common/util.js",
-                  "line": 15,
-                  "function": "Hash"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/common/util.js",
-                  "line": 15,
-                  "function": "Hash"
-                },
-                "description": "Function name \"Hash\" should start with a verb in camelCase"
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "outgoingDependencies": 0,
-          "incomingDependencies": 1,
-          "instability": 0,
-          "cohesionScore": 1,
-          "percentileUsageRank": 50,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
         "file": "lib/main/build-dist.js",
         "metrics": {
           "complexity": 1,
@@ -4789,6 +4616,179 @@
           "isInCycle": false
         },
         "healthScore": 100
+      },
+      {
+        "file": "lib/common/file.js",
+        "metrics": {
+          "complexity": 4,
+          "loc": 27,
+          "functionCount": 4,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "globTemplate",
+            "line": 32,
+            "endLine": 37,
+            "complexity": 1,
+            "loc": 6,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/common/file.js",
+                  "line": 32,
+                  "function": "globTemplate"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.67,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/mapping.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 5,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 2,
+          "incomingDependencies": 0,
+          "instability": 1,
+          "cohesionScore": 0.33,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/minify.js",
+        "metrics": {
+          "complexity": 5,
+          "loc": 20,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "minify",
+            "line": 24,
+            "endLine": 37,
+            "complexity": 5,
+            "loc": 14,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/common/minify.js",
+                  "line": 24,
+                  "function": "minify"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.67,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/uglify.options.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 15,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/common/util.js",
+        "metrics": {
+          "complexity": 4,
+          "loc": 19,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "Hash",
+            "line": 15,
+            "endLine": 21,
+            "complexity": 1,
+            "loc": 7,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/common/util.js",
+                  "line": 15,
+                  "function": "Hash"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/common/util.js",
+                  "line": 15,
+                  "function": "Hash"
+                },
+                "description": "Function name \"Hash\" should start with a verb in camelCase"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 50,
+          "isInCycle": false
+        },
+        "healthScore": 100
       }
     ],
     "overview": {
@@ -4815,13 +4815,13 @@
         "version": "4.17.21"
       },
       "analysis": {
-        "timestamp": "2025-07-21T16:18:18.783Z",
-        "durationMs": 64609,
+        "timestamp": "2025-07-21T22:11:03.236Z",
+        "durationMs": 66604,
         "toolVersion": "0.7.0",
         "filesAnalyzed": 20,
         "duplicationMode": "legacy"
       }
     }
   },
-  "durationMs": 64647
+  "durationMs": 66644
 }

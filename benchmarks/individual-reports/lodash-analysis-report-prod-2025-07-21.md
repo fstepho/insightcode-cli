@@ -11,8 +11,8 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-21T16:18:18.783Z
-- **Duration:** 64.65s
+- **Timestamp:** 2025-07-21T22:11:03.236Z
+- **Duration:** 66.64s
 - **Files Analyzed:** 20
 - **Tool Version:** 0.7.0
 
@@ -38,21 +38,27 @@
 
 InsightCode combines **research-based thresholds** with **criticality-weighted aggregation**, following the **Pareto principle**.
 
-#### 🔧 Overall Score Formula
+#### 🔧 Overall Score Calculation
+InsightCode uses a **two-step weighted aggregation** process:
+
+**Step 1:** Each metric is weighted by architectural criticality:
 ```
-Overall Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)
+Weighted_Complexity = Σ(File_Complexity × CriticismScore) / Σ(CriticismScore)
+Weighted_Maintainability = Σ(File_Maintainability × CriticismScore) / Σ(CriticismScore)
+Weighted_Duplication = Σ(File_Duplication × CriticismScore) / Σ(CriticismScore)
 ```
 
-#### 🧮 Metric Breakdown
-| Metric | Weight | Thresholds & Basis |
-|--------|--------|---------------------|
-| **Complexity** | 45% | McCabe (1976): ≤10 = low, <= 15 = medium, <= 20 = high, <= 50 = very high, >50 = extreme. Penalized quadratically to exponentially. |
-| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |
-| **Duplication** | 25% | ⚠️ Legacy threshold ≤15% considered "excellent" (brownfield projects). |
+**Step 2:** Final score combines weighted metrics:
+```
+Overall Score = (Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)
+```
 
-#### 🧠 Aggregation Strategy
-- **File-level health:** 100 - penalties (progressive, no caps or masking).
-- **Project-level score:** Weighted by **architectural criticality**, not arithmetic average.
+#### 🧮 Metric Configuration
+| Metric | Final Weight | Thresholds & Research Basis |
+|--------|--------------|-----------------------------|
+| **Complexity** | 45% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |
+| **Maintainability** | 30% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |
+| **Duplication** | 25% | Legacy threshold: ≤15% considered excellent for brownfield projects |
 
 #### 🧭 Architectural Criticality Formula
 Each file’s weight is computed as:

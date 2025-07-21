@@ -1270,6 +1270,1160 @@
         "healthScore": 100
       },
       {
+        "file": "lib/cli-engine/cli-engine.js",
+        "metrics": {
+          "complexity": 127,
+          "loc": 620,
+          "functionCount": 24,
+          "duplicationRatio": 0.09
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "location": {
+              "file": "lib/cli-engine/cli-engine.js",
+              "line": 1
+            },
+            "description": "File complexity 127 exceeds critical threshold",
+            "threshold": null,
+            "excessRatio": 0
+          },
+          {
+            "type": "size",
+            "severity": "high",
+            "location": {
+              "file": "lib/cli-engine/cli-engine.js",
+              "line": 1
+            },
+            "description": "File size 620 lines exceeds high threshold",
+            "threshold": 300,
+            "excessRatio": 2.07
+          }
+        ],
+        "functions": [
+          {
+            "name": "validateFixTypes",
+            "line": 156,
+            "endLine": 162,
+            "complexity": 4,
+            "loc": 7,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 156,
+                  "function": "validateFixTypes"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "calculateStatsPerFile",
+            "line": 170,
+            "endLine": 198,
+            "complexity": 7,
+            "loc": 29,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 170,
+                  "function": "calculateStatsPerFile"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "calculateStatsPerRun",
+            "line": 206,
+            "endLine": 226,
+            "complexity": 2,
+            "loc": 21,
+            "parameterCount": 1,
+            "issues": []
+          },
+          {
+            "name": "verifyText",
+            "line": 243,
+            "endLine": 300,
+            "complexity": 6,
+            "loc": 58,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 243,
+                  "function": "verifyText"
+                },
+                "description": "Function has 58 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.16
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 243,
+                  "function": "verifyText"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          },
+          {
+            "name": "createIgnoreResult",
+            "line": 309,
+            "endLine": 346,
+            "complexity": 4,
+            "loc": 38,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 309,
+                  "function": "createIgnoreResult"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "getRule",
+            "line": 354,
+            "endLine": 363,
+            "complexity": 4,
+            "loc": 10,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 354,
+                  "function": "getRule"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "iterateRuleDeprecationWarnings",
+            "line": 387,
+            "endLine": 421,
+            "complexity": 9,
+            "loc": 35,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 387,
+                  "function": "iterateRuleDeprecationWarnings"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "getCacheFile",
+            "line": 443,
+            "endLine": 500,
+            "complexity": 6,
+            "loc": 58,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 443,
+                  "function": "getCacheFile"
+                },
+                "description": "Function has 58 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.16
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 443,
+                  "function": "getCacheFile"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "toBooleanMap",
+            "line": 510,
+            "endLine": 526,
+            "complexity": 6,
+            "loc": 17,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 510,
+                  "function": "toBooleanMap"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "high",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 510,
+                  "function": "toBooleanMap"
+                },
+                "description": "Function has 3 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ],
+            "snippet": "function toBooleanMap(keys, defaultValue, displayName) {\n\tif (keys && !Array.isArray(keys)) {\n\t\tthrow new Error(`${displayName} must be an array.`);\n\t}\n\tif (keys && keys.length > 0) {\n\t\treturn keys.reduce((map, def) => {\n\t\t\tconst [key, value] = def.split(\":\");\n\t\t\tif (key !== \"__proto__\") {\n  // ... more code ..."
+          },
+          {
+            "name": "createConfigDataFromOptions",
+            "line": 533,
+            "endLine": 558,
+            "complexity": 9,
+            "loc": 26,
+            "parameterCount": 1,
+            "issues": []
+          },
+          {
+            "name": "directoryExists",
+            "line": 566,
+            "endLine": 575,
+            "complexity": 6,
+            "loc": 10,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 566,
+                  "function": "directoryExists"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "<anonymous>",
+            "line": 591,
+            "endLine": 678,
+            "complexity": 11,
+            "loc": 88,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "medium-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 591,
+                  "function": "<anonymous>"
+                },
+                "description": "Complexity 11 exceeds medium threshold of 10",
+                "threshold": 10,
+                "excessRatio": 1.1
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 591,
+                  "function": "<anonymous>"
+                },
+                "description": "Function has 88 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.76
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 591,
+                  "function": "<anonymous>"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 591,
+                  "function": "<anonymous>"
+                },
+                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "getRules",
+            "line": 680,
+            "endLine": 692,
+            "complexity": 1,
+            "loc": 13,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 680,
+                  "function": "getRules"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "getErrorResults",
+            "line": 699,
+            "endLine": 721,
+            "complexity": 1,
+            "loc": 23,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 699,
+                  "function": "getErrorResults"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "resolveFileGlobPatterns",
+            "line": 742,
+            "endLine": 762,
+            "complexity": 3,
+            "loc": 21,
+            "parameterCount": 1,
+            "issues": []
+          },
+          {
+            "name": "executeOnFiles",
+            "line": 770,
+            "endLine": 901,
+            "complexity": 18,
+            "loc": 132,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "medium-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 770,
+                  "function": "executeOnFiles"
+                },
+                "description": "Complexity 18 exceeds medium threshold of 10",
+                "threshold": 10,
+                "excessRatio": 1.8
+              },
+              {
+                "type": "long-function",
+                "severity": "high",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 770,
+                  "function": "executeOnFiles"
+                },
+                "description": "Function has 132 lines, consider breaking into smaller functions",
+                "threshold": 100,
+                "excessRatio": 1.32
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 770,
+                  "function": "executeOnFiles"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 770,
+                  "function": "executeOnFiles"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 770,
+                  "function": "executeOnFiles"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "snippet": "executeOnFiles(patterns) {\n\t\tconst {\n\t\t\tcacheFilePath,\n\t\t\tfileEnumerator,\n\t\t\tlastConfigArrays,\n\t\t\tlintResultCache,\n\t\t\tlinter,\n\t\t\toptions: {\n  // ... more code ..."
+          },
+          {
+            "name": "executeOnText",
+            "line": 910,
+            "endLine": 979,
+            "complexity": 6,
+            "loc": 70,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 910,
+                  "function": "executeOnText"
+                },
+                "description": "Function has 70 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.4
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 910,
+                  "function": "executeOnText"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 910,
+                  "function": "executeOnText"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "getFormatter",
+            "line": 1038,
+            "endLine": 1092,
+            "complexity": 10,
+            "loc": 55,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 1038,
+                  "function": "getFormatter"
+                },
+                "description": "Function has 55 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.1
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 1038,
+                  "function": "getFormatter"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "high",
+                "location": {
+                  "file": "lib/cli-engine/cli-engine.js",
+                  "line": 1038,
+                  "function": "getFormatter"
+                },
+                "description": "Function has 3 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ],
+            "snippet": "getFormatter(format) {\n\t\tconst resolvedFormatName = format || \"stylish\";\n\t\tif (typeof resolvedFormatName === \"string\") {\n\t\t\tconst normalizedFormatName = resolvedFormatName.replace(\n\t\t\t\t/\\\\/gu,\n\t\t\t\t\"/\",\n\t\t\t);\n\t\t\tconst slots = internalSlotsMap.get(this);\n  // ... more code ..."
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 7,
+          "incomingDependencies": 2,
+          "instability": 0.78,
+          "cohesionScore": 0.48,
+          "percentileUsageRank": 90,
+          "isInCycle": false
+        },
+        "healthScore": 0
+      },
+      {
+        "file": "lib/cli-engine/file-enumerator.js",
+        "metrics": {
+          "complexity": 63,
+          "loc": 279,
+          "functionCount": 15,
+          "duplicationRatio": 0.01
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "location": {
+              "file": "lib/cli-engine/file-enumerator.js",
+              "line": 1
+            },
+            "description": "File complexity 63 exceeds critical threshold",
+            "threshold": null,
+            "excessRatio": 0
+          },
+          {
+            "type": "size",
+            "severity": "medium",
+            "location": {
+              "file": "lib/cli-engine/file-enumerator.js",
+              "line": 1
+            },
+            "description": "File size 279 lines exceeds medium threshold",
+            "threshold": 200,
+            "excessRatio": 1.4
+          }
+        ],
+        "functions": [
+          {
+            "name": "statSafeSync",
+            "line": 118,
+            "endLine": 128,
+            "complexity": 4,
+            "loc": 11,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 118,
+                  "function": "statSafeSync"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "readdirSafeSync",
+            "line": 137,
+            "endLine": 147,
+            "complexity": 4,
+            "loc": 11,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 137,
+                  "function": "readdirSafeSync"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "<anonymous>",
+            "line": 173,
+            "endLine": 179,
+            "complexity": 2,
+            "loc": 7,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 173,
+                  "function": "<anonymous>"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 173,
+                  "function": "<anonymous>"
+                },
+                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "<anonymous>",
+            "line": 189,
+            "endLine": 193,
+            "complexity": 1,
+            "loc": 5,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 189,
+                  "function": "<anonymous>"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 189,
+                  "function": "<anonymous>"
+                },
+                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "<anonymous>",
+            "line": 205,
+            "endLine": 227,
+            "complexity": 1,
+            "loc": 23,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 205,
+                  "function": "<anonymous>"
+                },
+                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "isTargetPath",
+            "line": 235,
+            "endLine": 257,
+            "complexity": 4,
+            "loc": 23,
+            "parameterCount": 2,
+            "issues": []
+          },
+          {
+            "name": "iterateFiles",
+            "line": 265,
+            "endLine": 322,
+            "complexity": 13,
+            "loc": 58,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "medium-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 265,
+                  "function": "iterateFiles"
+                },
+                "description": "Complexity 13 exceeds medium threshold of 10",
+                "threshold": 10,
+                "excessRatio": 1.3
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 265,
+                  "function": "iterateFiles"
+                },
+                "description": "Function has 58 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.16
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 265,
+                  "function": "iterateFiles"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 265,
+                  "function": "iterateFiles"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "_iterateFiles",
+            "line": 329,
+            "endLine": 346,
+            "complexity": 7,
+            "loc": 18,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 329,
+                  "function": "_iterateFiles"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 329,
+                  "function": "_iterateFiles"
+                },
+                "description": "Function name \"_iterateFiles\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "_iterateFilesWithFile",
+            "line": 354,
+            "endLine": 363,
+            "complexity": 2,
+            "loc": 10,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 354,
+                  "function": "_iterateFilesWithFile"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 354,
+                  "function": "_iterateFilesWithFile"
+                },
+                "description": "Function name \"_iterateFilesWithFile\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "_iterateFilesWithDirectory",
+            "line": 372,
+            "endLine": 380,
+            "complexity": 1,
+            "loc": 9,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 372,
+                  "function": "_iterateFilesWithDirectory"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 372,
+                  "function": "_iterateFilesWithDirectory"
+                },
+                "description": "Function name \"_iterateFilesWithDirectory\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "_iterateFilesWithGlob",
+            "line": 389,
+            "endLine": 411,
+            "complexity": 1,
+            "loc": 23,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 389,
+                  "function": "_iterateFilesWithGlob"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 389,
+                  "function": "_iterateFilesWithGlob"
+                },
+                "description": "Function name \"_iterateFilesWithGlob\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "_iterateFilesRecursive",
+            "line": 423,
+            "endLine": 502,
+            "complexity": 14,
+            "loc": 80,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "medium-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 423,
+                  "function": "_iterateFilesRecursive"
+                },
+                "description": "Complexity 14 exceeds medium threshold of 10",
+                "threshold": 10,
+                "excessRatio": 1.4
+              },
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 423,
+                  "function": "_iterateFilesRecursive"
+                },
+                "description": "Function has 80 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.6
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 423,
+                  "function": "_iterateFilesRecursive"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 423,
+                  "function": "_iterateFilesRecursive"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 423,
+                  "function": "_iterateFilesRecursive"
+                },
+                "description": "Function name \"_iterateFilesRecursive\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "_isIgnoredFile",
+            "line": 514,
+            "endLine": 534,
+            "complexity": 5,
+            "loc": 21,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/file-enumerator.js",
+                  "line": 514,
+                  "function": "_isIgnoredFile"
+                },
+                "description": "Function name \"_isIgnoredFile\" should start with a verb in camelCase"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 2,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 90,
+          "isInCycle": false
+        },
+        "healthScore": 0
+      },
+      {
+        "file": "lib/cli-engine/hash.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 6,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 3,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 95,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/cli-engine/index.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 5,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.67,
+          "percentileUsageRank": 8,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/cli-engine/lint-result-cache.js",
+        "metrics": {
+          "complexity": 17,
+          "loc": 92,
+          "functionCount": 6,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "high",
+            "location": {
+              "file": "lib/cli-engine/lint-result-cache.js",
+              "line": 1
+            },
+            "description": "File complexity 17 exceeds high threshold",
+            "threshold": 20,
+            "excessRatio": 0.85
+          }
+        ],
+        "functions": [
+          {
+            "name": "<anonymous>",
+            "line": 72,
+            "endLine": 92,
+            "complexity": 1,
+            "loc": 21,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/lint-result-cache.js",
+                  "line": 72,
+                  "function": "<anonymous>"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/lint-result-cache.js",
+                  "line": 72,
+                  "function": "<anonymous>"
+                },
+                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "getCachedLintResults",
+            "line": 103,
+            "endLine": 152,
+            "complexity": 6,
+            "loc": 50,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/lint-result-cache.js",
+                  "line": 103,
+                  "function": "getCachedLintResults"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "setCachedLintResults",
+            "line": 165,
+            "endLine": 190,
+            "complexity": 6,
+            "loc": 26,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/cli-engine/lint-result-cache.js",
+                  "line": 165,
+                  "function": "setCachedLintResults"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/lint-result-cache.js",
+                  "line": 165,
+                  "function": "setCachedLintResults"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "reconcile",
+            "line": 196,
+            "endLine": 199,
+            "complexity": 1,
+            "loc": 4,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/cli-engine/lint-result-cache.js",
+                  "line": 196,
+                  "function": "reconcile"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 2,
+          "incomingDependencies": 2,
+          "instability": 0.5,
+          "cohesionScore": 0.5,
+          "percentileUsageRank": 90,
+          "isInCycle": false
+        },
+        "healthScore": 67
+      },
+      {
+        "file": "lib/cli-engine/load-rules.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 19,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 8,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
         "file": "lib/config/config-loader.js",
         "metrics": {
           "complexity": 78,
@@ -1713,7 +2867,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/config/config-loader.js",
@@ -1992,7 +3146,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/config/config.js",
@@ -2813,1160 +3967,6 @@
         "healthScore": 15
       },
       {
-        "file": "lib/cli-engine/cli-engine.js",
-        "metrics": {
-          "complexity": 127,
-          "loc": 620,
-          "functionCount": 24,
-          "duplicationRatio": 0.09
-        },
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "critical",
-            "location": {
-              "file": "lib/cli-engine/cli-engine.js",
-              "line": 1
-            },
-            "description": "File complexity 127 exceeds critical threshold",
-            "threshold": null,
-            "excessRatio": 0
-          },
-          {
-            "type": "size",
-            "severity": "high",
-            "location": {
-              "file": "lib/cli-engine/cli-engine.js",
-              "line": 1
-            },
-            "description": "File size 620 lines exceeds high threshold",
-            "threshold": 300,
-            "excessRatio": 2.07
-          }
-        ],
-        "functions": [
-          {
-            "name": "validateFixTypes",
-            "line": 156,
-            "endLine": 162,
-            "complexity": 4,
-            "loc": 7,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 156,
-                  "function": "validateFixTypes"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "calculateStatsPerFile",
-            "line": 170,
-            "endLine": 198,
-            "complexity": 7,
-            "loc": 29,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 170,
-                  "function": "calculateStatsPerFile"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "calculateStatsPerRun",
-            "line": 206,
-            "endLine": 226,
-            "complexity": 2,
-            "loc": 21,
-            "parameterCount": 1,
-            "issues": []
-          },
-          {
-            "name": "verifyText",
-            "line": 243,
-            "endLine": 300,
-            "complexity": 6,
-            "loc": 58,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "long-function",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 243,
-                  "function": "verifyText"
-                },
-                "description": "Function has 58 lines, consider splitting for better maintainability",
-                "threshold": 50,
-                "excessRatio": 1.16
-              },
-              {
-                "type": "multiple-responsibilities",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 243,
-                  "function": "verifyText"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              }
-            ]
-          },
-          {
-            "name": "createIgnoreResult",
-            "line": 309,
-            "endLine": 346,
-            "complexity": 4,
-            "loc": 38,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 309,
-                  "function": "createIgnoreResult"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "getRule",
-            "line": 354,
-            "endLine": 363,
-            "complexity": 4,
-            "loc": 10,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 354,
-                  "function": "getRule"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "iterateRuleDeprecationWarnings",
-            "line": 387,
-            "endLine": 421,
-            "complexity": 9,
-            "loc": 35,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 387,
-                  "function": "iterateRuleDeprecationWarnings"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "getCacheFile",
-            "line": 443,
-            "endLine": 500,
-            "complexity": 6,
-            "loc": 58,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "long-function",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 443,
-                  "function": "getCacheFile"
-                },
-                "description": "Function has 58 lines, consider splitting for better maintainability",
-                "threshold": 50,
-                "excessRatio": 1.16
-              },
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 443,
-                  "function": "getCacheFile"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "toBooleanMap",
-            "line": 510,
-            "endLine": 526,
-            "complexity": 6,
-            "loc": 17,
-            "parameterCount": 3,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 510,
-                  "function": "toBooleanMap"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "multiple-responsibilities",
-                "severity": "high",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 510,
-                  "function": "toBooleanMap"
-                },
-                "description": "Function has 3 distinct responsibilities, violates Single Responsibility Principle"
-              }
-            ],
-            "snippet": "function toBooleanMap(keys, defaultValue, displayName) {\n\tif (keys && !Array.isArray(keys)) {\n\t\tthrow new Error(`${displayName} must be an array.`);\n\t}\n\tif (keys && keys.length > 0) {\n\t\treturn keys.reduce((map, def) => {\n\t\t\tconst [key, value] = def.split(\":\");\n\t\t\tif (key !== \"__proto__\") {\n  // ... more code ..."
-          },
-          {
-            "name": "createConfigDataFromOptions",
-            "line": 533,
-            "endLine": 558,
-            "complexity": 9,
-            "loc": 26,
-            "parameterCount": 1,
-            "issues": []
-          },
-          {
-            "name": "directoryExists",
-            "line": 566,
-            "endLine": 575,
-            "complexity": 6,
-            "loc": 10,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 566,
-                  "function": "directoryExists"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "<anonymous>",
-            "line": 591,
-            "endLine": 678,
-            "complexity": 11,
-            "loc": 88,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "high-complexity",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 591,
-                  "function": "<anonymous>"
-                },
-                "description": "Complexity 11 exceeds medium threshold of 10",
-                "threshold": 10,
-                "excessRatio": 1.1
-              },
-              {
-                "type": "long-function",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 591,
-                  "function": "<anonymous>"
-                },
-                "description": "Function has 88 lines, consider splitting for better maintainability",
-                "threshold": 50,
-                "excessRatio": 1.76
-              },
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 591,
-                  "function": "<anonymous>"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 591,
-                  "function": "<anonymous>"
-                },
-                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "getRules",
-            "line": 680,
-            "endLine": 692,
-            "complexity": 1,
-            "loc": 13,
-            "parameterCount": 0,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 680,
-                  "function": "getRules"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "getErrorResults",
-            "line": 699,
-            "endLine": 721,
-            "complexity": 1,
-            "loc": 23,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 699,
-                  "function": "getErrorResults"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "resolveFileGlobPatterns",
-            "line": 742,
-            "endLine": 762,
-            "complexity": 3,
-            "loc": 21,
-            "parameterCount": 1,
-            "issues": []
-          },
-          {
-            "name": "executeOnFiles",
-            "line": 770,
-            "endLine": 901,
-            "complexity": 18,
-            "loc": 132,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "high-complexity",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 770,
-                  "function": "executeOnFiles"
-                },
-                "description": "Complexity 18 exceeds medium threshold of 10",
-                "threshold": 10,
-                "excessRatio": 1.8
-              },
-              {
-                "type": "long-function",
-                "severity": "high",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 770,
-                  "function": "executeOnFiles"
-                },
-                "description": "Function has 132 lines, consider breaking into smaller functions",
-                "threshold": 100,
-                "excessRatio": 1.32
-              },
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 770,
-                  "function": "executeOnFiles"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "multiple-responsibilities",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 770,
-                  "function": "executeOnFiles"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              },
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 770,
-                  "function": "executeOnFiles"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ],
-            "snippet": "executeOnFiles(patterns) {\n\t\tconst {\n\t\t\tcacheFilePath,\n\t\t\tfileEnumerator,\n\t\t\tlastConfigArrays,\n\t\t\tlintResultCache,\n\t\t\tlinter,\n\t\t\toptions: {\n  // ... more code ..."
-          },
-          {
-            "name": "executeOnText",
-            "line": 910,
-            "endLine": 979,
-            "complexity": 6,
-            "loc": 70,
-            "parameterCount": 3,
-            "issues": [
-              {
-                "type": "long-function",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 910,
-                  "function": "executeOnText"
-                },
-                "description": "Function has 70 lines, consider splitting for better maintainability",
-                "threshold": 50,
-                "excessRatio": 1.4
-              },
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 910,
-                  "function": "executeOnText"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 910,
-                  "function": "executeOnText"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "getFormatter",
-            "line": 1038,
-            "endLine": 1092,
-            "complexity": 10,
-            "loc": 55,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "long-function",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 1038,
-                  "function": "getFormatter"
-                },
-                "description": "Function has 55 lines, consider splitting for better maintainability",
-                "threshold": 50,
-                "excessRatio": 1.1
-              },
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 1038,
-                  "function": "getFormatter"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "multiple-responsibilities",
-                "severity": "high",
-                "location": {
-                  "file": "lib/cli-engine/cli-engine.js",
-                  "line": 1038,
-                  "function": "getFormatter"
-                },
-                "description": "Function has 3 distinct responsibilities, violates Single Responsibility Principle"
-              }
-            ],
-            "snippet": "getFormatter(format) {\n\t\tconst resolvedFormatName = format || \"stylish\";\n\t\tif (typeof resolvedFormatName === \"string\") {\n\t\t\tconst normalizedFormatName = resolvedFormatName.replace(\n\t\t\t\t/\\\\/gu,\n\t\t\t\t\"/\",\n\t\t\t);\n\t\t\tconst slots = internalSlotsMap.get(this);\n  // ... more code ..."
-          }
-        ],
-        "dependencies": {
-          "outgoingDependencies": 7,
-          "incomingDependencies": 2,
-          "instability": 0.78,
-          "cohesionScore": 0.48,
-          "percentileUsageRank": 90,
-          "isInCycle": false
-        },
-        "healthScore": 0
-      },
-      {
-        "file": "lib/cli-engine/file-enumerator.js",
-        "metrics": {
-          "complexity": 63,
-          "loc": 279,
-          "functionCount": 15,
-          "duplicationRatio": 0.01
-        },
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "critical",
-            "location": {
-              "file": "lib/cli-engine/file-enumerator.js",
-              "line": 1
-            },
-            "description": "File complexity 63 exceeds critical threshold",
-            "threshold": null,
-            "excessRatio": 0
-          },
-          {
-            "type": "size",
-            "severity": "medium",
-            "location": {
-              "file": "lib/cli-engine/file-enumerator.js",
-              "line": 1
-            },
-            "description": "File size 279 lines exceeds medium threshold",
-            "threshold": 200,
-            "excessRatio": 1.4
-          }
-        ],
-        "functions": [
-          {
-            "name": "statSafeSync",
-            "line": 118,
-            "endLine": 128,
-            "complexity": 4,
-            "loc": 11,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 118,
-                  "function": "statSafeSync"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "readdirSafeSync",
-            "line": 137,
-            "endLine": 147,
-            "complexity": 4,
-            "loc": 11,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 137,
-                  "function": "readdirSafeSync"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "<anonymous>",
-            "line": 173,
-            "endLine": 179,
-            "complexity": 2,
-            "loc": 7,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 173,
-                  "function": "<anonymous>"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 173,
-                  "function": "<anonymous>"
-                },
-                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "<anonymous>",
-            "line": 189,
-            "endLine": 193,
-            "complexity": 1,
-            "loc": 5,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 189,
-                  "function": "<anonymous>"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 189,
-                  "function": "<anonymous>"
-                },
-                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "<anonymous>",
-            "line": 205,
-            "endLine": 227,
-            "complexity": 1,
-            "loc": 23,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 205,
-                  "function": "<anonymous>"
-                },
-                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "isTargetPath",
-            "line": 235,
-            "endLine": 257,
-            "complexity": 4,
-            "loc": 23,
-            "parameterCount": 2,
-            "issues": []
-          },
-          {
-            "name": "iterateFiles",
-            "line": 265,
-            "endLine": 322,
-            "complexity": 13,
-            "loc": 58,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "high-complexity",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 265,
-                  "function": "iterateFiles"
-                },
-                "description": "Complexity 13 exceeds medium threshold of 10",
-                "threshold": 10,
-                "excessRatio": 1.3
-              },
-              {
-                "type": "long-function",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 265,
-                  "function": "iterateFiles"
-                },
-                "description": "Function has 58 lines, consider splitting for better maintainability",
-                "threshold": 50,
-                "excessRatio": 1.16
-              },
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 265,
-                  "function": "iterateFiles"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 265,
-                  "function": "iterateFiles"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "_iterateFiles",
-            "line": 329,
-            "endLine": 346,
-            "complexity": 7,
-            "loc": 18,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 329,
-                  "function": "_iterateFiles"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 329,
-                  "function": "_iterateFiles"
-                },
-                "description": "Function name \"_iterateFiles\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "_iterateFilesWithFile",
-            "line": 354,
-            "endLine": 363,
-            "complexity": 2,
-            "loc": 10,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 354,
-                  "function": "_iterateFilesWithFile"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 354,
-                  "function": "_iterateFilesWithFile"
-                },
-                "description": "Function name \"_iterateFilesWithFile\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "_iterateFilesWithDirectory",
-            "line": 372,
-            "endLine": 380,
-            "complexity": 1,
-            "loc": 9,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 372,
-                  "function": "_iterateFilesWithDirectory"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 372,
-                  "function": "_iterateFilesWithDirectory"
-                },
-                "description": "Function name \"_iterateFilesWithDirectory\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "_iterateFilesWithGlob",
-            "line": 389,
-            "endLine": 411,
-            "complexity": 1,
-            "loc": 23,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 389,
-                  "function": "_iterateFilesWithGlob"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 389,
-                  "function": "_iterateFilesWithGlob"
-                },
-                "description": "Function name \"_iterateFilesWithGlob\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "_iterateFilesRecursive",
-            "line": 423,
-            "endLine": 502,
-            "complexity": 14,
-            "loc": 80,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "high-complexity",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 423,
-                  "function": "_iterateFilesRecursive"
-                },
-                "description": "Complexity 14 exceeds medium threshold of 10",
-                "threshold": 10,
-                "excessRatio": 1.4
-              },
-              {
-                "type": "long-function",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 423,
-                  "function": "_iterateFilesRecursive"
-                },
-                "description": "Function has 80 lines, consider splitting for better maintainability",
-                "threshold": 50,
-                "excessRatio": 1.6
-              },
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 423,
-                  "function": "_iterateFilesRecursive"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 423,
-                  "function": "_iterateFilesRecursive"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 423,
-                  "function": "_iterateFilesRecursive"
-                },
-                "description": "Function name \"_iterateFilesRecursive\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "_isIgnoredFile",
-            "line": 514,
-            "endLine": 534,
-            "complexity": 5,
-            "loc": 21,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/file-enumerator.js",
-                  "line": 514,
-                  "function": "_isIgnoredFile"
-                },
-                "description": "Function name \"_isIgnoredFile\" should start with a verb in camelCase"
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "outgoingDependencies": 0,
-          "incomingDependencies": 2,
-          "instability": 0,
-          "cohesionScore": 1,
-          "percentileUsageRank": 90,
-          "isInCycle": false
-        },
-        "healthScore": 0
-      },
-      {
-        "file": "lib/cli-engine/hash.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 6,
-          "functionCount": 1,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "outgoingDependencies": 0,
-          "incomingDependencies": 3,
-          "instability": 0,
-          "cohesionScore": 1,
-          "percentileUsageRank": 95,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "lib/cli-engine/index.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 5,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "outgoingDependencies": 1,
-          "incomingDependencies": 1,
-          "instability": 0.5,
-          "cohesionScore": 0.67,
-          "percentileUsageRank": 8,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "lib/cli-engine/lint-result-cache.js",
-        "metrics": {
-          "complexity": 17,
-          "loc": 92,
-          "functionCount": 6,
-          "duplicationRatio": 0
-        },
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "high",
-            "location": {
-              "file": "lib/cli-engine/lint-result-cache.js",
-              "line": 1
-            },
-            "description": "File complexity 17 exceeds high threshold",
-            "threshold": 20,
-            "excessRatio": 0.85
-          }
-        ],
-        "functions": [
-          {
-            "name": "<anonymous>",
-            "line": 72,
-            "endLine": 92,
-            "complexity": 1,
-            "loc": 21,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/lint-result-cache.js",
-                  "line": 72,
-                  "function": "<anonymous>"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/lint-result-cache.js",
-                  "line": 72,
-                  "function": "<anonymous>"
-                },
-                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "getCachedLintResults",
-            "line": 103,
-            "endLine": 152,
-            "complexity": 6,
-            "loc": 50,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/lint-result-cache.js",
-                  "line": 103,
-                  "function": "getCachedLintResults"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "setCachedLintResults",
-            "line": 165,
-            "endLine": 190,
-            "complexity": 6,
-            "loc": 26,
-            "parameterCount": 3,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/cli-engine/lint-result-cache.js",
-                  "line": 165,
-                  "function": "setCachedLintResults"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/lint-result-cache.js",
-                  "line": 165,
-                  "function": "setCachedLintResults"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "reconcile",
-            "line": 196,
-            "endLine": 199,
-            "complexity": 1,
-            "loc": 4,
-            "parameterCount": 0,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/cli-engine/lint-result-cache.js",
-                  "line": 196,
-                  "function": "reconcile"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "outgoingDependencies": 2,
-          "incomingDependencies": 2,
-          "instability": 0.5,
-          "cohesionScore": 0.5,
-          "percentileUsageRank": 90,
-          "isInCycle": false
-        },
-        "healthScore": 67
-      },
-      {
-        "file": "lib/cli-engine/load-rules.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 19,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "outgoingDependencies": 0,
-          "incomingDependencies": 1,
-          "instability": 0,
-          "cohesionScore": 1,
-          "percentileUsageRank": 8,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
         "file": "lib/eslint/eslint-helpers.js",
         "metrics": {
           "complexity": 113,
@@ -4507,7 +4507,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/eslint/eslint.js",
@@ -4743,7 +4743,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/eslint/eslint.js",
@@ -4787,7 +4787,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/eslint/eslint.js",
@@ -4927,7 +4927,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/eslint/eslint.js",
@@ -5401,7 +5401,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/eslint/legacy-eslint.js",
@@ -5504,1020 +5504,6 @@
           "isInCycle": false
         },
         "healthScore": 0
-      },
-      {
-        "file": "lib/rule-tester/index.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 5,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "outgoingDependencies": 1,
-          "incomingDependencies": 1,
-          "instability": 0.5,
-          "cohesionScore": 0.67,
-          "percentileUsageRank": 8,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "lib/rule-tester/rule-tester.js",
-        "metrics": {
-          "complexity": 147,
-          "loc": 1069,
-          "functionCount": 30,
-          "duplicationRatio": 0
-        },
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "critical",
-            "location": {
-              "file": "lib/rule-tester/rule-tester.js",
-              "line": 1
-            },
-            "description": "File complexity 147 exceeds critical threshold",
-            "threshold": null,
-            "excessRatio": 0
-          },
-          {
-            "type": "size",
-            "severity": "critical",
-            "location": {
-              "file": "lib/rule-tester/rule-tester.js",
-              "line": 1
-            },
-            "description": "File size 1069 lines exceeds critical threshold",
-            "threshold": 1000,
-            "excessRatio": 1.07
-          }
-        ],
-        "functions": [
-          {
-            "name": "cloneDeeplyExcludesParent",
-            "line": 172,
-            "endLine": 190,
-            "complexity": 7,
-            "loc": 19,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 172,
-                  "function": "cloneDeeplyExcludesParent"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "multiple-responsibilities",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 172,
-                  "function": "cloneDeeplyExcludesParent"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              }
-            ]
-          },
-          {
-            "name": "freezeDeeply",
-            "line": 198,
-            "endLine": 218,
-            "complexity": 8,
-            "loc": 21,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 198,
-                  "function": "freezeDeeply"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "defineStartEndAsError",
-            "line": 241,
-            "endLine": 262,
-            "complexity": 1,
-            "loc": 22,
-            "parameterCount": 2,
-            "issues": []
-          },
-          {
-            "name": "wrapParser",
-            "line": 285,
-            "endLine": 307,
-            "complexity": 2,
-            "loc": 23,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 285,
-                  "function": "wrapParser"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "throwForbiddenMethodError",
-            "line": 315,
-            "endLine": 333,
-            "complexity": 1,
-            "loc": 19,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 315,
-                  "function": "throwForbiddenMethodError"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "itDefaultHandler",
-            "line": 395,
-            "endLine": 404,
-            "complexity": 4,
-            "loc": 10,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 395,
-                  "function": "itDefaultHandler"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "runRuleForItem",
-            "line": 678,
-            "endLine": 924,
-            "complexity": 23,
-            "loc": 247,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "high-complexity",
-                "severity": "high",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 678,
-                  "function": "runRuleForItem"
-                },
-                "description": "Complexity 23 exceeds recommended threshold of 20",
-                "threshold": 20,
-                "excessRatio": 1.15
-              },
-              {
-                "type": "long-function",
-                "severity": "high",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 678,
-                  "function": "runRuleForItem"
-                },
-                "description": "Function has 247 lines, consider breaking into smaller functions",
-                "threshold": 100,
-                "excessRatio": 2.47
-              },
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 678,
-                  "function": "runRuleForItem"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "god-function",
-                "severity": "high",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 678,
-                  "function": "runRuleForItem"
-                },
-                "description": "Function does too much - high complexity, many lines, and multiple responsibilities"
-              },
-              {
-                "type": "multiple-responsibilities",
-                "severity": "high",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 678,
-                  "function": "runRuleForItem"
-                },
-                "description": "Function has 4 distinct responsibilities, violates Single Responsibility Principle"
-              }
-            ],
-            "snippet": "function runRuleForItem(item) {\n\t\t\tconst flatConfigArrayOptions = {\n\t\t\t\tbaseConfig,\n\t\t\t};\n\t\t\tif (item.filename) {\n\t\t\t\tflatConfigArrayOptions.basePath =\n\t\t\t\t\tpath.parse(item.filename).root || void 0;\n\t\t\t}\n  // ... more code ..."
-          },
-          {
-            "name": "checkDuplicateTestCase",
-            "line": 946,
-            "endLine": 972,
-            "complexity": 3,
-            "loc": 27,
-            "parameterCount": 2,
-            "issues": []
-          },
-          {
-            "name": "testValidTemplate",
-            "line": 981,
-            "endLine": 1011,
-            "complexity": 3,
-            "loc": 31,
-            "parameterCount": 1,
-            "issues": []
-          },
-          {
-            "name": "testInvalidTemplate",
-            "line": 1041,
-            "endLine": 1523,
-            "complexity": 40,
-            "loc": 483,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "high-complexity",
-                "severity": "high",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 1041,
-                  "function": "testInvalidTemplate"
-                },
-                "description": "Complexity 40 exceeds recommended threshold of 20",
-                "threshold": 20,
-                "excessRatio": 2
-              },
-              {
-                "type": "long-function",
-                "severity": "high",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 1041,
-                  "function": "testInvalidTemplate"
-                },
-                "description": "Function has 483 lines, consider breaking into smaller functions",
-                "threshold": 100,
-                "excessRatio": 4.83
-              },
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 1041,
-                  "function": "testInvalidTemplate"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "multiple-responsibilities",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 1041,
-                  "function": "testInvalidTemplate"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              }
-            ],
-            "snippet": "function testInvalidTemplate(item) {\n\t\t\tassert.ok(\n\t\t\t\ttypeof item.code === \"string\",\n\t\t\t\t\"Test case must specify a string value for 'code'\",\n\t\t\t);\n\t\t\tif (item.name) {\n\t\t\t\tassert.ok(\n\t\t\t\t\ttypeof item.name === \"string\",\n  // ... more code ..."
-          },
-          {
-            "name": "<anonymous>",
-            "line": 425,
-            "endLine": 438,
-            "complexity": 1,
-            "loc": 14,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 425,
-                  "function": "<anonymous>"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 425,
-                  "function": "<anonymous>"
-                },
-                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "setDefaultConfig",
-            "line": 446,
-            "endLine": 456,
-            "complexity": 5,
-            "loc": 11,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "multiple-responsibilities",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 446,
-                  "function": "setDefaultConfig"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              }
-            ]
-          },
-          {
-            "name": "run",
-            "line": 565,
-            "endLine": 1572,
-            "complexity": 10,
-            "loc": 1008,
-            "parameterCount": 3,
-            "issues": [
-              {
-                "type": "long-function",
-                "severity": "high",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 565,
-                  "function": "run"
-                },
-                "description": "Function has 1008 lines, consider breaking into smaller functions",
-                "threshold": 100,
-                "excessRatio": 10.08
-              },
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 565,
-                  "function": "run"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "multiple-responsibilities",
-                "severity": "high",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 565,
-                  "function": "run"
-                },
-                "description": "Function has 4 distinct responsibilities, violates Single Responsibility Principle"
-              },
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 565,
-                  "function": "run"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 565,
-                  "function": "run"
-                },
-                "description": "Function name \"run\" is too generic, use a more descriptive name"
-              }
-            ],
-            "snippet": "run(ruleName, rule, test) {\n\t\tconst testerConfig = this.testerConfig,\n\t\t\trequiredScenarios = [\"valid\", \"invalid\"],\n\t\t\tscenarioErrors = [],\n\t\t\tlinter = this.linter,\n\t\t\truleId = `rule-to-test/${ruleName}`;\n\t\tconst seenValidTestCases = new Set();\n\t\tconst seenInvalidTestCases = new Set();\n  // ... more code ..."
-          },
-          {
-            "name": "<anonymous>",
-            "line": 516,
-            "endLine": 547,
-            "complexity": 12,
-            "loc": 32,
-            "parameterCount": 0,
-            "issues": [
-              {
-                "type": "high-complexity",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/rule-tester/rule-tester.js",
-                  "line": 516,
-                  "function": "<anonymous>"
-                },
-                "description": "Complexity 12 exceeds medium threshold of 10",
-                "threshold": 10,
-                "excessRatio": 1.2
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "outgoingDependencies": 10,
-          "incomingDependencies": 1,
-          "instability": 0.91,
-          "cohesionScore": 0.31,
-          "percentileUsageRank": 8,
-          "isInCycle": false
-        },
-        "healthScore": 0
-      },
-      {
-        "file": "lib/services/parser-service.js",
-        "metrics": {
-          "complexity": 4,
-          "loc": 31,
-          "functionCount": 1,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [
-          {
-            "name": "parseSync",
-            "line": 32,
-            "endLine": 62,
-            "complexity": 4,
-            "loc": 31,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "multiple-responsibilities",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/services/parser-service.js",
-                  "line": 32,
-                  "function": "parseSync"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "outgoingDependencies": 0,
-          "incomingDependencies": 1,
-          "instability": 0,
-          "cohesionScore": 1,
-          "percentileUsageRank": 8,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "lib/services/processor-service.js",
-        "metrics": {
-          "complexity": 5,
-          "loc": 48,
-          "functionCount": 2,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [
-          {
-            "name": "preprocessSync",
-            "line": 40,
-            "endLine": 85,
-            "complexity": 4,
-            "loc": 46,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/services/processor-service.js",
-                  "line": 40,
-                  "function": "preprocessSync"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "multiple-responsibilities",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/services/processor-service.js",
-                  "line": 40,
-                  "function": "preprocessSync"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "outgoingDependencies": 1,
-          "incomingDependencies": 1,
-          "instability": 0.5,
-          "cohesionScore": 0.33,
-          "percentileUsageRank": 8,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "lib/services/suppressions-service.js",
-        "metrics": {
-          "complexity": 33,
-          "loc": 163,
-          "functionCount": 9,
-          "duplicationRatio": 0
-        },
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "critical",
-            "location": {
-              "file": "lib/services/suppressions-service.js",
-              "line": 1
-            },
-            "description": "File complexity 33 exceeds critical threshold",
-            "threshold": 50,
-            "excessRatio": 0.66
-          }
-        ],
-        "functions": [
-          {
-            "name": "<anonymous>",
-            "line": 43,
-            "endLine": 46,
-            "complexity": 1,
-            "loc": 4,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 43,
-                  "function": "<anonymous>"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 43,
-                  "function": "<anonymous>"
-                },
-                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "suppress",
-            "line": 55,
-            "endLine": 76,
-            "complexity": 5,
-            "loc": 22,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 55,
-                  "function": "suppress"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "async-heavy",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 55,
-                  "function": "suppress"
-                },
-                "description": "Function uses async/await pattern"
-              },
-              {
-                "type": "multiple-responsibilities",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 55,
-                  "function": "suppress"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              },
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 55,
-                  "function": "suppress"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "prune",
-            "line": 83,
-            "endLine": 124,
-            "complexity": 9,
-            "loc": 42,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 83,
-                  "function": "prune"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "async-heavy",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 83,
-                  "function": "prune"
-                },
-                "description": "Function uses async/await pattern"
-              },
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 83,
-                  "function": "prune"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "applySuppressions",
-            "line": 140,
-            "endLine": 206,
-            "complexity": 10,
-            "loc": 67,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "long-function",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 140,
-                  "function": "applySuppressions"
-                },
-                "description": "Function has 67 lines, consider splitting for better maintainability",
-                "threshold": 50,
-                "excessRatio": 1.34
-              },
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 140,
-                  "function": "applySuppressions"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 140,
-                  "function": "applySuppressions"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "load",
-            "line": 213,
-            "endLine": 226,
-            "complexity": 4,
-            "loc": 14,
-            "parameterCount": 0,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 213,
-                  "function": "load"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "async-heavy",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 213,
-                  "function": "load"
-                },
-                "description": "Function uses async/await pattern"
-              },
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 213,
-                  "function": "load"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "save",
-            "line": 234,
-            "endLine": 239,
-            "complexity": 1,
-            "loc": 6,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 234,
-                  "function": "save"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "countViolationsByRule",
-            "line": 246,
-            "endLine": 254,
-            "complexity": 1,
-            "loc": 9,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 246,
-                  "function": "countViolationsByRule"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              }
-            ]
-          },
-          {
-            "name": "getRelativeFilePath",
-            "line": 262,
-            "endLine": 267,
-            "complexity": 1,
-            "loc": 6,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 262,
-                  "function": "getRelativeFilePath"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "suppressMessagesByRule",
-            "line": 275,
-            "endLine": 296,
-            "complexity": 1,
-            "loc": 22,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "multiple-responsibilities",
-                "severity": "medium",
-                "location": {
-                  "file": "lib/services/suppressions-service.js",
-                  "line": 275,
-                  "function": "suppressMessagesByRule"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "outgoingDependencies": 1,
-          "incomingDependencies": 1,
-          "instability": 0.5,
-          "cohesionScore": 0.33,
-          "percentileUsageRank": 8,
-          "isInCycle": false
-        },
-        "healthScore": 42
-      },
-      {
-        "file": "lib/services/warning-service.js",
-        "metrics": {
-          "complexity": 6,
-          "loc": 36,
-          "functionCount": 6,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [
-          {
-            "name": "<anonymous>",
-            "line": 20,
-            "endLine": 24,
-            "complexity": 1,
-            "loc": 5,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/warning-service.js",
-                  "line": 20,
-                  "function": "<anonymous>"
-                },
-                "description": "Function has side effects or depends on external state"
-              },
-              {
-                "type": "poorly-named",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/warning-service.js",
-                  "line": 20,
-                  "function": "<anonymous>"
-                },
-                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
-              }
-            ]
-          },
-          {
-            "name": "emitCircularFixesWarning",
-            "line": 32,
-            "endLine": 37,
-            "complexity": 1,
-            "loc": 6,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/warning-service.js",
-                  "line": 32,
-                  "function": "emitCircularFixesWarning"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "emitEmptyConfigWarning",
-            "line": 44,
-            "endLine": 49,
-            "complexity": 1,
-            "loc": 6,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/warning-service.js",
-                  "line": 44,
-                  "function": "emitEmptyConfigWarning"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "emitESLintIgnoreWarning",
-            "line": 55,
-            "endLine": 60,
-            "complexity": 1,
-            "loc": 6,
-            "parameterCount": 0,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/warning-service.js",
-                  "line": 55,
-                  "function": "emitESLintIgnoreWarning"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "emitESLintRCWarning",
-            "line": 66,
-            "endLine": 71,
-            "complexity": 1,
-            "loc": 6,
-            "parameterCount": 0,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/warning-service.js",
-                  "line": 66,
-                  "function": "emitESLintRCWarning"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "emitInactiveFlagWarning",
-            "line": 80,
-            "endLine": 82,
-            "complexity": 1,
-            "loc": 3,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "impure-function",
-                "severity": "low",
-                "location": {
-                  "file": "lib/services/warning-service.js",
-                  "line": 80,
-                  "function": "emitInactiveFlagWarning"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "outgoingDependencies": 0,
-          "incomingDependencies": 4,
-          "instability": 0,
-          "cohesionScore": 1,
-          "percentileUsageRank": 98,
-          "isInCycle": false
-        },
-        "healthScore": 100
       },
       {
         "file": "lib/linter/apply-disable-directives.js",
@@ -6665,7 +5651,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/linter/apply-disable-directives.js",
@@ -6785,7 +5771,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/linter/esquery.js",
@@ -7380,7 +6366,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/linter/linter.js",
@@ -7804,7 +6790,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/linter/linter.js",
@@ -8708,7 +7694,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/linter/source-code-traverser.js",
@@ -9107,6 +8093,1020 @@
           "instability": 0,
           "cohesionScore": 1,
           "percentileUsageRank": 90,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/rule-tester/index.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 5,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.67,
+          "percentileUsageRank": 8,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/rule-tester/rule-tester.js",
+        "metrics": {
+          "complexity": 147,
+          "loc": 1069,
+          "functionCount": 30,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "location": {
+              "file": "lib/rule-tester/rule-tester.js",
+              "line": 1
+            },
+            "description": "File complexity 147 exceeds critical threshold",
+            "threshold": null,
+            "excessRatio": 0
+          },
+          {
+            "type": "size",
+            "severity": "critical",
+            "location": {
+              "file": "lib/rule-tester/rule-tester.js",
+              "line": 1
+            },
+            "description": "File size 1069 lines exceeds critical threshold",
+            "threshold": 1000,
+            "excessRatio": 1.07
+          }
+        ],
+        "functions": [
+          {
+            "name": "cloneDeeplyExcludesParent",
+            "line": 172,
+            "endLine": 190,
+            "complexity": 7,
+            "loc": 19,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 172,
+                  "function": "cloneDeeplyExcludesParent"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 172,
+                  "function": "cloneDeeplyExcludesParent"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          },
+          {
+            "name": "freezeDeeply",
+            "line": 198,
+            "endLine": 218,
+            "complexity": 8,
+            "loc": 21,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 198,
+                  "function": "freezeDeeply"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "defineStartEndAsError",
+            "line": 241,
+            "endLine": 262,
+            "complexity": 1,
+            "loc": 22,
+            "parameterCount": 2,
+            "issues": []
+          },
+          {
+            "name": "wrapParser",
+            "line": 285,
+            "endLine": 307,
+            "complexity": 2,
+            "loc": 23,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 285,
+                  "function": "wrapParser"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "throwForbiddenMethodError",
+            "line": 315,
+            "endLine": 333,
+            "complexity": 1,
+            "loc": 19,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 315,
+                  "function": "throwForbiddenMethodError"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "itDefaultHandler",
+            "line": 395,
+            "endLine": 404,
+            "complexity": 4,
+            "loc": 10,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 395,
+                  "function": "itDefaultHandler"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "runRuleForItem",
+            "line": 678,
+            "endLine": 924,
+            "complexity": 23,
+            "loc": 247,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "high-complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 678,
+                  "function": "runRuleForItem"
+                },
+                "description": "Complexity 23 exceeds recommended threshold of 20",
+                "threshold": 20,
+                "excessRatio": 1.15
+              },
+              {
+                "type": "long-function",
+                "severity": "high",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 678,
+                  "function": "runRuleForItem"
+                },
+                "description": "Function has 247 lines, consider breaking into smaller functions",
+                "threshold": 100,
+                "excessRatio": 2.47
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 678,
+                  "function": "runRuleForItem"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "god-function",
+                "severity": "high",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 678,
+                  "function": "runRuleForItem"
+                },
+                "description": "Function does too much - high complexity, many lines, and multiple responsibilities"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "high",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 678,
+                  "function": "runRuleForItem"
+                },
+                "description": "Function has 4 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ],
+            "snippet": "function runRuleForItem(item) {\n\t\t\tconst flatConfigArrayOptions = {\n\t\t\t\tbaseConfig,\n\t\t\t};\n\t\t\tif (item.filename) {\n\t\t\t\tflatConfigArrayOptions.basePath =\n\t\t\t\t\tpath.parse(item.filename).root || void 0;\n\t\t\t}\n  // ... more code ..."
+          },
+          {
+            "name": "checkDuplicateTestCase",
+            "line": 946,
+            "endLine": 972,
+            "complexity": 3,
+            "loc": 27,
+            "parameterCount": 2,
+            "issues": []
+          },
+          {
+            "name": "testValidTemplate",
+            "line": 981,
+            "endLine": 1011,
+            "complexity": 3,
+            "loc": 31,
+            "parameterCount": 1,
+            "issues": []
+          },
+          {
+            "name": "testInvalidTemplate",
+            "line": 1041,
+            "endLine": 1523,
+            "complexity": 40,
+            "loc": 483,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "high-complexity",
+                "severity": "high",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 1041,
+                  "function": "testInvalidTemplate"
+                },
+                "description": "Complexity 40 exceeds recommended threshold of 20",
+                "threshold": 20,
+                "excessRatio": 2
+              },
+              {
+                "type": "long-function",
+                "severity": "high",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 1041,
+                  "function": "testInvalidTemplate"
+                },
+                "description": "Function has 483 lines, consider breaking into smaller functions",
+                "threshold": 100,
+                "excessRatio": 4.83
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 1041,
+                  "function": "testInvalidTemplate"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 1041,
+                  "function": "testInvalidTemplate"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ],
+            "snippet": "function testInvalidTemplate(item) {\n\t\t\tassert.ok(\n\t\t\t\ttypeof item.code === \"string\",\n\t\t\t\t\"Test case must specify a string value for 'code'\",\n\t\t\t);\n\t\t\tif (item.name) {\n\t\t\t\tassert.ok(\n\t\t\t\t\ttypeof item.name === \"string\",\n  // ... more code ..."
+          },
+          {
+            "name": "<anonymous>",
+            "line": 425,
+            "endLine": 438,
+            "complexity": 1,
+            "loc": 14,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 425,
+                  "function": "<anonymous>"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 425,
+                  "function": "<anonymous>"
+                },
+                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "setDefaultConfig",
+            "line": 446,
+            "endLine": 456,
+            "complexity": 5,
+            "loc": 11,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 446,
+                  "function": "setDefaultConfig"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          },
+          {
+            "name": "run",
+            "line": 565,
+            "endLine": 1572,
+            "complexity": 10,
+            "loc": 1008,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "high",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 565,
+                  "function": "run"
+                },
+                "description": "Function has 1008 lines, consider breaking into smaller functions",
+                "threshold": 100,
+                "excessRatio": 10.08
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 565,
+                  "function": "run"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "high",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 565,
+                  "function": "run"
+                },
+                "description": "Function has 4 distinct responsibilities, violates Single Responsibility Principle"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 565,
+                  "function": "run"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 565,
+                  "function": "run"
+                },
+                "description": "Function name \"run\" is too generic, use a more descriptive name"
+              }
+            ],
+            "snippet": "run(ruleName, rule, test) {\n\t\tconst testerConfig = this.testerConfig,\n\t\t\trequiredScenarios = [\"valid\", \"invalid\"],\n\t\t\tscenarioErrors = [],\n\t\t\tlinter = this.linter,\n\t\t\truleId = `rule-to-test/${ruleName}`;\n\t\tconst seenValidTestCases = new Set();\n\t\tconst seenInvalidTestCases = new Set();\n  // ... more code ..."
+          },
+          {
+            "name": "<anonymous>",
+            "line": 516,
+            "endLine": 547,
+            "complexity": 12,
+            "loc": 32,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "medium-complexity",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/rule-tester/rule-tester.js",
+                  "line": 516,
+                  "function": "<anonymous>"
+                },
+                "description": "Complexity 12 exceeds medium threshold of 10",
+                "threshold": 10,
+                "excessRatio": 1.2
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 10,
+          "incomingDependencies": 1,
+          "instability": 0.91,
+          "cohesionScore": 0.31,
+          "percentileUsageRank": 8,
+          "isInCycle": false
+        },
+        "healthScore": 0
+      },
+      {
+        "file": "lib/services/parser-service.js",
+        "metrics": {
+          "complexity": 4,
+          "loc": 31,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "parseSync",
+            "line": 32,
+            "endLine": 62,
+            "complexity": 4,
+            "loc": 31,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/services/parser-service.js",
+                  "line": 32,
+                  "function": "parseSync"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 1,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 8,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/services/processor-service.js",
+        "metrics": {
+          "complexity": 5,
+          "loc": 48,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "preprocessSync",
+            "line": 40,
+            "endLine": 85,
+            "complexity": 4,
+            "loc": 46,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/services/processor-service.js",
+                  "line": 40,
+                  "function": "preprocessSync"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/services/processor-service.js",
+                  "line": 40,
+                  "function": "preprocessSync"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.33,
+          "percentileUsageRank": 8,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/services/suppressions-service.js",
+        "metrics": {
+          "complexity": 33,
+          "loc": 163,
+          "functionCount": 9,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "location": {
+              "file": "lib/services/suppressions-service.js",
+              "line": 1
+            },
+            "description": "File complexity 33 exceeds critical threshold",
+            "threshold": 50,
+            "excessRatio": 0.66
+          }
+        ],
+        "functions": [
+          {
+            "name": "<anonymous>",
+            "line": 43,
+            "endLine": 46,
+            "complexity": 1,
+            "loc": 4,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 43,
+                  "function": "<anonymous>"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 43,
+                  "function": "<anonymous>"
+                },
+                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "suppress",
+            "line": 55,
+            "endLine": 76,
+            "complexity": 5,
+            "loc": 22,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 55,
+                  "function": "suppress"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "async-heavy",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 55,
+                  "function": "suppress"
+                },
+                "description": "Function uses async/await pattern"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 55,
+                  "function": "suppress"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 55,
+                  "function": "suppress"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "prune",
+            "line": 83,
+            "endLine": 124,
+            "complexity": 9,
+            "loc": 42,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 83,
+                  "function": "prune"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "async-heavy",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 83,
+                  "function": "prune"
+                },
+                "description": "Function uses async/await pattern"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 83,
+                  "function": "prune"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "applySuppressions",
+            "line": 140,
+            "endLine": 206,
+            "complexity": 10,
+            "loc": 67,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 140,
+                  "function": "applySuppressions"
+                },
+                "description": "Function has 67 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "excessRatio": 1.34
+              },
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 140,
+                  "function": "applySuppressions"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 140,
+                  "function": "applySuppressions"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "load",
+            "line": 213,
+            "endLine": 226,
+            "complexity": 4,
+            "loc": 14,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 213,
+                  "function": "load"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "async-heavy",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 213,
+                  "function": "load"
+                },
+                "description": "Function uses async/await pattern"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 213,
+                  "function": "load"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "save",
+            "line": 234,
+            "endLine": 239,
+            "complexity": 1,
+            "loc": 6,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 234,
+                  "function": "save"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "countViolationsByRule",
+            "line": 246,
+            "endLine": 254,
+            "complexity": 1,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 246,
+                  "function": "countViolationsByRule"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              }
+            ]
+          },
+          {
+            "name": "getRelativeFilePath",
+            "line": 262,
+            "endLine": 267,
+            "complexity": 1,
+            "loc": 6,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 262,
+                  "function": "getRelativeFilePath"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "suppressMessagesByRule",
+            "line": 275,
+            "endLine": 296,
+            "complexity": 1,
+            "loc": 22,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/services/suppressions-service.js",
+                  "line": 275,
+                  "function": "suppressMessagesByRule"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 1,
+          "incomingDependencies": 1,
+          "instability": 0.5,
+          "cohesionScore": 0.33,
+          "percentileUsageRank": 8,
+          "isInCycle": false
+        },
+        "healthScore": 42
+      },
+      {
+        "file": "lib/services/warning-service.js",
+        "metrics": {
+          "complexity": 6,
+          "loc": 36,
+          "functionCount": 6,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "<anonymous>",
+            "line": 20,
+            "endLine": 24,
+            "complexity": 1,
+            "loc": 5,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/warning-service.js",
+                  "line": 20,
+                  "function": "<anonymous>"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/warning-service.js",
+                  "line": 20,
+                  "function": "<anonymous>"
+                },
+                "description": "Function name \"<anonymous>\" should start with a verb in camelCase"
+              }
+            ]
+          },
+          {
+            "name": "emitCircularFixesWarning",
+            "line": 32,
+            "endLine": 37,
+            "complexity": 1,
+            "loc": 6,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/warning-service.js",
+                  "line": 32,
+                  "function": "emitCircularFixesWarning"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "emitEmptyConfigWarning",
+            "line": 44,
+            "endLine": 49,
+            "complexity": 1,
+            "loc": 6,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/warning-service.js",
+                  "line": 44,
+                  "function": "emitEmptyConfigWarning"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "emitESLintIgnoreWarning",
+            "line": 55,
+            "endLine": 60,
+            "complexity": 1,
+            "loc": 6,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/warning-service.js",
+                  "line": 55,
+                  "function": "emitESLintIgnoreWarning"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "emitESLintRCWarning",
+            "line": 66,
+            "endLine": 71,
+            "complexity": 1,
+            "loc": 6,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/warning-service.js",
+                  "line": 66,
+                  "function": "emitESLintRCWarning"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "emitInactiveFlagWarning",
+            "line": 80,
+            "endLine": 82,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/services/warning-service.js",
+                  "line": 80,
+                  "function": "emitInactiveFlagWarning"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "outgoingDependencies": 0,
+          "incomingDependencies": 4,
+          "instability": 0,
+          "cohesionScore": 1,
+          "percentileUsageRank": 98,
           "isInCycle": false
         },
         "healthScore": 100
@@ -9627,7 +9627,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/shared/runtime-info.js",
@@ -9701,7 +9701,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/shared/serialization.js",
@@ -9976,7 +9976,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/shared/traverser.js",
@@ -10253,7 +10253,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/accessor-pairs.js",
@@ -10387,7 +10387,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/array-bracket-newline.js",
@@ -10606,7 +10606,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/array-callback-return.js",
@@ -10659,7 +10659,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/array-callback-return.js",
@@ -10819,7 +10819,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/array-element-newline.js",
@@ -11129,7 +11129,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/block-spacing.js",
@@ -11217,7 +11217,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/brace-style.js",
@@ -11386,7 +11386,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/camelcase.js",
@@ -11470,7 +11470,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/capitalized-comments.js",
@@ -11566,7 +11566,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/class-methods-use-this.js",
@@ -11651,7 +11651,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/comma-dangle.js",
@@ -11847,7 +11847,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/comma-style.js",
@@ -12072,7 +12072,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/consistent-return.js",
@@ -12341,7 +12341,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/curly.js",
@@ -12942,7 +12942,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/func-names.js",
@@ -12964,7 +12964,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/func-names.js",
@@ -13204,7 +13204,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/function-paren-newline.js",
@@ -13385,7 +13385,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/getter-return.js",
@@ -14018,7 +14018,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/indent-legacy.js",
@@ -14077,7 +14077,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/indent-legacy.js",
@@ -14099,7 +14099,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/indent-legacy.js",
@@ -14197,7 +14197,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/indent-legacy.js",
@@ -14352,7 +14352,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/indent.js",
@@ -15345,7 +15345,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/keyword-spacing.js",
@@ -15635,7 +15635,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/lines-around-directive.js",
@@ -15841,7 +15841,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/logical-assignment-operators.js",
@@ -16160,7 +16160,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/max-lines-per-function.js",
@@ -16569,7 +16569,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/newline-after-var.js",
@@ -16831,7 +16831,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-array-constructor.js",
@@ -17515,7 +17515,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-constant-binary-expression.js",
@@ -17559,7 +17559,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-constant-binary-expression.js",
@@ -17696,7 +17696,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-control-regex.js",
@@ -18076,7 +18076,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-duplicate-imports.js",
@@ -18370,7 +18370,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-empty-function.js",
@@ -18402,7 +18402,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-empty-function.js",
@@ -18808,7 +18808,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-extra-boolean-cast.js",
@@ -18984,7 +18984,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-extra-parens.js",
@@ -19134,7 +19134,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-extra-parens.js",
@@ -19254,7 +19254,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-extra-parens.js",
@@ -19787,7 +19787,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-inline-comments.js",
@@ -20220,7 +20220,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-loop-func.js",
@@ -20252,7 +20252,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-loop-func.js",
@@ -21232,7 +21232,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-param-reassign.js",
@@ -21713,7 +21713,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-restricted-exports.js",
@@ -21972,7 +21972,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-restricted-properties.js",
@@ -22442,7 +22442,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-shadow.js",
@@ -22486,7 +22486,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-shadow.js",
@@ -22508,7 +22508,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-shadow.js",
@@ -23134,7 +23134,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-underscore-dangle.js",
@@ -23736,7 +23736,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-unsafe-finally.js",
@@ -23821,7 +23821,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-unsafe-optional-chaining.js",
@@ -24200,7 +24200,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-unused-vars.js",
@@ -24315,7 +24315,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "critical-complexity",
                 "severity": "critical",
                 "location": {
                   "file": "lib/rules/no-unused-vars.js",
@@ -24536,7 +24536,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-use-before-define.js",
@@ -24811,7 +24811,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-useless-assignment.js",
@@ -25023,7 +25023,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-useless-computed-key.js",
@@ -25288,7 +25288,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-useless-escape.js",
@@ -25373,7 +25373,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-useless-rename.js",
@@ -25623,7 +25623,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/no-var.js",
@@ -25952,7 +25952,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/object-curly-newline.js",
@@ -26187,7 +26187,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/object-shorthand.js",
@@ -26387,7 +26387,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/one-var.js",
@@ -26698,7 +26698,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/operator-linebreak.js",
@@ -27086,7 +27086,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/prefer-arrow-callback.js",
@@ -27204,7 +27204,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/prefer-const.js",
@@ -27375,7 +27375,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/prefer-destructuring.js",
@@ -27440,7 +27440,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/prefer-exponentiation-operator.js",
@@ -27823,7 +27823,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/prefer-regex-literals.js",
@@ -28091,7 +28091,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/quote-props.js",
@@ -28250,7 +28250,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/quotes.js",
@@ -28613,7 +28613,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/require-await.js",
@@ -28753,7 +28753,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/rest-spread-spacing.js",
@@ -28841,7 +28841,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/semi-spacing.js",
@@ -29067,7 +29067,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/semi.js",
@@ -29784,7 +29784,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/rules/spaced-comment.js",
@@ -30871,7 +30871,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/languages/js/validate-language-options.js",
@@ -31124,7 +31124,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/linter/code-path-analysis/code-path-analyzer.js",
@@ -32075,7 +32075,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/linter/code-path-analysis/code-path-state.js",
@@ -32129,7 +32129,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/linter/code-path-analysis/code-path-state.js",
@@ -32583,7 +32583,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/linter/code-path-analysis/code-path-state.js",
@@ -33132,7 +33132,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/linter/code-path-analysis/code-path.js",
@@ -33817,7 +33817,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/languages/js/source-code/source-code.js",
@@ -33859,7 +33859,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/languages/js/source-code/source-code.js",
@@ -33881,7 +33881,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/languages/js/source-code/source-code.js",
@@ -33933,7 +33933,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/languages/js/source-code/source-code.js",
@@ -33997,7 +33997,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/languages/js/source-code/source-code.js",
@@ -34132,7 +34132,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/languages/js/source-code/source-code.js",
@@ -34236,7 +34236,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lib/languages/js/source-code/source-code.js",
@@ -35180,13 +35180,13 @@
         "repository": "eslint/eslint"
       },
       "analysis": {
-        "timestamp": "2025-07-21T16:18:20.908Z",
-        "durationMs": 66727,
+        "timestamp": "2025-07-21T22:11:04.855Z",
+        "durationMs": 68216,
         "toolVersion": "0.7.0",
         "filesAnalyzed": 425,
         "duplicationMode": "legacy"
       }
     }
   },
-  "durationMs": 66743
+  "durationMs": 68233
 }

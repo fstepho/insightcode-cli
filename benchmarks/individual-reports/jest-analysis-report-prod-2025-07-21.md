@@ -11,8 +11,8 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-21T16:18:21.832Z
-- **Duration:** 67.67s
+- **Timestamp:** 2025-07-21T22:11:05.713Z
+- **Duration:** 69.10s
 - **Files Analyzed:** 388
 - **Tool Version:** 0.7.0
 
@@ -38,21 +38,27 @@
 
 InsightCode combines **research-based thresholds** with **criticality-weighted aggregation**, following the **Pareto principle**.
 
-#### 🔧 Overall Score Formula
+#### 🔧 Overall Score Calculation
+InsightCode uses a **two-step weighted aggregation** process:
+
+**Step 1:** Each metric is weighted by architectural criticality:
 ```
-Overall Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)
+Weighted_Complexity = Σ(File_Complexity × CriticismScore) / Σ(CriticismScore)
+Weighted_Maintainability = Σ(File_Maintainability × CriticismScore) / Σ(CriticismScore)
+Weighted_Duplication = Σ(File_Duplication × CriticismScore) / Σ(CriticismScore)
 ```
 
-#### 🧮 Metric Breakdown
-| Metric | Weight | Thresholds & Basis |
-|--------|--------|---------------------|
-| **Complexity** | 45% | McCabe (1976): ≤10 = low, <= 15 = medium, <= 20 = high, <= 50 = very high, >50 = extreme. Penalized quadratically to exponentially. |
-| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |
-| **Duplication** | 25% | ⚠️ Legacy threshold ≤15% considered "excellent" (brownfield projects). |
+**Step 2:** Final score combines weighted metrics:
+```
+Overall Score = (Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)
+```
 
-#### 🧠 Aggregation Strategy
-- **File-level health:** 100 - penalties (progressive, no caps or masking).
-- **Project-level score:** Weighted by **architectural criticality**, not arithmetic average.
+#### 🧮 Metric Configuration
+| Metric | Final Weight | Thresholds & Research Basis |
+|--------|--------------|-----------------------------|
+| **Complexity** | 45% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |
+| **Maintainability** | 30% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |
+| **Duplication** | 25% | Legacy threshold: ≤15% considered excellent for brownfield projects |
 
 #### 🧭 Architectural Criticality Formula
 Each file’s weight is computed as:
@@ -103,7 +109,7 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 
 | Function | File | Complexity | Lines | Key Issues (Implications) |
 |:---|:---|:---|:---|:---|
-| `normalize` | `jest-config/src/normalize.ts` | **63** | 698 | **long-function** (Should be split into smaller functions)<br/>**god-function** (Violates Single Responsibility)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test)<br/>**async-heavy** (Ensure proper error handling)<br/>**impure-function** (Side effects make testing harder)<br/>**high-complexity** (Error-prone and hard to maintain) |
+| `normalize` | `jest-config/src/normalize.ts` | **63** | 698 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**god-function** (Violates Single Responsibility)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test)<br/>**async-heavy** (Ensure proper error handling)<br/>**impure-function** (Side effects make testing harder) |
 | `eventHandler` | `jest-circus/src/eventHandler.ts` | **49** | 284 | **high-complexity** (Error-prone and hard to maintain)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**impure-function** (Side effects make testing harder) |
 | `eq` | `expect-utils/src/jasmineUtils.ts` | **47** | 145 | **high-complexity** (Error-prone and hard to maintain)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**poorly-named** (Names should be descriptive and meaningful) |
 | `iterableEquality` | `expect-utils/src/utils.ts` | **39** | 151 | **high-complexity** (Error-prone and hard to maintain)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test) |
@@ -153,11 +159,11 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 
 | Issue Pattern | Occurrences | Most Affected Functions | Implication |
 |---------------|-------------|-------------------------|-------------|
-| High-complexity | 5 | `normalize`, `eventHandler`... | Error-prone and hard to maintain |
 | Long-function | 5 | `normalize`, `eventHandler`... | Should be split into smaller functions |
 | Deep-nesting | 5 | `normalize`, `eventHandler`... | Hard to read and test |
+| High-complexity | 4 | `eventHandler`, `eq`... | Error-prone and hard to maintain |
 | Impure-function | 2 | `normalize`, `eventHandler` | Side effects make testing harder |
-| Async-heavy | 1 | `normalize` | Ensure proper error handling |
+| Critical-complexity | 1 | `normalize` | Severely impacts maintainability |
 
 ## 📈 Pattern Analysis
 

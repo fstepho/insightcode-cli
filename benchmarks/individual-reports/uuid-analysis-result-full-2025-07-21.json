@@ -369,7 +369,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "src/parse.ts",
@@ -503,7 +503,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "src/sha1-browser.ts",
@@ -523,7 +523,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "src/sha1-browser.ts",
@@ -646,7 +646,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "src/stringify.ts",
@@ -707,7 +707,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "src/uuid-bin.ts",
@@ -782,7 +782,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "src/v1.ts",
@@ -792,7 +792,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "src/v1.ts",
@@ -876,7 +876,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "src/v1.ts",
@@ -886,7 +886,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "src/v1.ts",
@@ -927,7 +927,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "src/v1ToV6.ts",
@@ -980,7 +980,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "src/v3.ts",
@@ -1043,7 +1043,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "src/v35.ts",
@@ -1096,7 +1096,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "src/v4.ts",
@@ -1118,7 +1118,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "src/v4.ts",
@@ -1128,7 +1128,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "src/v4.ts",
@@ -1181,7 +1181,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "src/v5.ts",
@@ -1232,7 +1232,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "src/v6.ts",
@@ -1273,7 +1273,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "src/v6ToV1.ts",
@@ -1326,7 +1326,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "src/v7.ts",
@@ -1336,7 +1336,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "src/v7.ts",
@@ -1386,7 +1386,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "src/v7.ts",
@@ -1396,7 +1396,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "src/v7.ts",
@@ -1457,7 +1457,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "src/version.ts",
@@ -1469,393 +1469,6 @@
             ]
           }
         ],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "test/browser/browser.spec.js",
-        "metrics": {
-          "complexity": 22,
-          "loc": 103,
-          "functionCount": 19,
-          "duplicationRatio": 0
-        },
-        "issues": [
-          {
-            "type": "complexity",
-            "severity": "critical",
-            "location": {
-              "file": "test/browser/browser.spec.js",
-              "line": 1
-            },
-            "description": "File complexity 22 exceeds critical threshold",
-            "threshold": 50,
-            "excessRatio": 0.44
-          }
-        ],
-        "functions": [
-          {
-            "name": "testExpectations",
-            "line": 81,
-            "endLine": 113,
-            "complexity": 4,
-            "loc": 33,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "test/browser/browser.spec.js",
-                  "line": 81,
-                  "function": "testExpectations"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "async-heavy",
-                "severity": "low",
-                "location": {
-                  "file": "test/browser/browser.spec.js",
-                  "line": 81,
-                  "function": "testExpectations"
-                },
-                "description": "Function uses async/await pattern"
-              }
-            ]
-          },
-          {
-            "name": "v1",
-            "line": 11,
-            "endLine": 11,
-            "complexity": 1,
-            "loc": 1,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "well-named",
-                "severity": "low",
-                "location": {
-                  "file": "test/browser/browser.spec.js",
-                  "line": 11,
-                  "function": "v1"
-                },
-                "description": "Function name \"v1\" is too short, use descriptive names"
-              }
-            ]
-          },
-          {
-            "name": "v4",
-            "line": 12,
-            "endLine": 12,
-            "complexity": 1,
-            "loc": 1,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "well-named",
-                "severity": "low",
-                "location": {
-                  "file": "test/browser/browser.spec.js",
-                  "line": 12,
-                  "function": "v4"
-                },
-                "description": "Function name \"v4\" is too short, use descriptive names"
-              }
-            ]
-          },
-          {
-            "name": "v6",
-            "line": 13,
-            "endLine": 13,
-            "complexity": 1,
-            "loc": 1,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "well-named",
-                "severity": "low",
-                "location": {
-                  "file": "test/browser/browser.spec.js",
-                  "line": 13,
-                  "function": "v6"
-                },
-                "description": "Function name \"v6\" is too short, use descriptive names"
-              }
-            ]
-          },
-          {
-            "name": "v7",
-            "line": 14,
-            "endLine": 14,
-            "complexity": 1,
-            "loc": 1,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "well-named",
-                "severity": "low",
-                "location": {
-                  "file": "test/browser/browser.spec.js",
-                  "line": 14,
-                  "function": "v7"
-                },
-                "description": "Function name \"v7\" is too short, use descriptive names"
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 50
-      },
-      {
-        "file": "src/test/parse.test.ts",
-        "metrics": {
-          "complexity": 3,
-          "loc": 57,
-          "functionCount": 2,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "src/test/rng.test.ts",
-        "metrics": {
-          "complexity": 1,
-          "loc": 12,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "src/test/stringify.test.ts",
-        "metrics": {
-          "complexity": 1,
-          "loc": 38,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "src/test/test_constants.ts",
-        "metrics": {
-          "complexity": 1,
-          "loc": 90,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "src/test/v1.test.ts",
-        "metrics": {
-          "complexity": 4,
-          "loc": 158,
-          "functionCount": 2,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "src/test/v35.test.ts",
-        "metrics": {
-          "complexity": 2,
-          "loc": 209,
-          "functionCount": 1,
-          "duplicationRatio": 0
-        },
-        "issues": [
-          {
-            "type": "size",
-            "severity": "medium",
-            "location": {
-              "file": "src/test/v35.test.ts",
-              "line": 1
-            },
-            "description": "File size 209 lines exceeds medium threshold",
-            "threshold": 200,
-            "excessRatio": 1.04
-          }
-        ],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 93
-      },
-      {
-        "file": "src/test/v4.test.ts",
-        "metrics": {
-          "complexity": 1,
-          "loc": 113,
-          "functionCount": 1,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "src/test/v6.test.ts",
-        "metrics": {
-          "complexity": 1,
-          "loc": 74,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "src/test/v7.test.ts",
-        "metrics": {
-          "complexity": 5,
-          "loc": 246,
-          "functionCount": 5,
-          "duplicationRatio": 0
-        },
-        "issues": [
-          {
-            "type": "size",
-            "severity": "medium",
-            "location": {
-              "file": "src/test/v7.test.ts",
-              "line": 1
-            },
-            "description": "File size 246 lines exceeds medium threshold",
-            "threshold": 200,
-            "excessRatio": 1.23
-          }
-        ],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 91
-      },
-      {
-        "file": "src/test/validate.test.ts",
-        "metrics": {
-          "complexity": 1,
-          "loc": 15,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "src/test/version.test.ts",
-        "metrics": {
-          "complexity": 1,
-          "loc": 17,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
         "dependencies": {
           "incomingDependencies": 0,
           "outgoingDependencies": 0,
@@ -1907,7 +1520,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "examples/benchmark/benchmark.js",
@@ -1917,7 +1530,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "examples/benchmark/benchmark.js",
@@ -1938,7 +1551,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "examples/benchmark/benchmark.js",
@@ -1970,7 +1583,7 @@
                 "excessRatio": 1.2
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "examples/benchmark/benchmark.js",
@@ -1980,7 +1593,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "examples/benchmark/benchmark.js",
@@ -2000,7 +1613,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "examples/benchmark/benchmark.js",
@@ -2327,6 +1940,78 @@
         "healthScore": 100
       },
       {
+        "file": "examples/node-commonjs/example.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 59,
+          "functionCount": 0,
+          "duplicationRatio": 1
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "low",
+            "location": {
+              "file": "examples/node-commonjs/example.js",
+              "line": 1
+            },
+            "description": "Duplication ratio 100.0% exceeds excellent threshold",
+            "threshold": 0.15,
+            "excessRatio": 6.67
+          }
+        ],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 0
+      },
+      {
+        "file": "examples/node-jest/jsdom.test.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 9,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "examples/node-jest/node.test.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 9,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
         "file": "examples/browser-webpack/example-all-require.js",
         "metrics": {
           "complexity": 1,
@@ -2591,179 +2276,6 @@
         "healthScore": 100
       },
       {
-        "file": "examples/node-commonjs/example.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 59,
-          "functionCount": 0,
-          "duplicationRatio": 1
-        },
-        "issues": [
-          {
-            "type": "duplication",
-            "severity": "low",
-            "location": {
-              "file": "examples/node-commonjs/example.js",
-              "line": 1
-            },
-            "description": "Duplication ratio 100.0% exceeds excellent threshold",
-            "threshold": 0.15,
-            "excessRatio": 6.67
-          }
-        ],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 0
-      },
-      {
-        "file": "examples/node-jest/jsdom.test.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 9,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "examples/node-jest/node.test.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 9,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "examples/utils/testpage.js",
-        "metrics": {
-          "complexity": 6,
-          "loc": 36,
-          "functionCount": 3,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [
-          {
-            "name": "test",
-            "line": 1,
-            "endLine": 42,
-            "complexity": 1,
-            "loc": 42,
-            "parameterCount": 1,
-            "issues": [
-              {
-                "type": "deep-nesting",
-                "severity": "medium",
-                "location": {
-                  "file": "examples/utils/testpage.js",
-                  "line": 1,
-                  "function": "test"
-                },
-                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
-              },
-              {
-                "type": "single-responsibility",
-                "severity": "medium",
-                "location": {
-                  "file": "examples/utils/testpage.js",
-                  "line": 1,
-                  "function": "test"
-                },
-                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
-              },
-              {
-                "type": "pure-function",
-                "severity": "low",
-                "location": {
-                  "file": "examples/utils/testpage.js",
-                  "line": 1,
-                  "function": "test"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "addTest",
-            "line": 14,
-            "endLine": 31,
-            "complexity": 4,
-            "loc": 18,
-            "parameterCount": 2,
-            "issues": [
-              {
-                "type": "pure-function",
-                "severity": "low",
-                "location": {
-                  "file": "examples/utils/testpage.js",
-                  "line": 14,
-                  "function": "addTest"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          },
-          {
-            "name": "done",
-            "line": 33,
-            "endLine": 37,
-            "complexity": 1,
-            "loc": 5,
-            "parameterCount": 0,
-            "issues": [
-              {
-                "type": "pure-function",
-                "severity": "low",
-                "location": {
-                  "file": "examples/utils/testpage.js",
-                  "line": 33,
-                  "function": "done"
-                },
-                "description": "Function has side effects or depends on external state"
-              }
-            ]
-          }
-        ],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
         "file": "examples/typescript/buffer.test.ts",
         "metrics": {
           "complexity": 1,
@@ -2902,6 +2414,494 @@
           "isInCycle": false
         },
         "healthScore": 100
+      },
+      {
+        "file": "examples/utils/testpage.js",
+        "metrics": {
+          "complexity": 6,
+          "loc": 36,
+          "functionCount": 3,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "test",
+            "line": 1,
+            "endLine": 42,
+            "complexity": 1,
+            "loc": 42,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "examples/utils/testpage.js",
+                  "line": 1,
+                  "function": "test"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "examples/utils/testpage.js",
+                  "line": 1,
+                  "function": "test"
+                },
+                "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "examples/utils/testpage.js",
+                  "line": 1,
+                  "function": "test"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "addTest",
+            "line": 14,
+            "endLine": 31,
+            "complexity": 4,
+            "loc": 18,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "examples/utils/testpage.js",
+                  "line": 14,
+                  "function": "addTest"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          },
+          {
+            "name": "done",
+            "line": 33,
+            "endLine": 37,
+            "complexity": 1,
+            "loc": 5,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "examples/utils/testpage.js",
+                  "line": 33,
+                  "function": "done"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/test/parse.test.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 57,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/test/rng.test.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 12,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/test/stringify.test.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 38,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/test/test_constants.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 90,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/test/v1.test.ts",
+        "metrics": {
+          "complexity": 4,
+          "loc": 158,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/test/v35.test.ts",
+        "metrics": {
+          "complexity": 2,
+          "loc": 209,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "location": {
+              "file": "src/test/v35.test.ts",
+              "line": 1
+            },
+            "description": "File size 209 lines exceeds medium threshold",
+            "threshold": 200,
+            "excessRatio": 1.04
+          }
+        ],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 93
+      },
+      {
+        "file": "src/test/v4.test.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 113,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/test/v6.test.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 74,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/test/v7.test.ts",
+        "metrics": {
+          "complexity": 5,
+          "loc": 246,
+          "functionCount": 5,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "size",
+            "severity": "medium",
+            "location": {
+              "file": "src/test/v7.test.ts",
+              "line": 1
+            },
+            "description": "File size 246 lines exceeds medium threshold",
+            "threshold": 200,
+            "excessRatio": 1.23
+          }
+        ],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 91
+      },
+      {
+        "file": "src/test/validate.test.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 15,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/test/version.test.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 17,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "test/browser/browser.spec.js",
+        "metrics": {
+          "complexity": 22,
+          "loc": 103,
+          "functionCount": 19,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "critical",
+            "location": {
+              "file": "test/browser/browser.spec.js",
+              "line": 1
+            },
+            "description": "File complexity 22 exceeds critical threshold",
+            "threshold": 50,
+            "excessRatio": 0.44
+          }
+        ],
+        "functions": [
+          {
+            "name": "testExpectations",
+            "line": 81,
+            "endLine": 113,
+            "complexity": 4,
+            "loc": 33,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "deep-nesting",
+                "severity": "medium",
+                "location": {
+                  "file": "test/browser/browser.spec.js",
+                  "line": 81,
+                  "function": "testExpectations"
+                },
+                "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
+              },
+              {
+                "type": "async-heavy",
+                "severity": "low",
+                "location": {
+                  "file": "test/browser/browser.spec.js",
+                  "line": 81,
+                  "function": "testExpectations"
+                },
+                "description": "Function uses async/await pattern"
+              }
+            ]
+          },
+          {
+            "name": "v1",
+            "line": 11,
+            "endLine": 11,
+            "complexity": 1,
+            "loc": 1,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "test/browser/browser.spec.js",
+                  "line": 11,
+                  "function": "v1"
+                },
+                "description": "Function name \"v1\" is too short, use descriptive names"
+              }
+            ]
+          },
+          {
+            "name": "v4",
+            "line": 12,
+            "endLine": 12,
+            "complexity": 1,
+            "loc": 1,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "test/browser/browser.spec.js",
+                  "line": 12,
+                  "function": "v4"
+                },
+                "description": "Function name \"v4\" is too short, use descriptive names"
+              }
+            ]
+          },
+          {
+            "name": "v6",
+            "line": 13,
+            "endLine": 13,
+            "complexity": 1,
+            "loc": 1,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "test/browser/browser.spec.js",
+                  "line": 13,
+                  "function": "v6"
+                },
+                "description": "Function name \"v6\" is too short, use descriptive names"
+              }
+            ]
+          },
+          {
+            "name": "v7",
+            "line": 14,
+            "endLine": 14,
+            "complexity": 1,
+            "loc": 1,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "test/browser/browser.spec.js",
+                  "line": 14,
+                  "function": "v7"
+                },
+                "description": "Function name \"v7\" is too short, use descriptive names"
+              }
+            ]
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 50
       }
     ],
     "overview": {
@@ -2914,10 +2914,10 @@
         "avgDuplicationRatio": 0.07
       },
       "scores": {
-        "complexity": 93,
-        "duplication": 95,
-        "maintainability": 98,
-        "overall": 95
+        "complexity": 97,
+        "duplication": 89,
+        "maintainability": 99,
+        "overall": 96
       },
       "summary": "10 critical files found requiring attention"
     },
@@ -2929,13 +2929,13 @@
         "repository": "https://github.com/uuidjs/uuid.git"
       },
       "analysis": {
-        "timestamp": "2025-07-21T14:25:33.524Z",
-        "durationMs": 258728,
+        "timestamp": "2025-07-21T22:20:39.396Z",
+        "durationMs": 234855,
         "toolVersion": "0.7.0",
         "filesAnalyzed": 79,
         "duplicationMode": "legacy"
       }
     }
   },
-  "durationMs": 258778
+  "durationMs": 234891
 }

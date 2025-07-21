@@ -252,13 +252,13 @@
         "repository": "chalk/chalk"
       },
       "analysis": {
-        "timestamp": "2025-07-21T16:18:18.369Z",
-        "durationMs": 64191,
+        "timestamp": "2025-07-21T22:11:02.362Z",
+        "durationMs": 65725,
         "toolVersion": "0.7.0",
         "filesAnalyzed": 5,
         "duplicationMode": "legacy"
       }
     }
   },
-  "durationMs": 64226
+  "durationMs": 65762
 }

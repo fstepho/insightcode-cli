@@ -11,14 +11,14 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-21T14:25:33.526Z
-- **Duration:** 258.79s
+- **Timestamp:** 2025-07-21T22:20:39.396Z
+- **Duration:** 234.90s
 - **Files Analyzed:** 47
 - **Tool Version:** 0.7.0
 
 ## Quality Summary
 
-### Grade: 💀 **F**
+### Grade: 🔴 **D**
 
 **🚨 Primary Concern:** Extreme complexity (1818) in `lodash.js` (core file).
 
@@ -29,38 +29,45 @@
 
 | Dimension | Score (Value) | Status |
 |:---|:---|:---|
-| Complexity | 8/100 | 🔴 Critical |
-| Duplication | 99/100 (1.6% detected) | 🟢 Exceptional |
-| Maintainability | 9/100 | 🔴 Critical |
-| **Overall** | **31/100** | **🔴 Critical** |
+| Complexity | 61/100 | 🟠 Poor |
+| Duplication | 96/100 (1.6% detected) | 🟢 Exceptional |
+| Maintainability | 51/100 | 🔴 Critical |
+| **Overall** | **67/100** | **🟠 Poor** |
 
 ### 📊 Scoring Methodology
 
 InsightCode combines **research-based thresholds** with **criticality-weighted aggregation**, following the **Pareto principle**.
 
-#### 🔧 Overall Score Formula
+#### 🔧 Overall Score Calculation
+InsightCode uses a **two-step weighted aggregation** process:
+
+**Step 1:** Each metric is weighted by architectural criticality:
 ```
-Overall Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)
+Weighted_Complexity = Σ(File_Complexity × CriticismScore) / Σ(CriticismScore)
+Weighted_Maintainability = Σ(File_Maintainability × CriticismScore) / Σ(CriticismScore)
+Weighted_Duplication = Σ(File_Duplication × CriticismScore) / Σ(CriticismScore)
 ```
 
-#### 🧮 Metric Breakdown
-| Metric | Weight | Thresholds & Basis |
-|--------|--------|---------------------|
-| **Complexity** | 45% | McCabe (1976): ≤10 = low, >50 = extreme. Penalized quadratically to exponentially. |
-| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |
-| **Duplication** | 25% | ⚠️ Legacy threshold ≤15% considered "excellent" (brownfield projects). |
+**Step 2:** Final score combines weighted metrics:
+```
+Overall Score = (Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)
+```
 
-#### 🧠 Aggregation Strategy
-- **File-level health:** 100 - penalties (progressive, no caps or masking).
-- **Project-level score:** Weighted by **architectural criticality**, not arithmetic average.
+#### 🧮 Metric Configuration
+| Metric | Final Weight | Thresholds & Research Basis |
+|--------|--------------|-----------------------------|
+| **Complexity** | 45% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |
+| **Maintainability** | 30% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |
+| **Duplication** | 25% | Legacy threshold: ≤15% considered excellent for brownfield projects |
 
 #### 🧭 Architectural Criticality Formula
 Each file’s weight is computed as:
 ```
-CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues × 0.5) + 1
+CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 ```
 - **Dependencies:** incoming + outgoing + cycle penalty (if any)
 - **WeightedIssues:** critical×4 + high×3 + medium×2 + low×1
+- **Note:** Complexity excluded to avoid double-counting (already weighted at 45%)
 - **Base +1** avoids zero weighting
 
 #### 🎓 Grade Scale
@@ -102,9 +109,9 @@ CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues �
 
 | Function | File | Complexity | Lines | Key Issues (Implications) |
 |:---|:---|:---|:---|:---|
-| `Sizzle` | `vendor/firebug-lite/src/firebug-lite-debug.js` | **51** | 120 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**well-named** (Self-documenting code)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `findLocation` | `vendor/firebug-lite/src/firebug-lite-debug.js` | **46** | 252 | **high-complexity** (Error-prone and hard to maintain)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**single-responsibility** (Clean separation of concerns)<br/>**pure-function** (Predictable and testable) |
-| `N` | `vendor/underscore/underscore-min.js` | **37** | 1 | **high-complexity** (Error-prone and hard to maintain)<br/>**deep-nesting** (Hard to read and test)<br/>**well-named** (Self-documenting code) |
+| `Sizzle` | `vendor/firebug-lite/src/firebug-lite-debug.js` | **51** | 120 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**poorly-named** (Names should be descriptive and meaningful) |
+| `findLocation` | `vendor/firebug-lite/src/firebug-lite-debug.js` | **46** | 252 | **high-complexity** (Error-prone and hard to maintain)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**impure-function** (Side effects make testing harder) |
+| `N` | `vendor/underscore/underscore-min.js` | **37** | 1 | **high-complexity** (Error-prone and hard to maintain)<br/>**deep-nesting** (Hard to read and test)<br/>**poorly-named** (Names should be descriptive and meaningful) |
 | `compareAscending` | `lodash.js` | **32** | 29 | **high-complexity** (Error-prone and hard to maintain)<br/>**deep-nesting** (Hard to read and test) |
 | `str` | `vendor/json-js/json2.js` | **29** | 137 | **high-complexity** (Error-prone and hard to maintain)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test) |
 
@@ -141,28 +148,20 @@ CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues �
 
 | Issue Pattern | Occurrences | Most Affected Functions | Implication |
 |---------------|-------------|-------------------------|-------------|
-| High-complexity | 5 | `Sizzle`, `findLocation`... | Error-prone and hard to maintain |
 | Deep-nesting | 5 | `Sizzle`, `findLocation`... | Hard to read and test |
+| High-complexity | 4 | `findLocation`, `N`... | Error-prone and hard to maintain |
 | Long-function | 3 | `Sizzle`, `findLocation`... | Should be split into smaller functions |
-| Well-named | 2 | `Sizzle`, `N` | Self-documenting code |
-| Single-responsibility | 1 | `findLocation` | Clean separation of concerns |
+| Poorly-named | 2 | `Sizzle`, `N` | Names should be descriptive and meaningful |
+| Critical-complexity | 1 | `Sizzle` | Severely impacts maintainability |
 
 ## 📈 Pattern Analysis
-
-### ✅ Good Practices Detected
-
-| Pattern | Occurrences | Implication |
-|---------|-------------|-------------|
-| Well Named | 2 | Self-documenting code |
-| Single Responsibility | 1 | Clean separation of concerns |
-| Pure Function | 1 | Predictable and testable |
 
 
 ---
 ## 🔬 Technical Notes
 
 ### Duplication Detection
-- **Algorithm:** Enhanced 8-line literal pattern matching with 8+ token minimum, cross-file exact matches only
+- **Algorithm:** Enhanced 8-line literal pattern matching with 20+ token minimum, cross-file exact matches only
 - **Focus:** Copy-paste duplication using MD5 hashing of normalized blocks (not structural similarity)
 - **Philosophy:** Pragmatic approach using regex normalization - avoids false positives while catching actionable duplication
 - **Results:** Typically 0-15% duplication vs ~70% with structural detection tools, filtering imports/trivial declarations

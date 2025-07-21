@@ -175,7 +175,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "source/index.js",
@@ -195,7 +195,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "source/index.js",
@@ -488,7 +488,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "source/vendor/ansi-styles/index.js",
@@ -665,7 +665,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "source/vendor/supports-color/index.js",
@@ -690,7 +690,7 @@
       }
     ],
     "overview": {
-      "grade": "B",
+      "grade": "A",
       "statistics": {
         "totalFiles": 19,
         "totalLOC": 1170,
@@ -699,10 +699,10 @@
         "avgDuplicationRatio": 0
       },
       "scores": {
-        "complexity": 64,
+        "complexity": 86,
         "duplication": 100,
         "maintainability": 100,
-        "overall": 84
+        "overall": 94
       },
       "summary": "2 critical files found requiring attention"
     },
@@ -714,13 +714,13 @@
         "repository": "chalk/chalk"
       },
       "analysis": {
-        "timestamp": "2025-07-21T14:25:33.526Z",
-        "durationMs": 258730,
+        "timestamp": "2025-07-21T22:20:39.396Z",
+        "durationMs": 234857,
         "toolVersion": "0.7.0",
         "filesAnalyzed": 19,
         "duplicationMode": "legacy"
       }
     }
   },
-  "durationMs": 258785
+  "durationMs": 234894
 }

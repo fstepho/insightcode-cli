@@ -49,6 +49,26 @@
         "healthScore": 100
       },
       {
+        "file": "benchmarks/middleware.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 13,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
         "file": "lib/application.js",
         "metrics": {
           "complexity": 5,
@@ -79,7 +99,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lib/application.js",
@@ -99,7 +119,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lib/application.js",
@@ -369,7 +389,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lib/view.js",
@@ -379,7 +399,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lib/view.js",
@@ -389,7 +409,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "lib/view.js",
@@ -410,26 +430,6 @@
           "isInCycle": false
         },
         "healthScore": 88
-      },
-      {
-        "file": "benchmarks/middleware.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 13,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
       },
       {
         "file": "test/Route.js",
@@ -494,7 +494,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/Router.js",
@@ -514,7 +514,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/Router.js",
@@ -739,7 +739,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/app.render.js",
@@ -749,7 +749,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/app.render.js",
@@ -769,7 +769,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/app.render.js",
@@ -779,7 +779,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/app.render.js",
@@ -799,7 +799,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/app.render.js",
@@ -809,7 +809,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/app.render.js",
@@ -829,7 +829,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/app.render.js",
@@ -839,7 +839,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/app.render.js",
@@ -859,7 +859,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/app.render.js",
@@ -869,7 +869,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/app.render.js",
@@ -982,7 +982,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/app.router.js",
@@ -1002,7 +1002,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/app.router.js",
@@ -1115,7 +1115,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/config.js",
@@ -1135,7 +1135,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/config.js",
@@ -1155,7 +1155,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/config.js",
@@ -1239,7 +1239,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/express.json.js",
@@ -2311,7 +2311,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "test/res.location.js",
@@ -2341,7 +2341,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/res.location.js",
@@ -2629,7 +2629,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "examples/auth/index.js",
@@ -2641,26 +2641,6 @@
             ]
           }
         ],
-        "dependencies": {
-          "incomingDependencies": 0,
-          "outgoingDependencies": 0,
-          "instability": 0,
-          "cohesionScore": 0,
-          "percentileUsageRank": 0,
-          "isInCycle": false
-        },
-        "healthScore": 100
-      },
-      {
-        "file": "examples/cookie-sessions/index.js",
-        "metrics": {
-          "complexity": 1,
-          "loc": 13,
-          "functionCount": 0,
-          "duplicationRatio": 0
-        },
-        "issues": [],
-        "functions": [],
         "dependencies": {
           "incomingDependencies": 0,
           "outgoingDependencies": 0,
@@ -2732,10 +2712,10 @@
         "healthScore": 100
       },
       {
-        "file": "examples/downloads/index.js",
+        "file": "examples/cookie-sessions/index.js",
         "metrics": {
           "complexity": 1,
-          "loc": 15,
+          "loc": 13,
           "functionCount": 0,
           "duplicationRatio": 0
         },
@@ -2752,10 +2732,10 @@
         "healthScore": 100
       },
       {
-        "file": "examples/cookies/index.js",
+        "file": "examples/downloads/index.js",
         "metrics": {
           "complexity": 1,
-          "loc": 32,
+          "loc": 15,
           "functionCount": 0,
           "duplicationRatio": 0
         },
@@ -2892,6 +2872,26 @@
         "healthScore": 100
       },
       {
+        "file": "examples/cookies/index.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 32,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
         "file": "examples/error/index.js",
         "metrics": {
           "complexity": 2,
@@ -2910,7 +2910,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "examples/error/index.js",
@@ -2973,10 +2973,10 @@
         "healthScore": 100
       },
       {
-        "file": "examples/resource/index.js",
+        "file": "examples/params/index.js",
         "metrics": {
           "complexity": 1,
-          "loc": 70,
+          "loc": 43,
           "functionCount": 0,
           "duplicationRatio": 0
         },
@@ -2993,10 +2993,10 @@
         "healthScore": 100
       },
       {
-        "file": "examples/params/index.js",
+        "file": "examples/resource/index.js",
         "metrics": {
           "complexity": 1,
-          "loc": 43,
+          "loc": 70,
           "functionCount": 0,
           "duplicationRatio": 0
         },
@@ -3051,7 +3051,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "examples/route-middleware/index.js",
@@ -3272,7 +3272,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "examples/view-constructor/github-view.js",
@@ -3282,7 +3282,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "examples/view-constructor/github-view.js",
@@ -3383,7 +3383,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "examples/view-locals/user.js",
@@ -3393,7 +3393,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "examples/view-locals/user.js",
@@ -3834,7 +3834,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "test/support/tmpl.js",
@@ -3937,10 +3937,10 @@
         "healthScore": 100
       },
       {
-        "file": "examples/search/public/client.js",
+        "file": "examples/mvc/lib/boot.js",
         "metrics": {
           "complexity": 1,
-          "loc": 13,
+          "loc": 63,
           "functionCount": 0,
           "duplicationRatio": 0
         },
@@ -3957,10 +3957,10 @@
         "healthScore": 100
       },
       {
-        "file": "examples/mvc/lib/boot.js",
+        "file": "examples/search/public/client.js",
         "metrics": {
           "complexity": 1,
-          "loc": 63,
+          "loc": 13,
           "functionCount": 0,
           "duplicationRatio": 0
         },
@@ -4017,10 +4017,10 @@
         "healthScore": 100
       },
       {
-        "file": "examples/mvc/controllers/user/index.js",
+        "file": "examples/mvc/controllers/user-pet/index.js",
         "metrics": {
           "complexity": 1,
-          "loc": 27,
+          "loc": 15,
           "functionCount": 0,
           "duplicationRatio": 0
         },
@@ -4037,10 +4037,10 @@
         "healthScore": 100
       },
       {
-        "file": "examples/mvc/controllers/user-pet/index.js",
+        "file": "examples/mvc/controllers/user/index.js",
         "metrics": {
           "complexity": 1,
-          "loc": 15,
+          "loc": 27,
           "functionCount": 0,
           "duplicationRatio": 0
         },
@@ -4087,10 +4087,10 @@
         "avgDuplicationRatio": 0.02
       },
       "scores": {
-        "complexity": 96,
+        "complexity": 98,
         "duplication": 95,
-        "maintainability": 84,
-        "overall": 92
+        "maintainability": 89,
+        "overall": 95
       },
       "summary": "14 critical files found requiring attention"
     },
@@ -4102,13 +4102,13 @@
         "repository": "expressjs/express"
       },
       "analysis": {
-        "timestamp": "2025-07-21T14:25:33.527Z",
-        "durationMs": 258729,
+        "timestamp": "2025-07-21T22:20:39.397Z",
+        "durationMs": 234857,
         "toolVersion": "0.7.0",
         "filesAnalyzed": 142,
         "duplicationMode": "legacy"
       }
     }
   },
-  "durationMs": 258774
+  "durationMs": 234888
 }

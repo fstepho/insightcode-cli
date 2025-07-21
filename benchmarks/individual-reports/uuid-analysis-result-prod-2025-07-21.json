@@ -1096,7 +1096,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "src/v4.ts",
@@ -1505,13 +1505,13 @@
         "repository": "https://github.com/uuidjs/uuid.git"
       },
       "analysis": {
-        "timestamp": "2025-07-21T16:18:18.666Z",
-        "durationMs": 64487,
+        "timestamp": "2025-07-21T22:11:02.598Z",
+        "durationMs": 65962,
         "toolVersion": "0.7.0",
         "filesAnalyzed": 29,
         "duplicationMode": "legacy"
       }
     }
   },
-  "durationMs": 64520
+  "durationMs": 65995
 }

@@ -11,8 +11,8 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-21T16:18:20.713Z
-- **Duration:** 66.54s
+- **Timestamp:** 2025-07-21T22:11:04.528Z
+- **Duration:** 67.90s
 - **Files Analyzed:** 697
 - **Tool Version:** 0.7.0
 
@@ -38,21 +38,27 @@
 
 InsightCode combines **research-based thresholds** with **criticality-weighted aggregation**, following the **Pareto principle**.
 
-#### 🔧 Overall Score Formula
+#### 🔧 Overall Score Calculation
+InsightCode uses a **two-step weighted aggregation** process:
+
+**Step 1:** Each metric is weighted by architectural criticality:
 ```
-Overall Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)
+Weighted_Complexity = Σ(File_Complexity × CriticismScore) / Σ(CriticismScore)
+Weighted_Maintainability = Σ(File_Maintainability × CriticismScore) / Σ(CriticismScore)
+Weighted_Duplication = Σ(File_Duplication × CriticismScore) / Σ(CriticismScore)
 ```
 
-#### 🧮 Metric Breakdown
-| Metric | Weight | Thresholds & Basis |
-|--------|--------|---------------------|
-| **Complexity** | 45% | McCabe (1976): ≤10 = low, <= 15 = medium, <= 20 = high, <= 50 = very high, >50 = extreme. Penalized quadratically to exponentially. |
-| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |
-| **Duplication** | 25% | ⚠️ Legacy threshold ≤15% considered "excellent" (brownfield projects). |
+**Step 2:** Final score combines weighted metrics:
+```
+Overall Score = (Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)
+```
 
-#### 🧠 Aggregation Strategy
-- **File-level health:** 100 - penalties (progressive, no caps or masking).
-- **Project-level score:** Weighted by **architectural criticality**, not arithmetic average.
+#### 🧮 Metric Configuration
+| Metric | Final Weight | Thresholds & Research Basis |
+|--------|--------------|-----------------------------|
+| **Complexity** | 45% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |
+| **Maintainability** | 30% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |
+| **Duplication** | 25% | Legacy threshold: ≤15% considered excellent for brownfield projects |
 
 #### 🧭 Architectural Criticality Formula
 Each file’s weight is computed as:
@@ -103,11 +109,11 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 
 | Function | File | Complexity | Lines | Key Issues (Implications) |
 |:---|:---|:---|:---|:---|
-| `structuredTypeRelatedToWorker` | `compiler/checker.ts` | **222** | 604 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `pipelineEmitWithHintWorker` | `compiler/emitter.ts` | **220** | 475 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `checkGrammarModifiers` | `compiler/checker.ts` | **179** | 418 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `getSymbolDisplayPartsDocumentationAndSymbolKindWorker` | `services/symbolDisplay.ts` | **174** | 614 | **long-function** (Should be split into smaller functions)<br/>**too-many-params** (Consider using object parameters)<br/>**deep-nesting** (Hard to read and test)<br/>**poorly-named** (Names should be descriptive and meaningful)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `scan` | `compiler/scanner.ts` | **167** | 498 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**high-complexity** (Error-prone and hard to maintain) |
+| `structuredTypeRelatedToWorker` | `compiler/checker.ts` | **222** | 604 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test) |
+| `pipelineEmitWithHintWorker` | `compiler/emitter.ts` | **220** | 475 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test) |
+| `checkGrammarModifiers` | `compiler/checker.ts` | **179** | 418 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test) |
+| `getSymbolDisplayPartsDocumentationAndSymbolKindWorker` | `services/symbolDisplay.ts` | **174** | 614 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**too-many-params** (Consider using object parameters)<br/>**deep-nesting** (Hard to read and test)<br/>**poorly-named** (Names should be descriptive and meaningful) |
+| `scan` | `compiler/scanner.ts` | **167** | 498 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test) |
 
 ## Dependency Analysis
 
@@ -129,7 +135,7 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 | harness/evaluatorImpl.ts | 0.86 | 6/1 |
 | harness/fakesHosts.ts | 0.88 | 7/1 |
 | harness/vfsUtil.ts | 0.83 | 5/1 |
-| tsc/tsc.ts | 1.00 | 1/0 |
+| services/services.ts | 0.86 | 6/1 |
 
 ## Issue Analysis
 
@@ -154,7 +160,7 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 
 | Issue Pattern | Occurrences | Most Affected Functions | Implication |
 |---------------|-------------|-------------------------|-------------|
-| High-complexity | 5 | `structuredTypeRelatedToWorker`, `pipelineEmitWithHintWorker`... | Error-prone and hard to maintain |
+| Critical-complexity | 5 | `structuredTypeRelatedToWorker`, `pipelineEmitWithHintWorker`... | Severely impacts maintainability |
 | Long-function | 5 | `structuredTypeRelatedToWorker`, `pipelineEmitWithHintWorker`... | Should be split into smaller functions |
 | Deep-nesting | 5 | `structuredTypeRelatedToWorker`, `pipelineEmitWithHintWorker`... | Hard to read and test |
 | Too-many-params | 1 | `getSymbolDisplayPartsDocumentationAndSymbolKindWorker` | Consider using object parameters |

@@ -11,14 +11,14 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-21T14:25:33.547Z
-- **Duration:** 258.77s
+- **Timestamp:** 2025-07-21T22:20:39.414Z
+- **Duration:** 234.89s
 - **Files Analyzed:** 5895
 - **Tool Version:** 0.7.0
 
 ## Quality Summary
 
-### Grade: 🔴 **D**
+### Grade: ✅ **B**
 
 **🚨 Primary Concern:** Extreme complexity (4269) in `.github/actions/deploy-docs-site/main.js`.
 
@@ -29,38 +29,45 @@
 
 | Dimension | Score (Value) | Status |
 |:---|:---|:---|
-| Complexity | 50/100 | 🔴 Critical |
-| Duplication | 97/100 (6.1% detected) | 🟢 Exceptional |
-| Maintainability | 60/100 | 🟠 Poor |
-| **Overall** | **65/100** | **🟠 Poor** |
+| Complexity | 83/100 | 🟢 Good |
+| Duplication | 93/100 (6.1% detected) | 🟢 Exceptional |
+| Maintainability | 86/100 | 🟢 Good |
+| **Overall** | **86/100** | **🟢 Good** |
 
 ### 📊 Scoring Methodology
 
 InsightCode combines **research-based thresholds** with **criticality-weighted aggregation**, following the **Pareto principle**.
 
-#### 🔧 Overall Score Formula
+#### 🔧 Overall Score Calculation
+InsightCode uses a **two-step weighted aggregation** process:
+
+**Step 1:** Each metric is weighted by architectural criticality:
 ```
-Overall Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)
+Weighted_Complexity = Σ(File_Complexity × CriticismScore) / Σ(CriticismScore)
+Weighted_Maintainability = Σ(File_Maintainability × CriticismScore) / Σ(CriticismScore)
+Weighted_Duplication = Σ(File_Duplication × CriticismScore) / Σ(CriticismScore)
 ```
 
-#### 🧮 Metric Breakdown
-| Metric | Weight | Thresholds & Basis |
-|--------|--------|---------------------|
-| **Complexity** | 45% | McCabe (1976): ≤10 = low, >50 = extreme. Penalized quadratically to exponentially. |
-| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |
-| **Duplication** | 25% | ⚠️ Legacy threshold ≤15% considered "excellent" (brownfield projects). |
+**Step 2:** Final score combines weighted metrics:
+```
+Overall Score = (Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)
+```
 
-#### 🧠 Aggregation Strategy
-- **File-level health:** 100 - penalties (progressive, no caps or masking).
-- **Project-level score:** Weighted by **architectural criticality**, not arithmetic average.
+#### 🧮 Metric Configuration
+| Metric | Final Weight | Thresholds & Research Basis |
+|--------|--------------|-----------------------------|
+| **Complexity** | 45% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |
+| **Maintainability** | 30% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |
+| **Duplication** | 25% | Legacy threshold: ≤15% considered excellent for brownfield projects |
 
 #### 🧭 Architectural Criticality Formula
 Each file’s weight is computed as:
 ```
-CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues × 0.5) + 1
+CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 ```
 - **Dependencies:** incoming + outgoing + cycle penalty (if any)
 - **WeightedIssues:** critical×4 + high×3 + medium×2 + low×1
+- **Note:** Complexity excluded to avoid double-counting (already weighted at 45%)
 - **Base +1** avoids zero weighting
 
 #### 🎓 Grade Scale
@@ -102,11 +109,11 @@ CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues �
 
 | Function | File | Complexity | Lines | Key Issues (Implications) |
 |:---|:---|:---|:---|:---|
-| `stringifyPair` | `.github/actions/deploy-docs-site/main.js` | **89** | 121 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**single-responsibility** (Clean separation of concerns)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `reifyCreateOperations` | `packages/compiler/src/template/pipeline/src/phases/reify.ts` | **86** | 359 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**single-responsibility** (Clean separation of concerns)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `simpleSubset` | `.github/actions/deploy-docs-site/main.js` | **84** | 112 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `resolve` | `packages/compiler-cli/src/ngtsc/annotations/component/src/handler.ts` | **84** | 501 | **long-function** (Should be split into smaller functions)<br/>**single-responsibility** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test)<br/>**pure-function** (Predictable and testable)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `getDateFormatter` | `packages/common/src/i18n/format_date.ts` | **82** | 309 | **long-function** (Should be split into smaller functions)<br/>**single-responsibility** (Clean separation of concerns)<br/>**high-complexity** (Error-prone and hard to maintain) |
+| `stringifyPair` | `.github/actions/deploy-docs-site/main.js` | **89** | 121 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**multiple-responsibilities** (Clean separation of concerns) |
+| `reifyCreateOperations` | `packages/compiler/src/template/pipeline/src/phases/reify.ts` | **86** | 359 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**multiple-responsibilities** (Clean separation of concerns) |
+| `simpleSubset` | `.github/actions/deploy-docs-site/main.js` | **84** | 112 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test) |
+| `resolve` | `packages/compiler-cli/src/ngtsc/annotations/component/src/handler.ts` | **84** | 501 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test)<br/>**impure-function** (Side effects make testing harder) |
+| `getDateFormatter` | `packages/common/src/i18n/format_date.ts` | **82** | 309 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**multiple-responsibilities** (Clean separation of concerns) |
 
 ## Dependency Analysis
 
@@ -141,27 +148,20 @@ CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues �
 
 | Issue Pattern | Occurrences | Most Affected Functions | Implication |
 |---------------|-------------|-------------------------|-------------|
-| High-complexity | 5 | `stringifyPair`, `reifyCreateOperations`... | Error-prone and hard to maintain |
+| Critical-complexity | 5 | `stringifyPair`, `reifyCreateOperations`... | Severely impacts maintainability |
 | Long-function | 5 | `stringifyPair`, `reifyCreateOperations`... | Should be split into smaller functions |
 | Deep-nesting | 4 | `stringifyPair`, `reifyCreateOperations`... | Hard to read and test |
-| Single-responsibility | 4 | `stringifyPair`, `reifyCreateOperations`... | Clean separation of concerns |
-| Pure-function | 1 | `resolve` | Predictable and testable |
+| Multiple-responsibilities | 4 | `stringifyPair`, `reifyCreateOperations`... | Clean separation of concerns |
+| Impure-function | 1 | `resolve` | Side effects make testing harder |
 
 ## 📈 Pattern Analysis
-
-### ✅ Good Practices Detected
-
-| Pattern | Occurrences | Implication |
-|---------|-------------|-------------|
-| Single Responsibility | 4 | Clean separation of concerns |
-| Pure Function | 1 | Predictable and testable |
 
 
 ---
 ## 🔬 Technical Notes
 
 ### Duplication Detection
-- **Algorithm:** Enhanced 8-line literal pattern matching with 8+ token minimum, cross-file exact matches only
+- **Algorithm:** Enhanced 8-line literal pattern matching with 20+ token minimum, cross-file exact matches only
 - **Focus:** Copy-paste duplication using MD5 hashing of normalized blocks (not structural similarity)
 - **Philosophy:** Pragmatic approach using regex normalization - avoids false positives while catching actionable duplication
 - **Results:** Typically 0-15% duplication vs ~70% with structural detection tools, filtering imports/trivial declarations

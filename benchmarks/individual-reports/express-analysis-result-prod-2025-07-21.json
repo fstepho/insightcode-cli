@@ -437,13 +437,13 @@
         "repository": "expressjs/express"
       },
       "analysis": {
-        "timestamp": "2025-07-21T16:18:20.064Z",
-        "durationMs": 65885,
+        "timestamp": "2025-07-21T22:11:03.836Z",
+        "durationMs": 67198,
         "toolVersion": "0.7.0",
         "filesAnalyzed": 7,
         "duplicationMode": "legacy"
       }
     }
   },
-  "durationMs": 65914
+  "durationMs": 67229
 }

@@ -11,8 +11,8 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-21T16:18:20.064Z
-- **Duration:** 65.91s
+- **Timestamp:** 2025-07-21T22:11:03.836Z
+- **Duration:** 67.23s
 - **Files Analyzed:** 7
 - **Tool Version:** 0.7.0
 
@@ -36,21 +36,27 @@
 
 InsightCode combines **research-based thresholds** with **criticality-weighted aggregation**, following the **Pareto principle**.
 
-#### 🔧 Overall Score Formula
+#### 🔧 Overall Score Calculation
+InsightCode uses a **two-step weighted aggregation** process:
+
+**Step 1:** Each metric is weighted by architectural criticality:
 ```
-Overall Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)
+Weighted_Complexity = Σ(File_Complexity × CriticismScore) / Σ(CriticismScore)
+Weighted_Maintainability = Σ(File_Maintainability × CriticismScore) / Σ(CriticismScore)
+Weighted_Duplication = Σ(File_Duplication × CriticismScore) / Σ(CriticismScore)
 ```
 
-#### 🧮 Metric Breakdown
-| Metric | Weight | Thresholds & Basis |
-|--------|--------|---------------------|
-| **Complexity** | 45% | McCabe (1976): ≤10 = low, <= 15 = medium, <= 20 = high, <= 50 = very high, >50 = extreme. Penalized quadratically to exponentially. |
-| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |
-| **Duplication** | 25% | ⚠️ Legacy threshold ≤15% considered "excellent" (brownfield projects). |
+**Step 2:** Final score combines weighted metrics:
+```
+Overall Score = (Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)
+```
 
-#### 🧠 Aggregation Strategy
-- **File-level health:** 100 - penalties (progressive, no caps or masking).
-- **Project-level score:** Weighted by **architectural criticality**, not arithmetic average.
+#### 🧮 Metric Configuration
+| Metric | Final Weight | Thresholds & Research Basis |
+|--------|--------------|-----------------------------|
+| **Complexity** | 45% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |
+| **Maintainability** | 30% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |
+| **Duplication** | 25% | Legacy threshold: ≤15% considered excellent for brownfield projects |
 
 #### 🧭 Architectural Criticality Formula
 Each file’s weight is computed as:
@@ -100,7 +106,7 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 | `acceptParams` | `lib/utils.js` | **7** | 32 | **deep-nesting** (Hard to read and test) |
 | `onfinish` | `lib/response.js` | **5** | 16 | **deep-nesting** (Hard to read and test) |
 | `stringify` | `lib/response.js` | **5** | 25 | **deep-nesting** (Hard to read and test) |
-| `logerror` | `lib/application.js` | **3** | 4 | **impure-function** (Side effects make testing harder) |
+| `tryRender` | `lib/application.js` | **2** | 7 | **multiple-responsibilities** (Clean separation of concerns) |
 
 ## Dependency Analysis
 
@@ -124,8 +130,8 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 |----------|-------|------------|----------------|-------------------|
 | 💀 Critical | 1 | 1 | 0 | lib |
 | 🔴 High | 1 | 1 | 0 | lib |
-| 🟠 Medium | 7 | 2 | 5 | lib |
-| 🟡 Low | 3 | 0 | 3 | lib |
+| 🟠 Medium | 8 | 2 | 6 | lib |
+| 🟡 Low | 2 | 0 | 2 | lib |
 
 ### File-Level Issue Types
 
@@ -139,8 +145,8 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 | Issue Pattern | Occurrences | Most Affected Functions | Implication |
 |---------------|-------------|-------------------------|-------------|
 | Deep-nesting | 4 | `View`, `acceptParams`... | Hard to read and test |
-| Impure-function | 2 | `View`, `logerror` | Side effects make testing harder |
-| Multiple-responsibilities | 1 | `View` | Clean separation of concerns |
+| Multiple-responsibilities | 2 | `View`, `tryRender` | Clean separation of concerns |
+| Impure-function | 1 | `View` | Side effects make testing harder |
 | Poorly-named | 1 | `View` | Names should be descriptive and meaningful |
 
 ## 📈 Pattern Analysis

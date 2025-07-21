@@ -346,7 +346,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -446,7 +446,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -456,7 +456,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -476,7 +476,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -486,7 +486,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -506,7 +506,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -526,7 +526,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -546,7 +546,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -568,7 +568,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -588,7 +588,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -598,7 +598,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -618,7 +618,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -638,7 +638,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -658,7 +658,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -678,7 +678,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -698,7 +698,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -718,7 +718,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -728,7 +728,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -748,7 +748,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -768,7 +768,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -788,7 +788,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -808,7 +808,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -828,7 +828,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -848,7 +848,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -858,7 +858,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -878,7 +878,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -898,7 +898,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -918,7 +918,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -938,7 +938,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -948,7 +948,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -968,7 +968,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -988,7 +988,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -1008,7 +1008,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -1018,7 +1018,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -1038,7 +1038,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -1058,7 +1058,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -1078,7 +1078,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -1098,7 +1098,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -1128,7 +1128,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -1295,7 +1295,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -1492,7 +1492,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -1584,7 +1584,7 @@
             "parameterCount": 7,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -1747,7 +1747,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -1870,7 +1870,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -2258,7 +2258,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -2504,7 +2504,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -2543,7 +2543,7 @@
             "parameterCount": 6,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -2707,7 +2707,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -2736,7 +2736,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -2768,7 +2768,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -2922,7 +2922,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3174,7 +3174,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -3194,7 +3194,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -3244,7 +3244,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -3264,7 +3264,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -3373,7 +3373,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3424,7 +3424,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3473,7 +3473,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -3493,7 +3493,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3561,7 +3561,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3650,7 +3650,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3702,7 +3702,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3734,7 +3734,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3768,7 +3768,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3816,7 +3816,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "lodash.js",
@@ -3890,7 +3890,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lodash.js",
@@ -3994,7 +3994,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "fp/_baseConvert.js",
@@ -4028,7 +4028,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "high",
                 "location": {
                   "file": "fp/_baseConvert.js",
@@ -4117,7 +4117,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "fp/_baseConvert.js",
@@ -4273,7 +4273,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "perf/perf.js",
@@ -4293,7 +4293,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "perf/perf.js",
@@ -4303,7 +4303,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "perf/perf.js",
@@ -4407,7 +4407,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4427,7 +4427,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4447,7 +4447,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4467,7 +4467,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4497,7 +4497,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4517,7 +4517,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4551,7 +4551,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4581,7 +4581,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4601,7 +4601,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4611,7 +4611,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4653,7 +4653,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4663,7 +4663,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4673,7 +4673,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/saucelabs.js",
@@ -4737,7 +4737,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test-fp.js",
@@ -4757,7 +4757,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test-fp.js",
@@ -4777,7 +4777,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test-fp.js",
@@ -4797,7 +4797,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test-fp.js",
@@ -4861,7 +4861,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -4871,7 +4871,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -4891,7 +4891,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "test/test.js",
@@ -4911,7 +4911,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -4921,7 +4921,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -4941,7 +4941,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -4961,7 +4961,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -4981,7 +4981,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5001,7 +5001,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5011,7 +5011,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5031,7 +5031,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5051,7 +5051,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5071,7 +5071,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5091,7 +5091,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5111,7 +5111,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5131,7 +5131,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5151,7 +5151,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5161,7 +5161,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5181,7 +5181,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5201,7 +5201,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5211,7 +5211,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5231,7 +5231,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5251,7 +5251,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5271,7 +5271,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5291,7 +5291,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5301,7 +5301,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5321,7 +5321,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5331,7 +5331,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5351,7 +5351,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5371,7 +5371,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5381,7 +5381,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5401,7 +5401,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5411,7 +5411,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5431,7 +5431,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5451,7 +5451,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5471,7 +5471,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5491,7 +5491,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5511,7 +5511,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5531,7 +5531,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5551,7 +5551,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5561,7 +5561,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5581,7 +5581,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5591,7 +5591,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5611,7 +5611,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5621,7 +5621,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5641,7 +5641,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5651,7 +5651,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5671,7 +5671,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5691,7 +5691,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5711,7 +5711,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5731,7 +5731,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5751,7 +5751,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5761,7 +5761,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5781,7 +5781,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5801,7 +5801,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5821,7 +5821,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5841,7 +5841,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5861,7 +5861,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5871,7 +5871,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5891,7 +5891,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5911,7 +5911,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5931,7 +5931,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5951,7 +5951,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5971,7 +5971,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -5981,7 +5981,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6001,7 +6001,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6011,7 +6011,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6031,7 +6031,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6041,7 +6041,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6061,7 +6061,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6081,7 +6081,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6101,7 +6101,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6121,7 +6121,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6131,7 +6131,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6151,7 +6151,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6171,7 +6171,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6181,7 +6181,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6201,7 +6201,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6221,7 +6221,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6231,7 +6231,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6251,7 +6251,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6261,7 +6261,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6281,7 +6281,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6291,7 +6291,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6311,7 +6311,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6321,7 +6321,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6341,7 +6341,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6361,7 +6361,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6381,7 +6381,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6401,7 +6401,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6421,7 +6421,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6441,7 +6441,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6451,7 +6451,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6471,7 +6471,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6491,7 +6491,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6511,7 +6511,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6521,7 +6521,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6541,7 +6541,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6551,7 +6551,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6571,7 +6571,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6591,7 +6591,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6611,7 +6611,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6631,7 +6631,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6651,7 +6651,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6671,7 +6671,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6691,7 +6691,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6711,7 +6711,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6731,7 +6731,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6741,7 +6741,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6761,7 +6761,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6781,7 +6781,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6801,7 +6801,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6821,7 +6821,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6831,7 +6831,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6851,7 +6851,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6861,7 +6861,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6881,7 +6881,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6901,7 +6901,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6921,7 +6921,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6941,7 +6941,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6961,7 +6961,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -6981,7 +6981,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7001,7 +7001,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7021,7 +7021,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7031,7 +7031,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7051,7 +7051,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7071,7 +7071,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7091,7 +7091,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7111,7 +7111,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7131,7 +7131,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7141,7 +7141,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7161,7 +7161,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7181,7 +7181,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7191,7 +7191,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7211,7 +7211,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7221,7 +7221,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7241,7 +7241,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7251,7 +7251,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7271,7 +7271,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7291,7 +7291,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7301,7 +7301,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7321,7 +7321,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7341,7 +7341,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7361,7 +7361,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7381,7 +7381,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7401,7 +7401,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7421,7 +7421,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7431,7 +7431,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7451,7 +7451,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7471,7 +7471,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7481,7 +7481,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7501,7 +7501,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7521,7 +7521,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7541,7 +7541,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7551,7 +7551,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7571,7 +7571,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7591,7 +7591,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7611,7 +7611,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7631,7 +7631,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7651,7 +7651,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7671,7 +7671,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7691,7 +7691,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7711,7 +7711,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7731,7 +7731,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7751,7 +7751,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7761,7 +7761,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7781,7 +7781,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7791,7 +7791,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7811,7 +7811,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7831,7 +7831,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7851,7 +7851,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7871,7 +7871,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7881,7 +7881,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "test/test.js",
@@ -7922,7 +7922,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lib/common/file.js",
@@ -8044,7 +8044,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lib/common/util.js",
@@ -8054,7 +8054,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "lib/common/util.js",
@@ -8155,7 +8155,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lib/fp/build-modules.js",
@@ -8286,7 +8286,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "lib/main/build-site.js",
@@ -8326,7 +8326,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "lib/main/build-site.js",
@@ -8387,7 +8387,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "test/asset/test-ui.js",
@@ -8480,7 +8480,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/backbone.js",
@@ -8549,7 +8549,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/backbone/backbone.js",
@@ -8633,7 +8633,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/backbone/backbone.js",
@@ -8730,7 +8730,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/json-js/json2.js",
@@ -8750,7 +8750,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/json-js/json2.js",
@@ -8878,7 +8878,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -8898,7 +8898,7 @@
             "parameterCount": 6,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -8928,7 +8928,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -8958,7 +8958,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -8978,7 +8978,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -8998,7 +8998,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9018,7 +9018,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9028,7 +9028,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9048,7 +9048,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9068,7 +9068,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9098,7 +9098,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9118,7 +9118,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9138,7 +9138,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9158,7 +9158,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9178,7 +9178,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9208,7 +9208,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9228,7 +9228,7 @@
             "parameterCount": 5,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9248,7 +9248,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9268,7 +9268,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9288,7 +9288,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9308,7 +9308,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9328,7 +9328,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9370,7 +9370,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9391,7 +9391,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9411,7 +9411,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9431,7 +9431,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9451,7 +9451,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9471,7 +9471,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore-min.js",
@@ -9535,7 +9535,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore.js",
@@ -9555,7 +9555,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore.js",
@@ -9565,7 +9565,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore.js",
@@ -9594,7 +9594,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/underscore.js",
@@ -9888,7 +9888,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/collections.js",
@@ -9898,7 +9898,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/collections.js",
@@ -9918,7 +9918,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/collections.js",
@@ -9928,7 +9928,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/collections.js",
@@ -9948,7 +9948,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/collections.js",
@@ -9968,7 +9968,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/collections.js",
@@ -10009,7 +10009,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/cross-document.js",
@@ -10073,7 +10073,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10083,7 +10083,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10103,7 +10103,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10123,7 +10123,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10143,7 +10143,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10163,7 +10163,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10183,7 +10183,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10193,7 +10193,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10213,7 +10213,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10233,7 +10233,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10243,7 +10243,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10263,7 +10263,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/functions.js",
@@ -10327,7 +10327,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10347,7 +10347,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10367,7 +10367,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10377,7 +10377,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10397,7 +10397,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10407,7 +10407,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10427,7 +10427,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10437,7 +10437,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10457,7 +10457,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10477,7 +10477,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10497,7 +10497,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10517,7 +10517,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10537,7 +10537,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10557,7 +10557,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10567,7 +10567,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10587,7 +10587,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10607,7 +10607,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10617,7 +10617,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10637,7 +10637,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10657,7 +10657,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10677,7 +10677,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10697,7 +10697,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10717,7 +10717,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10727,7 +10727,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/objects.js",
@@ -10780,7 +10780,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/utility.js",
@@ -10790,7 +10790,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/utility.js",
@@ -10810,7 +10810,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/underscore/test/utility.js",
@@ -10972,7 +10972,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11016,7 +11016,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11060,7 +11060,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11092,7 +11092,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11112,7 +11112,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11132,7 +11132,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11162,7 +11162,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11172,7 +11172,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11192,7 +11192,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11212,7 +11212,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11297,7 +11297,7 @@
             "parameterCount": 6,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11329,7 +11329,7 @@
             "parameterCount": 6,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11361,7 +11361,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11381,7 +11381,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11420,7 +11420,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11440,7 +11440,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11460,7 +11460,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11480,7 +11480,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11510,7 +11510,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11530,7 +11530,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11540,7 +11540,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11560,7 +11560,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11570,7 +11570,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11679,7 +11679,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11689,7 +11689,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11699,7 +11699,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11719,7 +11719,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11739,7 +11739,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11799,7 +11799,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11840,7 +11840,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11921,7 +11921,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -11950,7 +11950,7 @@
             "parameterCount": 3,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12029,7 +12029,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12069,7 +12069,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12089,7 +12089,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12109,7 +12109,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12119,7 +12119,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12139,7 +12139,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12149,7 +12149,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12169,7 +12169,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12179,7 +12179,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12259,7 +12259,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12299,7 +12299,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12319,7 +12319,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12393,7 +12393,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12403,7 +12403,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12466,7 +12466,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12486,7 +12486,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12518,7 +12518,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12572,7 +12572,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "high",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12582,7 +12582,7 @@
                 "description": "Function has 3 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12634,7 +12634,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12664,7 +12664,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12694,7 +12694,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12723,7 +12723,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12733,7 +12733,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12824,7 +12824,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12834,7 +12834,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12874,7 +12874,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12906,7 +12906,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12926,7 +12926,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -12979,7 +12979,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13041,7 +13041,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13071,7 +13071,7 @@
             "parameterCount": 4,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "critical-complexity",
                 "severity": "critical",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13105,7 +13105,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13126,7 +13126,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13146,7 +13146,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13195,7 +13195,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13205,7 +13205,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13247,7 +13247,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13257,7 +13257,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13267,7 +13267,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13298,7 +13298,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13328,7 +13328,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13400,7 +13400,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13429,7 +13429,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13471,7 +13471,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13481,7 +13481,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13491,7 +13491,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13552,7 +13552,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13604,7 +13604,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13648,7 +13648,7 @@
             "parameterCount": 2,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13682,7 +13682,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13737,7 +13737,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13780,7 +13780,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13790,7 +13790,7 @@
                 "description": "Function has 2 distinct responsibilities, violates Single Responsibility Principle"
               },
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13864,7 +13864,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -13911,7 +13911,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "high-complexity",
+                "type": "medium-complexity",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -14009,7 +14009,7 @@
                 "description": "Deep nesting detected, consider extracting sub-functions or using early returns"
               },
               {
-                "type": "single-responsibility",
+                "type": "multiple-responsibilities",
                 "severity": "medium",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -14039,7 +14039,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/firebug-lite/src/firebug-lite-debug.js",
@@ -14175,7 +14175,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14195,7 +14195,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14215,7 +14215,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14235,7 +14235,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14255,7 +14255,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14275,7 +14275,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14295,7 +14295,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14315,7 +14315,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14335,7 +14335,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14355,7 +14355,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14375,7 +14375,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14395,7 +14395,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14415,7 +14415,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14435,7 +14435,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14455,7 +14455,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14475,7 +14475,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14485,7 +14485,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14505,7 +14505,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/events.js",
@@ -14598,7 +14598,7 @@
             "parameterCount": 1,
             "issues": [
               {
-                "type": "pure-function",
+                "type": "impure-function",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/router.js",
@@ -14608,7 +14608,7 @@
                 "description": "Function has side effects or depends on external state"
               },
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/router.js",
@@ -14693,7 +14693,7 @@
             "parameterCount": 0,
             "issues": [
               {
-                "type": "well-named",
+                "type": "poorly-named",
                 "severity": "low",
                 "location": {
                   "file": "vendor/backbone/test/view.js",
@@ -14757,7 +14757,7 @@
       }
     ],
     "overview": {
-      "grade": "F",
+      "grade": "D",
       "statistics": {
         "totalFiles": 47,
         "totalLOC": 50842,
@@ -14766,10 +14766,10 @@
         "avgDuplicationRatio": 0.02
       },
       "scores": {
-        "complexity": 8,
-        "duplication": 99,
-        "maintainability": 9,
-        "overall": 31
+        "complexity": 61,
+        "duplication": 96,
+        "maintainability": 51,
+        "overall": 67
       },
       "summary": "21 critical files found requiring attention"
     },
@@ -14780,13 +14780,13 @@
         "version": "4.17.21"
       },
       "analysis": {
-        "timestamp": "2025-07-21T14:25:33.526Z",
-        "durationMs": 258734,
+        "timestamp": "2025-07-21T22:20:39.396Z",
+        "durationMs": 234861,
         "toolVersion": "0.7.0",
         "filesAnalyzed": 47,
         "duplicationMode": "legacy"
       }
     }
   },
-  "durationMs": 258793
+  "durationMs": 234902
 }

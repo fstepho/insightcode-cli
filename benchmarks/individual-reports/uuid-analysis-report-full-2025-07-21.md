@@ -11,8 +11,8 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-21T14:25:33.524Z
-- **Duration:** 258.78s
+- **Timestamp:** 2025-07-21T22:20:39.396Z
+- **Duration:** 234.89s
 - **Files Analyzed:** 79
 - **Tool Version:** 0.7.0
 
@@ -29,38 +29,45 @@
 
 | Dimension | Score (Value) | Status |
 |:---|:---|:---|
-| Complexity | 93/100 | 🟢 Exceptional |
-| Duplication | 95/100 (7.3% detected) | 🟢 Exceptional |
-| Maintainability | 98/100 | 🟢 Exceptional |
-| **Overall** | **95/100** | **🟢 Exceptional** |
+| Complexity | 97/100 | 🟢 Exceptional |
+| Duplication | 89/100 (7.3% detected) | 🟢 Good |
+| Maintainability | 99/100 | 🟢 Exceptional |
+| **Overall** | **96/100** | **🟢 Exceptional** |
 
 ### 📊 Scoring Methodology
 
 InsightCode combines **research-based thresholds** with **criticality-weighted aggregation**, following the **Pareto principle**.
 
-#### 🔧 Overall Score Formula
+#### 🔧 Overall Score Calculation
+InsightCode uses a **two-step weighted aggregation** process:
+
+**Step 1:** Each metric is weighted by architectural criticality:
 ```
-Overall Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)
+Weighted_Complexity = Σ(File_Complexity × CriticismScore) / Σ(CriticismScore)
+Weighted_Maintainability = Σ(File_Maintainability × CriticismScore) / Σ(CriticismScore)
+Weighted_Duplication = Σ(File_Duplication × CriticismScore) / Σ(CriticismScore)
 ```
 
-#### 🧮 Metric Breakdown
-| Metric | Weight | Thresholds & Basis |
-|--------|--------|---------------------|
-| **Complexity** | 45% | McCabe (1976): ≤10 = low, >50 = extreme. Penalized quadratically to exponentially. |
-| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |
-| **Duplication** | 25% | ⚠️ Legacy threshold ≤15% considered "excellent" (brownfield projects). |
+**Step 2:** Final score combines weighted metrics:
+```
+Overall Score = (Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)
+```
 
-#### 🧠 Aggregation Strategy
-- **File-level health:** 100 - penalties (progressive, no caps or masking).
-- **Project-level score:** Weighted by **architectural criticality**, not arithmetic average.
+#### 🧮 Metric Configuration
+| Metric | Final Weight | Thresholds & Research Basis |
+|--------|--------------|-----------------------------|
+| **Complexity** | 45% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |
+| **Maintainability** | 30% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |
+| **Duplication** | 25% | Legacy threshold: ≤15% considered excellent for brownfield projects |
 
 #### 🧭 Architectural Criticality Formula
 Each file’s weight is computed as:
 ```
-CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues × 0.5) + 1
+CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 ```
 - **Dependencies:** incoming + outgoing + cycle penalty (if any)
 - **WeightedIssues:** critical×4 + high×3 + medium×2 + low×1
+- **Note:** Complexity excluded to avoid double-counting (already weighted at 45%)
 - **Base +1** avoids zero weighting
 
 #### 🎓 Grade Scale
@@ -94,7 +101,7 @@ CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues �
 | src/md5-browser.ts | 70% | Multiple quality issues |
 | examples/browser-esmodules/example.js | 0% | Extreme duplication (78%) |
 | examples/browser-rollup/example-all.js | 0% | Extreme duplication (100%) |
-| examples/browser-webpack/example-all-require.js | 0% | Extreme duplication (100%) |
+| examples/node-commonjs/example.js | 0% | Extreme duplication (100%) |
 
 *⭐ indicates emblematic/core files*
 
@@ -102,11 +109,11 @@ CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues �
 
 | Function | File | Complexity | Lines | Key Issues (Implications) |
 |:---|:---|:---|:---|:---|
-| `v4` | `src/v4.ts` | **13** | 36 | **high-complexity** (Error-prone and hard to maintain)<br/>**deep-nesting** (Hard to read and test)<br/>**single-responsibility** (Clean separation of concerns)<br/>**well-named** (Self-documenting code) |
-| `v35` | `src/v35.ts` | **9** | 42 | **deep-nesting** (Hard to read and test)<br/>**single-responsibility** (Clean separation of concerns) |
-| `v1Bytes` | `src/v1.ts` | **8** | 61 | **long-function** (Should be split into smaller functions)<br/>**too-many-params** (Consider using object parameters)<br/>**deep-nesting** (Hard to read and test)<br/>**single-responsibility** (Clean separation of concerns)<br/>**pure-function** (Predictable and testable) |
+| `benchmark` | `examples/benchmark/benchmark.js` | **1** | 119 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**impure-function** (Side effects make testing harder) |
+| `v4` | `src/v4.ts` | **13** | 36 | **medium-complexity** (Consider refactoring for clarity)<br/>**deep-nesting** (Hard to read and test)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**poorly-named** (Names should be descriptive and meaningful) |
+| `v35` | `src/v35.ts` | **9** | 42 | **deep-nesting** (Hard to read and test)<br/>**multiple-responsibilities** (Clean separation of concerns) |
+| `v1Bytes` | `src/v1.ts` | **8** | 61 | **long-function** (Should be split into smaller functions)<br/>**too-many-params** (Consider using object parameters)<br/>**deep-nesting** (Hard to read and test)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**impure-function** (Side effects make testing harder) |
 | `sha1` | `src/sha1-browser.ts` | **7** | 89 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test) |
-| `v1` | `src/v1.ts` | **7** | 53 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**pure-function** (Predictable and testable)<br/>**well-named** (Self-documenting code) |
 
 ## Dependency Analysis
 
@@ -125,9 +132,9 @@ CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues �
 | Severity | Count | File-Level | Function-Level | Top Affected Areas |
 |----------|-------|------------|----------------|-------------------|
 | 💀 Critical | 2 | 2 | 0 | src, test/browser |
-| 🔴 High | 1 | 1 | 0 | src |
+| 🔴 High | 2 | 1 | 1 | src, examples/benchmark |
 | 🟠 Medium | 19 | 6 | 13 | src, src/test |
-| 🟡 Low | 11 | 7 | 4 | src, examples/browser-webpack |
+| 🟡 Low | 10 | 7 | 3 | src, examples/browser-webpack |
 
 ### File-Level Issue Types
 
@@ -141,28 +148,20 @@ CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues �
 
 | Issue Pattern | Occurrences | Most Affected Functions | Implication |
 |---------------|-------------|-------------------------|-------------|
-| Deep-nesting | 5 | `v4`, `v35`... | Hard to read and test |
-| Single-responsibility | 3 | `v4`, `v35`... | Clean separation of concerns |
-| Long-function | 3 | `v1Bytes`, `sha1`... | Should be split into smaller functions |
-| Well-named | 2 | `v4`, `v1` | Self-documenting code |
-| Pure-function | 2 | `v1Bytes`, `v1` | Predictable and testable |
+| Deep-nesting | 5 | `benchmark`, `v4`... | Hard to read and test |
+| Multiple-responsibilities | 4 | `benchmark`, `v4`... | Clean separation of concerns |
+| Long-function | 3 | `benchmark`, `v1Bytes`... | Should be split into smaller functions |
+| Impure-function | 2 | `benchmark`, `v1Bytes` | Side effects make testing harder |
+| Medium-complexity | 1 | `v4` | Consider refactoring for clarity |
 
 ## 📈 Pattern Analysis
-
-### ✅ Good Practices Detected
-
-| Pattern | Occurrences | Implication |
-|---------|-------------|-------------|
-| Single Responsibility | 3 | Clean separation of concerns |
-| Well Named | 2 | Self-documenting code |
-| Pure Function | 2 | Predictable and testable |
 
 
 ---
 ## 🔬 Technical Notes
 
 ### Duplication Detection
-- **Algorithm:** Enhanced 8-line literal pattern matching with 8+ token minimum, cross-file exact matches only
+- **Algorithm:** Enhanced 8-line literal pattern matching with 20+ token minimum, cross-file exact matches only
 - **Focus:** Copy-paste duplication using MD5 hashing of normalized blocks (not structural similarity)
 - **Philosophy:** Pragmatic approach using regex normalization - avoids false positives while catching actionable duplication
 - **Results:** Typically 0-15% duplication vs ~70% with structural detection tools, filtering imports/trivial declarations

@@ -11,8 +11,8 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-21T16:18:24.474Z
-- **Duration:** 70.31s
+- **Timestamp:** 2025-07-21T22:11:08.438Z
+- **Duration:** 71.82s
 - **Files Analyzed:** 1744
 - **Tool Version:** 0.7.0
 
@@ -38,21 +38,27 @@
 
 InsightCode combines **research-based thresholds** with **criticality-weighted aggregation**, following the **Pareto principle**.
 
-#### 🔧 Overall Score Formula
+#### 🔧 Overall Score Calculation
+InsightCode uses a **two-step weighted aggregation** process:
+
+**Step 1:** Each metric is weighted by architectural criticality:
 ```
-Overall Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)
+Weighted_Complexity = Σ(File_Complexity × CriticismScore) / Σ(CriticismScore)
+Weighted_Maintainability = Σ(File_Maintainability × CriticismScore) / Σ(CriticismScore)
+Weighted_Duplication = Σ(File_Duplication × CriticismScore) / Σ(CriticismScore)
 ```
 
-#### 🧮 Metric Breakdown
-| Metric | Weight | Thresholds & Basis |
-|--------|--------|---------------------|
-| **Complexity** | 45% | McCabe (1976): ≤10 = low, <= 15 = medium, <= 20 = high, <= 50 = very high, >50 = extreme. Penalized quadratically to exponentially. |
-| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |
-| **Duplication** | 25% | ⚠️ Legacy threshold ≤15% considered "excellent" (brownfield projects). |
+**Step 2:** Final score combines weighted metrics:
+```
+Overall Score = (Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)
+```
 
-#### 🧠 Aggregation Strategy
-- **File-level health:** 100 - penalties (progressive, no caps or masking).
-- **Project-level score:** Weighted by **architectural criticality**, not arithmetic average.
+#### 🧮 Metric Configuration
+| Metric | Final Weight | Thresholds & Research Basis |
+|--------|--------------|-----------------------------|
+| **Complexity** | 45% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |
+| **Maintainability** | 30% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |
+| **Duplication** | 25% | Legacy threshold: ≤15% considered excellent for brownfield projects |
 
 #### 🧭 Architectural Criticality Formula
 Each file’s weight is computed as:
@@ -103,11 +109,11 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 
 | Function | File | Complexity | Lines | Key Issues (Implications) |
 |:---|:---|:---|:---|:---|
-| `reifyCreateOperations` | `compiler/src/template/pipeline/src/phases/reify.ts` | **86** | 359 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `resolve` | `compiler-cli/src/ngtsc/annotations/component/src/handler.ts` | **84** | 501 | **long-function** (Should be split into smaller functions)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test)<br/>**impure-function** (Side effects make testing harder)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `getDateFormatter` | `common/src/i18n/format_date.ts` | **82** | 309 | **long-function** (Should be split into smaller functions)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `transformExpressionsInOp` | `compiler/src/template/pipeline/ir/src/expression.ts` | **72** | 152 | **long-function** (Should be split into smaller functions)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `analyze` | `compiler-cli/src/ngtsc/annotations/component/src/handler.ts` | **59** | 487 | **long-function** (Should be split into smaller functions)<br/>**god-function** (Violates Single Responsibility)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test)<br/>**impure-function** (Side effects make testing harder)<br/>**high-complexity** (Error-prone and hard to maintain) |
+| `reifyCreateOperations` | `compiler/src/template/pipeline/src/phases/reify.ts` | **86** | 359 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**multiple-responsibilities** (Clean separation of concerns) |
+| `resolve` | `compiler-cli/src/ngtsc/annotations/component/src/handler.ts` | **84** | 501 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test)<br/>**impure-function** (Side effects make testing harder) |
+| `getDateFormatter` | `common/src/i18n/format_date.ts` | **82** | 309 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**multiple-responsibilities** (Clean separation of concerns) |
+| `transformExpressionsInOp` | `compiler/src/template/pipeline/ir/src/expression.ts` | **72** | 152 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test) |
+| `analyze` | `compiler-cli/src/ngtsc/annotations/component/src/handler.ts` | **59** | 487 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**god-function** (Violates Single Responsibility)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test)<br/>**impure-function** (Side effects make testing harder) |
 
 ## Dependency Analysis
 
@@ -126,10 +132,10 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 | File | Instability | Outgoing/Incoming |
 |------|-------------|-------------------|
 | animations/index.ts | 1.00 | 1/0 |
-| benchpress/index.ts | 1.00 | 22/0 |
 | compiler/index.ts | 1.00 | 1/0 |
-| core/index.ts | 1.00 | 1/0 |
+| benchpress/index.ts | 1.00 | 22/0 |
 | compiler-cli/index.ts | 0.86 | 12/2 |
+| forms/index.ts | 1.00 | 1/0 |
 
 ## Issue Analysis
 
@@ -154,7 +160,7 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 
 | Issue Pattern | Occurrences | Most Affected Functions | Implication |
 |---------------|-------------|-------------------------|-------------|
-| High-complexity | 5 | `reifyCreateOperations`, `resolve`... | Error-prone and hard to maintain |
+| Critical-complexity | 5 | `reifyCreateOperations`, `resolve`... | Severely impacts maintainability |
 | Long-function | 5 | `reifyCreateOperations`, `resolve`... | Should be split into smaller functions |
 | Multiple-responsibilities | 5 | `reifyCreateOperations`, `resolve`... | Clean separation of concerns |
 | Deep-nesting | 4 | `reifyCreateOperations`, `resolve`... | Hard to read and test |

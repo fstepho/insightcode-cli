@@ -11,8 +11,8 @@
 
 ## Analysis Context
 
-- **Timestamp:** 2025-07-21T16:18:21.186Z
-- **Duration:** 67.03s
+- **Timestamp:** 2025-07-21T22:11:05.125Z
+- **Duration:** 68.51s
 - **Files Analyzed:** 253
 - **Tool Version:** 0.7.0
 
@@ -38,21 +38,27 @@
 
 InsightCode combines **research-based thresholds** with **criticality-weighted aggregation**, following the **Pareto principle**.
 
-#### 🔧 Overall Score Formula
+#### 🔧 Overall Score Calculation
+InsightCode uses a **two-step weighted aggregation** process:
+
+**Step 1:** Each metric is weighted by architectural criticality:
 ```
-Overall Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)
+Weighted_Complexity = Σ(File_Complexity × CriticismScore) / Σ(CriticismScore)
+Weighted_Maintainability = Σ(File_Maintainability × CriticismScore) / Σ(CriticismScore)
+Weighted_Duplication = Σ(File_Duplication × CriticismScore) / Σ(CriticismScore)
 ```
 
-#### 🧮 Metric Breakdown
-| Metric | Weight | Thresholds & Basis |
-|--------|--------|---------------------|
-| **Complexity** | 45% | McCabe (1976): ≤10 = low, <= 15 = medium, <= 20 = high, <= 50 = very high, >50 = extreme. Penalized quadratically to exponentially. |
-| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |
-| **Duplication** | 25% | ⚠️ Legacy threshold ≤15% considered "excellent" (brownfield projects). |
+**Step 2:** Final score combines weighted metrics:
+```
+Overall Score = (Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)
+```
 
-#### 🧠 Aggregation Strategy
-- **File-level health:** 100 - penalties (progressive, no caps or masking).
-- **Project-level score:** Weighted by **architectural criticality**, not arithmetic average.
+#### 🧮 Metric Configuration
+| Metric | Final Weight | Thresholds & Research Basis |
+|--------|--------------|-----------------------------|
+| **Complexity** | 45% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |
+| **Maintainability** | 30% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |
+| **Duplication** | 25% | Legacy threshold: ≤15% considered excellent for brownfield projects |
 
 #### 🧭 Architectural Criticality Formula
 Each file’s weight is computed as:
@@ -103,11 +109,11 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 
 | Function | File | Complexity | Lines | Key Issues (Implications) |
 |:---|:---|:---|:---|:---|
-| `compileScript` | `compiler-sfc/src/compileScript.ts` | **192** | 892 | **long-function** (Should be split into smaller functions)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test)<br/>**impure-function** (Side effects make testing harder)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `inferRuntimeType` | `compiler-sfc/src/script/resolveType.ts` | **123** | 307 | **long-function** (Should be split into smaller functions)<br/>**god-function** (Violates Single Responsibility)<br/>**deep-nesting** (Hard to read and test)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `buildProps` | `compiler-core/src/transforms/transformElement.ts` | **93** | 458 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `hydrateElement` | `runtime-core/src/hydration.ts` | **60** | 185 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**high-complexity** (Error-prone and hard to maintain) |
-| `walk` | `compiler-core/src/transforms/cacheStatic.ts` | **60** | 201 | **long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**high-complexity** (Error-prone and hard to maintain) |
+| `compileScript` | `compiler-sfc/src/compileScript.ts` | **192** | 892 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**multiple-responsibilities** (Clean separation of concerns)<br/>**deep-nesting** (Hard to read and test)<br/>**impure-function** (Side effects make testing harder) |
+| `inferRuntimeType` | `compiler-sfc/src/script/resolveType.ts` | **123** | 307 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**god-function** (Violates Single Responsibility)<br/>**deep-nesting** (Hard to read and test) |
+| `buildProps` | `compiler-core/src/transforms/transformElement.ts` | **93** | 458 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test) |
+| `hydrateElement` | `runtime-core/src/hydration.ts` | **60** | 185 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test)<br/>**multiple-responsibilities** (Clean separation of concerns) |
+| `walk` | `compiler-core/src/transforms/cacheStatic.ts` | **60** | 201 | **critical-complexity** (Severely impacts maintainability)<br/>**long-function** (Should be split into smaller functions)<br/>**deep-nesting** (Hard to read and test) |
 
 ## Dependency Analysis
 
@@ -128,8 +134,8 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 | compiler-core/src/compile.ts | 0.95 | 19/1 |
 | compiler-core/src/index.ts | 0.96 | 22/1 |
 | compiler-dom/src/index.ts | 1.00 | 13/0 |
+| compiler-ssr/src/index.ts | 1.00 | 10/0 |
 | compiler-sfc/src/compileScript.ts | 0.81 | 17/4 |
-| compiler-sfc/src/index.ts | 1.00 | 10/0 |
 
 ## Issue Analysis
 
@@ -154,7 +160,7 @@ CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 
 | Issue Pattern | Occurrences | Most Affected Functions | Implication |
 |---------------|-------------|-------------------------|-------------|
-| High-complexity | 5 | `compileScript`, `inferRuntimeType`... | Error-prone and hard to maintain |
+| Critical-complexity | 5 | `compileScript`, `inferRuntimeType`... | Severely impacts maintainability |
 | Long-function | 5 | `compileScript`, `inferRuntimeType`... | Should be split into smaller functions |
 | Deep-nesting | 5 | `compileScript`, `inferRuntimeType`... | Hard to read and test |
 | Multiple-responsibilities | 2 | `compileScript`, `hydrateElement` | Clean separation of concerns |
