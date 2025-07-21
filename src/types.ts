@@ -242,9 +242,9 @@ export type QualityPattern =
   | 'high-complexity'
   | 'too-many-params'
   | 'god-function'
-  | 'single-responsibility'
-  | 'pure-function'
-  | 'well-named';
+  | 'multiple-responsibilities'
+  | 'impure-function'
+  | 'poorly-named';
 
 export type ArchitecturePattern =
   | 'async-heavy'

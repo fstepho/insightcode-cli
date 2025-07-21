@@ -272,7 +272,7 @@ class FunctionAnalyzer {
     const responsibilities = this.countResponsibilities(node);
     if (responsibilities > 1) {
       issues.push({
-        type: 'single-responsibility',
+        type: 'multiple-responsibilities',
         severity: responsibilities > 2 ? 'high' : 'medium',
         location: {
           file: filePath,
@@ -286,7 +286,7 @@ class FunctionAnalyzer {
     // Impure Function (has side effects)
     if (this.hasImpureOperations(node)) {
       issues.push({
-        type: 'pure-function',
+        type: 'impure-function',
         severity: 'low',
         location: {
           file: filePath,
@@ -301,7 +301,7 @@ class FunctionAnalyzer {
     const namingIssue = this.checkFunctionNaming(node);
     if (namingIssue) {
       issues.push({
-        type: 'well-named',
+        type: 'poorly-named',
         severity: 'low',
         location: {
           file: filePath,

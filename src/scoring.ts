@@ -300,12 +300,13 @@ export function calculateHealthScore(file: {
  * 
  * Weights:
  * - Impact (dependencies): 2.0 (most important)
- * - Complexity: 1.0 
  * - Weighted issues by severity: 0.5 (critical×4, high×3, medium×2, low×1)
  * - Base score: 1 (to avoid zero weights)
+ * 
+ * Note: Complexity is NOT included here to avoid double-counting since it's 
+ * already weighted at 45% in the health score calculation.
  */
 export function calculateCriticismScore(file: FileDetail): number {
-  const complexityWeight = 1.0;
   const impactWeight = 2.0;
   const issueWeight = 0.5;
   
@@ -324,7 +325,6 @@ export function calculateCriticismScore(file: FileDetail): number {
   const weightedIssueScore = (criticalIssues * 4) + (highIssues * 3) + (mediumIssues * 2) + (lowIssues * 1);
   
   return (impact * impactWeight) + 
-         (file.metrics.complexity * complexityWeight) + 
          (weightedIssueScore * issueWeight) + 
          1; // Base score to avoid zero weights
 }

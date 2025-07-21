@@ -72,9 +72,13 @@ Final Score = Math.max(0, Health Score)
 **Architectural Criticality Weighting**:
 Each file receives a "criticism score" determining its weight in final project scores:
 ```
-CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues × 0.5) + 1
+CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
 ```
-Where Dependencies = incomingDeps + outgoingDeps + (isInCycle ? 5 : 0)
+Where:
+- Dependencies = incomingDeps + outgoingDeps + (isInCycle ? 5 : 0)
+- WeightedIssues = (critical×4) + (high×3) + (medium×2) + (low×1)
+
+*Note: Complexity is NOT included to avoid double-counting since it's already weighted at 45% in health score calculation.*
 
 **Grade Thresholds** (Academic standard):
 - A: 90-100 points

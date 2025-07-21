@@ -67,9 +67,9 @@ export function getPatternImplication(pattern: FunctionPatternType | string, _ca
         'high-complexity': 'Error-prone and hard to maintain',
         'too-many-params': 'Consider using object parameters',
         'god-function': 'Violates Single Responsibility',
-        'single-responsibility': 'Clean separation of concerns',
-        'pure-function': 'Predictable and testable',
-        'well-named': 'Self-documenting code',
+        'multiple-responsibilities': 'Clean separation of concerns',
+        'impure-function': 'Side effects make testing harder',
+        'poorly-named': 'Names should be descriptive and meaningful',
         
         // Architecture patterns
         'async-heavy': 'Ensure proper error handling',
@@ -97,7 +97,7 @@ export function getPatternImplication(pattern: FunctionPatternType | string, _ca
 export function isQualityPattern(pattern: string): pattern is QualityPattern {
     const qualityPatterns: readonly QualityPattern[] = [
         'deep-nesting', 'long-function', 'high-complexity', 'too-many-params',
-        'god-function', 'single-responsibility', 'pure-function', 'well-named'
+        'god-function', 'multiple-responsibilities', 'impure-function', 'poorly-named'
     ];
     return qualityPatterns.includes(pattern as QualityPattern);
 }

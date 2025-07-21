@@ -237,7 +237,7 @@ function generateScoringMethodologyNotes(analysis?: AnalysisResult): string {
     notes += `#### 🧮 Metric Breakdown\n`;
     notes += `| Metric | Weight | Thresholds & Basis |\n`;
     notes += `|--------|--------|---------------------|\n`;
-    notes += `| **Complexity** | 45% | McCabe (1976): ≤10 = low, >50 = extreme. Penalized quadratically to exponentially. |\n`;
+    notes += `| **Complexity** | 45% | McCabe (1976): ≤10 = low, <= 15 = medium, <= 20 = high, <= 50 = very high, >50 = extreme. Penalized quadratically to exponentially. |\n`;
     notes += `| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |\n`;
     if (duplicationMode === 'strict') {
         notes += `| **Duplication** | 25% | Strict threshold ≤3% (SonarQube-aligned). |\n`;
@@ -253,10 +253,11 @@ function generateScoringMethodologyNotes(analysis?: AnalysisResult): string {
     notes += `#### 🧭 Architectural Criticality Formula\n`;
     notes += `Each file’s weight is computed as:\n`;
     notes += `\`\`\`\n`;
-    notes += `CriticismScore = (Dependencies × 2.0) + (Complexity × 1.0) + (WeightedIssues × 0.5) + 1\n`;
+    notes += `CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1\n`;
     notes += `\`\`\`\n`;
     notes += `- **Dependencies:** incoming + outgoing + cycle penalty (if any)\n`;
     notes += `- **WeightedIssues:** critical×4 + high×3 + medium×2 + low×1\n`;
+    notes += `- **Note:** Complexity excluded to avoid double-counting (already weighted at 45%)\n`;
     notes += `- **Base +1** avoids zero weighting\n\n`;
 
     notes += `#### 🎓 Grade Scale\n`;
@@ -493,20 +494,6 @@ function generatePatternAnalysis(functionsWithFile: FunctionWithFile[]): string 
         });
     });
 
-    
-    // Good practices (patterns positifs)
-    const architecturePractices = Array.from(patternCounts.architecture.entries())
-        .filter(([pattern]) => ['error-handling', 'type-safe'].includes(pattern)); // Exclure async-heavy
-    const positiveQualityPatterns = Array.from(patternCounts.quality.entries())
-        .filter(([pattern]) => ['single-responsibility', 'pure-function', 'well-named'].includes(pattern));
-    
-    const allGoodPractices = [...architecturePractices, ...positiveQualityPatterns];
-    
-    if (allGoodPractices.length > 0) {
-        markdown += `### ✅ Good Practices Detected\n\n`;
-        markdown += generatePatternTable(new Map(allGoodPractices), 'architecture');
-    }
-    
     // Caractéristiques architecturales (neutres)
     const architecturalCharacteristics = Array.from(patternCounts.architecture.entries())
         .filter(([pattern]) => ['async-heavy'].includes(pattern));
