@@ -162,23 +162,53 @@ function extractFunctionsWithFiles(details: FileDetail[]): FunctionWithFile[] {
 
 /**
  * Centralised top functions selection
- * Consistent sorting and selection logic
+ * Now considers severity for selection and sorting
  */
 function getTopComplexFunctions(functionsWithFile: FunctionWithFile[], count: number = 5): FunctionWithFile[] {
     return functionsWithFile
-        .sort((a, b) => b.complexity - a.complexity)
+        .sort((a, b) => {
+            // First, sort by highest severity issue
+            const aSeverityWeight = getMaxSeverityWeight(a.issues);
+            const bSeverityWeight = getMaxSeverityWeight(b.issues);
+            
+            if (aSeverityWeight !== bSeverityWeight) {
+                return bSeverityWeight - aSeverityWeight; // Higher severity first
+            }
+            
+            // If severity is equal, sort by complexity
+            return b.complexity - a.complexity;
+        })
         .slice(0, count);
+}
+
+/**
+ * Get the maximum severity weight for a function's issues
+ */
+function getMaxSeverityWeight(issues: any[]): number {
+    if (issues.length === 0) return -1; // No issues = lowest priority
+    
+    const severityWeights: Record<string, number> = { 
+        critical: 4, 
+        high: 3, 
+        medium: 2, 
+        low: 1 
+    };
+    
+    return Math.max(...issues.map(issue => severityWeights[issue.severity] || 0));
 }
 
 /**
  * Centralised issue sorting by severity
  * Harmonises severity ordering across both files
+ * Critical first, then high, medium, low
  */
 function sortIssuesBySeverity<T extends { severity: string }>(issues: T[]): T[] {
     const severityOrder: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
-    return [...issues].sort((a, b) => 
-        (severityOrder[a.severity] || 999) - (severityOrder[b.severity] || 999)
-    );
+    return [...issues].sort((a, b) => {
+        const orderA = severityOrder[a.severity] !== undefined ? severityOrder[a.severity] : 999;
+        const orderB = severityOrder[b.severity] !== undefined ? severityOrder[b.severity] : 999;
+        return orderA - orderB;
+    });
 }
 
 /**

@@ -64,7 +64,9 @@ export function getPatternImplication(pattern: FunctionPatternType | string, _ca
         // Quality patterns (function-level)
         'deep-nesting': 'Hard to read and test',
         'long-function': 'Should be split into smaller functions',
+        'critical-complexity': 'Severely impacts maintainability',
         'high-complexity': 'Error-prone and hard to maintain',
+        'medium-complexity': 'Consider refactoring for clarity',
         'too-many-params': 'Consider using object parameters',
         'god-function': 'Violates Single Responsibility',
         'multiple-responsibilities': 'Clean separation of concerns',
@@ -96,7 +98,7 @@ export function getPatternImplication(pattern: FunctionPatternType | string, _ca
 // Pattern type guards - these check if a string is a valid pattern of a specific category
 export function isQualityPattern(pattern: string): pattern is QualityPattern {
     const qualityPatterns: readonly QualityPattern[] = [
-        'deep-nesting', 'long-function', 'high-complexity', 'too-many-params',
+        'deep-nesting', 'long-function', 'high-complexity', 'critical-complexity', 'medium-complexity', 'too-many-params',
         'god-function', 'multiple-responsibilities', 'impure-function', 'poorly-named'
     ];
     return qualityPatterns.includes(pattern as QualityPattern);

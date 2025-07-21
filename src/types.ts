@@ -239,7 +239,9 @@ export interface FunctionQualityIssue {
 export type QualityPattern = 
   | 'deep-nesting'
   | 'long-function' 
+  | 'critical-complexity'
   | 'high-complexity'
+  | 'medium-complexity'
   | 'too-many-params'
   | 'god-function'
   | 'multiple-responsibilities'

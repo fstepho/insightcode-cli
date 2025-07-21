@@ -142,7 +142,7 @@ class FunctionAnalyzer {
     // High Complexity Pattern
     if (complexity > (COMPLEXITY_LEVELS.veryHigh.maxThreshold)) {
       issues.push({
-        type: 'high-complexity',
+        type: 'critical-complexity',
         severity: 'critical',
         location: {
           file: filePath,
@@ -168,7 +168,7 @@ class FunctionAnalyzer {
       });
     } else if (complexity > (COMPLEXITY_LEVELS.low.maxThreshold)) {
       issues.push({
-        type: 'high-complexity',
+        type: 'medium-complexity',
         severity: 'medium',
         location: {
           file: filePath,
