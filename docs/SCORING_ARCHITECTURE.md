@@ -50,13 +50,38 @@ return sum + (complexityImpact * PROJECT_SCORING_WEIGHTS.COMPLEXITY);
 
 ## Types of Constants
 
-### 1. **Project-Level Weighting Factors** (`PROJECT_SCORING_WEIGHTS`)
+### 1. **Project-Level Scoring Architecture** 
+
+**Two-Step Weighted Aggregation Process:**
+
 ```typescript
-COMPLEXITY: 0.45,        // Internal hypothesis - Primary defect predictor (requires validation)
-MAINTAINABILITY: 0.30,   // Internal hypothesis - Development velocity impact (requires validation)
-DUPLICATION: 0.25        // Internal hypothesis - Technical debt indicator (requires validation)
+// Step 1: Weight each metric by architectural criticality
+function calculateProjectMetrics(files: FileDetail[]): ProjectMetrics {
+  const totalCriticismScore = Σ(calculateCriticismScore(file));
+  
+  return {
+    weightedComplexity: Σ(complexityScore(file) × criticismScore(file)) / totalCriticismScore,
+    weightedMaintainability: Σ(maintainabilityScore(file) × criticismScore(file)) / totalCriticismScore,
+    weightedDuplication: Σ(duplicationScore(file) × criticismScore(file)) / totalCriticismScore
+  };
+}
+
+// Step 2: Apply final dimension weights
+PROJECT_SCORING_WEIGHTS: {
+  COMPLEXITY: 0.45,        // Internal hypothesis - Primary defect predictor
+  MAINTAINABILITY: 0.30,   // Internal hypothesis - Development velocity impact  
+  DUPLICATION: 0.25        // Internal hypothesis - Technical debt indicator
+}
 ```
-**Important**: These weights apply to project-level scoring aggregation only. Individual file Health Scores use direct penalty summation without weights.
+
+**Architectural Criticality Formula:**
+```typescript
+CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
+// Dependencies = incoming + outgoing + cycle_penalty
+// WeightedIssues = critical×4 + high×3 + medium×2 + low×1
+```
+
+**Important**: This two-step process ensures that files with high architectural impact (many dependencies, critical issues) influence project scores more than isolated problematic files. Individual file Health Scores use direct penalty summation without weights.
 
 ### 2. **Scoring Thresholds** 
 ```typescript

@@ -13,19 +13,39 @@
 
 ### 1. Project Scores vs. File Health Scores
 
+**Project-Level Scoring (Two-Step Process):**
+
+| Step | Process | Formula |
+|------|---------|---------|
+| **Step 1** | Weight by architectural criticality | `Weighted_Metric = Σ(File_Metric × CriticismScore) / Σ(CriticismScore)` |
+| **Step 2** | Combine weighted metrics | `(Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)` |
+
+**File Health Scoring (Direct Penalties):**
+
 | Level | Formula | Weights Applied? |
 |-------|---------|------------------|
-| **Project** | `(Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)` | ✅ Yes |
 | **File Health** | `100 - (complexity_penalty + size_penalty + duplication_penalty + issues_penalty)` | ❌ No |
 
 ### 2. What Users See
 
-**In Project Reports:**
+**In Project Reports (Two-Step Process):**
 ```
+Step 1: Architectural Criticality Weighting
+├── Files with high CriticismScore (dependencies + issues) get more weight
+└── Each metric weighted by importance of files contributing to it
+
+Step 2: Final Score Calculation
 Overall Score: 73/100 (Grade: C)
-└── Complexity: 65/100 (45% weight) = 29.25 points
-└── Maintainability: 80/100 (30% weight) = 24.00 points  
-└── Duplication: 85/100 (25% weight) = 21.25 points
+├── Weighted_Complexity: 65/100 (45% final weight) = 29.25 points
+├── Weighted_Maintainability: 80/100 (30% final weight) = 24.00 points  
+└── Weighted_Duplication: 85/100 (25% final weight) = 21.25 points
+```
+
+**CriticismScore Example:**
+```
+File A: complexity=50, deps=10, issues=critical -> CriticismScore = high -> more weight
+File B: complexity=50, deps=2, issues=none -> CriticismScore = low -> less weight
+Result: File A impacts project scores more than File B despite same complexity
 ```
 
 **In File Health Scores:**
@@ -52,13 +72,25 @@ FileA.ts: Health Score 67/100
 
 ## 📊 Why These Specific Weights?
 
-### Internal Hypotheses (Requiring Validation)
+### Two-Step Weighting Process
+
+**Step 1: Architectural Criticality (CriticismScore)**
+```
+CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
+
+Dependencies = incoming + outgoing + cycle_penalty
+WeightedIssues = critical×4 + high×3 + medium×2 + low×1
+```
+
+**Step 2: Final Dimension Weights (Internal Hypotheses)**
 
 | Weight | Dimension | Hypothesis | Validation Status |
 |--------|-----------|------------|-------------------|
 | **45%** | Complexity | Primary defect predictor | ⏳ Pending |
 | **30%** | Maintainability | Development velocity impact | ⏳ Pending |
 | **25%** | Duplication | Technical debt indicator | ⏳ Pending |
+
+**Key Insight:** Architectural criticality ensures that problematic files in critical parts of your codebase (high dependencies, many issues) have more impact on final scores than isolated problematic files.
 
 ### Supporting Research (Thresholds Only)
 - **Complexity thresholds**: Based on McCabe (1976) - ≤10 recommended
@@ -129,6 +161,7 @@ const customScore = (rawComplexity * 0.60) + (rawMaintainability * 0.25) + (rawD
 
 ## 📚 Documentation References
 
+- **CriticismScore Explained**: `/docs/CRITICISM_SCORE_GUIDE.md` ⭐ **New!**
 - **Technical Details**: `/docs/SCORING_ARCHITECTURE.md`
 - **Coefficient Justification**: `/docs/MATHEMATICAL_COEFFICIENTS_JUSTIFICATION.md`
 - **Full FAQ**: `/docs/PROJECT_WEIGHTS_FAQ.md`

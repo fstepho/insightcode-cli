@@ -229,26 +229,32 @@ function generateScoringMethodologyNotes(analysis?: AnalysisResult): string {
 
     let notes = `InsightCode combines **research-based thresholds** with **criticality-weighted aggregation**, following the **Pareto principle**.\n\n`;
 
-    notes += `#### 🔧 Overall Score Formula\n`;
+    notes += `#### 🔧 Overall Score Calculation\n`;
+    notes += `InsightCode uses a **two-step weighted aggregation** process:\n\n`;
+    
+    notes += `**Step 1:** Each metric is weighted by architectural criticality:\n`;
     notes += `\`\`\`\n`;
-    notes += `Overall Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)\n`;
+    notes += `Weighted_Complexity = Σ(File_Complexity × CriticismScore) / Σ(CriticismScore)\n`;
+    notes += `Weighted_Maintainability = Σ(File_Maintainability × CriticismScore) / Σ(CriticismScore)\n`;
+    notes += `Weighted_Duplication = Σ(File_Duplication × CriticismScore) / Σ(CriticismScore)\n`;
+    notes += `\`\`\`\n\n`;
+    
+    notes += `**Step 2:** Final score combines weighted metrics:\n`;
+    notes += `\`\`\`\n`;
+    notes += `Overall Score = (Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)\n`;
     notes += `\`\`\`\n\n`;
 
-    notes += `#### 🧮 Metric Breakdown\n`;
-    notes += `| Metric | Weight | Thresholds & Basis |\n`;
-    notes += `|--------|--------|---------------------|\n`;
-    notes += `| **Complexity** | 45% | McCabe (1976): ≤10 = low, <= 15 = medium, <= 20 = high, <= 50 = very high, >50 = extreme. Penalized quadratically to exponentially. |\n`;
-    notes += `| **Maintainability** | 30% | Clean Code: ≤200 LOC/file preferred. Penalties increase with size. |\n`;
+    notes += `#### 🧮 Metric Configuration\n`;
+    notes += `| Metric | Final Weight | Thresholds & Research Basis |\n`;
+    notes += `|--------|--------------|-----------------------------|\n`;
+    notes += `| **Complexity** | 45% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |\n`;
+    notes += `| **Maintainability** | 30% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |\n`;
     if (duplicationMode === 'strict') {
-        notes += `| **Duplication** | 25% | Strict threshold ≤3% (SonarQube-aligned). |\n`;
+        notes += `| **Duplication** | 25% | Strict threshold: ≤3% (SonarQube-aligned) |\n`;
     } else {
-        notes += `| **Duplication** | 25% | ⚠️ Legacy threshold ≤15% considered "excellent" (brownfield projects). |\n`;
+        notes += `| **Duplication** | 25% | Legacy threshold: ≤15% considered excellent for brownfield projects |\n`;
     }
     notes += `\n`;
-
-    notes += `#### 🧠 Aggregation Strategy\n`;
-    notes += `- **File-level health:** 100 - penalties (progressive, no caps or masking).\n`;
-    notes += `- **Project-level score:** Weighted by **architectural criticality**, not arithmetic average.\n\n`;
 
     notes += `#### 🧭 Architectural Criticality Formula\n`;
     notes += `Each file’s weight is computed as:\n`;
