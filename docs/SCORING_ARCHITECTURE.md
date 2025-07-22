@@ -1,255 +1,325 @@
-# InsightCode Scoring Architecture - v0.6.0+
+# InsightCode Scoring Architecture - v0.7.0
 
 ## Architecture Overview
 
-The unified architecture centralizes ALL scoring thresholds and constants in a single file to ensure consistency and eliminate redundancy.
+The unified architecture distributes scoring concerns across specialized files for optimal maintainability while ensuring consistency through centralized constants and automated validation.
 
 ```
 src/
-├── thresholds.constants.ts  # ✨ UNIFIED: All thresholds and constants (configurable + non-configurable)
-└── scoring.ts              # Calculation functions (uses thresholds.constants.ts)
+├── thresholds.constants.ts:448      # 🎯 CONSTANTS: Raw threshold values & penalties
+├── scoring.ts:364                   # 🧮 CALCULATIONS: Primary scoring functions  
+├── scoring.utils.ts:74              # ⚙️ CONFIGURATIONS: Grade configs & utilities
+├── analyzer/OverviewCalculator.ts   # 📊 PROJECT: Two-step weighted scoring
+└── types.ts:406                     # 📝 INTERFACES: TypeScript definitions
 ```
 
-## Centralization Principle
+## Architectural Evolution (v0.7.0)
 
-### ✅ **Before (v0.5.x)** - Problematic dispersion
+### 🎯 **3-Layer Architecture Principle**
+
 ```typescript
-// scoring.ts
-if (complexity <= 10) return 'Low';          // Hardcoded
-const cleanCodeThreshold = 200;              // Hardcoded
-
-// analyzer.ts  
-return sum + (complexityImpact * 0.45);      // Hardcoded
-
-// duplication.ts
-const blockSize = 8;                         // Hardcoded
-```
-
-### 🎯 **After (v0.6.0+)** - Unified centralization
-```typescript
-// thresholds.constants.ts - SINGLE SOURCE OF TRUTH FOR EVERYTHING
-export const DEFAULT_THRESHOLDS = {
-  complexity: { production: { medium: 10, high: 15, critical: 20 } }
-  // ... user-configurable thresholds
-};
-
-export const PROJECT_SCORING_WEIGHTS = {
-  COMPLEXITY: 0.45,        // Internal hypothesis (requires empirical validation)
-  MAINTAINABILITY: 0.30,   // Internal hypothesis (requires empirical validation)  
-  DUPLICATION: 0.25        // Internal hypothesis (requires empirical validation)
+// LAYER 1: Raw Constants (thresholds.constants.ts)
+export const COMPLEXITY_SCORING_THRESHOLDS = {
+  EXCELLENT: 10,               // ≤10: Phase 1 threshold (McCabe excellent)
+  CRITICAL: 20,                // ≤20: End of Phase 2 linear degradation  
+  LINEAR_PENALTY_RATE: 3,      // Phase 2: 3 points lost per complexity unit
+  EXPONENTIAL_BASE: 30,        // Phase 4: Base score for exponential decay
+  EXPONENTIAL_POWER: 1.8,      // Phase 4: Harmonized exponential power  
+  EXPONENTIAL_MULTIPLIER: 40   // Phase 3: Quadratic penalty magnitude (20-50)
 } as const;
 
-// ⚠️ Note: These weights apply to PROJECT-LEVEL scoring only, NOT to individual file Health Scores
+// LAYER 2: Rich Configurations (scoring.utils.ts)
+export const COMPLEXITY_CONFIG = [
+  { maxThreshold: 10, label: 'Low', color: 'green', severity: 'low' },
+  { maxThreshold: 15, label: 'Medium', color: 'yellow', severity: 'medium' },
+  { maxThreshold: 20, label: 'High', color: 'red', severity: 'high' },
+  { maxThreshold: 50, label: 'Very High', color: 'redBold', severity: 'critical' },
+  { maxThreshold: Infinity, label: 'Extreme', color: 'redBold', severity: 'critical' }
+] as const;
 
-// scoring.ts - Uses unified constants
-if (complexity <= COMPLEXITY_LABEL_THRESHOLDS.LOW) return 'Low';
+export const GRADE_CONFIG = [
+  { grade: 'A', threshold: 90, category: 'excellent', emoji: '🟢', range: '90-100' },
+  { grade: 'B', threshold: 80, category: 'very-good', emoji: '🔵', range: '80-89' },
+  { grade: 'C', threshold: 70, category: 'good', emoji: '🟡', range: '70-79' },
+  { grade: 'D', threshold: 60, category: 'needs-improvement', emoji: '🟠', range: '60-69' },
+  { grade: 'F', threshold: 0, category: 'critical', emoji: '🔴', range: '0-59' }
+] as const;
 
-// analyzer.ts - Uses unified constants  
-return sum + (complexityImpact * PROJECT_SCORING_WEIGHTS.COMPLEXITY);
-```
-
-## Types of Constants
-
-### 1. **Project-Level Scoring Architecture** 
-
-**Two-Step Weighted Aggregation Process:**
-
-```typescript
-// Step 1: Weight each metric by architectural criticality
-function calculateProjectMetrics(files: FileDetail[]): ProjectMetrics {
-  const totalCriticismScore = Σ(calculateCriticismScore(file));
+// LAYER 3: Implementation (scoring.ts) - 4-Phase Complexity Scoring
+export function calculateComplexityScore(complexity: number): number {
+  if (complexity <= 10) return 100;                    // Phase 1: Excellent
   
-  return {
-    weightedComplexity: Σ(complexityScore(file) × criticismScore(file)) / totalCriticismScore,
-    weightedMaintainability: Σ(maintainabilityScore(file) × criticismScore(file)) / totalCriticismScore,
-    weightedDuplication: Σ(duplicationScore(file) × criticismScore(file)) / totalCriticismScore
-  };
-}
-
-// Step 2: Apply final dimension weights
-PROJECT_SCORING_WEIGHTS: {
-  COMPLEXITY: 0.45,        // Internal hypothesis - Primary defect predictor
-  MAINTAINABILITY: 0.30,   // Internal hypothesis - Development velocity impact  
-  DUPLICATION: 0.25        // Internal hypothesis - Technical debt indicator
-}
-```
-
-**Architectural Criticality Formula:**
-```typescript
-CriticismScore = (Dependencies × 2.0) + (WeightedIssues × 0.5) + 1
-// Dependencies = incoming + outgoing + cycle_penalty
-// WeightedIssues = critical×4 + high×3 + medium×2 + low×1
-```
-
-**Important**: This two-step process ensures that files with high architectural impact (many dependencies, critical issues) influence project scores more than isolated problematic files. Individual file Health Scores use direct penalty summation without weights.
-
-### 2. **Scoring Thresholds** 
-```typescript
-COMPLEXITY_SCORING_THRESHOLDS: {
-  EXCELLENT: 10,              // <= 10 = 100 points (McCabe "good")
-  CRITICAL: 20,               // Transition point for phases
-  LINEAR_PENALTY_RATE: 3,     // 3 points lost per complexity unit (superior calibration)
-  EXPONENTIAL_BASE: 30,       // Base score for exponential phase
-  EXPONENTIAL_POWER: 1.8,     // Harmonized exponential growth across all penalties
-  EXPONENTIAL_MULTIPLIER: 40, // Penalty magnitude for high complexity
-  // NO MIN_SCORE - allows scores to reach 0 for extreme complexity (aligned with "no artificial caps" philosophy)
-  // Implements Rules of the Art: Linear → Quadratic → Exponential
-  // Phase 1 (≤10): Excellent (100 points)
-  // Phase 2 (10-20): Linear degradation (100 → 70 points)  
-  // Phase 3 (20-50): Quadratic penalty (70 → 30 points)
-  // Phase 4 (>50): Exponential penalty (30 → 0 points)
+  if (complexity <= 20) {                             // Phase 2: Linear degradation
+    return Math.round(100 - (complexity - 10) * 3);   // Uses LINEAR_PENALTY_RATE=3
+  }
+  
+  if (complexity <= 50) {                             // Phase 3: Quadratic 
+    const base = 70;                                   // 100 - (20-10)*3 = 70
+    const range = complexity - 20;
+    const quadraticPenalty = Math.pow(range / 30, 2) * 40; // Uses EXPONENTIAL_MULTIPLIER=40
+    return Math.round(base - quadraticPenalty);
+  }
+  
+  // Phase 4: Exponential (>50)
+  const base = 30;                                     // Uses EXPONENTIAL_BASE=30
+  const range = complexity - 50;
+  const exponentialPenalty = Math.pow(range / 50, 1.8) * 30; // Uses EXPONENTIAL_BASE=30
+  return Math.max(0, Math.round(base - exponentialPenalty));
 }
 ```
 
-### 3. **Label & Color Thresholds**
-```typescript
-COMPLEXITY_LABEL_THRESHOLDS: { 
-  LOW: 10, MEDIUM: 15, HIGH: 20, VERY_HIGH: 50 
-}
-COMPLEXITY_COLOR_THRESHOLDS: { 
-  GREEN: 10, YELLOW: 15, RED: 20, RED_BOLD: 50 
-}
+## Core Components
 
-DUPLICATION_LABEL_THRESHOLDS: { 
-  LOW: 15, MEDIUM: 30, HIGH: 50   // Base thresholds (mode-aware)
-}
-DUPLICATION_COLOR_THRESHOLDS: { 
-  GREEN: 15, YELLOW: 30, RED: 50, RED_BOLD: 100  // Mode-aware thresholds
-}
-```
+### **1. Threshold Constants** (`thresholds.constants.ts`)
 
-### 4. **Detection Constants**
 ```typescript
-DUPLICATION_DETECTION_CONSTANTS: {
-  BLOCK_SIZE: 8,              // Internal convention (reduces false positives) - not a formal standard
-  MIN_TOKENS: 20,             // Internal convention (realistic for 8-line blocks)
-  MIN_BLOCK_LENGTH: 40,       // Internal convention (practical detection threshold)
-  MIN_CONTENT_LENGTH: 25      // Internal convention (significance threshold for content analysis)
-}
-```
+// Complexity scoring thresholds - McCabe-aligned phases
+export const COMPLEXITY_SCORING_THRESHOLDS = {
+  EXCELLENT: 10,               // ≤10: Excellent threshold (McCabe)
+  CRITICAL: 20,                // ≤20: End of linear degradation phase
+  LINEAR_PENALTY_RATE: 3,      // Phase 2: Points lost per unit (10-20)
+  EXPONENTIAL_BASE: 30,        // Phase 4: Base score AND multiplier for exponential
+  EXPONENTIAL_POWER: 1.8,      // Phase 4: Exponential power (harmonized)
+  EXPONENTIAL_MULTIPLIER: 40   // Phase 3: Quadratic penalty multiplier (20-50)
+} as const;
 
-### 5. **Health Score Penalties (Mode-Aware v0.6.0+)**
-```typescript
-HEALTH_PENALTY_CONSTANTS: {
-  COMPLEXITY: { 
-    EXCELLENT_THRESHOLD: 10,
-    CRITICAL_THRESHOLD: 20,
-    // NO CAPS - extreme complexity gets extreme penalties (Pareto principle)
-    // Example: Complexity 176 → Penalty 131 (catastrophic)
+// Project scoring weights - Apply ONLY to project-level aggregation
+export const PROJECT_SCORING_WEIGHTS = {
+  COMPLEXITY: 0.45,      // Internal hypothesis - NOT industry standard
+  MAINTAINABILITY: 0.30, // Internal hypothesis - NOT industry standard
+  DUPLICATION: 0.25      // Internal hypothesis - NOT industry standard
+} as const;
+
+// Health score penalties - Progressive without caps
+export const HEALTH_PENALTY_CONSTANTS = {
+  COMPLEXITY: {
+    EXPONENTIAL_POWER: 1.8,      // Harmonized with all penalties
+    EXPONENTIAL_MULTIPLIER: 50   // Extreme complexity penalty (>100)
   },
-  DUPLICATION: { 
-    // Mode-aware thresholds (v0.6.0+):
-    // STRICT MODE: 3%/8%/15% (industry-aligned)
-    // LEGACY MODE: 15%/30%/50% (permissive for legacy codebases)
-    // Progressive penalties without caps - extreme duplication devastates score
-    // Example: 50% duplication → Penalty 70+ (critical technical debt)
-  },
-  SIZE: { 
-    // Exponential penalties for massive files - following Clean Code principles
-    // Example: 834 LOC → Penalty 60+ (very large file)
+  ISSUES: {
+    CRITICAL_PENALTY: 20,        // 20 points per critical issue
+    HIGH_PENALTY: 12,            // 12 points per high issue
+    MEDIUM_PENALTY: 6,           // 6 points per medium issue
+    LOW_PENALTY: 2               // 2 points per low issue
+  }
+} as const;
+```
+
+### **2. Configuration Objects** (`scoring.utils.ts`)
+
+```typescript
+// Dynamic configurations with metadata
+export const GRADE_CONFIG = [...] as const;
+export const COMPLEXITY_CONFIG = [...] as const;
+export const DUPLICATION_CONFIG_LEGACY = [...] as const;
+export const DUPLICATION_CONFIG_STRICT = [...] as const;
+
+// Helper functions using configurations
+export function getComplexityConfig(complexity: number) {
+  return COMPLEXITY_CONFIG.find(config => complexity <= config.maxThreshold) || 
+         COMPLEXITY_CONFIG[COMPLEXITY_CONFIG.length - 1];
+}
+
+export function getGradeInfo(score: number) {
+  return GRADE_CONFIG.find(grade => score >= grade.threshold) || 
+         GRADE_CONFIG[GRADE_CONFIG.length - 1];
+}
+```
+
+### **3. Scoring Implementation** (`scoring.ts`)
+
+```typescript
+// 4-Phase Complexity Scoring Implementation
+export function calculateComplexityScore(complexity: number): number {
+  // Phase 1 (≤10): Excellent - McCabe threshold
+  if (complexity <= EXCELLENT) return 100;
+  
+  // Phase 2 (10-20): Linear degradation - ends at CRITICAL=20
+  if (complexity <= CRITICAL) {
+    return Math.round(100 - (complexity - EXCELLENT) * LINEAR_PENALTY_RATE);
+  }
+  
+  // Phase 3 (20-50): Quadratic penalty - uses EXPONENTIAL_MULTIPLIER=40
+  if (complexity <= 50) {
+    const base = 100 - (CRITICAL - EXCELLENT) * LINEAR_PENALTY_RATE; // 70
+    const range = complexity - CRITICAL; // 0-30 range
+    const quadraticPenalty = Math.pow(range / 30, 2) * EXPONENTIAL_MULTIPLIER; // 40
+    return Math.round(base - quadraticPenalty);
+  }
+  
+  // Phase 4 (>50): Exponential penalty - uses EXPONENTIAL_BASE=30
+  const base = EXPONENTIAL_BASE; // 30
+  const range = complexity - 50;
+  const exponentialPenalty = Math.pow(range / 50, EXPONENTIAL_POWER) * EXPONENTIAL_BASE; // 30
+  return Math.max(0, Math.round(base - exponentialPenalty));
+}
+
+// Health score calculation - DIRECT PENALTIES, NO WEIGHTS
+export function calculateHealthScore(file: FileDetail, duplicationMode?: string): number {
+  const complexityPenalty = getComplexityPenalty(file.metrics.complexity);
+  const duplicationPenalty = getDuplicationPenalty(file.metrics.duplicationRatio, duplicationMode);
+  const sizePenalty = getSizePenalty(file.metrics.loc);
+  const issuesPenalty = getIssuesPenalty(file.issues);
+  
+  const totalPenalty = complexityPenalty + duplicationPenalty + sizePenalty + issuesPenalty;
+  
+  // Direct penalty summation - NO WEIGHTS APPLIED
+  return Math.max(0, Math.round(100 - totalPenalty));
+}
+```
+
+### **4. Project-Level Scoring** (`analyzer/OverviewCalculator.ts`)
+
+```typescript
+// Two-step weighted aggregation for project scores
+export class OverviewCalculator {
+  static calculate(fileDetails: FileDetail[]): Overview {
+    // Step 1: Weight by architectural criticality (CriticismScore)
+    const weightedMetrics = this.calculateWeightedMetrics(fileDetails);
+    
+    // Step 2: Apply PROJECT_SCORING_WEIGHTS (45/30/25)
+    const overallScore = 
+      (weightedMetrics.complexity * PROJECT_SCORING_WEIGHTS.COMPLEXITY) +
+      (weightedMetrics.maintainability * PROJECT_SCORING_WEIGHTS.MAINTAINABILITY) +
+      (weightedMetrics.duplication * PROJECT_SCORING_WEIGHTS.DUPLICATION);
+    
+    return {
+      grade: getGrade(overallScore),
+      scores: {
+        complexity: weightedMetrics.complexity,
+        maintainability: weightedMetrics.maintainability,
+        duplication: weightedMetrics.duplication,
+        overall: overallScore
+      },
+      statistics: this.calculateStatistics(fileDetails),
+      summary: this.generateSummary(overallScore, criticalCount)
+    };
   }
 }
 ```
 
-**Health Score Formula**: `100 - Σ(all penalties)` where penalties can exceed 100 for extreme cases.
+## Critical Distinctions
 
-**See also**: [HEALTH_SCORE_METHODOLOGY.md](./HEALTH_SCORE_METHODOLOGY.md) for complete technical details.
+### **Project Weights vs File Health Scores**
 
-## Guaranteed Consistency
+| Level | Formula | Weights Applied? | Usage |
+|-------|---------|------------------|--------|
+| **Project Scoring** | Two-step: (1) CriticismScore weighting → (2) 45/30/25 weights | ✅ YES | Overall project grade |
+| **File Health Scores** | `100 - (penalties sum)` | ❌ NO | Individual file assessment |
 
-### ✅ All systems aligned (Mode-Aware v0.6.0+)
-- **Config thresholds** (issues): 10/15/20 (complexity), strict 3/8/15% or legacy 15/30/50% (duplication)
-- **Labels & colors**: 10/15/20 (complexity), mode-specific duplication thresholds  
-- **Scoring functions**: 10/15/20 (complexity), mode-aware duplication scoring
-- **Penalty functions**: 10/15/20 (complexity), mode-aware duplication penalties
+**Important:** The 45/30/25 weights are **INTERNAL HYPOTHESES**, not industry standards. They require empirical validation.
 
-**Duplication Mode Selection (v0.6.0+)**: Use `--strict-duplication` flag for industry-aligned 3%/8%/15% thresholds, or default legacy 15%/30%/50% for existing codebases.
+### **Duplication Mode Architecture (v0.7.0)**
 
-### ✅ Automatically consistent documentation
-Notes in `report-generator.ts` reference the same thresholds as the implementation.
+```typescript
+// Mode-aware configuration
+export const DUPLICATION_LEVELS = {
+  strict: {
+    excellent: { maxThreshold: 3, label: 'Excellent' },   // Industry standard
+    good: { maxThreshold: 8, label: 'Good' },
+    needsImprovement: { maxThreshold: 15, label: 'Needs Improvement' }
+  },
+  legacy: {
+    excellent: { maxThreshold: 15, label: 'Excellent' },  // Permissive
+    good: { maxThreshold: 30, label: 'Good' },
+    needsImprovement: { maxThreshold: 50, label: 'Needs Improvement' }
+  }
+} as const;
 
-### ✅ Simplified maintenance
-One threshold change = one modification in `thresholds.constants.ts`.
-
-## Usage Guide
-
-### To modify a threshold
-1. ✅ **DO**: Modify in `thresholds.constants.ts`
-2. ❌ **DON'T**: Hardcode in `scoring.ts` or elsewhere
-3. **For duplication**: Consider impact on both strict and legacy modes
-
-### To add a new constant
-1. Add to appropriate section in `thresholds.constants.ts`
-2. Import in the file that uses it
-3. Use the constant instead of hardcoded value
-4. For duplication thresholds, ensure both strict and legacy modes are supported
-
-### To verify consistency
-1. Search for hardcoded values: `grep -r "= 10\|= 15\|= 20" src/`
-2. Ensure they all reference `thresholds.constants.ts`
-3. Check duplication mode consistency: both strict and legacy modes should be supported throughout the codebase
-
-## Architecture Benefits
-
-### 🎯 **Single Source of Truth**
-- All constants in one place
-- Impossible inconsistencies between systems
-
-### 🔧 **Maintainability**
-- Threshold modification = one line to change
-- Reduced risk of errors during updates
-
-### 📚 **Documentability**
-- Constants serve as living documentation
-- Centralized explanatory comments
-
-### 🧪 **Testability**
-- Constants easily mockable for tests
-- Explicit calculation parameters
-
-### 🎨 **Type Safety**
-- `as const` ensures immutability
-- TypeScript guarantees correct usage
-
-## Migration from old hardcoded values
-
-If you still find hardcoded values:
-
-```bash
-# Find dispersed constants
-grep -r "= 10\|= 15\|= 20\|= 0\.45\|= 200" src/ 
-
-# Centralize them in thresholds.constants.ts
-# Replace with references
-# Ensure duplication thresholds support both modes
+// CLI usage affects project scoring through 25% duplication weight
+insightcode --strict-duplication  // Uses strict thresholds
+insightcode                      // Uses legacy thresholds (default)
 ```
 
-## Key Improvements in v0.6.0+
+## Quality Assurance Architecture
 
-### 📉 **Eliminated Redundancy**
-- **Before**: Two files (`config.ts` + `scoringConstants.ts`) with overlapping thresholds
-- **After**: Single file (`thresholds.constants.ts`) with ALL constants unified, including dual-mode duplication support
+### **Automated Validation System**
 
-### 🎯 **Guaranteed Alignment** 
-- Labels, colors, and penalties automatically use same base thresholds
-- No risk of inconsistency between configurable and non-configurable constants
-- Dual-mode duplication thresholds ensure consistency across strict and legacy modes
+The architecture includes validation to prevent doc/code drift:
 
-### 🔧 **Simplified Architecture**
-- Fewer files to maintain
-- Clear single source of truth
-- Easier onboarding for new developers
+```bash
+# Validation scripts
+npm run validate-docs      # Validates numerical examples against actual code
+npm run generate-docs      # Generates tables from current implementation
+npm run validate-coefficients  # Validates mathematical foundations
+npm run qa                 # Full quality assurance suite
+```
 
-### 🏛️ **Industry Standards Compliance**
-- **Pareto Principle (80/20)**: Extreme values (complexity 16,000+) receive extreme penalties
-- **ISO/IEC 25010**: Maintainability violations clearly identified and quantified
-- **Fowler Technical Debt**: No logarithmic masking - debt is visible and measurable
-- **McCabe Research**: Complexity ≤10 threshold for excellent code maintained
-- **Rules of the Art**: Linear → Quadratic → Exponential progression implemented
+**Key validation features:**
+- **10 regex patterns** detect examples in documentation
+- **Real-time validation** against actual `calculateComplexityScore()`, `calculateHealthScore()`, etc.
+- **Anti-regression protection** prevents future inconsistencies
+- **Auto-generated tables** reflect current code implementation
+
+## Architectural Benefits
+
+### 🎯 **Separation of Concerns**
+- **thresholds.constants.ts**: Raw threshold values with clear coefficient usage
+- **scoring.utils.ts**: Rich configurations with metadata
+- **scoring.ts**: Core algorithm logic with 4-phase implementation
+- **OverviewCalculator.ts**: Project-level two-step weighted aggregation
+
+### 🔧 **Maintainability**
+- Single source of truth for each concern
+- Type-safe configurations with `as const`
+- Automated validation prevents documentation drift
+- Clear responsibility boundaries
+
+### 🧪 **Testability**
+- Constants easily mockable for unit tests
+- Configurations provide test data structures
+- Validation scripts ensure implementation correctness
+- Test coverage for all scoring functions
+
+### 📚 **Documentation Integrity**
+- Documentation auto-validated against implementation
+- Generated tables always match current code
+- Version control for architectural decisions
+- Clear upgrade paths documented
+
+## Usage Guidelines
+
+### **To modify a threshold:**
+1. ✅ **Change raw value** in `thresholds.constants.ts`
+2. ✅ **Run validation** with `npm run validate-docs`
+3. ✅ **Update docs** if needed with `npm run generate-docs`
+4. ❌ **Don't hardcode** anywhere else
+
+### **To add a new metric:**
+1. **Constant** → Add to `thresholds.constants.ts`
+2. **Configuration** → Add rich config to `scoring.utils.ts`
+3. **Implementation** → Add calculation logic to `scoring.ts`
+4. **Integration** → Add to project scoring if needed
+5. **Testing** → Add test coverage
+6. **Documentation** → Auto-generated with validation
+
+### **To verify consistency:**
+```bash
+# Find any remaining hardcoded values
+grep -r "= 10\|= 15\|= 20" src/
+
+# Validate all examples
+npm run validate-docs
+
+# Full validation suite
+npm run qa
+```
+
+## Industry Standards Compliance
+
+### 🏛️ **Academic Foundation**
+- **McCabe (1976)**: Complexity ≤10 threshold maintained
+- **NASA NPR 7150.2D (2022)**: ≤15 complexity for critical software
+- **Pareto Principle**: 80/20 rule for identifying critical files
+- **ISO/IEC 25010**: Maintainability quality model compliance
+
+### ⚠️ **Internal Hypotheses**
+- **PROJECT_SCORING_WEIGHTS (45/30/25)**: Internal hypotheses requiring validation
+- **Power harmonization (1.8)**: Mathematical consistency across penalty types
+- **CriticismScore formula**: Internal architectural weighting system
 
 ### 🚫 **Anti-Patterns Eliminated**
-- **No artificial caps**: Removed all soft-caps that masked extreme complexity
-- **No logarithmic scaling**: Raw values used to prevent masking of outliers
-- **No debt masking**: Progressive penalties without upper limits
-
-This unified architecture guarantees long-term consistency of InsightCode's scoring system with zero redundancy while respecting all industry best practices and research-based standards.
+- **No artificial caps**: Extreme values receive appropriate penalties
+- **No logarithmic masking**: Raw technical debt visible
+- **No magic numbers**: All constants documented and justified
+- **No data redundancy**: Single source of truth guaranteed
