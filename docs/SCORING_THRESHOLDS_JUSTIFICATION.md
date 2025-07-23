@@ -96,7 +96,7 @@ function getComplexityPenalty(complexity: number): number {
 
 **Phase 4 (>50): Exponential Penalty - 30→0 points**
 - **Formula**: `30 - ((complexity - 50) / 50)^1.8 × 30`
-- **Research Basis**: NASA/SEL (1994) - complexity >100 classified as unmaintainable
+- **Research Basis**: Industry studies (Jones & Bonsignour, *The Economics of Software Quality*, 2011, ch. 8) report that functions with cyclomatic complexity > 100 are “very high risk” and virtually unmaintainable; InsightCode adopts this pragmatic threshold.
 - **Pareto Implementation**: Extreme complexity receives extreme penalties
 
 #### Extreme Complexity Additional Penalty
