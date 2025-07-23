@@ -183,7 +183,6 @@ Based on real project analysis:
 | File | Complexity | LOC | Issues | Health Score | Analysis |
 |------|------------|-----|--------|--------------|----------|
 | `perfect.ts` | 5 | 100 | 0 | 100 | No penalties applied |
-| `context-builder.ts` | 97 | 315 | 0 | 13 | High complexity (87 penalty) + size (7.7 penalty) |
 | `dependency-analyzer.ts` | 176 | 834 | 0 | 0 | Extreme complexity (119 penalty) + large size (22.4 penalty) |
 
 The extreme scores reflect **real technical debt** that requires immediate attention. This follows the **Pareto Principle**: identifying the 20% of code that causes 80% of maintenance problems.
