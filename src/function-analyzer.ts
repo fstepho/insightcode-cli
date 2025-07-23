@@ -126,7 +126,6 @@ class FunctionAnalyzer {
 
   /**
    * Comprehensive function issue identification
-   * Reused and adapted from context-builder.ts
    */
   private identifyFunctionIssues(
     node: Node,
