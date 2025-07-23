@@ -411,11 +411,6 @@ Academic literature suggests several aggregation methods:
 
 ## Empirical Validation Roadmap
 
-### ⚠️ **Critical Research Gap**
-The experimental components (project weights, CriticismScore) require systematic empirical validation before being considered academically validated.
-
-## Empirical Validation Roadmap
-
 ### 🚨 **Critical Research Gap**
 The experimental components (project weights, CriticismScore) require systematic empirical validation before being considered academically validated.
 
