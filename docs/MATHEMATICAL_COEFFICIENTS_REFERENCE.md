@@ -24,7 +24,7 @@ This document provides a quick reference for all mathematical coefficients used 
 |-------------|-------|---------|---------------|---------|
 | **Quadratic Penalty** | `40` | `* 40` (complexity 20-50) | 40-point span = 2 grade levels | ✅ Calibrated |
 | **Exponential Penalty** | `30` | `* 30` (complexity 50+) | Drives scores to 0 for extreme cases | ✅ Calibrated |
-| **Linear Complexity** | `4` | `* 4` (complexity 10-15) | 4 points/unit = smooth degradation | ✅ Validated |
+| **Linear Complexity** | `3` | `* 3` (complexity 10-20) | 3 points/unit = optimal 100→70 progression | ✅ Validated |
 | **Duplication Linear** | `1.5` | `* 1.5` (mode-aware thresholds) | Gentler than complexity (easier to fix) | 🎯 Heuristic |
 | **Issue Critical** | `20` | Critical issue penalty | 5 critical issues = 100 points penalty | ✅ Empirical |
 
