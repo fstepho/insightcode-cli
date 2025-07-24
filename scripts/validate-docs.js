@@ -540,7 +540,6 @@ function generateHealthExamples() {
   console.log('|------|------------|-----|--------------|------------------|');
 
   const healthExamples = [
-    { name: 'context-builder.ts', complexity: 97, loc: 315 },
     { name: 'dependency-analyzer.ts', complexity: 176, loc: 834 },
     { name: 'file-detail-builder.ts', complexity: 80, loc: 300 },
   ];

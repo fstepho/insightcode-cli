@@ -2,7 +2,7 @@
 import { Node, SyntaxKind } from 'ts-morph';
 
 /**
- * Collection of AST utility functions shared between file-detail-builder.ts and context-builder.ts
+ * Collection of AST utility functions shared between file-detail-builder.ts
  * This module centralizes common TypeScript AST analysis functions to avoid duplication.
  */
 
