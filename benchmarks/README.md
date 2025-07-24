@@ -257,4 +257,4 @@ We prioritize **actionable insights** over structural pattern detection.
 
 ---
 
-*For complete methodology details, see [docs/HEALTH_SCORE_METHODOLOGY.md](../docs/HEALTH_SCORE_METHODOLOGY.md) and [docs/SCORING_ARCHITECTURE.md](../docs/SCORING_ARCHITECTURE.md)*
+*For complete methodology details, see [docs/FILE_HEALTH_SCORE_METHODOLOGY.md](../docs/FILE_HEALTH_SCORE_METHODOLOGY.md) and [docs/SCORING_ARCHITECTURE.md](../docs/SCORING_ARCHITECTURE.md)*

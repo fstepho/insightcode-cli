@@ -16,7 +16,7 @@ import { astBuilder, ASTBuildOptions, ASTBuildResult } from './ast-builder';
 import { fileDetailBuilder, FileDetailBuildOptions } from './file-detail-builder';
 import { detectDuplication } from './duplication';
 import { UniversalDependencyAnalyzer } from './dependency-analyzer';
-import { calculateHealthScore } from './scoring';
+import { calculateFileHealthScore } from './scoring';
 // createDuplicationConfig removed - use mode string directly
 // config.manager removed - using global configurations from scoring.utils.ts
 import { OverviewCalculator } from './analyzer/OverviewCalculator';
@@ -47,7 +47,7 @@ class AnalysisContext {
  * Flow:
  * 1. Build AST from source files
  * 2. Extract file details from AST
- * 3. Process metrics (duplication, dependencies, health scores)
+ * 3. Process metrics (duplication, dependencies, file health scores)
  * 4. Calculate overview scores
  * 5. Generate context metadata
  * 6. Assemble final result
@@ -104,12 +104,12 @@ async function executeFileDetailStep(context: AnalysisContext): Promise<void> {
 }
 
 /**
- * Step 3: Process metrics (duplication, dependencies, health scores)
+ * Step 3: Process metrics (duplication, dependencies, file health scores)
  * 
  * Processing flow:
  * 1. Detect duplication using 8-line sliding window algorithm
  * 2. Analyze dependencies with universal resolver and circular detection
- * 3. Calculate health scores using progressive penalties (no artificial caps)
+ * 3. Calculate file health scores using progressive penalties (no artificial caps)
  */
 async function executeMetricsProcessingStep(context: AnalysisContext): Promise<void> {
   if (context.options.format === 'terminal') {
@@ -138,7 +138,7 @@ async function executeMetricsProcessingStep(context: AnalysisContext): Promise<v
   
   const dependencyAnalysisResult = await dependencyAnalyzer.analyze(filesWithDuplication, context.astData);
   
-  // 3. Update dependencies and calculate health scores
+  // 3. Update dependencies and calculate file health scores
   context.processedFileDetails = filesWithDuplication.map(file => {
     const dependencies = dependencyAnalysisResult.fileAnalyses.get(file.file) || {
       incomingDependencies: 0,
@@ -149,7 +149,7 @@ async function executeMetricsProcessingStep(context: AnalysisContext): Promise<v
       isInCycle: false
     };
     
-    const healthScore = validateScore(calculateHealthScore(file, duplicationMode));
+    const healthScore = validateScore(calculateFileHealthScore(file, duplicationMode));
     
     return {
       ...file,

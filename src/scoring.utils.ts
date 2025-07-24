@@ -1,6 +1,6 @@
 // File: src/scoring.utils.ts
 
-import { CRITICAL_HEALTH_SCORE, CONVERSION_CONSTANTS, FILE_SIZE_THRESHOLDS, IMPROVEMENT_SUGGESTION_THRESHOLDS } from './thresholds.constants';
+import { CRITICAL_FILE_HEALTH_SCORE, CONVERSION_CONSTANTS, FILE_SIZE_THRESHOLDS, IMPROVEMENT_SUGGESTION_THRESHOLDS } from './thresholds.constants';
 import { FileDetail, EmblematicFiles, Grade } from './types';
 
 /**
@@ -326,7 +326,7 @@ export function getAverageExcessRatio(issues: Array<{ excessRatio: number }>): s
 /**
  * Health assessment functions
  */
-export function getPrimaryConcern(file: FileDetail, duplicationMode: 'strict' | 'legacy' = 'legacy'): string {
+export function getFilePrimaryConcern(file: FileDetail, duplicationMode: 'strict' | 'legacy' = 'legacy'): string {
   // Priorité 1: Complexité extrême
   if (file.metrics.complexity > IMPROVEMENT_SUGGESTION_THRESHOLDS.HIGH_COMPLEXITY) {
     const complexityInfo = getComplexityInfo(file.metrics.complexity);
@@ -361,7 +361,7 @@ export function getPrimaryConcern(file: FileDetail, duplicationMode: 'strict' | 
   // Priorité 5: Score de santé très bas
   const gradeInfo = getGradeInfo(file.healthScore);
   if (gradeInfo.grade === 'F') {
-    return `${gradeInfo.label} health score (${file.healthScore}%)`;
+    return `${gradeInfo.label} file health score (${file.healthScore}%)`;
   }
   
   return 'Multiple quality issues';
@@ -412,7 +412,7 @@ export function getCriticalFiles(details: FileDetail[], emblematicFiles: Emblema
         return aIsEmblematic ? -1 : 1;
       }
       
-      // Priority 3: Health score (ascending - worst first)
+      // Priority 3: File health score (ascending - worst first)
       if (a.healthScore !== b.healthScore) {
         return a.healthScore - b.healthScore;
       }
@@ -424,7 +424,7 @@ export function getCriticalFiles(details: FileDetail[], emblematicFiles: Emblema
 }
 
 
-export function generateHealthDistribution(details: FileDetail[]): string {
+export function generateFileHealthDistribution(details: FileDetail[]): string {
   const total = details.length;
   
   let markdown = `| Health Status | Count | Percentage |\n`;
@@ -447,9 +447,9 @@ export function generateHealthDistribution(details: FileDetail[]): string {
 /**
  * Fonction pure pour déterminer si un fichier est critique
  * @param healthScore Score de santé du fichier
- * @param threshold Seuil critique (par défaut: CRITICAL_HEALTH_SCORE)
+ * @param threshold Seuil critique (par défaut: CRITICAL_FILE_HEALTH_SCORE)
  * @returns true si le fichier est critique
  */
-export function isCriticalFile(healthScore: number, threshold: number = CRITICAL_HEALTH_SCORE): boolean {
+export function isCriticalFile(healthScore: number, threshold: number = CRITICAL_FILE_HEALTH_SCORE): boolean {
   return healthScore < threshold;
 }

@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { calculateComplexityScore, calculateHealthScore, calculateDuplicationScore } = require('../dist/scoring.js');
+const { calculateFileComplexityScore, calculateFileHealthScore, calculateDuplicationScore } = require('../dist/scoring.js');
 
 let globalErrors = 0;
 const docsDir = path.join(__dirname, '..', 'docs');
@@ -221,13 +221,13 @@ function extractExamples(content, filename) {
     
     // Extract InsightCode function calls
     const functionCalls = [
-      ...code.matchAll(/calculateComplexityScore\((\d+)\)/g),
-      ...code.matchAll(/calculateHealthScore\([^)]+\)/g),
+      ...code.matchAll(/calculateFileComplexityScore\((\d+)\)/g),
+      ...code.matchAll(/calculateFileHealthScore\([^)]+\)/g),
       ...code.matchAll(/calculateDuplicationScore\(([\d.]+)\)/g)
     ];
     
     functionCalls.forEach(callMatch => {
-      if (callMatch[0].includes('calculateComplexityScore')) {
+      if (callMatch[0].includes('calculateFileComplexityScore')) {
         examples.push({
           type: 'complexityScore',
           input: parseInt(callMatch[1]),
@@ -255,11 +255,11 @@ function validateExample(example) {
   try {
     switch (example.type) {
       case 'complexityScore':
-        actual = calculateComplexityScore(example.input);
+        actual = calculateFileComplexityScore(example.input);
         
         // Validate function output
         if (actual === undefined || actual === null || isNaN(actual)) {
-          throw new Error(`calculateComplexityScore returned invalid value: ${actual}`);
+          throw new Error(`calculateFileComplexityScore returned invalid value: ${actual}`);
         }
         
         // Special handling for code examples
@@ -267,7 +267,7 @@ function validateExample(example) {
           // For code examples, just verify it's calculable and reasonable
           isValid = !isNaN(actual) && actual >= 0 && actual <= 100;
           if (isValid) {
-            console.log(`  ✅ Code example: calculateComplexityScore(${example.input}) = ${actual}`);
+            console.log(`  ✅ Code example: calculateFileComplexityScore(${example.input}) = ${actual}`);
           } else {
             globalErrors++;
             console.log(`❌ CODE EXAMPLE INVALID RESULT`);
@@ -288,9 +288,9 @@ function validateExample(example) {
         break;
       
       case 'complexityPenalty':
-        const score = calculateComplexityScore(example.input);
+        const score = calculateFileComplexityScore(example.input);
         if (score === undefined || score === null || isNaN(score)) {
-          throw new Error(`calculateComplexityScore returned invalid value: ${score}`);
+          throw new Error(`calculateFileComplexityScore returned invalid value: ${score}`);
         }
         
         const basePenalty = 100 - score;
@@ -324,9 +324,9 @@ function validateExample(example) {
           issues: []
         };
         
-        const actualHealth = calculateHealthScore(file);
+        const actualHealth = calculateFileHealthScore(file);
         if (actualHealth === undefined || actualHealth === null || isNaN(actualHealth)) {
-          throw new Error(`calculateHealthScore returned invalid value: ${actualHealth}`);
+          throw new Error(`calculateFileHealthScore returned invalid value: ${actualHealth}`);
         }
         
         isValid = actualHealth === example.expected;
@@ -401,10 +401,10 @@ function validateExample(example) {
       case 'formula':
       case 'quadratic': 
       case 'exponential':
-        // These are all complexity score formulas, validate with calculateComplexityScore
-        actual = calculateComplexityScore(example.input);
+        // These are all complexity score formulas, validate with calculateFileComplexityScore
+        actual = calculateFileComplexityScore(example.input);
         if (actual === undefined || actual === null || isNaN(actual)) {
-          throw new Error(`calculateComplexityScore returned invalid value: ${actual}`);
+          throw new Error(`calculateFileComplexityScore returned invalid value: ${actual}`);
         }
         
         isValid = actual === example.expected;
@@ -452,7 +452,7 @@ function validateSemanticCoherence(examples) {
     }
   }
   
-  // 2. Health scores should be reasonable (0-100)
+  // 2. File health scores should be reasonable (0-100)
   const healthExamples = examples.filter(e => e.type === 'healthScore');
   healthExamples.forEach(example => {
     if (example.expected < 0 || example.expected > 100) {
@@ -491,7 +491,7 @@ function generateComplexityTable() {
 
   const complexityExamples = [1, 10, 11, 15, 16, 20, 25, 30, 40, 50, 60, 100, 176];
   complexityExamples.forEach(complexity => {
-    const score = calculateComplexityScore(complexity);
+    const score = calculateFileComplexityScore(complexity);
     let phase = '';
     let researchBasis = '';
     
@@ -555,9 +555,9 @@ function generateHealthExamples() {
       issues: []
     };
     
-    const healthScore = calculateHealthScore(file);
+    const healthScore = calculateFileHealthScore(file);
     
-    const complexityScore = calculateComplexityScore(example.complexity);
+    const complexityScore = calculateFileComplexityScore(example.complexity);
     const complexityPenalty = 100 - complexityScore;
     let extremePenalty = 0;
     if (example.complexity > 100) {
@@ -586,12 +586,12 @@ function generateHealthExamples() {
 function generateCodeExample() {
   console.log('=== CODE EXAMPLE TEMPLATE ===\n');
   console.log('```typescript');
-  console.log('import { calculateComplexityScore } from \'insightcode-cli\';');
+  console.log('import { calculateFileComplexityScore } from \'insightcode-cli\';');
   console.log('');
   console.log('// Examples of scores by complexity');
   [5, 10, 15, 25, 50].forEach(complexity => {
-    const score = calculateComplexityScore(complexity);
-    console.log(`const score${complexity} = calculateComplexityScore(${complexity}); // ${score}`);
+    const score = calculateFileComplexityScore(complexity);
+    console.log(`const score${complexity} = calculateFileComplexityScore(${complexity}); // ${score}`);
   });
   console.log('```\n');
 }
@@ -718,7 +718,7 @@ if (command === 'generate') {
   console.log('=== DOCUMENTATION VALIDATION MODE ===\n');
   
   const docsToValidate = [
-    'HEALTH_SCORE_METHODOLOGY.md',
+    'FILE_HEALTH_SCORE_METHODOLOGY.md',
     'SCORING_ARCHITECTURE.md',
     'SCORING_THRESHOLDS_JUSTIFICATION.md',
     'DUPLICATION_DETECTION_PHILOSOPHY.md',

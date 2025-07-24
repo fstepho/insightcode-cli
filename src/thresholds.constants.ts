@@ -5,7 +5,7 @@
 /**
  * Type-safe threshold values
  */
-type HealthScoreThreshold = 80;
+type FileHealthScoreThreshold = 80;
 
 
 // DUPLICATION_STATUS_CONFIG moved to scoring.utils.ts as DUPLICATION_CONFIG_LEGACY/STRICT
@@ -32,10 +32,10 @@ export const IMPROVEMENT_SUGGESTION_THRESHOLDS = {
 } as const;
 
 /**
- * Seuil critique global pour le health score
+ * Seuil critique global pour le file health score
  * 80: Based on Pareto principle - identifies files needing immediate attention
  */
-export const CRITICAL_HEALTH_SCORE: HealthScoreThreshold = 80;
+export const CRITICAL_FILE_HEALTH_SCORE: FileHealthScoreThreshold = 80;
 
 // DEFAULT_THRESHOLDS removed - use configurations from scoring.utils.ts instead:
 // - COMPLEXITY_CONFIG for complexity thresholds
@@ -108,7 +108,7 @@ export const COMPLEXITY_SCORING_THRESHOLDS = {
 /**
  * Maintainability scoring thresholds based on Martin Clean Code (2008)
  */
-export const MAINTAINABILITY_SCORING_THRESHOLDS = {
+export const FILE_MAINTAINABILITY_SCORING_THRESHOLDS = {
   OPTIMAL_FILE_SIZE: 200,     // Martin Clean Code: ideal file size for readability and cognitive load
   OPTIMAL_FUNCTION_COUNT: 10, // Industry standard: manageable number of functions per file for navigation
   SIZE_PENALTY_MULTIPLIER: 0.00003,    // 0.00003 (calibrated): gentle penalty progression for file size to avoid harsh penalties for slightly large files
@@ -119,7 +119,7 @@ export const MAINTAINABILITY_SCORING_THRESHOLDS = {
 
 
 /**
- * Health score penalty constants
+ * File health score penalty constants
  * 
  * Mathematical Coefficient Justification:
  * 
@@ -160,7 +160,7 @@ export const MAINTAINABILITY_SCORING_THRESHOLDS = {
  */
 
 
-export const HEALTH_PENALTY_CONSTANTS = {
+export const FILE_HEALTH_PENALTY_CONSTANTS = {
   COMPLEXITY: {
     EXPONENTIAL_POWER: 1.8,      // Power 1.8: harmonized with complexity scoring for mathematical consistency,
     EXPONENTIAL_MULTIPLIER: 50,   // Multiplier 50: calibrated against InsightCode's complexity 176 → penalty 31 case

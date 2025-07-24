@@ -1,26 +1,26 @@
 import { describe, it, expect } from 'vitest';
 import { 
-  calculateComplexityScore, 
+  calculateFileComplexityScore, 
   calculateDuplicationScore, 
-  calculateMaintainabilityScore,
-  calculateWeightedScore,
-  calculateHealthScore
+  calculateFileMaintainabilityScore,
+  calculateProjectWeightedScore,
+  calculateFileHealthScore
 } from '../src/scoring';
 import { getGrade } from '../src/scoring.utils';
 import { FileIssue, FileIssueType, Severity } from '../src/types';
 
 describe('Scoring Algorithms', () => {
-  describe('calculateComplexityScore', () => {
+  describe('calculateFileComplexityScore', () => {
     it('should return 100 for low complexity', () => {
-      expect(calculateComplexityScore(1)).toBe(100);
-      expect(calculateComplexityScore(10)).toBe(100);
+      expect(calculateFileComplexityScore(1)).toBe(100);
+      expect(calculateFileComplexityScore(10)).toBe(100);
     });
 
     it('should return decreasing scores for higher complexity', () => {
-      const score15 = calculateComplexityScore(15);
-      const score20 = calculateComplexityScore(20);
-      const score30 = calculateComplexityScore(30);
-      const score50 = calculateComplexityScore(50);
+      const score15 = calculateFileComplexityScore(15);
+      const score20 = calculateFileComplexityScore(20);
+      const score30 = calculateFileComplexityScore(30);
+      const score50 = calculateFileComplexityScore(50);
       
       // Scores should decrease as complexity increases
       expect(score15).toBeGreaterThan(score20);
@@ -35,7 +35,7 @@ describe('Scoring Algorithms', () => {
     });
 
     it('should handle extreme complexity values', () => {
-      const score = calculateComplexityScore(100);
+      const score = calculateFileComplexityScore(100);
       expect(score).toBeGreaterThanOrEqual(0);
       expect(score).toBeLessThan(20);
     });
@@ -44,8 +44,8 @@ describe('Scoring Algorithms', () => {
       // Test that complexity score decreases as complexity increases
       const complexities = [1, 5, 10, 15, 20, 25, 30, 40, 50, 100];
       for (let i = 1; i < complexities.length; i++) {
-        const prevScore = calculateComplexityScore(complexities[i - 1]);
-        const currScore = calculateComplexityScore(complexities[i]);
+        const prevScore = calculateFileComplexityScore(complexities[i - 1]);
+        const currScore = calculateFileComplexityScore(complexities[i]);
         expect(currScore).toBeLessThanOrEqual(prevScore);
       }
     });
@@ -92,17 +92,17 @@ describe('Scoring Algorithms', () => {
     });
   });
 
-  describe('calculateMaintainabilityScore', () => {
+  describe('calculateFileMaintainabilityScore', () => {
     it('should return 100 for small files with few functions', () => {
-      expect(calculateMaintainabilityScore(100, 5)).toBe(100);
-      expect(calculateMaintainabilityScore(200, 10)).toBe(100);
+      expect(calculateFileMaintainabilityScore(100, 5)).toBe(100);
+      expect(calculateFileMaintainabilityScore(200, 10)).toBe(100);
     });
 
     it('should penalize large files', () => {
-      const small = calculateMaintainabilityScore(100, 5);
-      const medium = calculateMaintainabilityScore(300, 5);
-      const large = calculateMaintainabilityScore(400, 5);
-      const veryLarge = calculateMaintainabilityScore(500, 5);
+      const small = calculateFileMaintainabilityScore(100, 5);
+      const medium = calculateFileMaintainabilityScore(300, 5);
+      const large = calculateFileMaintainabilityScore(400, 5);
+      const veryLarge = calculateFileMaintainabilityScore(500, 5);
       
       // Larger files should have lower maintainability scores
       expect(small).toBeGreaterThan(medium);
@@ -117,10 +117,10 @@ describe('Scoring Algorithms', () => {
     });
 
     it('should penalize high function count', () => {
-      const fewFunctions = calculateMaintainabilityScore(100, 5);
-      const mediumFunctions = calculateMaintainabilityScore(100, 15);
-      const manyFunctions = calculateMaintainabilityScore(100, 20);
-      const veryManyFunctions = calculateMaintainabilityScore(100, 30);
+      const fewFunctions = calculateFileMaintainabilityScore(100, 5);
+      const mediumFunctions = calculateFileMaintainabilityScore(100, 15);
+      const manyFunctions = calculateFileMaintainabilityScore(100, 20);
+      const veryManyFunctions = calculateFileMaintainabilityScore(100, 30);
       
       // More functions should result in lower maintainability scores
       expect(fewFunctions).toBeGreaterThan(mediumFunctions);
@@ -135,16 +135,16 @@ describe('Scoring Algorithms', () => {
     });
 
     it('should handle extreme values', () => {
-      const score = calculateMaintainabilityScore(10000, 1000);
+      const score = calculateFileMaintainabilityScore(10000, 1000);
       expect(score).toBeGreaterThanOrEqual(0);
       expect(score).toBeLessThan(40);
     });
 
     it('should be affected by both LOC and function count', () => {
-      const baseline = calculateMaintainabilityScore(100, 5);
-      const bigFile = calculateMaintainabilityScore(500, 5);
-      const manyFunctions = calculateMaintainabilityScore(100, 25);
-      const both = calculateMaintainabilityScore(500, 25);
+      const baseline = calculateFileMaintainabilityScore(100, 5);
+      const bigFile = calculateFileMaintainabilityScore(500, 5);
+      const manyFunctions = calculateFileMaintainabilityScore(100, 25);
+      const both = calculateFileMaintainabilityScore(500, 25);
       
       expect(bigFile).toBeLessThan(baseline);
       expect(manyFunctions).toBeLessThan(baseline);
@@ -153,16 +153,16 @@ describe('Scoring Algorithms', () => {
     });
   });
 
-  describe('calculateWeightedScore', () => {
+  describe('calculateProjectWeightedScore', () => {
     it('should apply correct weights (45/30/25)', () => {
-      const score = calculateWeightedScore(100, 75, 50);
+      const score = calculateProjectWeightedScore(100, 75, 50);
       const expected = (100 * 0.45) + (50 * 0.30) + (75 * 0.25);
       expect(score).toBe(expected);
     });
 
     it('should handle edge cases', () => {
-      expect(calculateWeightedScore(0, 0, 0)).toBe(0);
-      expect(calculateWeightedScore(100, 100, 100)).toBe(100);
+      expect(calculateProjectWeightedScore(0, 0, 0)).toBe(0);
+      expect(calculateProjectWeightedScore(100, 100, 100)).toBe(100);
     });
 
     it('should produce scores between 0 and 100', () => {
@@ -170,7 +170,7 @@ describe('Scoring Algorithms', () => {
         const c = Math.random() * 100;
         const d = Math.random() * 100;
         const m = Math.random() * 100;
-        const score = calculateWeightedScore(c, d, m);
+        const score = calculateProjectWeightedScore(c, d, m);
         expect(score).toBeGreaterThanOrEqual(0);
         expect(score).toBeLessThanOrEqual(100);
       }
@@ -199,7 +199,7 @@ describe('Scoring Algorithms', () => {
     });
   });
 
-  describe('calculateHealthScore', () => {
+  describe('calculateFileHealthScore', () => {
     const createMockIssue = (severity: Severity): FileIssue => ({
       type: 'complexity' as FileIssueType,
       severity,
@@ -214,24 +214,24 @@ describe('Scoring Algorithms', () => {
         metrics: { complexity: 1, loc: 10, duplicationRatio: 0 },
         issues: []
       };
-      const score = calculateHealthScore(file);
+      const score = calculateFileHealthScore(file);
       expect(score).toBe(100);
     });
 
     it('should penalize files with issues', () => {
-      const noIssues = calculateHealthScore({
+      const noIssues = calculateFileHealthScore({
         metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: []
       });
-      const withCritical = calculateHealthScore({
+      const withCritical = calculateFileHealthScore({
         metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: [createMockIssue(Severity.Critical)]
       });
-      const withHigh = calculateHealthScore({
+      const withHigh = calculateFileHealthScore({
         metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: [createMockIssue(Severity.High)]
       });
-      const withMedium = calculateHealthScore({
+      const withMedium = calculateFileHealthScore({
         metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: [createMockIssue(Severity.Medium)]
       });
@@ -244,11 +244,11 @@ describe('Scoring Algorithms', () => {
     });
 
     it('should handle multiple issues', () => {
-      const singleIssue = calculateHealthScore({
+      const singleIssue = calculateFileHealthScore({
         metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: [createMockIssue(Severity.High)]
       });
-      const multipleIssues = calculateHealthScore({
+      const multipleIssues = calculateFileHealthScore({
         metrics: { complexity: 10, loc: 50, duplicationRatio: 0.05 },
         issues: [
           createMockIssue(Severity.High),
@@ -261,19 +261,19 @@ describe('Scoring Algorithms', () => {
     });
 
     it('should consider complexity, size, and duplication', () => {
-      const baseline = calculateHealthScore({
+      const baseline = calculateFileHealthScore({
         metrics: { complexity: 10, loc: 100, duplicationRatio: 0.05 },
         issues: []
       });
-      const highComplexity = calculateHealthScore({
+      const highComplexity = calculateFileHealthScore({
         metrics: { complexity: 50, loc: 100, duplicationRatio: 0.05 },
         issues: []
       });
-      const largeFile = calculateHealthScore({
+      const largeFile = calculateFileHealthScore({
         metrics: { complexity: 10, loc: 1000, duplicationRatio: 0.05 },
         issues: []
       });
-      const highDuplication = calculateHealthScore({
+      const highDuplication = calculateFileHealthScore({
         metrics: { complexity: 10, loc: 100, duplicationRatio: 0.5 },
         issues: []
       });

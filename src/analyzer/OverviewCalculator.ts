@@ -2,11 +2,11 @@
 
 import { Overview, FileDetail, validateScore } from '../types';
 import { 
-  calculateComplexityScore, 
+  calculateFileComplexityScore, 
   calculateDuplicationScore, 
-  calculateMaintainabilityScore, 
-  calculateWeightedScore,
-  calculateCriticismScore 
+  calculateFileMaintainabilityScore, 
+  calculateProjectWeightedScore,
+  calculateFileCriticismScore 
 } from '../scoring';
 import { getGrade, isCriticalFile, GRADE_CONFIG, COMPLEXITY_LEVELS, getDuplicationThreshold } from '../scoring.utils';
 
@@ -50,7 +50,12 @@ export class OverviewCalculator {
    * 
    * NOTE: No outlier masking - extreme values receive extreme penalties
    */
-  private static calculateComponentScores(fileDetails: FileDetail[], duplicationMode: 'strict' | 'legacy' = 'legacy') {
+  private static calculateComponentScores(fileDetails: FileDetail[], duplicationMode: 'strict' | 'legacy' = 'legacy') : {
+    complexity: number;
+    duplication: number;
+    maintainability: number;
+    overall: number;
+  } {
     // Calculate weighted scores using criticism-based approach
     let weightedComplexityScore = 0;
     let weightedDuplicationScore = 0;
@@ -59,41 +64,41 @@ export class OverviewCalculator {
 
     // First pass: calculate total criticism score
     fileDetails.forEach(file => {
-      const criticismScore = calculateCriticismScore(file);
+      const criticismScore = calculateFileCriticismScore(file);
       totalCriticismScore += criticismScore;
     });
 
     // Second pass: calculate weighted scores
     if (totalCriticismScore > 0) {
       fileDetails.forEach(file => {
-        const criticismScore = calculateCriticismScore(file);
-        const weight = criticismScore / totalCriticismScore;
+        const fileCriticismScore = calculateFileCriticismScore(file);
+        const fileWeight = fileCriticismScore / totalCriticismScore;
         
-        weightedComplexityScore += calculateComplexityScore(file.metrics.complexity) * weight;
-        weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio, duplicationMode) * weight;
-        weightedMaintainabilityScore += calculateMaintainabilityScore(file.metrics.loc, file.metrics.functionCount) * weight;
+        weightedComplexityScore += calculateFileComplexityScore(file.metrics.complexity) * fileWeight;
+        weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio, duplicationMode) * fileWeight;
+        weightedMaintainabilityScore += calculateFileMaintainabilityScore(file.metrics.loc, file.metrics.functionCount) * fileWeight;
       });
     } else {
       // Fallback to simple averages
-      weightedComplexityScore = fileDetails.reduce((sum, f) => sum + calculateComplexityScore(f.metrics.complexity), 0) / fileDetails.length;
+      weightedComplexityScore = fileDetails.reduce((sum, f) => sum + calculateFileComplexityScore(f.metrics.complexity), 0) / fileDetails.length;
       weightedDuplicationScore = fileDetails.reduce((sum, f) => sum + calculateDuplicationScore(f.metrics.duplicationRatio, duplicationMode), 0) / fileDetails.length;
-      weightedMaintainabilityScore = fileDetails.reduce((sum, f) => sum + calculateMaintainabilityScore(f.metrics.loc, f.metrics.functionCount), 0) / fileDetails.length;
+      weightedMaintainabilityScore = fileDetails.reduce((sum, f) => sum + calculateFileMaintainabilityScore(f.metrics.loc, f.metrics.functionCount), 0) / fileDetails.length;
     }
     
-    const complexityScore = validateScore(weightedComplexityScore);
-    const duplicationScore = validateScore(weightedDuplicationScore);
-    const maintainabilityScore = validateScore(weightedMaintainabilityScore);
-    
-    const overallScore = validateScore(calculateWeightedScore(
-      complexityScore,
-      duplicationScore,
-      maintainabilityScore
+    weightedComplexityScore = validateScore(weightedComplexityScore);
+    weightedDuplicationScore = validateScore(weightedDuplicationScore);
+    weightedMaintainabilityScore = validateScore(weightedMaintainabilityScore);
+
+    const overallScore = validateScore(calculateProjectWeightedScore(
+      weightedComplexityScore,
+      weightedDuplicationScore,
+      weightedMaintainabilityScore
     ));
 
     return {
-      complexity: complexityScore,
-      duplication: duplicationScore,
-      maintainability: maintainabilityScore,
+      complexity: weightedComplexityScore,
+      duplication: weightedDuplicationScore,
+      maintainability: weightedMaintainabilityScore,
       overall: overallScore
     };
   }
@@ -102,7 +107,7 @@ export class OverviewCalculator {
    * Calculate criticism score for a file
    * Higher score = more problematic file = more weight in final scores
    * 
-   * Synchronized with calculateHealthScore to use actual file.issues array
+   * Synchronized with calculateFileHealthScore to use actual file.issues array
    * instead of approximating issue count from metrics.
    * 
    * Weights:
@@ -149,7 +154,7 @@ export class OverviewCalculator {
         avgDuplicationRatio: 0
       },
       scores: {
-        complexity: 0,
+        complexity: 0, 
         duplication: 0,
         maintainability: 0,
         overall: 0

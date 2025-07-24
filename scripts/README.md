@@ -13,13 +13,13 @@ npm run validate-docs
 # Generate documentation tables
 npm run generate-docs
 ```
-- 📖 **Parses markdown files** (HEALTH_SCORE_METHODOLOGY.md, SCORING_ARCHITECTURE.md, etc.)
+- 📖 **Parses markdown files** (FILE_HEALTH_SCORE_METHODOLOGY.md, SCORING_ARCHITECTURE.md, etc.)
 - 🔍 **Extracts ALL numerical examples** automatically using 10 regex patterns
-- ✅ **Validates against real code** (calculateComplexityScore, calculateHealthScore, etc.)
+- ✅ **Validates against real code** (calculateFileComplexityScore, calculateFileHealthScore, etc.)
 - 🚨 **Detects inconsistencies** without relying on hardcoded test values
 - 📊 **Generates documentation tables** with research basis and formulas
 - 🔄 **Anti-regression** : Prevents future discrepancies between documentation and implementation
-- **Patterns detected**: Complexity scores, penalties, formulas, health scores, mappings, duplication, weights, thresholds
+- **Patterns detected**: Complexity scores, penalties, formulas, file health scores, mappings, duplication, weights, thresholds
 
 ### `validate.js`
 **Live code testing and accuracy measurement**

@@ -6,7 +6,7 @@ import {
   DUPLICATION_CONFIG_LEGACY,
   DUPLICATION_CONFIG_STRICT
 } from '../src/scoring.utils';
-import { calculateDuplicationScore, getDuplicationPenalty } from '../src/scoring';
+import { calculateDuplicationScore, getFileDuplicationPenalty } from '../src/scoring';
 
 describe('Duplication Modes', () => {
   describe('Configuration Factory', () => {
@@ -86,14 +86,14 @@ describe('Duplication Modes', () => {
     it('should return zero penalty for excellent duplication in both modes', () => {
       // 2% should have no penalty in both modes
       const lowDuplication = 0.02;
-      expect(getDuplicationPenalty(lowDuplication, 'legacy')).toBe(0);
-      expect(getDuplicationPenalty(lowDuplication, 'strict')).toBe(0);
+      expect(getFileDuplicationPenalty(lowDuplication, 'legacy')).toBe(0);
+      expect(getFileDuplicationPenalty(lowDuplication, 'strict')).toBe(0);
     });
 
     it('should show different penalties for moderate duplication', () => {
       const moderateDuplication = 0.10; // 10%
-      const legacyPenalty = getDuplicationPenalty(moderateDuplication, 'legacy');
-      const strictPenalty = getDuplicationPenalty(moderateDuplication, 'strict');
+      const legacyPenalty = getFileDuplicationPenalty(moderateDuplication, 'legacy');
+      const strictPenalty = getFileDuplicationPenalty(moderateDuplication, 'strict');
       
       // Legacy should have no penalty (≤15%)
       expect(legacyPenalty).toBe(0);

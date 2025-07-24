@@ -35,8 +35,8 @@ export const PROJECT_SCORING_WEIGHTS = {
   DUPLICATION: 0.25      // Internal hypothesis - NOT industry standard
 } as const;
 
-// Health score penalties - Progressive without caps
-export const HEALTH_PENALTY_CONSTANTS = {
+// File health score penalties - Progressive without caps
+export const FILE_HEALTH_PENALTY_CONSTANTS = {
   COMPLEXITY: {
     EXPONENTIAL_POWER: 1.8,      // Harmonized with all penalties
     QUADRATIC_PENALTY_MULTIPLIER: 50   // Extreme complexity penalty (>100)
@@ -75,7 +75,7 @@ export function getGradeInfo(score: number) {
 
 ```typescript
 // 4-Phase Complexity Scoring Implementation
-export function calculateComplexityScore(complexity: number): number {
+export function calculateFileComplexityScore(complexity: number): number {
   // Phase 1 (≤10): Excellent - McCabe threshold
   if (complexity <= EXCELLENT) return 100;
   
@@ -99,11 +99,11 @@ export function calculateComplexityScore(complexity: number): number {
   return Math.max(0, Math.round(base - exponentialPenalty));
 }
 
-// Health score calculation - DIRECT PENALTIES, NO WEIGHTS
-export function calculateHealthScore(file: FileDetail, duplicationMode?: string): number {
-  const complexityPenalty = getComplexityPenalty(file.metrics.complexity);
-  const duplicationPenalty = getDuplicationPenalty(file.metrics.duplicationRatio, duplicationMode);
-  const sizePenalty = getSizePenalty(file.metrics.loc);
+// File health score calculation - DIRECT PENALTIES, NO WEIGHTS
+export function calculateFileHealthScore(file: FileDetail, duplicationMode?: string): number {
+  const complexityPenalty = getFileComplexityPenalty(file.metrics.complexity);
+  const duplicationPenalty = getFileDuplicationPenalty(file.metrics.duplicationRatio, duplicationMode);
+  const sizePenalty = getFileSizePenalty(file.metrics.loc);
   const issuesPenalty = getIssuesPenalty(file.issues);
   
   const totalPenalty = complexityPenalty + duplicationPenalty + sizePenalty + issuesPenalty;
@@ -192,7 +192,7 @@ npm run qa                 # Full quality assurance suite
 
 **Key validation features:**
 - **10 regex patterns** detect examples in documentation
-- **Real-time validation** against actual `calculateComplexityScore()`, `calculateHealthScore()`, etc.
+- **Real-time validation** against actual `calculateFileComplexityScore()`, `calculateFileHealthScore()`, etc.
 - **Anti-regression protection** prevents future inconsistencies
 - **Auto-generated tables** reflect current code implementation
 

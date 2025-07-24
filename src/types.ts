@@ -103,10 +103,10 @@ export interface Overview {
   };
   
   scores: {
-    complexity: Score;      // 0-100
-    duplication: Score;     // 0-100
-    maintainability: Score; // 0-100
-    overall: Score;         // 0-100
+    complexity: Score;      // 0-100 Weighted complexity score
+    duplication: Score;    // 0-100 Weighted duplication score
+    maintainability: Score; // 0-100 Weighted maintainability score
+    overall: Score;        // 0-100 Overall weighted score
   };
   
   summary: string;  // Human-readable one-liner
@@ -284,7 +284,6 @@ export type TestingPattern =
 export interface AnalysisOptions {
   format: 'json' | 'ci' | 'critical' | 'summary' | 'markdown' | 'terminal';
   projectPath: string;
-  // thresholds removed - using global configurations from scoring.utils.ts instead
   production?: boolean;
   strictDuplication?: boolean;
 }

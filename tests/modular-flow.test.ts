@@ -112,7 +112,6 @@ function veryComplexFunction(a: number, b: string, c: boolean, d: object) {
       const result = await analyze(tempDir, {
         format: 'json',
         projectPath: tempDir,
-        thresholds: {} as any, // Will use defaults
         production: false
       });
 
@@ -124,7 +123,7 @@ function veryComplexFunction(a: number, b: string, c: boolean, d: object) {
       const file = result.details[0];
       expect(file.metrics.complexity).toBeGreaterThan(8); // Should be high complexity (adjusted)
       
-      // Context may or may not be present depending on health score thresholds
+      // Context may or may not be present depending on file health score thresholds
       // This is fine as context extraction is only for critical files
       
     } finally {

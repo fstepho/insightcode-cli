@@ -7,7 +7,7 @@ import {
     getScoreStatus,
     getCriticalFiles,
     isFileEmblematic,
-    getPrimaryConcern,
+    getFilePrimaryConcern,
     COMPLEXITY_LEVELS,
     ISSUE_SEVERITY,
     GRADE_CONFIG
@@ -453,7 +453,7 @@ function formatRiskyFileInfo(file: FileDetail, emblematicFiles?: EmblematicFiles
     const isEmblematic = isFileEmblematic(file.file, emblematicFiles);
     
     // Get primary concern without recommendation (as requested)
-    const primaryConcern = getPrimaryConcern(file);
+    const filePrimaryConcern = getFilePrimaryConcern(file);
     
     // Get primary issue (highest severity first)
     const sortedIssues = sortIssuesBySeverity(file.issues);
@@ -469,7 +469,7 @@ function formatRiskyFileInfo(file: FileDetail, emblematicFiles?: EmblematicFiles
     return {
         file: file.file,
         healthScore: file.healthScore,
-        primaryConcern,
+        primaryConcern: filePrimaryConcern,
         isEmblematic,
         metrics: {
             complexity: file.metrics.complexity,

@@ -583,7 +583,7 @@ ${Array.from({ length: 195 }, (_, i) => `const var${i} = ${i};`).join('\n')}
     });
 
     it('should handle critical file identification', async () => {
-      // Create files with varying health scores
+      // Create files with varying file health scores
       fs.writeFileSync(path.join(tempDir, 'good.ts'), `
 export function simple(): boolean {
   return true;
@@ -603,7 +603,7 @@ ${Array.from({ length: 600 }, (_, i) => `const var${i} = ${i};`).join('\n')}
       const criticalFiles = results.details.filter(f => f.healthScore < 80);
       expect(criticalFiles.length).toBeGreaterThan(0);
       
-      // Critical files should have lower health scores
+      // Critical files should have lower file health scores
       criticalFiles.forEach(file => {
         expect(file.healthScore).toBeLessThan(80);
       });

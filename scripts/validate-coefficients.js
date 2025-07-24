@@ -7,7 +7,7 @@
  * real-world code examples to validate and optimize scoring accuracy.
  */
 
-const { calculateComplexityScore, getDuplicationPenalty } = require('../dist/scoring.js');
+const { calculateFileComplexityScore, getFileDuplicationPenalty } = require('../dist/scoring.js');
 
 console.log('=== MATHEMATICAL COEFFICIENTS VALIDATION ===\n');
 
@@ -157,7 +157,7 @@ function analyzeScoreDistribution() {
   
   console.log('Real-world complexity score distribution:');
   testCases.complexity.forEach(testCase => {
-    const score = calculateComplexityScore(testCase.value);
+    const score = calculateFileComplexityScore(testCase.value);
     const category = score >= 80 ? '🟢 Good' : 
                     score >= 60 ? '🟡 Fair' : 
                     score >= 30 ? '🟠 Poor' : '🔴 Critical';
@@ -167,7 +167,7 @@ function analyzeScoreDistribution() {
   
   console.log('\nDuplication penalty distribution:');
   testCases.duplication.forEach(testCase => {
-    const penalty = getDuplicationPenalty(testCase.value);
+    const penalty = getFileDuplicationPenalty(testCase.value);
     const impact = penalty === 0 ? '🟢 None' :
                   penalty < 10 ? '🟡 Low' :
                   penalty < 25 ? '🟠 Medium' : '🔴 High';

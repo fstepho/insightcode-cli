@@ -22,7 +22,7 @@ InsightCode's **Health Score** (0-100) uses progressive penalties **without arti
  * Formula: 100 - Sum of Penalties (without artificial ceilings).
  * Extreme values receive extreme penalties following Rules of the Art.
  */
-export function calculateHealthScore(file: { 
+export function calculateFileHealthScore(file: { 
   metrics: { 
     complexity: number; 
     loc: number; 
@@ -31,9 +31,9 @@ export function calculateHealthScore(file: {
   issues: FileIssue[]; 
 }, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
   
-  const complexityPenalty = getComplexityPenalty(file.metrics.complexity);
-  const duplicationPenalty = getDuplicationPenalty(file.metrics.duplicationRatio, duplicationMode);
-  const sizePenalty = getSizePenalty(file.metrics.loc);
+  const complexityPenalty = getFileComplexityPenalty(file.metrics.complexity);
+  const duplicationPenalty = getFileDuplicationPenalty(file.metrics.duplicationRatio, duplicationMode);
+  const sizePenalty = getFileSizePenalty(file.metrics.loc);
   const issuesPenalty = getIssuesPenalty(file.issues);
   
   const totalPenalty = complexityPenalty + duplicationPenalty + sizePenalty + issuesPenalty;
@@ -46,9 +46,9 @@ export function calculateHealthScore(file: {
 
 ### 1. Complexity Penalty
 ```typescript
-function getComplexityPenalty(complexity: number): number {
+function getFileComplexityPenalty(complexity: number): number {
   // Base penalty from industry-standard scoring curve
-  const score = calculateComplexityScore(complexity);
+  const score = calculateFileComplexityScore(complexity);
   const basePenalty = 100 - score;
   
   // For extreme complexity (>100), add catastrophic penalties
@@ -67,7 +67,7 @@ function getComplexityPenalty(complexity: number): number {
 
 ### 2. Size Penalty
 ```typescript
-function getSizePenalty(loc: number): number {
+function getFileSizePenalty(loc: number): number {
   // 200 LOC threshold (Clean Code inspired)
   if (loc <= 200) return 0;
   
@@ -98,7 +98,7 @@ function getSizePenalty(loc: number): number {
 
 ### 3. Duplication Penalty (Mode-Aware v0.6.0+)
 ```typescript
-function getDuplicationPenalty(duplicationRatio: number, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
+function getFileDuplicationPenalty(duplicationRatio: number, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
   const percentage = duplicationRatio * 100;
   
   // Threshold varies by mode: 3% (strict) vs 15% (legacy)
@@ -154,11 +154,11 @@ insightcode .
 function getIssuesPenalty(issues: FileIssue[]): number {
   const penalty = issues.reduce((currentPenalty, issue) => {
     switch (issue.severity) {
-      case 'critical': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.CRITICAL_PENALTY; // 20 points
-      case 'high': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.HIGH_PENALTY;         // 12 points
-      case 'medium': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.MEDIUM_PENALTY;     // 6 points
-      case 'low': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.LOW_PENALTY;           // 2 points
-      default: return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.DEFAULT_PENALTY;          // 6 points
+      case 'critical': return currentPenalty + FILE_HEALTH_PENALTY_CONSTANTS.ISSUES.CRITICAL_PENALTY; // 20 points
+      case 'high': return currentPenalty + FILE_HEALTH_PENALTY_CONSTANTS.ISSUES.HIGH_PENALTY;         // 12 points
+      case 'medium': return currentPenalty + FILE_HEALTH_PENALTY_CONSTANTS.ISSUES.MEDIUM_PENALTY;     // 6 points
+      case 'low': return currentPenalty + FILE_HEALTH_PENALTY_CONSTANTS.ISSUES.LOW_PENALTY;           // 2 points
+      default: return currentPenalty + FILE_HEALTH_PENALTY_CONSTANTS.ISSUES.DEFAULT_PENALTY;          // 6 points
     }
   }, 0);
   
@@ -206,6 +206,6 @@ npm run validate-coefficients  # Validates mathematical foundations
 ```
 
 **Key validation features:**
-- Real-time validation against actual `calculateComplexityScore()`, `calculateHealthScore()` implementations
+- Real-time validation against actual `calculateFileComplexityScore()`, `calculateFileHealthScore()` implementations
 - Anti-regression protection prevents future inconsistencies
 - All examples in this document are auto-validated against the codebase

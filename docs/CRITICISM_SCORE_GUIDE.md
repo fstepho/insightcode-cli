@@ -114,7 +114,7 @@ The CriticismScore is designed to be:
 
 - **Technical Implementation**: `/docs/SCORING_ARCHITECTURE.md`
 - **Project Weights Guide**: `/docs/PROJECT_WEIGHTS_USER_GUIDE.md`  
-- **Methodology Details**: `/docs/HEALTH_SCORE_METHODOLOGY.md`
+- **Methodology Details**: `/docs/FILE_HEALTH_SCORE_METHODOLOGY.md`
 
 ---
 

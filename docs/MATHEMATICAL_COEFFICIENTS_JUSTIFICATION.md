@@ -150,7 +150,7 @@ Several key coefficients use the value **30**, which is not coincidental but rep
 - **Complexity exponential**: 1.8
 - **Duplication exponential**: 1.8  
 - **Size penalty**: 1.8
-- **Health score complexity**: 1.8
+- **File health score complexity**: 1.8
 - **Maintainability size**: 1.8
 
 **Mathematical Consistency**: All exponential penalty functions use the same growth rate (1.8), providing unified mathematical behavior across different penalty types.

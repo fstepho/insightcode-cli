@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 
-describe('Total Criticism Score Logic', () => {
+describe('Total File Criticism Score Logic', () => {
   
-  // Test the calculateCriticismScore function logic directly
-  function calculateCriticismScore(file: {
+  // Test the calculateFileCriticismScore function logic directly
+  function calculateFileCriticismScore(file: {
     complexity: number;
     loc: number;
     duplicationRatio: number;
@@ -50,8 +50,8 @@ describe('Total Criticism Score Logic', () => {
       isInCycle: false
     };
 
-    const highImpactCriticismScore = calculateCriticismScore(highImpactFile);
-    const lowImpactCriticismScore = calculateCriticismScore(lowImpactFile);
+    const highImpactCriticismScore = calculateFileCriticismScore(highImpactFile);
+    const lowImpactCriticismScore = calculateFileCriticismScore(lowImpactFile);
 
     // Verify high impact file has significantly higher criticism score
     expect(highImpactCriticismScore).toBeGreaterThan(lowImpactCriticismScore);
@@ -83,8 +83,8 @@ describe('Total Criticism Score Logic', () => {
       isInCycle: false
     };
 
-    const highDepScore = calculateCriticismScore(highDependencyFile);
-    const highComplexScore = calculateCriticismScore(highComplexityFile);
+    const highDepScore = calculateFileCriticismScore(highDependencyFile);
+    const highComplexScore = calculateFileCriticismScore(highComplexityFile);
 
     // Calculate manually
     // High dependency: 40*2 + 1*1 + 0*0.5 + 1 = 80 + 1 + 0 + 1 = 82
@@ -114,8 +114,8 @@ describe('Total Criticism Score Logic', () => {
       isInCycle: false
     };
 
-    const circularScore = calculateCriticismScore(circularFile);
-    const nonCircularScore = calculateCriticismScore(nonCircularFile);
+    const circularScore = calculateFileCriticismScore(circularFile);
+    const nonCircularScore = calculateFileCriticismScore(nonCircularFile);
 
     // Circular should get +5 penalty: (10+5)*2 vs 10*2 = 30 vs 20 impact component
     // Total difference should be 5*2 = 10 points
@@ -141,8 +141,8 @@ describe('Total Criticism Score Logic', () => {
       isInCycle: false
     };
 
-    const manyIssuesScore = calculateCriticismScore(manyIssuesFile);
-    const noIssuesScore = calculateCriticismScore(noIssuesFile);
+    const manyIssuesScore = calculateFileCriticismScore(manyIssuesFile);
+    const noIssuesScore = calculateFileCriticismScore(noIssuesFile);
 
     // Many issues: 0*2 + 15*1 + 3*0.5 + 1 = 17.5
     // No issues: 0*2 + 5*1 + 0*0.5 + 1 = 6
@@ -162,7 +162,7 @@ describe('Total Criticism Score Logic', () => {
       isInCycle: false
     };
 
-    const score = calculateCriticismScore(minimalFile);
+    const score = calculateFileCriticismScore(minimalFile);
     expect(score).toBe(1); // Only the base weight
   });
 });

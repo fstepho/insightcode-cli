@@ -5,7 +5,7 @@
 import { AnalysisResult, FileDetail, FunctionIssue, ReportResult, EmblematicFiles, Grade, DuplicationMode } from './types';
 import { 
     getAverageExcessRatio, 
-    generateHealthDistribution,
+    generateFileHealthDistribution,
     ratioToPercentage,
     formatPercentage,
     ISSUE_SEVERITY,
@@ -80,7 +80,7 @@ export function generateProjectReport(result: ReportResult): string {
     
     // Health Distribution
     markdown += `## File Health Distribution\n\n`;
-    markdown += generateHealthDistribution(analysis.details);
+    markdown += generateFileHealthDistribution(analysis.details);
     
     // Critical Files - using harmonized risky files logic
     const riskyFilesData = prepareRiskyFilesData(analysis.details, result.emblematicFiles);

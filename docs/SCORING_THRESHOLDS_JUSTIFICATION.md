@@ -22,7 +22,7 @@ InsightCode v0.7.0 implements a **dual scoring architecture** that addresses two
 ### 📊 **Dual Scoring Systems**
 
 #### **System 1: File-Level Health Scores (Academically Validated)**
-- **Direct penalty summation**: `HealthScore = Math.max(0, 100 - Σ(penalties))`
+- **Direct penalty summation**: `FileHealthScore = Math.max(0, 100 - Σ(penalties))`
 - **No weighting applied**: Each penalty contributes directly to total
 - **Progressive scaling**: Research-based penalty curves (McCabe, Clean Code principles)
 - **Bounded output**: Score constrained to 0-100 range
@@ -47,7 +47,7 @@ The Health Score system implements direct penalty aggregation, a mathematically 
 
 #### Core Formula
 ```typescript
-HealthScore = Math.max(0, 100 - (complexityPenalty + sizePenalty + duplicationPenalty + issuesPenalty))
+FileHealthScore = Math.max(0, 100 - (complexityPenalty + sizePenalty + duplicationPenalty + issuesPenalty))
 ```
 
 #### Mathematical Properties
@@ -63,8 +63,8 @@ Based on McCabe's seminal 1976 work and subsequent empirical validation across 4
 
 #### 4-Phase Implementation
 ```typescript
-function getComplexityPenalty(complexity: number): number {
-  const score = calculateComplexityScore(complexity);
+function getFileComplexityPenalty(complexity: number): number {
+  const score = calculateFileComplexityScore(complexity);
   const basePenalty = 100 - score;
   
   // Extreme complexity additional penalty (>100)
@@ -110,7 +110,7 @@ function getComplexityPenalty(complexity: number): number {
 Based on cognitive load theory and Clean Code principles, not formal standards.
 
 ```typescript
-function getSizePenalty(loc: number): number {
+function getFileSizePenalty(loc: number): number {
   if (loc <= 200) return 0; // Clean Code inspired threshold
   
   if (loc <= 500) {
@@ -137,7 +137,7 @@ function getSizePenalty(loc: number): number {
 Addresses different project contexts while maintaining academic rigor.
 
 ```typescript
-function getDuplicationPenalty(duplicationRatio: number, mode: 'strict' | 'legacy'): number {
+function getFileDuplicationPenalty(duplicationRatio: number, mode: 'strict' | 'legacy'): number {
   const percentage = duplicationRatio * 100;
   const thresholds = mode === 'strict' ? 
     { excellent: 3, high: 8, critical: 15 } : 

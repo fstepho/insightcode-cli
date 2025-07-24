@@ -185,9 +185,9 @@ describe('Analyzer v0.7.0', () => {
         // Critical files should have worse health scores
         const nonCriticalFiles = result.details.filter(f => f.healthScore >= 80);
         if (nonCriticalFiles.length > 0) {
-            const avgCriticalHealth = criticalFiles.reduce((sum, f) => sum + f.healthScore, 0) / criticalFiles.length;
-            const avgNonCriticalHealth = nonCriticalFiles.reduce((sum, f) => sum + f.healthScore, 0) / nonCriticalFiles.length;
-            expect(avgCriticalHealth).toBeLessThan(avgNonCriticalHealth);
+            const avgFileCriticalHealth = criticalFiles.reduce((sum, f) => sum + f.healthScore, 0) / criticalFiles.length;
+            const avgNonFileCriticalHealth = nonCriticalFiles.reduce((sum, f) => sum + f.healthScore, 0) / nonCriticalFiles.length;
+            expect(avgFileCriticalHealth).toBeLessThan(avgNonFileCriticalHealth);
         }
     });
 
@@ -269,7 +269,7 @@ describe('Analyzer v0.7.0', () => {
         expect(result).not.toHaveProperty('recommendations');
     });
 
-    it('should calculate health scores correctly', async () => {
+    it('should calculate file health scores correctly', async () => {
         const files: FileDetail[] = [
             createFileDetail({ 
                 metrics: { complexity: 10, loc: 100, functionCount: 2, duplicationRatio: 0.05 }
@@ -281,7 +281,7 @@ describe('Analyzer v0.7.0', () => {
 
         const result = await analyze(files, '.', MOCK_THRESHOLDS);
 
-        // Health scores should be between 0 and 100
+        // File health scores should be between 0 and 100
         result.details.forEach(file => {
             expect(file.healthScore).toBeGreaterThanOrEqual(0);
             expect(file.healthScore).toBeLessThanOrEqual(100);

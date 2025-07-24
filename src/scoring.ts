@@ -5,10 +5,11 @@ import { DUPLICATION_LEVELS } from './scoring.utils';
 import { COMPLEXITY_SCORING_THRESHOLDS } from './thresholds.constants';
 import {
   PROJECT_SCORING_WEIGHTS,
-  MAINTAINABILITY_SCORING_THRESHOLDS,
-  HEALTH_PENALTY_CONSTANTS
+  FILE_MAINTAINABILITY_SCORING_THRESHOLDS,
+  FILE_HEALTH_PENALTY_CONSTANTS
 } from './thresholds.constants';
 import { percentageToRatio, ratioToPercentage, DUPLICATION_SCORING } from './scoring.utils';
+
 /**
  * Converts cyclomatic complexity to a score from 0 to 100 according to industry best practices.
  * Uses progressive degradation following the gold standard: Linear → Quadratic → Exponential.
@@ -27,7 +28,7 @@ import { percentageToRatio, ratioToPercentage, DUPLICATION_SCORING } from './sco
  * This ensures extreme complexity (16,000+) receives catastrophic scores,
  * respecting the Pareto principle and making technical debt visible.
  */
-export function calculateComplexityScore(complexity: number): number {
+export function calculateFileComplexityScore(complexity: number): number {
   // Use empirically validated coefficients while maintaining table-driven configuration
   const { EXCELLENT, CRITICAL, LINEAR_PENALTY_RATE, EXPONENTIAL_BASE, EXPONENTIAL_POWER, QUADRATIC_PENALTY_MULTIPLIER } = COMPLEXITY_SCORING_THRESHOLDS;
   
@@ -104,21 +105,21 @@ export function calculateDuplicationScore(duplicationRatio: number, duplicationM
  * INTERNAL CONVENTION: Inspired by Clean Code principles suggesting files should be small.
  * Industry guidance: < 200 LOC is often considered good, 300+ becomes harder to maintain.
  */
-export function calculateMaintainabilityScore(fileLoc: number, fileFunctionCount: number): number {
+export function calculateFileMaintainabilityScore(fileLoc: number, fileFunctionCount: number): number {
   // Internal convention (Clean Code inspired): <= 200 LOC is considered maintainable
-  const sizeScore = fileLoc <= MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FILE_SIZE
+  const sizeScore = fileLoc <= FILE_MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FILE_SIZE
     ? 100 
     : 100 * Math.exp(
-        -MAINTAINABILITY_SCORING_THRESHOLDS.SIZE_PENALTY_MULTIPLIER * 
-        Math.pow(fileLoc - MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FILE_SIZE, MAINTAINABILITY_SCORING_THRESHOLDS.SIZE_PENALTY_POWER)
+        -FILE_MAINTAINABILITY_SCORING_THRESHOLDS.SIZE_PENALTY_MULTIPLIER * 
+        Math.pow(fileLoc - FILE_MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FILE_SIZE, FILE_MAINTAINABILITY_SCORING_THRESHOLDS.SIZE_PENALTY_POWER)
       );
 
   // Score based on function count
-  const functionScore = fileFunctionCount <= MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FUNCTION_COUNT
+  const functionScore = fileFunctionCount <= FILE_MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FUNCTION_COUNT
     ? 100
     : 100 * Math.exp(
-        -MAINTAINABILITY_SCORING_THRESHOLDS.FUNCTION_PENALTY_MULTIPLIER * 
-        Math.pow(fileFunctionCount - MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FUNCTION_COUNT, MAINTAINABILITY_SCORING_THRESHOLDS.FUNCTION_PENALTY_POWER)
+        -FILE_MAINTAINABILITY_SCORING_THRESHOLDS.FUNCTION_PENALTY_MULTIPLIER * 
+        Math.pow(fileFunctionCount - FILE_MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FUNCTION_COUNT, FILE_MAINTAINABILITY_SCORING_THRESHOLDS.FUNCTION_PENALTY_POWER)
       );
   
   return Math.max(0, Math.round((sizeScore + functionScore) / 2));
@@ -136,25 +137,24 @@ export function calculateMaintainabilityScore(fileLoc: number, fileFunctionCount
  * 
  * Note: These weights are internal conventions and require empirical validation.
  */
-export function calculateWeightedScore(
-  complexityScore: number,
-  duplicationScore: number, 
-  maintainabilityScore: number
+export function calculateProjectWeightedScore(
+  projectComplexityScore: number,
+  projectDuplicationScore: number, 
+  projectMaintainabilityScore: number
 ): number {
-  return (complexityScore * PROJECT_SCORING_WEIGHTS.COMPLEXITY) + 
-         (maintainabilityScore * PROJECT_SCORING_WEIGHTS.MAINTAINABILITY) + 
-         (duplicationScore * PROJECT_SCORING_WEIGHTS.DUPLICATION);
+  return (projectComplexityScore * PROJECT_SCORING_WEIGHTS.COMPLEXITY) + 
+         (projectMaintainabilityScore * PROJECT_SCORING_WEIGHTS.MAINTAINABILITY) + 
+         (projectDuplicationScore * PROJECT_SCORING_WEIGHTS.DUPLICATION);
 }
 
 /**
- * Fonctions de pénalité individuelles progressives sans plafonds artificiels.
- * Suivent le principe de Pareto : les valeurs extrêmes doivent dominer le calcul.
+ * Individual progressive penalty functions without artificial ceilings.
+ * Follow the Pareto principle: extreme values should dominate the calculation.
  */
-
-function getComplexityPenalty(complexity: number): number {
+function getFileComplexityPenalty(complexity: number): number {
   // Convert complexity score to penalty using the same industry-standard curve
   // This ensures consistency between scoring and health calculation
-  const score = calculateComplexityScore(complexity);
+  const score = calculateFileComplexityScore(complexity);
   
   // Base penalty from score (0-100 score becomes 100-0 penalty)
   const basePenalty = 100 - score;
@@ -162,14 +162,14 @@ function getComplexityPenalty(complexity: number): number {
   // For extreme complexity (>100), add catastrophic penalties to emphasize technical debt
   // This makes complexity 1000+ clearly distinguishable from complexity 100
   if (complexity > 100) {
-    const extremePenalty = Math.pow((complexity - 100) / 100, HEALTH_PENALTY_CONSTANTS.COMPLEXITY.EXPONENTIAL_POWER) * HEALTH_PENALTY_CONSTANTS.COMPLEXITY.EXPONENTIAL_MULTIPLIER;
+    const extremePenalty = Math.pow((complexity - 100) / 100, FILE_HEALTH_PENALTY_CONSTANTS.COMPLEXITY.EXPONENTIAL_POWER) * FILE_HEALTH_PENALTY_CONSTANTS.COMPLEXITY.EXPONENTIAL_MULTIPLIER;
     return basePenalty + extremePenalty;
   }
   
   return basePenalty;
 }
 
-export function getDuplicationPenalty(duplicationRatio: number, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
+export function getFileDuplicationPenalty(duplicationRatio: number, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
   const mode = duplicationMode;
   
   // Use centralized configuration from DUPLICATION_LEVELS
@@ -188,37 +188,37 @@ export function getDuplicationPenalty(duplicationRatio: number, duplicationMode:
   
   if (percentage <= highThreshold) {
     // Linear penalty up to high threshold (8% strict vs 30% legacy)
-    return (percentage - excellentThreshold) * HEALTH_PENALTY_CONSTANTS.DUPLICATION.LINEAR_MULTIPLIER;
+    return (percentage - excellentThreshold) * FILE_HEALTH_PENALTY_CONSTANTS.DUPLICATION.LINEAR_MULTIPLIER;
   }
   
   // Exponential penalty beyond high threshold - NO CAP!
   // High duplication should devastate the score
-  const basePenalty = HEALTH_PENALTY_CONSTANTS.DUPLICATION.LINEAR_MAX_PENALTY;
+  const basePenalty = FILE_HEALTH_PENALTY_CONSTANTS.DUPLICATION.LINEAR_MAX_PENALTY;
   const exponentialPenalty = Math.pow(
-    (percentage - highThreshold) / HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_DENOMINATOR, 
-    HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_POWER
-  ) * HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_MULTIPLIER;
+    (percentage - highThreshold) / FILE_HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_DENOMINATOR, 
+    FILE_HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_POWER
+  ) * FILE_HEALTH_PENALTY_CONSTANTS.DUPLICATION.EXPONENTIAL_MULTIPLIER;
   
   return basePenalty + exponentialPenalty; // Can exceed 50+ for extreme duplication
 }
 
-function getSizePenalty(loc: number): number {
+function getFileSizePenalty(loc: number): number {
   
-  if (loc <= HEALTH_PENALTY_CONSTANTS.SIZE.EXCELLENT_THRESHOLD) return 0;
+  if (loc <= FILE_HEALTH_PENALTY_CONSTANTS.SIZE.EXCELLENT_THRESHOLD) return 0;
   
   // Progressive penalty following internal convention (Clean Code inspired)
-  if (loc <= HEALTH_PENALTY_CONSTANTS.SIZE.HIGH_THRESHOLD) {
+  if (loc <= FILE_HEALTH_PENALTY_CONSTANTS.SIZE.HIGH_THRESHOLD) {
     // Linear penalty up to 500 LOC
-    return (loc - HEALTH_PENALTY_CONSTANTS.SIZE.EXCELLENT_THRESHOLD) / HEALTH_PENALTY_CONSTANTS.SIZE.LINEAR_DIVISOR;
+    return (loc - FILE_HEALTH_PENALTY_CONSTANTS.SIZE.EXCELLENT_THRESHOLD) / FILE_HEALTH_PENALTY_CONSTANTS.SIZE.LINEAR_DIVISOR;
   }
   
   // Exponential penalty for massive files - NO CAP!
   // Files with 5000+ LOC should be severely penalized
-  const basePenalty = HEALTH_PENALTY_CONSTANTS.SIZE.LINEAR_MAX_PENALTY;
+  const basePenalty = FILE_HEALTH_PENALTY_CONSTANTS.SIZE.LINEAR_MAX_PENALTY;
   const exponentialPenalty = Math.pow(
-    (loc - HEALTH_PENALTY_CONSTANTS.SIZE.HIGH_THRESHOLD) / HEALTH_PENALTY_CONSTANTS.SIZE.EXPONENTIAL_DENOMINATOR, 
-    HEALTH_PENALTY_CONSTANTS.SIZE.EXPONENTIAL_POWER
-  ) * HEALTH_PENALTY_CONSTANTS.SIZE.EXPONENTIAL_MULTIPLIER;
+    (loc - FILE_HEALTH_PENALTY_CONSTANTS.SIZE.HIGH_THRESHOLD) / FILE_HEALTH_PENALTY_CONSTANTS.SIZE.EXPONENTIAL_DENOMINATOR, 
+    FILE_HEALTH_PENALTY_CONSTANTS.SIZE.EXPONENTIAL_POWER
+  ) * FILE_HEALTH_PENALTY_CONSTANTS.SIZE.EXPONENTIAL_MULTIPLIER;
   
   return basePenalty + exponentialPenalty; // Can exceed 40+ for massive files
 }
@@ -227,11 +227,11 @@ function getIssuesPenalty(issues: FileIssue[]): number {
   // Issues penalty without artificial caps - following Pareto principle
   const penalty = issues.reduce((currentPenalty, issue) => {
     switch (issue.severity) {
-      case 'critical': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.CRITICAL_PENALTY;
-      case 'high': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.HIGH_PENALTY;
-      case 'medium': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.MEDIUM_PENALTY;
-      case 'low': return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.LOW_PENALTY;
-      default: return currentPenalty + HEALTH_PENALTY_CONSTANTS.ISSUES.DEFAULT_PENALTY;
+      case 'critical': return currentPenalty + FILE_HEALTH_PENALTY_CONSTANTS.ISSUES.CRITICAL_PENALTY;
+      case 'high': return currentPenalty + FILE_HEALTH_PENALTY_CONSTANTS.ISSUES.HIGH_PENALTY;
+      case 'medium': return currentPenalty + FILE_HEALTH_PENALTY_CONSTANTS.ISSUES.MEDIUM_PENALTY;
+      case 'low': return currentPenalty + FILE_HEALTH_PENALTY_CONSTANTS.ISSUES.LOW_PENALTY;
+      default: return currentPenalty + FILE_HEALTH_PENALTY_CONSTANTS.ISSUES.DEFAULT_PENALTY;
     }
   }, 0);
   
@@ -240,14 +240,14 @@ function getIssuesPenalty(issues: FileIssue[]): number {
 }
 
 /**
- * Calculate health score using progressive penalties WITHOUT CAPS.
+ * Calculate file health score using progressive penalties WITHOUT CAPS.
  * Formula: 100 - Sum of Penalties (without artificial ceilings).
  * Extreme values receive extreme penalties following Rules of the Art.
  * 
  * @param file Object containing file metrics and issues.
- * @returns Health score from 0 to 100.
+ * @returns File health score from 0 to 100.
  */
-export function calculateHealthScore(file: { 
+export function calculateFileHealthScore(file: { 
   metrics: { 
     complexity: number; 
     loc: number; 
@@ -256,9 +256,9 @@ export function calculateHealthScore(file: {
   issues: FileIssue[]; 
 }, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
   
-  const complexityPenalty = getComplexityPenalty(file.metrics.complexity);
-  const duplicationPenalty = getDuplicationPenalty(file.metrics.duplicationRatio, duplicationMode);
-  const sizePenalty = getSizePenalty(file.metrics.loc);
+  const complexityPenalty = getFileComplexityPenalty(file.metrics.complexity);
+  const duplicationPenalty = getFileDuplicationPenalty(file.metrics.duplicationRatio, duplicationMode);
+  const sizePenalty = getFileSizePenalty(file.metrics.loc);
   const issuesPenalty = getIssuesPenalty(file.issues);
   
   const totalPenalty = complexityPenalty + duplicationPenalty + sizePenalty + issuesPenalty;
@@ -270,7 +270,7 @@ export function calculateHealthScore(file: {
  * Calculate criticism score for a file using original hypothesis weights
  * Higher score = more problematic file = more weight in final scores
  * 
- * Synchronized with calculateHealthScore to use actual file.issues array
+ * Synchronized with calculateFileHealthScore to use actual file.issues array
  * instead of approximating issue count from metrics.
  * 
  * Weights:
@@ -279,9 +279,9 @@ export function calculateHealthScore(file: {
  * - Base score: 1 (to avoid zero weights)
  * 
  * Note: Complexity is NOT included here to avoid double-counting since it's 
- * already weighted at 45% in the health score calculation.
+ * already weighted at 45% in the file health score calculation.
  */
-export function calculateCriticismScore(file: FileDetail): number {
+export function calculateFileCriticismScore(file: FileDetail): number {
   const impactWeight = 2.0;
   const issueWeight = 0.5;
   
@@ -290,7 +290,7 @@ export function calculateCriticismScore(file: FileDetail): number {
                  (file.dependencies?.outgoingDependencies || 0) + 
                  (file.dependencies?.isInCycle ? 5 : 0); // Penalty for circular dependencies
   
-  // Use actual issues array instead of approximation - synchronized with calculateHealthScore
+  // Use actual issues array instead of approximation - synchronized with calculateFileHealthScore
   const criticalIssues = file.issues.filter(i => i.severity === 'critical').length;
   const highIssues = file.issues.filter(i => i.severity === 'high').length;
   const mediumIssues = file.issues.filter(i => i.severity === 'medium').length;

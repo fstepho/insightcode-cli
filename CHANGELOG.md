@@ -80,7 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Architectural Impact Analysis**: InsightCode now builds a dependency graph to calculate the `impact` of each file.
 - **Advanced Architectural Metrics**: The analysis now identifies "Silent Killers" (high-impact, low-complexity files) and calculates `complexityStdDev`.
-- **Enhanced Reporter**: The terminal output now displays the `Criticism Score`, `Impact`, and a new `Architectural Risks` section.
+- **Enhanced Reporter**: The terminal output now displays the File `Criticism Score`, `Impact`, and a new `Architectural Risks` section.
 - **Richer Issue Details**: Issues now include a `ratio` display for better context (e.g., "2.5x limit").
 - **Actionable Suggestions**: The reporter provides "Quick Wins" with potential score gains to guide refactoring.
 - **Improved Readability**: Numbers in the report now have thousand separators.
