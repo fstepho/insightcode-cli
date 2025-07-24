@@ -5,16 +5,18 @@ All notable changes to InsightCode CLI will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.0] - 2025-07-21
+## [0.7.0] - 2025-07-25
 
 ### Added
 - **Enhanced Report Generator**: Function-level critical issue tracking with centralized config
 - **Improved Markdown Generation**: Better insights and findings presentation
 - **Centralized Grading Config**: Introduced GRADE_CONFIG for consistency across components
 - **Unified Grade Type**: Added type-safe Grade type definition
-- **Function-Level Analysis**: Enhanced complexity metrics with distinct operation counting
+- **Function-Level Analysis**: Enhanced complexity metrics with distinct operation counting and severity-based sorting
 - **Strict Duplication Mode**: Added strict duplication detection with rigorous thresholds
-- **Enhanced Scoring Utilities**: New centralized scoring functions and utilities
+- **Enhanced Scoring Utilities**: New centralized scoring functions and utilities with deprecated comment removal
+- **CriticismScore Documentation**: New comprehensive guide for project scoring methodology
+- **Updated Benchmarks**: Fresh benchmark data for 2025-07-21 across all test projects
 
 ### Changed
 - **Refactored Reporter and Scoring Modules**: Improved structure and harmonization for better maintainability
@@ -24,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Removed Legacy Configs**: Simplified codebase for clarity and reduced technical debt
 - **Aligned Grading**: Grading now aligned with industry standards
 - **Improved Type Definitions**: Separated file-level vs. function-level issues
+- **Scoring Constants Refinement**: Renamed `EXPONENTIAL_MULTIPLIER` to `QUADRATIC_PENALTY_MULTIPLIER` for mathematical precision
+- **Centralized Labeling Functions**: Moved labeling functions to scoring.utils.ts for better organization
+- **Enhanced Documentation**: Updated scoring methodology across multiple technical documentation files
 
 ### Fixed
 - **Commit Message Handling**: Improved processing and validation of commit messages

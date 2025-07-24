@@ -70,70 +70,96 @@ insightcode --format=ci         # CI/CD friendly output
 
 ## 📊 Example Output
 
-Real analysis of the **React** project using `insightcode --production react`:
+Real analysis of the **Angular** project using `insightcode --production ./angular/packages`:
 
 ```
 🔍 Analyzing code quality...
+📁 Found 4282 files
+📊 Extracting file details...
+⚙️  Processing metrics...
+📈 Calculating overview...
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ packages vlatest (local, 0 stars)                                                                          │
+│ Analysis from Jul 25, 2025, took 0.0s                                                                      │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-  ┌──────────────────────────────────────────┐
-  │                                          │
-  │   📊   InsightCode Analysis Report   📊  │
-  │                                          │
-  └──────────────────────────────────────────┘
-  
+┌──────────────────────────┬────────────────────────────────────────────────────────────────────┬────────────┐
+│ OVERVIEW: GRADE  B  (85) │ 1174 critical files found requiring attention                      │            │
+├──────────────────────────┼────────────────────────────────────────────────────────────────────┼────────────┤
+│ Complexity               │ ██████████████████████████████████████████████████░░░░░░░░░░░░░░   │ 78         │
+│                          │                                                                    │            │
+│ Duplication              │ █████████████████████████████████████████████████████████████░░░   │ 96 (5%)    │
+│                          │                                                                    │            │
+│ Maintainability          │ ██████████████████████████████████████████████████████░░░░░░░░░░   │ 85         │
+└──────────────────────────┴────────────────────────────────────────────────────────────────────┴────────────┘
 
-╭─ Project Overview ──────────────────────────────────
-  Project:     react
-  Files:       1381
-  Total Lines: 197,953
+┌─────────────────────────────────────────────────────┬──────────────────────────────────────────────────────┐
+│ KEY STATS                                           │ BUSINESS IMPACT                                      │
+├─────────────────────────────────────────────────────┼──────────────────────────────────────────────────────┤
+│ Total Files     4282                                │ 🚨 High Maintenance Cost        885                  │
+│ Total LOC       582k                                │ 🐌 Slow to Change Files         556                  │
+│ Avg Complexity  10.7                                │ 🔗 Tightly Coupled Files        783                  │
+└─────────────────────────────────────────────────────┴──────────────────────────────────────────────────────┘
 
-╭─ Overall Code Quality Score ────────────────────────
+┌ CRITICAL FILES REQUIRING ATTENTION ────────────────────────────────────────────────────────────────────────┐
+│ S  │ File Path                                      │ Metrics               │ Primary Issue                │
+├────┼────────────────────────────────────────────────┼───────────────────────┼──────────────────────────────┤
+│ 0  │ common/locales/closure-locale.ts               │ C:  548 D:  0% L:  1k │ 💀 complexity (critical)     │
+│ 0  │ compiler-cli/.../type_check_block.ts           │ C:  451 D:  0% L:  2k │ 💀 complexity (critical)     │
+│ 0  │ compiler/src/output/output_ast.ts              │ C:  391 D:  0% L:  2k │ 💀 complexity (critical)     │
+│ 0  │ compiler/src/ml_parser/lexer.ts                │ C:  322 D:  8% L:  1k │ 💀 complexity (critical)     │
+│ 0  │ compiler/.../expression.ts                     │ C:  311 D:  0% L:  1k │ 💀 complexity (critical)     │
+│ 0  │ compiler-cli/.../handler.ts                    │ C:  306 D:  0% L:  2k │ 💀 complexity (critical)     │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-    F   47.0/100
+DEEP DIVE: KEY FUNCTION ANALYSIS
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
+🎯 reifyCreateOperations in compiler/src/template/pipeline/src/phases/reify.ts
+   Metrics: Complexity: 86 | Lines: 359 | Params: 2
+   Detected Issues:
+     - critical-complexity (critical)    : Severely impacts maintainability
+     - long-function (high)              : Should be split into smaller functions
+     - deep-nesting (medium)             : Hard to read and test
+     - multiple-responsibilities (medium): Clean separation of concerns
+· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · 
 
-╭─ Core Metrics ──────────────────────────────────────
-  Complexity:      ███████░░░░░░░░░░░░░  20.7 (High)
-  Duplication:     ███████████░░░░░░░░░  44.2% (Very High)
-  Maintainability: ███████████░░░░░░░░░  57/100 (Poor)
+🎯 resolve in compiler-cli/.../handler.ts
+   Metrics: Complexity: 84 | Lines: 501 | Params: 3
+   Detected Issues:
+     - critical-complexity (critical)  : Severely impacts maintainability
+     - long-function (high)            : Should be split into smaller functions
+     - multiple-responsibilities (high): Clean separation of concerns
+     - deep-nesting (medium)           : Hard to read and test
+     - impure-function (low)           : Side effects make testing harder
+· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · 
 
-╭─ ⚠️ Top 5 Critical Files to Address ────────────────
+🎯 getDateFormatter in common/src/i18n/format_date.ts
+   Metrics: Complexity: 82 | Lines: 309 | Params: 1
+   Detected Issues:
+     - critical-complexity (critical)    : Severely impacts maintainability
+     - long-function (high)              : Should be split into smaller functions
+     - multiple-responsibilities (medium): Clean separation of concerns
+· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · 
 
-  1. react/packages/react-reconciler/src/ReactFiberBeginWork.js
-    Criticity Score: 459  |  Impact: 3 dependents
-      🟠 High Complexity: 451 (23x above limit)
-      🟠 Very Large File: 3,179 lines (11x above limit)
-      🟠 High Duplication: 15.0% detected
+🎯 transformExpressionsInOp in compiler/.../expression.ts
+   Metrics: Complexity: 72 | Lines: 152 | Params: 3
+   Detected Issues:
+     - critical-complexity (critical)  : Severely impacts maintainability
+     - long-function (high)            : Should be split into smaller functions
+     - multiple-responsibilities (high): Clean separation of concerns
+     - deep-nesting (medium)           : Hard to read and test
+· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · 
 
-  2. react/packages/react-reconciler/src/ReactFiberCommitWork.js
-    Criticity Score: 801  |  Impact: 1 dependents
-      🟠 High Complexity: 797 (40x above limit)
-      🟠 Very Large File: 3,704 lines (12x above limit)
-
-  3. react/packages/react-reconciler/src/ReactFiberWorkLoop.js
-    Criticity Score: 669  |  Impact: 23 dependents
-      🟠 High Complexity: 621 (31x above limit)
-      🟠 Very Large File: 3,570 lines (12x above limit)
-
-  4. react/packages/react-dom-bindings/src/client/ReactFiberConfigDOM.js
-    Criticity Score: 747  |  Impact: 8 dependents
-      🟠 High Complexity: 729 (36x above limit)
-      🟠 Very Large File: 4,273 lines (14x above limit)
-
-  5. react/compiler/packages/babel-plugin-react-compiler/src/HIR/BuildHIR.ts
-    Criticity Score: 416  |  Impact: 0 dependents
-      🟠 High Complexity: 414 (21x above limit)
-      🟠 Very Large File: 3,883 lines (13x above limit)
-
-╭─ 💡 Quick Wins to Improve Score ────────────────────
-  › Refactor the 1 most complex file(s) for a potential gain of ~+3 pts.
-  › Split the 3 largest file(s) for a potential gain of ~+8 pts.
-  › Abstract repeated code in 727 file(s) for a potential gain of ~+6 pts.
-
-
-──────────────────────────────────────────────────────────
-  ✅ Analysis complete! Run regularly to maintain code quality.
-     Report generated on 7/3/2025, 9:27:56 PM
+🎯 analyze in compiler-cli/.../handler.ts
+   Metrics: Complexity: 59 | Lines: 487 | Params: 2
+   Detected Issues:
+     - critical-complexity (critical)  : Severely impacts maintainability
+     - long-function (high)            : Should be split into smaller functions
+     - god-function (high)             : Violates Single Responsibility
+     - multiple-responsibilities (high): Clean separation of concerns
+     - deep-nesting (medium)           : Hard to read and test
+     - impure-function (low)           : Side effects make testing harder
 ```
 
 ## 📐 How It Works
@@ -297,6 +323,11 @@ The `--json` flag outputs comprehensive analysis results in a structured format.
 ## 🗺️ Roadmap
 
 ### What's New (v0.7.0) ✅
+- **🔍 Enhanced Function-Level Analysis**: Better complexity breakdown with severity-based sorting to identify the most critical functions
+- **🎯 Strict Duplication Mode**: New `--strict-duplication` flag for industry-standard thresholds (3%/8%/15%)
+- **📊 Improved Reports**: Better insights and findings presentation with function-level critical issue tracking
+- **📚 New Documentation**: Comprehensive CriticismScore guide to help understand project scoring methodology
+- **📈 Updated Benchmarks**: Fresh analysis data across popular open-source projects for better context
 
 ### v0.6.0 ✅ **Major Release - BREAKING CHANGES**
 - **🚨 CLI Interface Redesign**: Analysis is now the default action - `analyze` subcommand removed
@@ -391,4 +422,4 @@ MIT - Use it, fork it, improve it!
 
 ---
 
-**Latest**: v0.6.0 | **Downloads**: [![npm](https://img.shields.io/npm/dm/insightcode-cli.svg)](https://www.npmjs.com/package/insightcode-cli) | **Stars**: ⭐ the repo if you find it useful!
+**Latest**: v0.7.0 | **Downloads**: [![npm](https://img.shields.io/npm/dm/insightcode-cli.svg)](https://www.npmjs.com/package/insightcode-cli) | **Stars**: ⭐ the repo if you find it useful!
