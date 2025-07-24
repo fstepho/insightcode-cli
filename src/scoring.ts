@@ -29,7 +29,7 @@ import { percentageToRatio, ratioToPercentage, DUPLICATION_SCORING } from './sco
  */
 export function calculateComplexityScore(complexity: number): number {
   // Use empirically validated coefficients while maintaining table-driven configuration
-  const { EXCELLENT, CRITICAL, LINEAR_PENALTY_RATE, EXPONENTIAL_BASE, EXPONENTIAL_POWER, EXPONENTIAL_MULTIPLIER } = COMPLEXITY_SCORING_THRESHOLDS;
+  const { EXCELLENT, CRITICAL, LINEAR_PENALTY_RATE, EXPONENTIAL_BASE, EXPONENTIAL_POWER, QUADRATIC_PENALTY_MULTIPLIER } = COMPLEXITY_SCORING_THRESHOLDS;
   
   // Phase 1: McCabe "excellent" threshold - excellent code (≤10)
   if (complexity <= EXCELLENT) {
@@ -46,7 +46,7 @@ export function calculateComplexityScore(complexity: number): number {
   if (complexity <= 50) {
     const base = 100 - (CRITICAL - EXCELLENT) * LINEAR_PENALTY_RATE; // 70 (from linear phase end)
     const range = complexity - CRITICAL; // 0-30 range
-    const quadraticPenalty = Math.pow(range / 30, 2) * EXPONENTIAL_MULTIPLIER; // 40 points penalty
+    const quadraticPenalty = Math.pow(range / 30, 2) * QUADRATIC_PENALTY_MULTIPLIER; // 40 points penalty
     return Math.round(base - quadraticPenalty);
   }
   

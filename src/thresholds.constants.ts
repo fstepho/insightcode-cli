@@ -83,12 +83,12 @@ export const PROJECT_SCORING_WEIGHTS: ScoringWeights = {
  * - Superior calibration: Provides appropriate penalties for extreme values
  * - Mathematical coherence: Universal 1.8 power creates consistent exponential behavior system-wide
  * 
- * EXPONENTIAL_MULTIPLIER (40):
+ * QUADRATIC_PENALTY_MULTIPLIER (40):
  * - Calibrated for quadratic range penalty: 70→30 points over complexity 20-50
  * - Mathematical design: 40-point span covers exactly two grade levels (C→D→F)
  * - Validation: ✅ Complexity 50 (NIST "high risk") = exactly 30 points
  * 
- * Validation Status: LINEAR_PENALTY_RATE + EXPONENTIAL_MULTIPLIER ✅ validated
+ * Validation Status: LINEAR_PENALTY_RATE + QUADRATIC_PENALTY_MULTIPLIER ✅ validated
  * ✅ EXPONENTIAL_POWER HARMONIZATION COMPLETE: All exponential penalties use 1.8
  * 
  * Philosophy: NO ARTIFICIAL FLOOR - extreme complexity (1000+) can reach 0 score
@@ -102,7 +102,7 @@ export const COMPLEXITY_SCORING_THRESHOLDS = {
   LINEAR_PENALTY_RATE: 3,     // 3 points lost per complexity unit: creates optimal 100→70 progression (superior calibration from documentation)
   EXPONENTIAL_BASE: 30,       // Base 30: calibrated to create appropriate penalty curve steepness for practical scoring
   EXPONENTIAL_POWER: 1.8,     // Power 1.8: harmonized with duplication penalties for mathematical consistency (superior calibration)
-  EXPONENTIAL_MULTIPLIER: 40  // Multiplier 40: ensures significant penalty for high complexity (>20) while maintaining score range
+  QUADRATIC_PENALTY_MULTIPLIER: 40  // Multiplier 40: ensures significant penalty for high complexity (>20) while maintaining score range
 } as const;
 
 /**

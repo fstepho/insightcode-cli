@@ -91,7 +91,7 @@ COMPLEXITY_SCORING_THRESHOLDS: {
   LINEAR_PENALTY_RATE: 3,     // 3 points lost per complexity unit (superior calibration)
   EXPONENTIAL_BASE: 30,       // Base score for exponential phase
   EXPONENTIAL_POWER: 1.8,     // Harmonized exponential growth across all penalties
-  EXPONENTIAL_MULTIPLIER: 40, // Penalty magnitude for high complexity
+  QUADRATIC_PENALTY_MULTIPLIER: 40, // Penalty magnitude for high complexity
   // NO MIN_SCORE - allows scores to reach 0 for extreme complexity (aligned with "no artificial caps" philosophy)
   // Implements Rules of the Art: Linear → Quadratic → Exponential
   // Phase 1 (≤10): Excellent (100 points)
