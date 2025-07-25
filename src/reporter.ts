@@ -285,13 +285,19 @@ function generateDeepDive(analysis: AnalysisResult): string[] {
             lines.push(Ansi.gray('· '.repeat(TOTAL_WIDTH / 2)));
         }
         
-        lines.push(`\n🎯 ${Ansi.bold(func.name)} in ${Ansi.yellow(truncatePath(func.file, 50))}`);
+        // Get the highest severity issue color for the function
+        const issueData = formatFunctionIssuesForDeepDive(func, 'cli');
+        let functionColor = Ansi.bold;
+        if (issueData.hasIssues && issueData.sortedIssues.length > 0) {
+            const highestSeverity = issueData.sortedIssues[0].severity;
+            const severityColorFunc = getSeverityColorForIssue(highestSeverity);
+            functionColor = (s: string) => Ansi.bold(severityColorFunc(s));
+        }
+        
+        lines.push(`\n🎯 ${functionColor(func.name)} in ${Ansi.white(truncatePath(func.file, 50))}`);
         
         // Use inline metrics formatting for CLI
         lines.push(`   ${Ansi.gray('Metrics:')} Complexity: ${Ansi.orange(func.complexity.toString())} | Lines: ${Ansi.orange(func.loc.toString())} | Params: ${Ansi.orange(func.parameterCount.toString())}`);
-
-        // Use harmonized issue formatting with implications
-        const issueData = formatFunctionIssuesForDeepDive(func, 'cli');
         if (issueData.hasIssues) {
             lines.push(`   ${Ansi.bold('Detected Issues:')}`);
             
