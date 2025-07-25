@@ -21,6 +21,7 @@ import { calculateFileHealthScore } from './scoring';
 // config.manager removed - using global configurations from scoring.utils.ts
 import { OverviewCalculator } from './analyzer/OverviewCalculator';
 import { ContextGenerator } from './analyzer/ContextGenerator';
+import { ProjectDiscovery } from './analyzer/ProjectDiscovery';
 
 
 /**
@@ -125,8 +126,16 @@ async function executeMetricsProcessingStep(context: AnalysisContext): Promise<v
   const filesWithDuplication = detectDuplication(context.rawFileDetails, duplicationMode);
   
   // 2. Analyze dependencies  
-  // Use the analysis path as project root, not the git repo root
-  const analysisProjectRoot = path.resolve(context.inputPath);
+  // Use ProjectDiscovery only if the input path doesn't have its own project markers
+  const resolvedInputPath = path.resolve(context.inputPath);
+  const discoveredRoot = ProjectDiscovery.findProjectRoot(context.inputPath);
+  
+  // If user explicitly specified a path different from the discovered root,
+  // respect their choice (they might want to analyze a specific subfolder)
+  const analysisProjectRoot = (discoveredRoot === resolvedInputPath) 
+                              ? discoveredRoot 
+                              : resolvedInputPath;
+  
   const dependencyAnalyzer = new UniversalDependencyAnalyzer({
     projectRoot: analysisProjectRoot,
     analyzeCircularDependencies: true,
