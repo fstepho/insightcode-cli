@@ -38,6 +38,11 @@ const UTILITY_PATTERNS = [
   '**/coverage/**',
   "**/vendor/**",
   "**/temp-analysis/**",
+  // Minified files (excluded in production mode)
+  "**/*-min.js",
+  "**/*.min.js",
+  "**/*-min.css",
+  "**/*.min.css",
   // Fichiers de test problématiques causant des stack overflow/memory issues
   "**/binderBinaryExpressionStress*",
   "**/binderBinaryExpressionStressJs*",
