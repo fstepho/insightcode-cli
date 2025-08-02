@@ -156,3 +156,5 @@ docs-archive
 .ai.md.new
 .skip-ai-hook
 .ai.md.backup
+
+benchmarks/sq-vs-ic/details
