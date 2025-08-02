@@ -346,7 +346,7 @@ The `--json` flag outputs comprehensive analysis results in a structured format.
 
 ### What's New (v0.4.0) ✅
 - **Advanced Criticality Engine**: Scoring weighted by file complexity and architectural impact
-- **Architectural Metrics**: Detection of "Silent Killers" and complexity distribution analysis
+- **Architectural Metrics**: High-impact file detection and complexity distribution analysis
 - **Enhanced JSON Output**: Complete metrics exposure for CI/CD and external tools
 - **Academic Methodology**: Research-based best practices for metric aggregation
 

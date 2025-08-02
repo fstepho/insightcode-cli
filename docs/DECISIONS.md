@@ -108,7 +108,7 @@ Format: **Date | Decision | Reason | Impact**
 
 **Impact**: 
 - **New capabilities**: Rich architectural analysis, pattern detection (async/await, error handling, TypeScript usage), dependency mapping, and complexity breakdown at function level
-- **Enhanced benchmarking**: Detailed context reports with code samples, architectural insights, and "silent killer" detection
+- **Enhanced benchmarking**: Detailed context reports with code samples, architectural insights, and high-impact file detection
 - **Better UX**: More actionable insights for developers with specific function-level complexity analysis and architectural risk assessment
 - **Future-ready**: Foundation for AI-powered code analysis and recommendations
 
@@ -129,8 +129,8 @@ Format: **Date | Decision | Reason | Impact**
 ---
 
 ## 2025-07-03: **Introduction of Advanced Architectural Metrics**
-**Decision**: The core analysis (`analyzer.ts`) now calculates and exposes two new advanced metrics: `complexityStdDev` (Standard Deviation) and `silentKillers` (architecturally risky files).
-**Reason**: To provide deeper architectural insights beyond a simple quality score. `complexityStdDev` identifies "monolith" files, while `silentKillers` highlights high-impact files that might otherwise go unnoticed.
+**Decision**: The core analysis (`analyzer.ts`) now calculates and exposes advanced architectural metrics: `complexityStdDev` (Standard Deviation) for identifying complexity distribution patterns.
+**Reason**: To provide deeper architectural insights beyond a simple quality score. `complexityStdDev` identifies "monolith" files and complexity outliers. High-impact files are detected through the criticism score calculation that weights dependency impact heavily.
 **Impact**: The CLI provides significantly more value, offering users not just a grade, but a true profile of their project's architecture and hidden risks.
 
 
