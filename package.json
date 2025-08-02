@@ -1,6 +1,6 @@
 {
   "name": "insightcode-cli",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "TypeScript code quality analyzer that runs 100% locally",
   "main": "dist/cli.js",
   "bin": {

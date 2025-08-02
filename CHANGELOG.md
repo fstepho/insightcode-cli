@@ -5,6 +5,25 @@ All notable changes to InsightCode CLI will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.1] - 2025-08-02
+
+### Added
+- **Benchmark Comparison Script**: Comprehensive benchmarking tool to compare InsightCode and SonarQube analysis across multiple projects
+- **Enhanced Benchmarking Infrastructure**: New setup documentation and automated comparison reporting in Markdown format
+- **excludePatterns Option**: Added excludePatterns to AnalysisOptions for more flexible file exclusion
+
+### Changed
+- **Production Mode Improvements**: Enhanced minified file pattern detection for better production code analysis
+- **Documentation Updates**: Improved clarity in architectural metrics terminology and code quality guides
+- **Harmonized Exclusion Patterns**: Consistent exclusion patterns between InsightCode and SonarQube for fair comparisons
+
+### Removed
+- **Obsolete Scripts**: Removed obsolete weight reference script and associated documentation
+
+### Fixed
+- **GitIgnore Updates**: Added benchmark details to .gitignore for cleaner repository structure
+- **Documentation Consistency**: Updated references in CODE_QUALITY_GUIDE for clearer critical file identification
+
 ## [0.7.0] - 2025-07-25
 
 ### Added
@@ -197,7 +216,10 @@ insightcode --json > report.json
 
 ---
 
-[Unreleased]: https://github.com/fstepho/insightcode-cli/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/fstepho/insightcode-cli/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/fstepho/insightcode-cli/compare/v0.7.0...v0.7.1
+[0.7.0]: https://github.com/fstepho/insightcode-cli/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/fstepho/insightcode-cli/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/fstepho/insightcode-cli/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/fstepho/insightcode-cli/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/fstepho/insightcode-cli/compare/v0.2.0...v0.3.0
