@@ -24,7 +24,7 @@ The overall score translates to a grade:
 
 | ✔️ Good Practice | 💡 Why? | 🛠️ InsightCode Command |
 |------------------|---------|------------------------|
-| **Focus on Criticality** | The tool guides you to the most important files. | Check `Top 5 Critical Files` & `Architectural Risks` first. |
+| **Focus on Criticality** | The tool guides you to the most important files. | Check `Critical Files Requiring Attention` section first. |
 | **Analyze Production Code** | Avoid noise from tests and configuration files. | `insightcode --production` |
 | **Track Trends Over Time** | See if quality improves or degrades with new features. | Integrate the JSON output in your CI/CD pipeline. |
 | **Combine with Human Review** | Context is king! A score can't understand business logic. | The score is a conversation starter, not a judgment. |
@@ -48,11 +48,11 @@ Low score (<60)?                High score (>80)?
 Check the report for:          Manual review:
 - High Complexity?             - Is complexity justified?
 - High Duplication?              └─ Yes: Algorithm, parser, compatibility layer
-- "Silent Killers"?              └─ No: Spaghetti code, legacy issues
+- High impact files?              └─ No: Spaghetti code, legacy issues
       │                              │
       ▼                              ▼
 Action: Review critical files  Action: Team review → 
-and architectural risks.       Refactor/Document/Accept
+requiring attention.           Refactor/Document/Accept
 ````
 
 ## 🛠️ Useful InsightCode Commands
@@ -75,8 +75,7 @@ insightcode --exclude "**/*.spec.ts,**/vendor/**"
 
 ### High Priority (Fix Soon)
 
-  - Files listed in the **Top 5 Critical Files**.
-  - Files identified as **Architectural Risks (Silent Killers)**.
+  - Files listed in the **Critical Files Requiring Attention** section.
   - Duplication \>40% in core production code.
 
 ### Medium Priority (Plan Refactoring)
