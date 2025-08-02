@@ -286,6 +286,7 @@ export interface AnalysisOptions {
   projectPath: string;
   production?: boolean;
   strictDuplication?: boolean;
+  excludePatterns?: string[];
 }
 
 export interface CliOptions {

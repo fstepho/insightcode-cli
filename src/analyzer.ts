@@ -80,7 +80,8 @@ export async function analyze(
  */
 async function executeASTBuildStep(context: AnalysisContext): Promise<void> {  
   const astBuildOptions: ASTBuildOptions = {
-    production: context.options.production
+    production: context.options.production,
+    excludePatterns: context.options.excludePatterns
   };
   
   context.astData = await astBuilder.build(context.inputPath, astBuildOptions);

@@ -124,7 +124,8 @@ async function runAnalysis(path: string, options: CliOptions) {
       format: format,
       projectPath: path,
       production: options.production,
-      strictDuplication: options.strictDuplication
+      strictDuplication: options.strictDuplication,
+      excludePatterns: options.exclude
     };
     
     // Analyze using new flow
