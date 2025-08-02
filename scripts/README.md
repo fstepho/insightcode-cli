@@ -58,14 +58,6 @@ npm run test:duplication-modes
 - 🔍 Tests various duplication detection strategies
 - 📊 Performance comparison between modes
 
-### `fix-weight-references.js`
-**Fix weight reference inconsistencies**
-```bash
-npm run fix-weight-refs
-```
-- 🔧 Fixes weight reference inconsistencies in codebase
-- 📝 Updates documentation to match implementation
-
 ### `discover-rules.js`
 **Discover linting and quality rules**
 ```bash

@@ -19,7 +19,6 @@
     "generate-docs": "node scripts/validate-docs.js generate",
     "validate-coefficients": "node scripts/validate-coefficients.js",
     "validate-powers": "node scripts/validate-power-coefficients.js",
-    "fix-weight-refs": "node scripts/fix-weight-references.js",
     "test:duplication-modes": "npm run build && node scripts/test-duplication-modes.js",
     "qa": "npm run build && npm test && npm run validate-docs",
     "prepare": "husky",
