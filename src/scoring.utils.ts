@@ -381,43 +381,51 @@ export function isFileEmblematic(filePath: string, emblematicFiles: EmblematicFi
 }
 
 export function getCriticalFiles(details: FileDetail[], emblematicFiles: EmblematicFiles | undefined): FileDetail[] {
+  // Import the criticism score calculation
+  const { calculateFileCriticismScore } = require('./scoring');
+  
   return details
     .filter(d => d.healthScore < GRADE_THRESHOLDS.C || d.issues.some(i => i.severity === 'critical' || i.severity === 'high'))
     .sort((a, b) => {
-      // Priority 0: Emblematic files first within same severity groups
-      const aIsEmblematic = isFileEmblematic(a.file, emblematicFiles);
-      const bIsEmblematic = isFileEmblematic(b.file, emblematicFiles);
+      // Priority 0: Calculate criticism scores for architectural importance
+      const aCriticismScore = calculateFileCriticismScore(a);
+      const bCriticismScore = calculateFileCriticismScore(b);
       
-      // Priority 1: Critical issues count (descending)
+      // Priority 1: Files with critical issues AND high architectural impact
       const aCriticalCount = a.issues.filter(i => i.severity === 'critical').length;
       const bCriticalCount = b.issues.filter(i => i.severity === 'critical').length;
+      
+      // If both have critical issues, sort by criticism score (architectural impact)
+      if (aCriticalCount > 0 && bCriticalCount > 0) {
+        if (aCriticismScore !== bCriticismScore) {
+          return bCriticismScore - aCriticismScore;
+        }
+      }
+      
+      // If only one has critical issues, it comes first
       if (aCriticalCount !== bCriticalCount) {
         return bCriticalCount - aCriticalCount;
       }
       
-      // Priority 1.5: Within same critical count, emblematic files first
-      if (aCriticalCount === bCriticalCount && aIsEmblematic !== bIsEmblematic) {
-        return aIsEmblematic ? -1 : 1;
+      // Priority 2: For files without critical issues, sort by criticism score
+      // This ensures architectural hubs like view.ts are prioritized
+      if (aCriticismScore !== bCriticismScore) {
+        return bCriticismScore - aCriticismScore;
       }
       
-      // Priority 2: High issues count (descending)
+      // Priority 3: High issues count (descending)
       const aHighCount = a.issues.filter(i => i.severity === 'high').length;
       const bHighCount = b.issues.filter(i => i.severity === 'high').length;
       if (aHighCount !== bHighCount) {
         return bHighCount - aHighCount;
       }
       
-      // Priority 2.5: Within same high count, emblematic files first
-      if (aHighCount === bHighCount && aIsEmblematic !== bIsEmblematic) {
-        return aIsEmblematic ? -1 : 1;
-      }
-      
-      // Priority 3: File health score (ascending - worst first)
+      // Priority 4: File health score (ascending - worst first)
       if (a.healthScore !== b.healthScore) {
         return a.healthScore - b.healthScore;
       }
       
-      // Priority 4: Complexity (descending)
+      // Priority 5: Complexity (descending) as final tiebreaker
       return b.metrics.complexity - a.metrics.complexity;
     })
     .slice(0, 10);
