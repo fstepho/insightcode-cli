@@ -500,6 +500,12 @@ function generatePatternAnalysis(functionsWithFile: FunctionWithFile[]): string 
         });
     });
 
+    // Quality Patterns
+    if (patternCounts.quality.size > 0) {
+        markdown += `### 🎯 Quality Patterns\n\n`;
+        markdown += generatePatternTable(patternCounts.quality, 'quality');
+    }
+
     // Caractéristiques architecturales (neutres)
     const architecturalCharacteristics = Array.from(patternCounts.architecture.entries())
         .filter(([pattern]) => ['async-heavy'].includes(pattern));
@@ -508,6 +514,12 @@ function generatePatternAnalysis(functionsWithFile: FunctionWithFile[]): string 
         markdown += `### 🏗️ Architectural Characteristics\n\n`;
         markdown += generatePatternTable(new Map(architecturalCharacteristics), 'architecture');
     }
+    
+    // Return empty string if no patterns found to avoid showing empty section
+    if (patternCounts.quality.size === 0 && architecturalCharacteristics.length === 0) {
+        return '';
+    }
+    
     
     return markdown;
 }
