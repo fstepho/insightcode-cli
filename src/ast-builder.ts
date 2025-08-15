@@ -106,7 +106,7 @@ class ASTBuilder {
         const relativePath = path.relative(targetPath, filePath);
         
         files.push({
-          filePath: normalizePath(filePath),
+          filePath: filePath, // Keep absolute path intact for file operations
           sourceFile,
           content,
           relativePath: normalizePath(relativePath)
@@ -127,6 +127,17 @@ class ASTBuilder {
    * Find all TypeScript/JavaScript files in the given path
    */
   private async findFiles(targetPath: string, options: ASTBuildOptions): Promise<string[]> {
+    // Check if the path exists before trying to glob
+    if (!fs.existsSync(targetPath)) {
+      throw new Error(`Project path does not exist: ${targetPath}`);
+    }
+    
+    // Check if it's a directory
+    const stats = fs.statSync(targetPath);
+    if (!stats.isDirectory()) {
+      throw new Error(`Project path is not a directory: ${targetPath}`);
+    }
+    
     const patterns = ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'];
     let ignore = [...DEFAULT_EXCLUDE, ...(options.excludePatterns || [])];
     

@@ -2,115 +2,215 @@
 
 import { SourceFile, Node, SyntaxKind } from 'ts-morph';
 import { FunctionAnalysis, FunctionIssue } from './types';
-import { 
-  getFunctionName, 
-  getFunctionLineCount, 
+import {
+  getFunctionName,
+  getFunctionLineCount,
   getFunctionParameterCount,
-  hasAsyncModifier,
-  isNestingNode
+  getMaxNestingDepth,
+  checkFunctionNaming,
+  hasImpureOperations,
+  countResponsibilities,
+  countDistinctOperations,
+  analyzeResponsibilities,
+  clearCache
 } from './ast-helpers';
-import { calculateFunctionComplexity } from './file-detail-builder';
 import { CONTEXT_EXTRACTION_THRESHOLDS } from './thresholds.constants';
 import { COMPLEXITY_LEVELS } from './scoring.utils';
+import { calculateFunctionComplexity } from './file-detail-builder';
+
+// ========== CONFIGURATION CONSTANTS ==========
+const ANALYSIS_THRESHOLDS = {
+  GOD_FUNCTION_OPERATIONS: 20,
+  GOD_FUNCTION_COMPLEXITY: 30,
+  GOD_FUNCTION_LINES: 100,
+  GOD_FUNCTION_MIN_CRITERIA: 2,
+  
+  NOTABLE_COMPLEXITY: 5,
+  NOTABLE_LINES: 20,
+  NOTABLE_PARAMS: 3,
+  
+  HIGH_PARAM_COUNT: 7,
+  ERROR_HANDLING_RATIO: 0.2,
+  
+  // Cache settings
+  BATCH_SIZE: 50 // Process functions in batches to manage memory
+} as const;
 
 /**
  * Dedicated analyzer for building comprehensive function analysis
  * Centralizes all function-level analysis logic in one place
  */
 class FunctionAnalyzer {
+  private functionCache = new WeakMap<Node, FunctionAnalysis>();
+  private processedNodes = new WeakSet<Node>();
 
   /**
    * Build comprehensive function analysis from source file
-   * Combines metrics calculation with issue detection
+   * Optimized with batching and caching
    */
   buildFunctionAnalysis(sf: SourceFile, filePath: string): FunctionAnalysis[] {
     const functions: FunctionAnalysis[] = [];
     const allFunctions = this.getAllNamedFunctions(sf);
 
-    allFunctions.forEach(node => {
-      const name = getFunctionName(node);
-      const line = node.getStartLineNumber();
-      const endLine = node.getEndLineNumber();
-      const complexity = calculateFunctionComplexity(node);
-      const loc = getFunctionLineCount(node);
-      const parameterCount = getFunctionParameterCount(node);
+    // Process in batches to manage memory
+    const batches = this.createBatches(allFunctions, ANALYSIS_THRESHOLDS.BATCH_SIZE);
+    
+    const startTime = performance.now();
+    for (const batch of batches) {
+      const batchResults = this.processBatch(batch, filePath);
+      functions.push(...batchResults);
       
-      // Identify all issues for this function
-      const issues = this.identifyFunctionIssues(node, complexity, loc, parameterCount, filePath);
-
-      // Only include functions that have issues or are above basic thresholds
-      if (issues.length > 0 || this.isFunctionNotable(complexity, loc, parameterCount)) {
-        functions.push({
-          name,
-          line,
-          endLine,
-          complexity,
-          loc,
-          parameterCount,
-          issues,
-          snippet: this.shouldIncludeSnippet(issues) ? this.extractCleanSnippet(node) : undefined
-        });
+      // Global timeout guard - don't spend more than 30s on any single file
+      if (performance.now() - startTime > 30000) {
+        console.warn(`Function analysis timeout for ${filePath}, processed ${functions.length}/${allFunctions.length} functions`);
+        break;
       }
-    });
-
+      
+      // Clear AST helper cache periodically to prevent memory buildup
+      if (functions.length % (ANALYSIS_THRESHOLDS.BATCH_SIZE * 2) === 0) {
+        clearCache();
+      }
+    }
+    
+    // Final cache clear
+    clearCache();
+    
     return functions;
   }
 
   /**
+   * Process a batch of functions
+   */
+  private processBatch(batch: Node[], filePath: string): FunctionAnalysis[] {
+    const results: FunctionAnalysis[] = [];
+    
+    for (const node of batch) {
+      // Check cache first
+      if (this.functionCache.has(node)) {
+        const cached = this.functionCache.get(node)!;
+        results.push(cached);
+        continue;
+      }
+      
+      const analysis = this.analyzeSingleFunction(node, filePath);
+      
+      if (analysis) {
+        this.functionCache.set(node, analysis);
+        results.push(analysis);
+      }
+    }
+    
+    return results;
+  }
+
+  /**
+   * Analyze a single function
+   */
+  private analyzeSingleFunction(node: Node, filePath: string): FunctionAnalysis | null {
+    const name = getFunctionName(node);
+    const line = node.getStartLineNumber();
+    const endLine = node.getEndLineNumber();
+    
+    // Get basic metrics for all functions
+    const loc = getFunctionLineCount(node);
+    
+    const complexity = calculateFunctionComplexity(node);
+    const parameterCount = getFunctionParameterCount(node);
+
+    // Calculate additional metrics
+    const nestingDepth = getMaxNestingDepth(node);
+    
+    // Identify issues
+    const issues = this.identifyFunctionIssues(node, complexity, loc, parameterCount, filePath);
+
+    // Return analysis for ALL functions (no longer filter by notability)
+    return {
+      name,
+      line,
+      endLine,
+      complexity,
+      loc,
+      parameterCount,
+      issues,
+      snippet: this.shouldIncludeSnippet(issues) ? this.extractCleanSnippet(node) : undefined,
+      metrics: {
+        nestingDepth
+      }
+    };
+  }
+
+  /**
+   * Create batches from function list
+   */
+  private createBatches<T>(items: T[], batchSize: number): T[][] {
+    const batches: T[][] = [];
+    for (let i = 0; i < items.length; i += batchSize) {
+      batches.push(items.slice(i, i + batchSize));
+    }
+    return batches;
+  }
+
+
+  /**
    * Extract all named functions with implementations from source file
-   * Reused from file-detail-builder.ts logic
+   * Optimized with Set for deduplication
    */
   private getAllNamedFunctions(sf: SourceFile): Node[] {
     const functions: Node[] = [];
-    const processed = new WeakSet<Node>();
-    
+    const processed = new WeakSet<Node>(); // Local set for this call only
+
     // Function declarations
-    const allFunctionDecls = sf.getDescendantsOfKind(SyntaxKind.FunctionDeclaration);
-    allFunctionDecls.forEach(fn => {
+    const functionDecls = sf.getDescendantsOfKind(SyntaxKind.FunctionDeclaration);
+    for (const fn of functionDecls) {
       if (fn.getName() && fn.getBody() && !processed.has(fn)) {
         functions.push(fn);
         processed.add(fn);
       }
-    });
-    
+    }
+
     // Class members
-    const allClasses = sf.getDescendantsOfKind(SyntaxKind.ClassDeclaration);
-    allClasses.forEach(cls => {
+    const classDecls = sf.getDescendantsOfKind(SyntaxKind.ClassDeclaration);
+    for (const cls of classDecls) {
       // Constructors
-      cls.getConstructors().forEach(ctor => {
+      const constructors = cls.getConstructors();
+      for (const ctor of constructors) {
         if (ctor.getBody() && !processed.has(ctor)) {
           functions.push(ctor);
           processed.add(ctor);
         }
-      });
+      }
       
       // Methods
-      cls.getMethods().forEach(method => {
+      const methods = cls.getMethods();
+      for (const method of methods) {
         if (method.getBody() && !method.isAbstract() && !processed.has(method)) {
           functions.push(method);
           processed.add(method);
         }
-      });
+      }
       
-      // Accessors
-      cls.getGetAccessors().forEach(getter => {
+      // Get accessors
+      const getAccessors = cls.getGetAccessors();
+      for (const getter of getAccessors) {
         if (getter.getBody() && !processed.has(getter)) {
           functions.push(getter);
           processed.add(getter);
         }
-      });
+      }
       
-      cls.getSetAccessors().forEach(setter => {
+      // Set accessors
+      const setAccessors = cls.getSetAccessors();
+      for (const setter of setAccessors) {
         if (setter.getBody() && !processed.has(setter)) {
           functions.push(setter);
           processed.add(setter);
         }
-      });
-    });
-    
+      }
+    }
+
     // Arrow functions and function expressions
-    const allVariableDecls = sf.getDescendantsOfKind(SyntaxKind.VariableDeclaration);
-    allVariableDecls.forEach(varDecl => {
+    const variableDecls = sf.getDescendantsOfKind(SyntaxKind.VariableDeclaration);
+    for (const varDecl of variableDecls) {
       const initializer = varDecl.getInitializer();
       if (initializer && varDecl.getName() && !processed.has(initializer)) {
         const kind = initializer.getKind();
@@ -119,13 +219,13 @@ class FunctionAnalyzer {
           processed.add(initializer);
         }
       }
-    });
+    }
 
     return functions;
   }
 
   /**
-   * Comprehensive function issue identification
+   * Comprehensive function issue identification - Optimized
    */
   private identifyFunctionIssues(
     node: Node,
@@ -135,434 +235,280 @@ class FunctionAnalyzer {
     filePath: string
   ): FunctionIssue[] {
     const issues: FunctionIssue[] = [];
+    const functionName = getFunctionName(node);
+    const startLine = node.getStartLineNumber();
+    
+    // PERFORMANCE GUARD: Skip expensive analysis for massive functions
+    if (lineCount > 5000) {
+      console.warn(`Skipping detailed analysis for massive function: ${functionName} (${lineCount} lines)`);
+      // Just add a god-function issue and return early
+      issues.push({
+        type: 'god-function',
+        severity: 'critical',
+        location: { file: filePath, line: startLine, function: functionName },
+        description: `Massive function with ${lineCount} lines - analysis skipped for performance`,
+        threshold: 100,
+        actualValue: lineCount,
+        excessRatio: lineCount / 100
+      });
+      return issues;
+    }
+    
+    // Special guard for compiler files - they tend to have very complex but well-structured functions
+    const isCompilerFile = filePath.includes('compiler/') || filePath.includes('checker.ts') || filePath.includes('emitter.ts');
+    const maxAnalysisSize = isCompilerFile ? 500 : 1000;
+    
+    // Pre-create location object for reuse
+    const location = {
+      file: filePath,
+      line: startLine,
+      function: functionName
+    };
 
-    // === QUALITY PATTERNS ===
-
-    // High Complexity Pattern
-    if (complexity > (COMPLEXITY_LEVELS.veryHigh.maxThreshold)) {
+    // === COMPLEXITY CHECKS (ordered by severity) ===
+    
+    // Critical complexity
+    const criticalThreshold = COMPLEXITY_LEVELS.veryHigh.maxThreshold;
+    if (complexity > criticalThreshold) {
       issues.push({
         type: 'critical-complexity',
         severity: 'critical',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: `Complexity ${complexity} exceeds critical threshold of ${COMPLEXITY_LEVELS.veryHigh.maxThreshold}`,
-        threshold: COMPLEXITY_LEVELS.veryHigh.maxThreshold,
-        excessRatio: complexity / (COMPLEXITY_LEVELS.veryHigh.maxThreshold)
+        location,
+        description: `Complexity ${complexity} exceeds critical threshold of ${criticalThreshold}`,
+        threshold: criticalThreshold,
+        actualValue: complexity,
+        excessRatio: complexity / criticalThreshold
       });
-    } else if (complexity > (COMPLEXITY_LEVELS.high.maxThreshold)) {
-      issues.push({
-        type: 'high-complexity',
-        severity: 'high',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: `Complexity ${complexity} exceeds recommended threshold of ${COMPLEXITY_LEVELS.high.maxThreshold}`,
-        threshold: COMPLEXITY_LEVELS.high.maxThreshold,
-        excessRatio: complexity / (COMPLEXITY_LEVELS.high.maxThreshold)
-      });
-    } else if (complexity > (COMPLEXITY_LEVELS.low.maxThreshold)) {
-      issues.push({
-        type: 'medium-complexity',
-        severity: 'medium',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: `Complexity ${complexity} exceeds medium threshold of ${COMPLEXITY_LEVELS.low.maxThreshold}`,
-        threshold: COMPLEXITY_LEVELS.low.maxThreshold,
-        excessRatio: complexity / (COMPLEXITY_LEVELS.low.maxThreshold)
-      });
+    } 
+    // High complexity
+    else {
+      const highThreshold = COMPLEXITY_LEVELS.high.maxThreshold;
+      if (complexity > highThreshold) {
+        issues.push({
+          type: 'high-complexity',
+          severity: 'high',
+          location,
+          description: `Complexity ${complexity} exceeds recommended threshold of ${highThreshold}`,
+          threshold: highThreshold,
+          actualValue: complexity,
+          excessRatio: complexity / highThreshold
+        });
+      }
+      // Medium complexity
+      else {
+        const mediumThreshold = COMPLEXITY_LEVELS.medium.maxThreshold;
+        if (complexity > mediumThreshold) {
+          issues.push({
+            type: 'medium-complexity',
+            severity: 'medium',
+            location,
+            description: `Complexity ${complexity} exceeds medium threshold of ${mediumThreshold}`,
+            threshold: mediumThreshold,
+            actualValue: complexity,
+            excessRatio: complexity / mediumThreshold
+          });
+        }
+      }
     }
 
-    // Long Function Pattern
-    if (lineCount > CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES * 2) {
+    // === LENGTH CHECKS ===
+    
+    const criticalLineThreshold = CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES * 2;
+    const normalLineThreshold = CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES;
+    
+    if (lineCount > criticalLineThreshold) {
       issues.push({
         type: 'long-function',
         severity: 'high',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
+        location,
         description: `Function has ${lineCount} lines, consider breaking into smaller functions`,
-        threshold: CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES * 2,
-        excessRatio: lineCount / (CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES * 2)
+        threshold: criticalLineThreshold,
+        actualValue: lineCount,
+        excessRatio: lineCount / criticalLineThreshold
       });
-    } else if (lineCount > CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES) {
+    } else if (lineCount > normalLineThreshold) {
       issues.push({
         type: 'long-function',
         severity: 'medium',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
+        location,
         description: `Function has ${lineCount} lines, consider splitting for better maintainability`,
-        threshold: CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES,
-        excessRatio: lineCount / CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES
+        threshold: normalLineThreshold,
+        actualValue: lineCount,
+        excessRatio: lineCount / normalLineThreshold
       });
     }
 
-    // Too Many Parameters
-    if (parameterCount > CONTEXT_EXTRACTION_THRESHOLDS.PARAMETER_COUNT) {
+    // === PARAMETER CHECKS ===
+    
+    const paramThreshold = CONTEXT_EXTRACTION_THRESHOLDS.PARAMETER_COUNT;
+    if (parameterCount > paramThreshold) {
       issues.push({
         type: 'too-many-params',
-        severity: parameterCount > 7 ? 'high' : 'medium',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: `${parameterCount} parameters, consider using object parameter or builder pattern`
+        severity: parameterCount > ANALYSIS_THRESHOLDS.HIGH_PARAM_COUNT ? 'high' : 'medium',
+        location,
+        description: `${parameterCount} parameters, consider using object parameter or builder pattern`,
+        threshold: paramThreshold,
+        actualValue: parameterCount,
+        excessRatio: parameterCount / paramThreshold
       });
     }
 
-    // Deep Nesting Pattern
-    if (this.hasDeepNestingInFunction(node)) {
-      issues.push({
-        type: 'deep-nesting',
-        severity: 'medium',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: 'Deep nesting detected, consider extracting sub-functions or using early returns'
-      });
-    }
+    // === STRUCTURAL CHECKS (expensive, do last) ===
+    
+    // Only check these for functions that aren't already flagged as too complex
+    if (!issues.some(i => i.type.includes('complexity') && i.severity === 'critical')) {
+      
+      // Calculate expensive values once
+      const maxDepth = getMaxNestingDepth(node);
+      const operationCount = countDistinctOperations(node);
+      
+      // Deep nesting
+      const nestingThreshold = CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_NESTING_DEPTH;
+      if (maxDepth > nestingThreshold) {
+        issues.push({
+          type: 'deep-nesting',
+          severity: 'medium',
+          location,
+          description: `Deep nesting detected (depth: ${maxDepth}), consider extracting sub-functions or using early returns`,
+          threshold: nestingThreshold,
+          actualValue: maxDepth,
+          excessRatio: maxDepth / nestingThreshold
+        });
+      }
 
-    // === ADVANCED QUALITY PATTERNS ===
+      // God Function - pass pre-calculated operationCount
+      if (this.isGodFunction(node, complexity, lineCount, operationCount)) {
+        issues.push({
+          type: 'god-function',
+          severity: 'high',
+          location,
+          description: `Function does too much - Operations: ${operationCount} (complexity: ${complexity}, lines: ${lineCount})`,
+          threshold: ANALYSIS_THRESHOLDS.GOD_FUNCTION_OPERATIONS,
+          actualValue: operationCount,
+          excessRatio: operationCount / ANALYSIS_THRESHOLDS.GOD_FUNCTION_OPERATIONS
+        });
+      }
 
-    // Async Pattern Detection
-    if (hasAsyncModifier(node)) {
-      issues.push({
-        type: 'async-heavy',
-        severity: 'low',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: 'Function uses async/await pattern'
-      });
-    }
+      // Single Responsibility (expensive check) - skip for large functions
+      if (lineCount < maxAnalysisSize) {
+        const responsibilities = countResponsibilities(node);
+        if (responsibilities > 1) {
+          const analysis = analyzeResponsibilities(node);
+          const responsibilityList = Array.from(analysis.responsibilities).join(', ');
 
-    // God Function (does too much)
-    if (this.isGodFunction(node, complexity, lineCount)) {
-      issues.push({
-        type: 'god-function',
-        severity: 'high',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: 'Function does too much - high complexity, many lines, and multiple responsibilities'
-      });
-    }
+        issues.push({
+          type: 'multiple-responsibilities',
+          severity: responsibilities > 2 ? 'high' : 'medium',
+          location,
+          description: `Function has ${responsibilities} distinct responsibilities (${responsibilityList}), violates Single Responsibility Principle`,
+          threshold: 1,
+          actualValue: responsibilities,
+          excessRatio: responsibilities
+        });
+        }
+      }
 
-    // Single Responsibility Violation
-    const responsibilities = this.countResponsibilities(node);
-    if (responsibilities > 1) {
-      issues.push({
-        type: 'multiple-responsibilities',
-        severity: responsibilities > 2 ? 'high' : 'medium',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: `Function has ${responsibilities} distinct responsibilities, violates Single Responsibility Principle`
-      });
-    }
+      // Code quality checks (less critical) - skip for large functions  
+      if (issues.length < 3 && lineCount < maxAnalysisSize) { // Only check if not already many issues and function is reasonable size
+        
+        // Impure function
+        if (hasImpureOperations(node)) {
+          issues.push({
+            type: 'impure-function',
+            severity: 'low',
+            location,
+            description: 'Function has side effects or depends on external state'
+          });
+        }
 
-    // Impure Function (has side effects)
-    if (this.hasImpureOperations(node)) {
-      issues.push({
-        type: 'impure-function',
-        severity: 'low',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: 'Function has side effects or depends on external state'
-      });
-    }
-
-    // Poor Naming
-    const namingIssue = this.checkFunctionNaming(node);
-    if (namingIssue) {
-      issues.push({
-        type: 'poorly-named',
-        severity: 'low',
-        location: {
-          file: filePath,
-          line: node.getStartLineNumber(),
-          function: getFunctionName(node)
-        },
-        description: namingIssue
-      });
+        // Poor naming
+        const namingIssue = checkFunctionNaming(node);
+        if (namingIssue) {
+          issues.push({
+            type: 'poorly-named',
+            severity: 'low',
+            location,
+            description: namingIssue
+          });
+        }
+      }
     }
 
     return issues;
   }
 
   /**
-   * Determine if function is notable enough to include in analysis
+   * Detect if function is a "God Function" - Optimized
    */
-  private isFunctionNotable(complexity: number, loc: number, parameterCount: number): boolean {
-    return complexity > 5 || 
-           loc > 20 || 
-           parameterCount > 3;
+  private isGodFunction(node: Node, complexity: number, lineCount: number, operationCount?: number): boolean {
+    // Fast path: if clearly not a god function
+    if (complexity < 10 && lineCount < 50) {
+      return false;
+    }
+    
+    // Use provided operationCount or calculate if not provided
+    const operations = operationCount ?? countDistinctOperations(node);
+
+    // Check criteria
+    let failedCriteria = 0;
+    if (complexity > ANALYSIS_THRESHOLDS.GOD_FUNCTION_COMPLEXITY) failedCriteria++;
+    if (lineCount > ANALYSIS_THRESHOLDS.GOD_FUNCTION_LINES) failedCriteria++;
+    if (operations > ANALYSIS_THRESHOLDS.GOD_FUNCTION_OPERATIONS) failedCriteria++;
+
+    return failedCriteria >= ANALYSIS_THRESHOLDS.GOD_FUNCTION_MIN_CRITERIA;
   }
+
 
   /**
    * Determine if snippet should be included based on issue severity
    */
   private shouldIncludeSnippet(issues: FunctionIssue[]): boolean {
-    return issues.some(issue => issue.severity === 'critical' || issue.severity === 'high');
+    // Fast check with early exit
+    for (const issue of issues) {
+      if (issue.severity === 'critical' || issue.severity === 'high') {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
-   * Extract a clean, focused snippet of a function
+   * Extract a clean, focused snippet - Optimized
    */
   private extractCleanSnippet(node: Node): string {
     const fullText = node.getText();
-    const lines = fullText.split('\n')
-      .filter(line => line.trim() && !line.trim().startsWith('//'))
-      .slice(0, CONTEXT_EXTRACTION_THRESHOLDS.SNIPPET_LINES);
-
-    if (fullText.split('\n').length > CONTEXT_EXTRACTION_THRESHOLDS.SNIPPET_THRESHOLD) {
-      lines.push('  // ... more code ...');
+    const lines = fullText.split('\n');
+    
+    // Fast filter and slice
+    const cleanLines: string[] = [];
+    let count = 0;
+    
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed && !trimmed.startsWith('//')) {
+        cleanLines.push(line);
+        count++;
+        if (count >= CONTEXT_EXTRACTION_THRESHOLDS.SNIPPET_LINES) {
+          break;
+        }
+      }
     }
 
-    return lines.join('\n');
-  }
-
-  /**
-   * Check for deep nesting within a function
-   */
-  private hasDeepNestingInFunction(node: Node): boolean {
-    let depth = 0;
-    let maxDepth = 0;
-
-    const visit = (n: Node) => {
-      if (isNestingNode(n)) {
-        depth++;
-        maxDepth = Math.max(maxDepth, depth);
-      }
-      n.forEachChild(visit);
-      if (isNestingNode(n)) {
-        depth--;
-      }
-    };
-
-    visit(node);
-    return maxDepth > CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_NESTING_DEPTH;
-  }
-
-
-  /**
-   * Detect if function is a "God Function" (does too much)
-   */
-  private isGodFunction(node: Node, complexity: number, lineCount: number): boolean {
-    // God function = high complexity + many lines + multiple operations
-    const highComplexity = complexity > (COMPLEXITY_LEVELS.high.maxThreshold);
-    const manyLines = lineCount > CONTEXT_EXTRACTION_THRESHOLDS.FUNCTION_LINES;
-    const multipleOperations = this.countDistinctOperations(node) > 5;
-
-    return highComplexity && manyLines && multipleOperations;
-  }
-
-  /**
-   * Count distinct responsibilities in a function
-   */
-  private countResponsibilities(node: Node): number {
-    const responsibilities = new Set<string>();
-
-    node.forEachDescendant(child => {
-      // IO operations
-      if (Node.isCallExpression(child)) {
-        const text = child.getText();
-        if (/\b(read|write|fetch|save|load)\b/i.test(text)) {
-          responsibilities.add('io');
-        }
-        if (/\b(validate|check|verify)\b/i.test(text)) {
-          responsibilities.add('validation');
-        }
-        if (/\b(transform|convert|map|format)\b/i.test(text)) {
-          responsibilities.add('transformation');
-        }
-        if (/\b(calculate|compute|derive)\b/i.test(text)) {
-          responsibilities.add('calculation');
-        }
-        if (/\b(render|display|show)\b/i.test(text)) {
-          responsibilities.add('presentation');
-        }
-      }
-
-      // Error handling
-      if (Node.isTryStatement(child) || Node.isThrowStatement(child)) {
-        responsibilities.add('error-handling');
-      }
-
-      // State mutation
-      if (Node.isBinaryExpression(child) && child.getOperatorToken().getText() === '=') {
-        const left = child.getLeft();
-        if (Node.isPropertyAccessExpression(left) || Node.isElementAccessExpression(left)) {
-          responsibilities.add('state-mutation');
-        }
-      }
-    });
-
-    return responsibilities.size;
-  }
-
-  /**
-   * Check if function has impure operations
-   */
-  private hasImpureOperations(node: Node): boolean {
-    let hasImpurity = false;
-
-    node.forEachDescendant(child => {
-      // Check for console operations
-      if (Node.isCallExpression(child)) {
-        const text = child.getText();
-        if (/\bconsole\.\w+/.test(text)) {
-          hasImpurity = true;
-          return;
-        }
-      }
-
-      // Check for external state access (this.x or global variables)
-      if (Node.isPropertyAccessExpression(child)) {
-        const expression = child.getExpression();
-        if (Node.isThisExpression(expression)) {
-          hasImpurity = true;
-          return;
-        }
-      }
-
-      // Check for Date.now() or Math.random()
-      if (Node.isCallExpression(child)) {
-        const text = child.getText();
-        if (/\b(Date\.now|Math\.random)\b/.test(text)) {
-          hasImpurity = true;
-          return;
-        }
-      }
-
-      // Check for DOM manipulation
-      if (Node.isCallExpression(child)) {
-        const text = child.getText();
-        if (/\b(document\.|window\.|querySelector|getElementById)\b/.test(text)) {
-          hasImpurity = true;
-          return;
-        }
-      }
-    });
-
-    return hasImpurity;
-  }
-
-  /**
-   * Check function naming conventions
-   */
-  private checkFunctionNaming(node: Node): string | null {
-    const name = getFunctionName(node);
-    if (!name || name === 'anonymous') return null;
-
-    // Check length
-    if (name.length < 3) {
-      return `Function name "${name}" is too short, use descriptive names`;
+    if (lines.length > CONTEXT_EXTRACTION_THRESHOLDS.SNIPPET_THRESHOLD) {
+      cleanLines.push('  // ... more code ...');
     }
 
-    if (name.length > 40) {
-      return `Function name "${name}" is too long, consider a more concise name`;
-    }
-
-    // Check for generic names
-    const genericNames = ['func', 'function', 'method', 'fn', 'cb', 'callback', 'handler', 'util', 'helper', 'process', 'do', 'run', 'execute'];
-    if (genericNames.includes(name.toLowerCase())) {
-      return `Function name "${name}" is too generic, use a more descriptive name`;
-    }
-
-    // Check for boolean functions that don't start with is/has/should/can
-    const returnType = this.getFunctionReturnType(node);
-    if (returnType === 'boolean' && !/^(is|has|should|can|will|does)/.test(name)) {
-      return `Boolean function "${name}" should start with is/has/should/can`;
-    }
-
-    // Check for verb prefix for action functions
-    if (!this.isGetter(node) && !this.isSetter(node) && !/^[a-z][a-zA-Z]*/.test(name)) {
-      return `Function name "${name}" should start with a verb in camelCase`;
-    }
-
-    return null;
+    return cleanLines.join('\n');
   }
 
-  /**
-   * Count distinct operations in a function
-   */
-  private countDistinctOperations(node: Node): number {
-    const operations = new Set<string>();
-
-    node.forEachDescendant(child => {
-      if (Node.isCallExpression(child)) {
-        operations.add('call');
-      }
-      if (Node.isIfStatement(child) || Node.isConditionalExpression(child)) {
-        operations.add('condition');
-      }
-      if (Node.isForStatement(child) || Node.isWhileStatement(child) || Node.isForOfStatement(child)) {
-        operations.add('loop');
-      }
-      if (Node.isTryStatement(child)) {
-        operations.add('error-handling');
-      }
-      if (Node.isReturnStatement(child)) {
-        operations.add('return');
-      }
-      if (Node.isAwaitExpression(child)) {
-        operations.add('async');
-      }
-      if (Node.isNewExpression(child)) {
-        operations.add('instantiation');
-      }
-    });
-
-    return operations.size;
-  }
 
   /**
-   * Helper to determine function return type
+   * Clear internal caches
    */
-  private getFunctionReturnType(_node: Node): string | null {
-    // For now, we can't easily determine return type without TypeChecker
-    // This would require a more complex implementation with ts-morph's type system
-    // Keeping it simple for naming validation purposes
-    return null;
-  }
-
-  /**
-   * Check if node is a getter
-   */
-  private isGetter(node: Node): boolean {
-    return Node.isGetAccessorDeclaration(node);
-  }
-
-  /**
-   * Check if node is a setter
-   */
-  private isSetter(node: Node): boolean {
-    return Node.isSetAccessorDeclaration(node);
+  public clearCaches(): void {
+    this.functionCache = new WeakMap();
+    this.processedNodes = new WeakSet();
+    clearCache(); // Clear AST helper cache
   }
 }
 
