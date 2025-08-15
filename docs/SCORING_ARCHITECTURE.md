@@ -1,4 +1,4 @@
-# InsightCode Scoring Architecture - v0.7.0
+# InsightCode Scoring Architecture - v0.8.0
 
 ## Architecture Overview
 

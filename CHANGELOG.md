@@ -5,6 +5,80 @@ All notable changes to InsightCode CLI will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2025-08-15
+
+### 🚨 Breaking Changes
+- **Four-Dimensional Scoring System**: Project scores have changed due to new weight distribution
+  - **Old (0.7.1)**: 3 dimensions - Complexity (45%), Maintainability (30%), Duplication (25%)
+  - **New (0.8.0)**: 4 dimensions - Complexity (35%), Maintainability (25%), Duplication (20%), **Reliability (20%)**
+  - Projects may show different overall grades due to weight redistribution
+
+### ✨ Major New Features
+- **Reliability Score**: Fourth scoring dimension measuring code robustness
+  - Detects potential defects based on code quality issues and patterns
+  - Progressive penalty system for critical/high/medium/low severity issues
+  - Visible in CLI terminal output and all report formats
+  - 20% weight in overall project score calculation
+
+- **Quick Wins Analysis**: Strategic improvement recommendations
+  - Identifies high-ROI code improvements (high impact, low effort)
+  - Categorizes by strategic priority and estimated effort hours
+  - ROI calculations with actionable recommendations
+  - Helps teams prioritize the most valuable refactoring work
+
+- **Quality Patterns Section**: Enhanced analysis in Markdown reports
+  - Identifies anti-patterns and architectural issues
+  - Categorizes by quality vs architecture patterns
+  - Provides context for understanding code quality problems
+
+### 🚀 Performance Improvements
+- **Function Analysis Optimization**:
+  - Batching: Process functions in batches of 50 for memory management
+  - Caching: WeakMap caching to avoid redundant analysis
+  - Smart timeouts: 30s timeout per file with partial completion
+  - Memory management: Periodic cache clearing during analysis
+
+- **AST Performance Enhancements**:
+  - Pre-compiled regex patterns for faster pattern matching
+  - Optimized global variable lookups with Set data structure
+  - Performance timing utilities and monitoring
+  - Reduced redundant getText() calls with caching
+
+### 🔧 Algorithm Improvements
+- **Enhanced Function Issue Detection**:
+  - New "God Function" detection using multiple metrics (operations, complexity, lines)
+  - Improved deep nesting analysis with performance guards
+  - Better responsibility analysis (IO, validation, transformation patterns)
+  - Enhanced purity detection for functional programming analysis
+
+- **Smarter File Prioritization**:
+  - Files sorted by architectural importance (criticism score)
+  - Focus on most critical files first in reports
+
+- **Improved Maintainability Scoring**:
+  - Enhanced cohesion and coupling analysis
+  - Better dependency stability metrics integration
+
+### 📊 User Experience Enhancements
+- **Enhanced CLI Output**:
+  - Reliability score display in terminal overview
+  - Improved file sorting by architectural importance
+  - Better legend and formatting in risky files table
+
+- **Improved Markdown Reports**:
+  - Quick Wins section with comprehensive ROI analysis
+  - Enhanced quality patterns breakdown
+  - Better narrative generation with problem pattern identification
+  - Strategic recommendations based on detected issues
+
+- **Performance Logging**: Better visibility into analysis performance and project identification
+
+### 🛠️ Technical Improvements
+- **Test Coverage**: Comprehensive integration tests for CLI functionality and scoring consistency
+- **Code Organization**: Extracted Quick Wins utilities and rules into dedicated modules
+- **Type Safety**: Enhanced TypeScript types for function vs file-level issues
+- **Memory Management**: Improved cache clearing and memory usage optimization
+
 ## [0.7.1] - 2025-08-02
 
 ### Added

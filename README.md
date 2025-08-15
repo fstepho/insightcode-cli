@@ -32,7 +32,7 @@
 - **🔒 100% Local** - Your code never leaves your machine
 - **⚡ Fast** - Proven on large codebases (analyzes over 40,000 lines/sec)
 - **🧠 Criticality-Aware Scoring** - Prioritizes issues based on file complexity and its architectural impact.
-- **🎯 Actionable Metrics** - Focus on what matters: complexity, duplication, and maintainability.
+- **🎯 Actionable Metrics** - Focus on what matters: complexity, duplication, maintainability, and reliability.
 - **🧬 Rich Context for LLM Analysis** - Provides detailed architectural insights to help LLMs better understand and analyze code structure.
 - **🎨 Beautiful Output** - Clear, colorful terminal reports.
 
@@ -193,8 +193,15 @@ Composite score based on file size and function density:
 - **Function count**: ≤ 10 per file excellent, ≤ 15 good
 - **Extreme penalty**: Files > 1000 lines get additional penalties
 
+#### 4. Reliability
+Measures potential defects and code quality issues:
+- **Based on detected issues**: Deep nesting, long functions, complex conditions
+- **Issue severity weighting**: Critical issues have higher impact
+- **Function-level analysis**: Aggregates issues across all functions
+- **Lower score indicates**: Higher risk of bugs and maintenance problems
+
 ### Scoring Philosophy: Criticality Weighting
-The final project score is a weighted average of individual file scores.
+The final project score is a weighted average across four dimensions (complexity, duplication, maintainability, reliability), with individual file scores weighted by criticality.
 
 Instead of a fixed weight, the weight of each file is determined by its Criticality Score. This score is calculated from the file's own complexity combined with its Impact—how many other files in the project depend on it.
 

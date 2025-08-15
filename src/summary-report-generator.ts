@@ -21,7 +21,7 @@ export function generateMarkdownReport(results: ReportResult[], summary: ReportS
     // Header du rapport
     let markdown = `# InsightCode Benchmark Report - ${mode}\n\n`;
     markdown += `**Generated:** ${timestamp}\n`;
-    markdown += `**Tool Version:** v0.7.1\n`;
+    markdown += `**Tool Version:** v0.8.0\n`;
     markdown += `**Analysis Mode:** ${mode}\n\n`;
     
     // Executive Summary
