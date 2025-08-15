@@ -24,6 +24,7 @@ import { OverviewCalculator } from './analyzer/OverviewCalculator';
 import { ContextGenerator } from './analyzer/ContextGenerator';
 import { ProjectDiscovery } from './analyzer/ProjectDiscovery';
 import { QuickWinsAnalyzer } from './analyzer/quick-wins-analyzer';
+import { logASTPerformanceStats } from './ast-helpers';
 
 
 /**
@@ -74,6 +75,11 @@ export async function analyze(
     }
     await executeContextGenerationStep(context);
     
+    // Log performance stats  
+    if (context.options.format === 'terminal') {
+      logASTPerformanceStats();
+    }
+    
     return assembleResult(context);
     
   } catch (error) {
@@ -105,11 +111,17 @@ async function executeFileDetailStep(context: AnalysisContext): Promise<void> {
     console.log('📊 Extracting file details...');
   }
 
+  const start = performance.now();
   if (!context.astData) throw new Error('AST data not available');
   const options: FileDetailBuildOptions = {
     projectPath: context.inputPath
   };
   context.rawFileDetails = await fileDetailBuilder.build(context.astData, options);
+  
+  const duration = performance.now() - start;
+  if (context.options.format === 'terminal') {
+    console.log(`📊 File details extracted in ${duration.toFixed(0)}ms`);
+  }
 }
 
 /**
@@ -125,6 +137,7 @@ async function executeMetricsProcessingStep(context: AnalysisContext): Promise<v
     console.log('⚙️  Processing metrics...');
   }
 
+  const start = performance.now();
   if (!context.rawFileDetails || !context.astData) {
     throw new Error('Raw file details or AST data not available');
   }
@@ -174,6 +187,11 @@ async function executeMetricsProcessingStep(context: AnalysisContext): Promise<v
       healthScore
     };
   });
+  
+  const duration = performance.now() - start;
+  if (context.options.format === 'terminal') {
+    console.log(`⚙️  Metrics processed in ${duration.toFixed(0)}ms`);
+  }
 }
 
 /**
@@ -182,20 +200,24 @@ async function executeMetricsProcessingStep(context: AnalysisContext): Promise<v
  * Methodology:
  * - Files with higher "criticism scores" get more weight in final calculations
  * - Follows Pareto principle (20% of files cause 80% of problems)
- * - Three-dimensional scoring: Complexity (45%) + Maintainability (30%) + Duplication (25%)
+ * - Four-dimensional scoring: Complexity (35%) + Maintainability (25%) + Duplication (20%) + Reliability (20%)
  * - No outlier masking - extreme values receive extreme penalties
  */
 async function executeOverviewCalculationStep(context: AnalysisContext): Promise<void> {
-  if (context.options.format === 'terminal') {
-    console.log('📈 Calculating overview...');
-  }
-
+  const start = performance.now();
   if (!context.processedFileDetails) {
     throw new Error('Processed file details not available');
   }
   
   const duplicationMode = context.options.strictDuplication ? 'strict' : 'legacy';
   context.overview = OverviewCalculator.calculate(context.processedFileDetails, duplicationMode);
+  
+  const duration = performance.now() - start;
+  if (context.options.format === 'terminal') {
+    console.log(`📈 Overview calculated in ${duration.toFixed(0)}ms`);
+  }
+}
+
 
 /**
  * Step 5: Generate Quick Wins recommendations
@@ -225,6 +247,7 @@ async function executeQuickWinsAnalysisStep(context: AnalysisContext): Promise<v
  * Step 6: Generate analysis context metadata
  */
 async function executeContextGenerationStep(context: AnalysisContext): Promise<void> {
+  const start = performance.now();
   if (!context.processedFileDetails) {
     throw new Error('Processed file details not available');
   }
@@ -236,6 +259,11 @@ async function executeContextGenerationStep(context: AnalysisContext): Promise<v
     context.startTime,
     duplicationMode
   );
+  
+  const duration = performance.now() - start;
+  if (context.options.format === 'terminal') {
+    console.log(`📝 Context generated in ${duration.toFixed(0)}ms`);
+  }
 }
 
 /**
