@@ -7,7 +7,8 @@ import {
   Context,
   Overview,
   AnalysisOptions,
-  validateScore
+  validateScore,
+  QuickWinsAnalysis
 } from './types';
 
 // Export AnalysisOptions for other modules
@@ -22,6 +23,7 @@ import { calculateFileHealthScore } from './scoring';
 import { OverviewCalculator } from './analyzer/OverviewCalculator';
 import { ContextGenerator } from './analyzer/ContextGenerator';
 import { ProjectDiscovery } from './analyzer/ProjectDiscovery';
+import { QuickWinsAnalyzer } from './analyzer/quick-wins-analyzer';
 
 
 /**
@@ -40,6 +42,7 @@ class AnalysisContext {
   processedFileDetails?: FileDetail[];
   overview?: Overview;
   context?: Context;
+  quickWins?: QuickWinsAnalysis;
 }
 
 /**
@@ -50,8 +53,9 @@ class AnalysisContext {
  * 2. Extract file details from AST
  * 3. Process metrics (duplication, dependencies, file health scores)
  * 4. Calculate overview scores
- * 5. Generate context metadata
- * 6. Assemble final result
+ * 5. Generate Quick Wins recommendations  // AJOUT : Nouvelle étape
+ * 6. Generate context metadata
+ * 7. Assemble final result
  */
 export async function analyze(
   inputPath: string,
@@ -65,6 +69,9 @@ export async function analyze(
     await executeFileDetailStep(context);
     await executeMetricsProcessingStep(context);
     await executeOverviewCalculationStep(context);
+    if (options.includeQuickWins !== false) { // Par défaut activé
+      await executeQuickWinsAnalysisStep(context);
+    }
     await executeContextGenerationStep(context);
     
     return assembleResult(context);
@@ -189,8 +196,30 @@ async function executeOverviewCalculationStep(context: AnalysisContext): Promise
   
   const duplicationMode = context.options.strictDuplication ? 'strict' : 'legacy';
   context.overview = OverviewCalculator.calculate(context.processedFileDetails, duplicationMode);
-}
 
+/**
+ * Step 5: Generate Quick Wins recommendations
+ * 
+ * Analyzes files and functions to identify low-effort, high-impact improvements:
+ * - Complexity reduction opportunities
+ * - Parameter simplification
+ * - Function extraction suggestions
+ * - File splitting recommendations
+ */
+async function executeQuickWinsAnalysisStep(context: AnalysisContext): Promise<void> {
+  const start = performance.now();
+  if (!context.processedFileDetails || !context.overview) {
+    throw new Error('Processed file details or overview not available');
+  }
+
+  const quickWinsAnalyzer = new QuickWinsAnalyzer(context.inputPath);
+  context.quickWins = quickWinsAnalyzer.analyzeQuickWins(context.processedFileDetails);
+  
+  const duration = performance.now() - start;
+  if (context.options.format === 'terminal') {
+    console.log(`🚀 Quick Wins analyzed in ${duration.toFixed(0)}ms`);
+  }
+}
 
 /**
  * Step 6: Generate analysis context metadata
@@ -220,6 +249,7 @@ function assembleResult(context: AnalysisContext): AnalysisResult {
   return {
     details: context.processedFileDetails,
     overview: context.overview,
-    context: context.context
+    context: context.context,
+    quickWinsAnalysis: context.quickWins!
   };
 }

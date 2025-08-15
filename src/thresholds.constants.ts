@@ -225,3 +225,70 @@ export const CONVERSION_CONSTANTS = {
   PERCENTAGE_TO_RATIO: 0.01,
   MS_TO_SECONDS: 1000,
 }
+
+
+/**
+ * Quick Wins threshold constants for centralized configuration
+ * These values determine when to suggest specific improvements
+ */
+export const QUICK_WIN_THRESHOLDS = {
+  // File-level thresholds
+  FILE_DUPLICATION_RATIO: 0.15,      // 15% - Suggest duplication removal
+  FILE_COMPLEXITY_HIGH: 100,         // Total complexity threshold
+  FILE_TARGET_COMPLEXITY: 50,        // Target complexity after refactoring
+  FILE_TARGET_DUPLICATION: 0.05,     // 5% - Target duplication percentage
+  FILE_COMPLEXITY_CRITICAL: 100,
+  FILE_FUNCTION_COUNT: 15, // Max functions per file
+  MIN_COHESION_SCORE: 0.6, // Minimum cohesion score (0-1)
+
+  // Function-level thresholds
+  FUNCTION_PARAMS_HIGH: 5,           // Suggest object parameter pattern
+  FUNCTION_PARAMS_VERY_HIGH: 7,      // Critical parameter count
+  FUNCTION_PARAMS_TARGET: 3,         // Target parameter count
+  FUNCTION_LOC_HIGH: 50,             // Suggest function splitting
+  FUNCTION_LOC_TARGET: 30,           // Target function size
+  FUNCTION_COMPLEXITY_TARGET: 10,    // Target function complexity (McCabe)
+  
+  // Deep nesting - centralized thresholds aligned with analyzer logic
+  NESTING_MINIMAL_MAX: 2,            // 1-2 levels = minimal (well structured)
+  NESTING_LIGHT_MAX: 4,              // 3-4 levels = light (guard clauses)
+  NESTING_MODERATE_MAX: 7,           // 5-7 levels = moderate (early returns)
+  NESTING_DEEP_MAX: 12,              // 8-12 levels = deep (serious refactoring)
+  NESTING_EXTREME_MIN: 13,           // 13+ levels = extreme (architectural)
+  ASSUMED_NESTING_DEPTH: 5,          // Conservative default when depth unknown
+  TARGET_NESTING_DEPTH: 3,           // Target nesting after refactoring
+  
+  // ROI calculation thresholds
+  ROI_HIGH_PRIORITY: 10,             // ROI > 10 = high priority
+  ROI_MEDIUM_PRIORITY: 5,            // ROI 5-10 = medium priority
+  
+  // Score gain constants
+  MAX_GAIN_PER_FUNCTION: 20,         // Maximum score gain per function
+  BASE_READABILITY_GAIN: 3,          // Base gain for readability improvements
+  GOD_FUNCTION_GAIN: 15,             // Gain for refactoring god functions
+  SPLIT_RESPONSIBILITY_GAIN: 8,      // Gain for single responsibility
+  MAX_GAIN_PER_FILE: 25,              // Maximum score gain per file
+
+  // Effort estimation thresholds
+  EFFORT_COMPLEXITY_EASY: 25,        // Complexity < 25 = easy
+  EFFORT_COMPLEXITY_MODERATE: 40,    // Complexity < 40 = moderate
+  EFFORT_COMPLEXITY_HARD: 60,        // Complexity < 60 = hard
+  
+  EFFORT_DUPLICATION_EASY: 0.2,      // Duplication < 20% = easy
+  EFFORT_DUPLICATION_MODERATE: 0.3,  // Duplication < 30% = moderate
+  
+  EFFORT_FUNCTION_LOC_EASY: 75,      // Function < 75 LOC = easy to split
+  EFFORT_FUNCTION_LOC_MODERATE: 150, // Function < 150 LOC = moderate
+  
+  // Effort time factors (in hours)
+  EFFORT_HOURS: {
+    trivial: 0.25,   // 15 minutes
+    easy: 0.5,       // 30 minutes
+    moderate: 1,     // 1 hour
+    hard: 2,         // 2 hours
+    complex: 4       // 4 hours
+  }
+} as const;
+
+// Type export for type safety
+export type QuickWinThresholdsType = typeof QUICK_WIN_THRESHOLDS;

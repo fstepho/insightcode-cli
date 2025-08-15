@@ -66,6 +66,7 @@ export interface AnalysisResult {
   context: Context;
   overview: Overview;
   details: FileDetail[];
+  quickWinsAnalysis?: QuickWinsAnalysis; // Optional Quick Wins analysis
 }
 
 /**
@@ -287,6 +288,7 @@ export interface AnalysisOptions {
   production?: boolean;
   strictDuplication?: boolean;
   excludePatterns?: string[];
+  includeQuickWins?: boolean;
 }
 
 export interface CliOptions {
@@ -296,6 +298,8 @@ export interface CliOptions {
   production?: boolean;
   format?: 'json' | 'ci' | 'critical' | 'summary' | 'markdown' | 'terminal';
   strictDuplication?: boolean;
+  quickWins?: boolean;
+  winsOnly?: boolean;
 }
 
 /**
@@ -417,4 +421,220 @@ export interface ReportSummary {
   avgDuplication: Ratio; // Average duplication ratio (0-1) - consistent with FileDetail
   gradeDistribution: Record<string, number>;
   modeCategory: 'production' | 'full';
+}
+// src/types.ts - Quick Wins additions
+
+/**
+ * Quick Win - Une action concrète avec ROI calculé
+ */
+export interface QuickWin {
+  id: string;                    // Unique ID pour tracking
+  priority: 1 | 2 | 3;          // 1 = highest ROI
+  type: QuickWinType;
+  
+  // Localisation
+  file: string;
+  function?: string;             // Si c'est au niveau fonction
+  line: number;
+  endLine?: number;
+  
+  // Action & Impact
+  action: string;                // Description actionnable
+  currentValue: number;          // Valeur actuelle (complexity, LOC, etc.)
+  targetValue: number;           // Valeur cible recommandée
+  
+  // ROI Metrics
+  scoreGain: number;             // Points gagnés sur health score (0-100)
+  effortEstimate: EffortLevel;   // Effort estimé
+  roi: number;                   // ROI = Health Points per Hour (HPH) - with ±25-55% uncertainty
+  
+  // Architectural Context
+  criticality: ArchitecturalCriticality; // Strategic importance of the file
+  criticalityScore: number;      // Numerical score based on dependencies and impact
+  strategicPriority: 'strategic' | 'standard' | 'low'; // Combined ROI + criticality assessment
+  
+  // Contexte
+  issueIds: string[];            // Issues résolues par cette action
+  dependencies?: string[];       // Autres QuickWins à faire avant
+  
+  // Code suggestion (optionnel)
+  suggestion?: {
+    before: string;              // Code actuel
+    after: string;               // Code suggéré
+    explanation: string;         // Pourquoi c'est mieux
+  };
+}
+
+export type QuickWinType = 
+  | 'extract-function'           // Complexité élevée → extraire
+  | 'split-file'                // Fichier trop gros → diviser
+  | 'remove-duplication'         // Code dupliqué → factoriser
+  | 'simplify-logic'            // Logique complexe → simplifier
+  | 'reduce-parameters'          // Trop de params → object param
+  | 'extract-module'             // God class → modules
+  | 'add-early-return'          // Deep nesting → early returns
+  | 'cache-computation'          // Calcul répété → cache
+  | 'remove-dead-code'          // Code mort → supprimer
+  | 'consolidate-imports'       // Imports multiples → regrouper
+  | 'reorganize-code'           // Mauvaise cohésion → réorganiser
+  | 'reduce-complexity'        //  Complexité élevée → refactoriser
+  | 'improve-naming'           // Noms peu descriptifs → renommer
+
+export type EffortLevel = 
+  | 'trivial'    // < 15 min
+  | 'easy'       // 15-30 min
+  | 'moderate'   // 30-60 min
+  | 'hard'       // 1-2 heures
+  | 'complex';   // > 2 heures
+
+/**
+ * Architectural criticality based on file's role and dependencies
+ */
+export type ArchitecturalCriticality =
+  | 'core'         // Core utility/hub with high dependencies (>20 incoming)
+  | 'feature'      // Feature implementation with moderate dependencies (5-20 incoming) 
+  | 'isolated'     // Standalone/test file with low dependencies (<5 incoming)
+  | 'api'          // Public API/interface file
+  | 'config';      // Configuration/setup file
+
+/**
+ * Quick Wins Analysis Result
+ */
+export interface QuickWinsAnalysis {
+  totalPotentialGain: number;    // Score total gagnable
+  quickWins: QuickWin[];         // Triés par ROI
+  byPriority: {
+    high: string[];             // IDs des QuickWins avec ROI > 10
+    medium: string[];           // IDs des QuickWins avec ROI 5-10
+    low: string[];              // IDs des QuickWins avec ROI < 5
+  };
+  byStrategicValue: {
+    strategic: string[];        // IDs des QuickWins avec High ROI + High architectural criticality
+    standard: string[];         // IDs des QuickWins avec Good ROI + moderate criticality
+    maintenance: string[];      // IDs des QuickWins avec Lower priority improvements
+  };
+   problemPatterns: Array<{
+    category: string;
+    count: number;
+    percentage: number;
+    totalGain: number;
+    averageGain: number;
+    averageEffort: number;
+    description: string;
+    strategicImplications: string;
+    topFiles: string[];
+  }>;
+  summary: {
+    totalWins: number;
+    immediateWins: number;       // Effort trivial/easy
+    estimatedHours: number;      // Total effort estimé
+    topFiles: string[];          // Fichiers avec le plus de wins
+  };
+}
+
+/**
+ * Mapping table from QuickWin actions to existing pattern types
+ * Eliminates redundancy between QuickWinType and pattern detection
+ */
+export const QUICKWIN_TO_PATTERN_MAPPING: Record<QuickWinType, {
+  pattern: QualityPattern | ArchitecturePattern | FileIssueType;
+  category: 'quality' | 'architecture' | 'file';
+  thresholds: {
+    high?: number;
+    critical?: number;
+  };
+}> = {
+  'reduce-complexity': {
+    pattern: 'high-complexity',
+    category: 'quality',
+    thresholds: { high: 15, critical: 25 }
+  },
+  'add-early-return': {
+    pattern: 'deep-nesting', 
+    category: 'quality',
+    thresholds: { high: 4, critical: 6 }
+  },
+  'extract-function': {
+    pattern: 'god-function',
+    category: 'quality', 
+    thresholds: { high: 50, critical: 100 }
+  },
+  'split-file': {
+    pattern: 'large-file',
+    category: 'file',
+    thresholds: { high: 300, critical: 500 }
+  },
+  'remove-duplication': {
+    pattern: 'high-duplication',
+    category: 'file',
+    thresholds: { high: 15, critical: 30 }
+  },
+  'simplify-logic': {
+    pattern: 'high-complexity',
+    category: 'quality',
+    thresholds: { high: 10, critical: 15 }
+  },
+  'reduce-parameters': {
+    pattern: 'too-many-params',
+    category: 'quality',
+    thresholds: { high: 5, critical: 8 }
+  },
+  'extract-module': {
+    pattern: 'multiple-responsibilities',
+    category: 'quality',
+    thresholds: {}
+  },
+  'cache-computation': {
+    pattern: 'multiple-responsibilities',
+    category: 'quality',
+    thresholds: {}
+  },
+  'remove-dead-code': {
+    pattern: 'multiple-responsibilities',
+    category: 'quality',
+    thresholds: {}
+  },
+  'consolidate-imports': {
+    pattern: 'multiple-responsibilities',
+    category: 'quality',
+    thresholds: {}
+  },
+  'reorganize-code': {
+    pattern: 'multiple-responsibilities',
+    category: 'quality',
+    thresholds: {}
+  },
+  'improve-naming': {
+    pattern: 'poorly-named',
+    category: 'quality',
+    thresholds: {}
+  }
+};
+
+
+/**
+ * Quick Wins Configuration Thresholds
+ */
+export interface QuickWinThresholds {
+  // File-level thresholds
+  FILE_DUPLICATION_RATIO: number;    // 0.15 (15%)
+  FILE_COMPLEXITY_HIGH: number;      // 100
+  FILE_TARGET_COMPLEXITY: number;    // 50
+  FILE_TARGET_DUPLICATION: number;   // 0.05 (5%)
+  
+  // Function-level thresholds
+  FUNCTION_PARAMS_HIGH: number;      // 5
+  FUNCTION_PARAMS_TARGET: number;    // 3
+  FUNCTION_LOC_HIGH: number;         // 50
+  FUNCTION_LOC_TARGET: number;       // 30
+  
+  // ROI thresholds
+  ROI_HIGH_PRIORITY: number;         // 10
+  ROI_MEDIUM_PRIORITY: number;       // 5
+  
+  // Scoring
+  MAX_GAIN_PER_FUNCTION: number;     // 20
+  BASE_READABILITY_GAIN: number;     // 3
+  GOD_FUNCTION_GAIN: number;         // 15
+  SPLIT_RESPONSIBILITY_GAIN: number; // 8
 }

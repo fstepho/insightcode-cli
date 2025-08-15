@@ -2,13 +2,14 @@
 // File: src/cli.ts
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { CliOptions, AnalysisResult, FileDetail, CiFormat } from './types';
+import { CliOptions, AnalysisResult, FileDetail, CiFormat, QuickWinsAnalysis } from './types';
 import { analyze, AnalysisOptions } from './analyzer';
 import { isCriticalFile, isPassingScore } from './scoring.utils';
 import { generateProjectReport } from './project-report-generator';
 // config.manager removed - using global configurations from scoring.utils.ts
 import { generateCliOutput } from './reporter';
 import { defaultJsonReplacer } from './json-utils';
+import { QuickWinsReporter } from './quick-wins-reporter';
 
 /**
  * Wrapper helper pour vérifier si un fichier est critique
@@ -125,7 +126,7 @@ async function runAnalysis(path: string, options: CliOptions) {
       projectPath: path,
       production: options.production,
       strictDuplication: options.strictDuplication,
-      excludePatterns: options.exclude
+      includeQuickWins: true
     };
     
     // Analyze using new flow
@@ -171,6 +172,9 @@ async function runAnalysis(path: string, options: CliOptions) {
       default:
         // Use the new reporter for terminal output
         generateCliOutput(reportResult);
+        if (results.quickWinsAnalysis && results.quickWinsAnalysis.quickWins.length > 0) {
+          outputQuickWinsFormat(results, options, inputPath);
+        }
         break;
     }
   } catch (error) {
@@ -180,5 +184,24 @@ async function runAnalysis(path: string, options: CliOptions) {
   process.exit(0);
 }
 
+
+// AJOUT: Fonction pour afficher les Quick Wins
+function outputQuickWinsFormat(results: AnalysisResult, options: CliOptions, analysisPath: string): void {
+  if (!results.quickWinsAnalysis || results.quickWinsAnalysis.quickWins.length === 0) {
+    console.log(chalk.yellow('No quick wins found or analysis not enabled.'));
+    return;
+  }
+  
+  // CORRECTION : Commander.js transforme --no-links en links: false
+  const enableLinks = options.links !== false; // Par défaut true, false seulement si --no-links est utilisé
+  
+  const quickWinsReporter = new QuickWinsReporter({
+    ide: (options.ide as any) || IdeLinkGenerator.detectIDE(),
+    projectRoot: path.resolve(analysisPath),
+    enableLinks: enableLinks
+  });
+  
+  console.log(quickWinsReporter.generateTerminalReport(results.quickWinsAnalysis));
+}
 
 program.parse();
