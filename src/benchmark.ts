@@ -319,20 +319,20 @@ function getAverageDuplication(analysis: AnalysisResult): number {
  * @param timestamp - Une fonction pour obtenir un timestamp formaté pour les logs.
  */
 async function prepareRepository(project: Project, projectTempDir: string, timestamp: () => string): Promise<void> {
-  console.log(`  🔄 [${timestamp()}] Preparing repository...`);
+  console.log(`  🔄 [${timestamp()}] [${project.name}] Preparing repository...`);
   if (fs.existsSync(projectTempDir)) {
-    console.log(`  [${timestamp()}] Repository cache found. Fetching latest changes...`);
+    console.log(`  [${timestamp()}] [${project.name}] Repository cache found. Fetching latest changes...`);
     try {
       // Utilisation de execa serait préférable ici
       runCommand('git', ['fetch'], { cwd: projectTempDir });
       runCommand('git', ['reset', '--hard', project.stableVersion], { cwd: projectTempDir });
     } catch (error) {
-      console.log(`  ⚠️  [${timestamp()}] Git fetch failed, removing cache and cloning fresh...`);
+      console.log(`  ⚠️  [${timestamp()}] [${project.name}] Git fetch failed, removing cache and cloning fresh...`);
       fs.rmSync(projectTempDir, { recursive: true, force: true });
       runCommand('git', ['clone', '--depth', '1', '--branch', project.stableVersion, project.repo, projectTempDir]);
     }
   } else {
-    console.log(`  📥 [${timestamp()}] Cloning repository (${project.stableVersion})...`);
+    console.log(`  📥 [${timestamp()}] [${project.name}] Cloning repository (${project.stableVersion})...`);
     runCommand('git', ['clone', '--depth', '1', '--branch', project.stableVersion, project.repo, projectTempDir]);
   }
 }
@@ -373,7 +373,9 @@ async function runProjectAnalysis(
   production: boolean,
   timestamp: () => string
 ): Promise<AnalysisResult> {
-  console.log(`  � [${timestamp()}] Building AST and analyzing...`);
+  // Extract project name from projectTempDir for logging
+  const projectName = path.basename(projectTempDir);
+  console.log(`  � [${timestamp()}] [${projectName}] Building AST and analyzing...`);
   
   const analysisOptions: AnalysisOptions = {
     format: 'markdown', // Default format for CLI
@@ -383,7 +385,7 @@ async function runProjectAnalysis(
   };
   
   const results = await analyze(analysisPath, analysisOptions);
-  console.log(`  📊 [${timestamp()}] Analysis completed`);
+  console.log(`  📊 [${timestamp()}] [${projectName}] Analysis completed`);
 
   return results;
 }
@@ -407,10 +409,10 @@ async function analyzeProject(project: Project, index: number, total: number): P
     await prepareRepository(project, projectTempDir, timestamp);
 
     // 2. Détermination des chemins et configuration
-    console.log(`  🔍 [${timestamp()}] Starting direct analysis...`);
+    console.log(`  🔍 [${timestamp()}] [${project.name}] Starting direct analysis...`);
     // thresholds removed - using global configurations from scoring.utils.ts
     const { analysisPath, pathInfo, pathMode } = determineAnalysisPath(project, projectTempDir, production);
-    console.log(`  📁 [${timestamp()}] Analysis path: ${pathInfo} (${pathMode})`);
+    console.log(`  📁 [${timestamp()}] [${project.name}] Analysis path: ${pathInfo} (${pathMode})`);
 
     // 3. Exécution du moteur d'analyse
     const analysisResult = await runProjectAnalysis(
@@ -595,7 +597,7 @@ async function main(): Promise<void> {
   
   // Générer un rapport pour chaque projet réussi
   results.filter(r => !r.error).forEach(result => {
-    const reportContent = generateProjectReport(result);
+    const reportContent = generateProjectReport(result, false);
     // add production info to filename
     const modeSuffixIndividual = production ? '-prod' : '-full';
     const date = new Date().toISOString().split('T')[0];
