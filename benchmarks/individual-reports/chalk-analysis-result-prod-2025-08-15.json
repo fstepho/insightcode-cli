@@ -1,0 +1,387 @@
+{
+  "project": "chalk",
+  "repo": "https://github.com/chalk/chalk.git",
+  "type": "utility library",
+  "stars": "22.3k",
+  "stableVersion": "v5.4.1",
+  "description": "Terminal string styling library",
+  "category": "small",
+  "emblematicFiles": {
+    "coreFiles": [
+      "source/index.js",
+      "index.js"
+    ],
+    "architecturalFiles": [
+      "source/templates.js"
+    ],
+    "performanceCriticalFiles": [
+      "source/utilities.js"
+    ],
+    "complexAlgorithmFiles": [
+      "source/vendor/ansi-styles/index.js"
+    ]
+  },
+  "analysis": {
+    "details": [
+      {
+        "file": "benchmark.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 42,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "source/index.d.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 89,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "source/index.js",
+        "metrics": {
+          "complexity": 36,
+          "loc": 169,
+          "functionCount": 16,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "critical-file-complexity",
+            "severity": "critical",
+            "location": {
+              "file": "source/index.js",
+              "line": 1
+            },
+            "description": "File complexity 36 exceeds critical threshold",
+            "threshold": 50,
+            "actualValue": 36,
+            "excessRatio": 0.72
+          },
+          {
+            "type": "too-many-functions",
+            "severity": "medium",
+            "location": {
+              "file": "source/index.js",
+              "line": 1
+            },
+            "description": "Too many functions in file (16)",
+            "threshold": 15,
+            "actualValue": 16,
+            "excessRatio": 1.07
+          }
+        ],
+        "functions": [
+          {
+            "name": "createChalk",
+            "line": 50,
+            "endLine": 52,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "<anonymous>",
+            "line": 35,
+            "endLine": 38,
+            "complexity": 1,
+            "loc": 4,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "applyOptions",
+            "line": 24,
+            "endLine": 32,
+            "complexity": 8,
+            "loc": 9,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "source/index.js",
+                  "line": 24,
+                  "function": "applyOptions"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "chalkFactory",
+            "line": 41,
+            "endLine": 48,
+            "complexity": 1,
+            "loc": 8,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "chalk",
+            "line": 42,
+            "endLine": 42,
+            "complexity": 1,
+            "loc": 1,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "getModelAnsi",
+            "line": 74,
+            "endLine": 92,
+            "complexity": 5,
+            "loc": 19,
+            "parameterCount": 4,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          },
+          {
+            "name": "createStyler",
+            "line": 132,
+            "endLine": 150,
+            "complexity": 2,
+            "loc": 19,
+            "parameterCount": 3,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "createBuilder",
+            "line": 152,
+            "endLine": 166,
+            "complexity": 1,
+            "loc": 15,
+            "parameterCount": 3,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "builder",
+            "line": 155,
+            "endLine": 155,
+            "complexity": 2,
+            "loc": 1,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "applyStyle",
+            "line": 168,
+            "endLine": 200,
+            "complexity": 8,
+            "loc": 33,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "source/index.js",
+                  "line": 168,
+                  "function": "applyStyle"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 29
+      },
+      {
+        "file": "source/index.test-d.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 148,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "source/utilities.js",
+        "metrics": {
+          "complexity": 7,
+          "loc": 28,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "stringReplaceAll",
+            "line": 2,
+            "endLine": 19,
+            "complexity": 3,
+            "loc": 18,
+            "parameterCount": 3,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "stringEncaseCRLFWithFirstIndex",
+            "line": 21,
+            "endLine": 33,
+            "complexity": 4,
+            "loc": 13,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "source/utilities.js",
+                  "line": 21,
+                  "function": "stringEncaseCRLFWithFirstIndex"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 98
+      }
+    ],
+    "overview": {
+      "grade": "C",
+      "statistics": {
+        "totalFiles": 5,
+        "totalLOC": 476,
+        "avgComplexity": 9.2,
+        "avgLOC": 95,
+        "avgDuplicationRatio": 0
+      },
+      "scores": {
+        "complexity": 80,
+        "duplication": 100,
+        "maintainability": 67,
+        "reliability": 58,
+        "overall": 76
+      },
+      "summary": "Good overall health with 1 file requiring attention"
+    },
+    "context": {
+      "project": {
+        "name": "chalk",
+        "path": "/Users/fstepho/dev/insightcode-cli/temp-analysis/chalk",
+        "version": "5.4.1",
+        "repository": "chalk/chalk"
+      },
+      "analysis": {
+        "timestamp": "2025-08-15T09:53:04.612Z",
+        "durationMs": 139596,
+        "toolVersion": "0.8.0",
+        "filesAnalyzed": 5,
+        "duplicationMode": "legacy"
+      }
+    },
+    "quickWinsAnalysis": {
+      "totalPotentialGain": 0,
+      "quickWins": [],
+      "byPriority": {
+        "high": [],
+        "medium": [],
+        "low": []
+      },
+      "byStrategicValue": {
+        "strategic": [],
+        "standard": [],
+        "maintenance": []
+      },
+      "problemPatterns": [],
+      "summary": {
+        "totalWins": 0,
+        "immediateWins": 0,
+        "estimatedHours": 0,
+        "topFiles": []
+      }
+    }
+  },
+  "durationMs": 139631
+}

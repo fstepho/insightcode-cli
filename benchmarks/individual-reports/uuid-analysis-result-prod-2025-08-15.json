@@ -1,0 +1,2161 @@
+{
+  "project": "uuid",
+  "repo": "https://github.com/uuidjs/uuid.git",
+  "type": "utility library",
+  "stars": "15k",
+  "stableVersion": "v11.1.0",
+  "description": "UUID generation library",
+  "category": "small",
+  "emblematicFiles": {
+    "coreFiles": [
+      "dist/index.js",
+      "src/index.js"
+    ],
+    "architecturalFiles": [
+      "src/v1.js",
+      "src/v4.js"
+    ],
+    "performanceCriticalFiles": [
+      "src/rng.js"
+    ],
+    "complexAlgorithmFiles": [
+      "src/v3.js",
+      "src/v5.js"
+    ]
+  },
+  "analysis": {
+    "details": [
+      {
+        "file": "prettier.config.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 7,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "wdio.conf.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 82,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/index.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 15,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/max.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/md5-browser.ts",
+        "metrics": {
+          "complexity": 16,
+          "loc": 136,
+          "functionCount": 12,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "high-file-complexity",
+            "severity": "high",
+            "location": {
+              "file": "src/md5-browser.ts",
+              "line": 1
+            },
+            "description": "File complexity 16 exceeds high threshold",
+            "threshold": 20,
+            "actualValue": 16,
+            "excessRatio": 0.8
+          }
+        ],
+        "functions": [
+          {
+            "name": "md5",
+            "line": 21,
+            "endLine": 26,
+            "complexity": 1,
+            "loc": 6,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "uint32ToUint8",
+            "line": 31,
+            "endLine": 42,
+            "complexity": 2,
+            "loc": 12,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "getOutputLength",
+            "line": 47,
+            "endLine": 49,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "wordsToMd5",
+            "line": 54,
+            "endLine": 148,
+            "complexity": 2,
+            "loc": 95,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "src/md5-browser.ts",
+                  "line": 54,
+                  "function": "wordsToMd5"
+                },
+                "description": "Function has 95 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "actualValue": 95,
+                "excessRatio": 1.9
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/md5-browser.ts",
+                  "line": 54,
+                  "function": "wordsToMd5"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "uint8ToUint32",
+            "line": 153,
+            "endLine": 163,
+            "complexity": 3,
+            "loc": 11,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "safeAdd",
+            "line": 169,
+            "endLine": 173,
+            "complexity": 1,
+            "loc": 5,
+            "parameterCount": 2,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "bitRotateLeft",
+            "line": 178,
+            "endLine": 180,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 2,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "md5cmn",
+            "line": 185,
+            "endLine": 187,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 6,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "md5ff",
+            "line": 189,
+            "endLine": 191,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "src/md5-browser.ts",
+                  "line": 189,
+                  "function": "md5ff"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern",
+                "threshold": 6,
+                "actualValue": 7,
+                "excessRatio": 1.17
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "md5gg",
+            "line": 193,
+            "endLine": 195,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "src/md5-browser.ts",
+                  "line": 193,
+                  "function": "md5gg"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern",
+                "threshold": 6,
+                "actualValue": 7,
+                "excessRatio": 1.17
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "md5hh",
+            "line": 197,
+            "endLine": 199,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "src/md5-browser.ts",
+                  "line": 197,
+                  "function": "md5hh"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern",
+                "threshold": 6,
+                "actualValue": 7,
+                "excessRatio": 1.17
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "md5ii",
+            "line": 201,
+            "endLine": 203,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "src/md5-browser.ts",
+                  "line": 201,
+                  "function": "md5ii"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern",
+                "threshold": 6,
+                "actualValue": 7,
+                "excessRatio": 1.17
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 38
+      },
+      {
+        "file": "src/md5.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 10,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "md5",
+            "line": 3,
+            "endLine": 11,
+            "complexity": 3,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/md5.ts",
+                  "line": 3,
+                  "function": "md5"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 98
+      },
+      {
+        "file": "src/native-browser.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 3,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/native.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 2,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/nil.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/parse.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 26,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "parse",
+            "line": 3,
+            "endLine": 36,
+            "complexity": 3,
+            "loc": 34,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/parse.ts",
+                  "line": 3,
+                  "function": "parse"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 98
+      },
+      {
+        "file": "src/regex.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 1,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/rng-browser.ts",
+        "metrics": {
+          "complexity": 5,
+          "loc": 13,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "rng",
+            "line": 9,
+            "endLine": 22,
+            "complexity": 5,
+            "loc": 14,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/rng-browser.ts",
+                  "line": 9,
+                  "function": "rng"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 98
+      },
+      {
+        "file": "src/rng.ts",
+        "metrics": {
+          "complexity": 2,
+          "loc": 10,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "rng",
+            "line": 6,
+            "endLine": 12,
+            "complexity": 2,
+            "loc": 7,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/rng.ts",
+                  "line": 6,
+                  "function": "rng"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 98
+      },
+      {
+        "file": "src/sha1-browser.ts",
+        "metrics": {
+          "complexity": 13,
+          "loc": 91,
+          "functionCount": 3,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "location": {
+              "file": "src/sha1-browser.ts",
+              "line": 1
+            },
+            "description": "File complexity 13 exceeds medium threshold",
+            "threshold": 15,
+            "actualValue": 13,
+            "excessRatio": 0.87
+          }
+        ],
+        "functions": [
+          {
+            "name": "f",
+            "line": 3,
+            "endLine": 14,
+            "complexity": 5,
+            "loc": 12,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/sha1-browser.ts",
+                  "line": 3,
+                  "function": "f"
+                },
+                "description": "Function name \"f\" is too short, use descriptive names"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "ROTL",
+            "line": 16,
+            "endLine": 18,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 2,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "sha1",
+            "line": 20,
+            "endLine": 108,
+            "complexity": 7,
+            "loc": 89,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "src/sha1-browser.ts",
+                  "line": 20,
+                  "function": "sha1"
+                },
+                "description": "Function has 89 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "actualValue": 89,
+                "excessRatio": 1.78
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/sha1-browser.ts",
+                  "line": 20,
+                  "function": "sha1"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 75
+      },
+      {
+        "file": "src/sha1.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 10,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "sha1",
+            "line": 3,
+            "endLine": 11,
+            "complexity": 3,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/sha1.ts",
+                  "line": 3,
+                  "function": "sha1"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 98
+      },
+      {
+        "file": "src/stringify.ts",
+        "metrics": {
+          "complexity": 4,
+          "loc": 37,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "unsafeStringify",
+            "line": 13,
+            "endLine": 41,
+            "complexity": 1,
+            "loc": 29,
+            "parameterCount": 2,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "stringify",
+            "line": 43,
+            "endLine": 56,
+            "complexity": 3,
+            "loc": 14,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/stringify.ts",
+                  "line": 43,
+                  "function": "stringify"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 98
+      },
+      {
+        "file": "src/types.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 21,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/uuid-bin.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 72,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "usage",
+            "line": 10,
+            "endLine": 23,
+            "complexity": 1,
+            "loc": 14,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/uuid-bin.ts",
+                  "line": 10,
+                  "function": "usage"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 98
+      },
+      {
+        "file": "src/v1.ts",
+        "metrics": {
+          "complexity": 21,
+          "loc": 120,
+          "functionCount": 3,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "critical-file-complexity",
+            "severity": "critical",
+            "location": {
+              "file": "src/v1.ts",
+              "line": 1
+            },
+            "description": "File complexity 21 exceeds critical threshold",
+            "threshold": 50,
+            "actualValue": 21,
+            "excessRatio": 0.42
+          }
+        ],
+        "functions": [
+          {
+            "name": "v1",
+            "line": 33,
+            "endLine": 85,
+            "complexity": 7,
+            "loc": 49,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 33,
+                  "function": "v1"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 33,
+                  "function": "v1"
+                },
+                "description": "Function name \"v1\" is too short, use descriptive names"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          },
+          {
+            "name": "updateV1State",
+            "line": 89,
+            "endLine": 139,
+            "complexity": 6,
+            "loc": 51,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 89,
+                  "function": "updateV1State"
+                },
+                "description": "Function has 51 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "actualValue": 51,
+                "excessRatio": 1.02
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 89,
+                  "function": "updateV1State"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 3
+            }
+          },
+          {
+            "name": "v1Bytes",
+            "line": 141,
+            "endLine": 201,
+            "complexity": 8,
+            "loc": 53,
+            "parameterCount": 7,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 141,
+                  "function": "v1Bytes"
+                },
+                "description": "Function has 53 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "actualValue": 53,
+                "excessRatio": 1.06
+              },
+              {
+                "type": "too-many-params",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 141,
+                  "function": "v1Bytes"
+                },
+                "description": "7 parameters, consider using object parameter or builder pattern",
+                "threshold": 6,
+                "actualValue": 7,
+                "excessRatio": 1.17
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v1.ts",
+                  "line": 141,
+                  "function": "v1Bytes"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 24
+      },
+      {
+        "file": "src/v1ToV6.ts",
+        "metrics": {
+          "complexity": 4,
+          "loc": 30,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "v1ToV6",
+            "line": 14,
+            "endLine": 20,
+            "complexity": 3,
+            "loc": 7,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "_v1ToV6",
+            "line": 23,
+            "endLine": 45,
+            "complexity": 1,
+            "loc": 23,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/v3.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 27,
+          "functionCount": 1,
+          "duplicationRatio": 0.5
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "low",
+            "location": {
+              "file": "src/v3.ts",
+              "line": 1
+            },
+            "description": "Duplication ratio 50.0% exceeds excellent threshold",
+            "threshold": 0.15,
+            "excessRatio": 3.33
+          }
+        ],
+        "functions": [
+          {
+            "name": "v3",
+            "line": 19,
+            "endLine": 26,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v3.ts",
+                  "line": 19,
+                  "function": "v3"
+                },
+                "description": "Function name \"v3\" is too short, use descriptive names"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 21
+      },
+      {
+        "file": "src/v35.ts",
+        "metrics": {
+          "complexity": 11,
+          "loc": 45,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "location": {
+              "file": "src/v35.ts",
+              "line": 1
+            },
+            "description": "File complexity 11 exceeds medium threshold",
+            "threshold": 15,
+            "actualValue": 11,
+            "excessRatio": 0.73
+          }
+        ],
+        "functions": [
+          {
+            "name": "stringToBytes",
+            "line": 5,
+            "endLine": 16,
+            "complexity": 2,
+            "loc": 12,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v35.ts",
+                  "line": 5,
+                  "function": "stringToBytes"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "v35",
+            "line": 23,
+            "endLine": 64,
+            "complexity": 9,
+            "loc": 35,
+            "parameterCount": 6,
+            "issues": [
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "src/v35.ts",
+                  "line": 23,
+                  "function": "v35"
+                },
+                "description": "Function has 2 distinct responsibilities (transformation, state-mutation), violates Single Responsibility Principle",
+                "threshold": 1,
+                "actualValue": 2,
+                "excessRatio": 2
+              },
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v35.ts",
+                  "line": 23,
+                  "function": "v35"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 81
+      },
+      {
+        "file": "src/v4.ts",
+        "metrics": {
+          "complexity": 13,
+          "loc": 38,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "location": {
+              "file": "src/v4.ts",
+              "line": 1
+            },
+            "description": "File complexity 13 exceeds medium threshold",
+            "threshold": 15,
+            "actualValue": 13,
+            "excessRatio": 0.87
+          }
+        ],
+        "functions": [
+          {
+            "name": "v4",
+            "line": 12,
+            "endLine": 47,
+            "complexity": 13,
+            "loc": 32,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v4.ts",
+                  "line": 12,
+                  "function": "v4"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v4.ts",
+                  "line": 12,
+                  "function": "v4"
+                },
+                "description": "Function name \"v4\" is too short, use descriptive names"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 81
+      },
+      {
+        "file": "src/v5.ts",
+        "metrics": {
+          "complexity": 1,
+          "loc": 27,
+          "functionCount": 1,
+          "duplicationRatio": 0.5
+        },
+        "issues": [
+          {
+            "type": "duplication",
+            "severity": "low",
+            "location": {
+              "file": "src/v5.ts",
+              "line": 1
+            },
+            "description": "Duplication ratio 50.0% exceeds excellent threshold",
+            "threshold": 0.15,
+            "excessRatio": 3.33
+          }
+        ],
+        "functions": [
+          {
+            "name": "v5",
+            "line": 19,
+            "endLine": 26,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v5.ts",
+                  "line": 19,
+                  "function": "v5"
+                },
+                "description": "Function name \"v5\" is too short, use descriptive names"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 21
+      },
+      {
+        "file": "src/v6.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 28,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "v6",
+            "line": 12,
+            "endLine": 37,
+            "complexity": 3,
+            "loc": 22,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v6.ts",
+                  "line": 12,
+                  "function": "v6"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v6.ts",
+                  "line": 12,
+                  "function": "v6"
+                },
+                "description": "Function name \"v6\" is too short, use descriptive names"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 96
+      },
+      {
+        "file": "src/v6ToV1.ts",
+        "metrics": {
+          "complexity": 4,
+          "loc": 30,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "v6ToV1",
+            "line": 14,
+            "endLine": 20,
+            "complexity": 3,
+            "loc": 7,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "_v6ToV1",
+            "line": 23,
+            "endLine": 45,
+            "complexity": 1,
+            "loc": 23,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "src/v7.ts",
+        "metrics": {
+          "complexity": 12,
+          "loc": 83,
+          "functionCount": 3,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "location": {
+              "file": "src/v7.ts",
+              "line": 1
+            },
+            "description": "File complexity 12 exceeds medium threshold",
+            "threshold": 15,
+            "actualValue": 12,
+            "excessRatio": 0.8
+          }
+        ],
+        "functions": [
+          {
+            "name": "v7",
+            "line": 18,
+            "endLine": 45,
+            "complexity": 2,
+            "loc": 24,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v7.ts",
+                  "line": 18,
+                  "function": "v7"
+                },
+                "description": "Function has side effects or depends on external state"
+              },
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/v7.ts",
+                  "line": 18,
+                  "function": "v7"
+                },
+                "description": "Function name \"v7\" is too short, use descriptive names"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "updateV7State",
+            "line": 49,
+            "endLine": 70,
+            "complexity": 3,
+            "loc": 22,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v7.ts",
+                  "line": 49,
+                  "function": "updateV7State"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          },
+          {
+            "name": "v7Bytes",
+            "line": 72,
+            "endLine": 121,
+            "complexity": 7,
+            "loc": 50,
+            "parameterCount": 5,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/v7.ts",
+                  "line": 72,
+                  "function": "v7Bytes"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 80
+      },
+      {
+        "file": "src/validate.ts",
+        "metrics": {
+          "complexity": 2,
+          "loc": 5,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "validate",
+            "line": 3,
+            "endLine": 5,
+            "complexity": 2,
+            "loc": 3,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "poorly-named",
+                "severity": "low",
+                "location": {
+                  "file": "src/validate.ts",
+                  "line": 3,
+                  "function": "validate"
+                },
+                "description": "Boolean function \"validate\" should start with is/has/should/can"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 98
+      },
+      {
+        "file": "src/version.ts",
+        "metrics": {
+          "complexity": 3,
+          "loc": 8,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "version",
+            "line": 3,
+            "endLine": 9,
+            "complexity": 3,
+            "loc": 7,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "src/version.ts",
+                  "line": 3,
+                  "function": "version"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 98
+      }
+    ],
+    "overview": {
+      "grade": "B",
+      "statistics": {
+        "totalFiles": 29,
+        "totalLOC": 979,
+        "avgComplexity": 4.62,
+        "avgLOC": 34,
+        "avgDuplicationRatio": 0.03
+      },
+      "scores": {
+        "complexity": 95,
+        "duplication": 93,
+        "maintainability": 70,
+        "reliability": 67,
+        "overall": 83
+      },
+      "summary": "5 critical files found requiring attention"
+    },
+    "context": {
+      "project": {
+        "name": "uuid",
+        "path": "/Users/fstepho/dev/insightcode-cli/temp-analysis/uuid",
+        "version": "11.1.0",
+        "repository": "https://github.com/uuidjs/uuid.git"
+      },
+      "analysis": {
+        "timestamp": "2025-08-15T09:53:04.614Z",
+        "durationMs": 139597,
+        "toolVersion": "0.8.0",
+        "filesAnalyzed": 29,
+        "duplicationMode": "legacy"
+      }
+    },
+    "quickWinsAnalysis": {
+      "totalPotentialGain": 56,
+      "quickWins": [
+        {
+          "type": "improve-naming",
+          "file": "src/sha1-browser.ts",
+          "function": "f",
+          "line": 3,
+          "endLine": 14,
+          "action": "Rename 'f' to use more descriptive name",
+          "currentValue": 1,
+          "targetValue": 0,
+          "scoreGain": 3,
+          "effortEstimate": "trivial",
+          "issueIds": [
+            "f-poorly-named"
+          ],
+          "id": "qw-6",
+          "priority": 1,
+          "roi": 12,
+          "criticality": "isolated",
+          "criticalityScore": 2,
+          "strategicPriority": "standard"
+        },
+        {
+          "type": "improve-naming",
+          "file": "src/v1.ts",
+          "function": "v1",
+          "line": 33,
+          "endLine": 85,
+          "action": "Rename 'v1' to use more descriptive name",
+          "currentValue": 2,
+          "targetValue": 0,
+          "scoreGain": 3,
+          "effortEstimate": "trivial",
+          "issueIds": [
+            "v1-poorly-named"
+          ],
+          "id": "qw-8",
+          "priority": 1,
+          "roi": 12,
+          "criticality": "isolated",
+          "criticalityScore": 3,
+          "strategicPriority": "standard"
+        },
+        {
+          "type": "improve-naming",
+          "file": "src/v3.ts",
+          "function": "v3",
+          "line": 19,
+          "endLine": 26,
+          "action": "Rename 'v3' to use more descriptive name",
+          "currentValue": 2,
+          "targetValue": 0,
+          "scoreGain": 3,
+          "effortEstimate": "trivial",
+          "issueIds": [
+            "v3-poorly-named"
+          ],
+          "id": "qw-10",
+          "priority": 1,
+          "roi": 12,
+          "criticality": "isolated",
+          "criticalityScore": 1.5,
+          "strategicPriority": "standard"
+        },
+        {
+          "type": "improve-naming",
+          "file": "src/v4.ts",
+          "function": "v4",
+          "line": 12,
+          "endLine": 47,
+          "action": "Rename 'v4' to use more descriptive name",
+          "currentValue": 2,
+          "targetValue": 0,
+          "scoreGain": 3,
+          "effortEstimate": "trivial",
+          "issueIds": [
+            "v4-poorly-named"
+          ],
+          "id": "qw-12",
+          "priority": 1,
+          "roi": 12,
+          "criticality": "isolated",
+          "criticalityScore": 2,
+          "strategicPriority": "standard"
+        },
+        {
+          "type": "improve-naming",
+          "file": "src/v5.ts",
+          "function": "v5",
+          "line": 19,
+          "endLine": 26,
+          "action": "Rename 'v5' to use more descriptive name",
+          "currentValue": 2,
+          "targetValue": 0,
+          "scoreGain": 3,
+          "effortEstimate": "trivial",
+          "issueIds": [
+            "v5-poorly-named"
+          ],
+          "id": "qw-13",
+          "priority": 1,
+          "roi": 12,
+          "criticality": "isolated",
+          "criticalityScore": 1.5,
+          "strategicPriority": "standard"
+        },
+        {
+          "type": "improve-naming",
+          "file": "src/v6.ts",
+          "function": "v6",
+          "line": 12,
+          "endLine": 37,
+          "action": "Rename 'v6' to use more descriptive name",
+          "currentValue": 2,
+          "targetValue": 0,
+          "scoreGain": 3,
+          "effortEstimate": "trivial",
+          "issueIds": [
+            "v6-poorly-named"
+          ],
+          "id": "qw-14",
+          "priority": 1,
+          "roi": 12,
+          "criticality": "isolated",
+          "criticalityScore": 1,
+          "strategicPriority": "standard"
+        },
+        {
+          "type": "improve-naming",
+          "file": "src/v7.ts",
+          "function": "v7",
+          "line": 18,
+          "endLine": 45,
+          "action": "Rename 'v7' to use more descriptive name",
+          "currentValue": 2,
+          "targetValue": 0,
+          "scoreGain": 3,
+          "effortEstimate": "trivial",
+          "issueIds": [
+            "v7-poorly-named"
+          ],
+          "id": "qw-15",
+          "priority": 1,
+          "roi": 12,
+          "criticality": "isolated",
+          "criticalityScore": 2,
+          "strategicPriority": "standard"
+        },
+        {
+          "type": "improve-naming",
+          "file": "src/validate.ts",
+          "function": "validate",
+          "line": 3,
+          "endLine": 5,
+          "action": "Rename 'validate' to use more descriptive name",
+          "currentValue": 8,
+          "targetValue": 0,
+          "scoreGain": 3,
+          "effortEstimate": "trivial",
+          "issueIds": [
+            "validate-poorly-named"
+          ],
+          "id": "qw-16",
+          "priority": 1,
+          "roi": 12,
+          "criticality": "isolated",
+          "criticalityScore": 1,
+          "strategicPriority": "standard"
+        },
+        {
+          "type": "extract-function",
+          "file": "src/v35.ts",
+          "function": "v35",
+          "line": 23,
+          "action": "Split v35 into single-responsibility functions (2 responsibilities detected)",
+          "currentValue": 2,
+          "targetValue": 1,
+          "scoreGain": 8,
+          "effortEstimate": "moderate",
+          "issueIds": [
+            "v35-multiple-responsibilities"
+          ],
+          "id": "qw-11",
+          "priority": 2,
+          "roi": 8,
+          "criticality": "isolated",
+          "criticalityScore": 2,
+          "strategicPriority": "low"
+        },
+        {
+          "type": "reduce-parameters",
+          "file": "src/md5-browser.ts",
+          "function": "md5ff",
+          "line": 189,
+          "action": "Use object parameter pattern for md5ff (7 parameters)",
+          "currentValue": 7,
+          "targetValue": 3,
+          "scoreGain": 3,
+          "effortEstimate": "easy",
+          "issueIds": [
+            "md5ff-too-many-params"
+          ],
+          "suggestion": {
+            "before": "function md5ff(param1, param2, param3, param4, param5, param6) { }",
+            "after": "interface md5ffOptions {\n  param1: string;\n  param2: number;\n  param3?: boolean;\n  // ... other params\n}\n\nfunction md5ff(options: md5ffOptions) {\n  const { param1, param2, param3 = true } = options;\n  // ...\n}",
+            "explanation": "Object parameters are easier to use and maintain"
+          },
+          "id": "qw-2",
+          "priority": 2,
+          "roi": 6,
+          "criticality": "isolated",
+          "criticalityScore": 2.5,
+          "strategicPriority": "low"
+        },
+        {
+          "type": "reduce-parameters",
+          "file": "src/md5-browser.ts",
+          "function": "md5gg",
+          "line": 193,
+          "action": "Use object parameter pattern for md5gg (7 parameters)",
+          "currentValue": 7,
+          "targetValue": 3,
+          "scoreGain": 3,
+          "effortEstimate": "easy",
+          "issueIds": [
+            "md5gg-too-many-params"
+          ],
+          "suggestion": {
+            "before": "function md5gg(param1, param2, param3, param4, param5, param6) { }",
+            "after": "interface md5ggOptions {\n  param1: string;\n  param2: number;\n  param3?: boolean;\n  // ... other params\n}\n\nfunction md5gg(options: md5ggOptions) {\n  const { param1, param2, param3 = true } = options;\n  // ...\n}",
+            "explanation": "Object parameters are easier to use and maintain"
+          },
+          "id": "qw-3",
+          "priority": 2,
+          "roi": 6,
+          "criticality": "isolated",
+          "criticalityScore": 2.5,
+          "strategicPriority": "low"
+        },
+        {
+          "type": "reduce-parameters",
+          "file": "src/md5-browser.ts",
+          "function": "md5hh",
+          "line": 197,
+          "action": "Use object parameter pattern for md5hh (7 parameters)",
+          "currentValue": 7,
+          "targetValue": 3,
+          "scoreGain": 3,
+          "effortEstimate": "easy",
+          "issueIds": [
+            "md5hh-too-many-params"
+          ],
+          "suggestion": {
+            "before": "function md5hh(param1, param2, param3, param4, param5, param6) { }",
+            "after": "interface md5hhOptions {\n  param1: string;\n  param2: number;\n  param3?: boolean;\n  // ... other params\n}\n\nfunction md5hh(options: md5hhOptions) {\n  const { param1, param2, param3 = true } = options;\n  // ...\n}",
+            "explanation": "Object parameters are easier to use and maintain"
+          },
+          "id": "qw-4",
+          "priority": 2,
+          "roi": 6,
+          "criticality": "isolated",
+          "criticalityScore": 2.5,
+          "strategicPriority": "low"
+        },
+        {
+          "type": "reduce-parameters",
+          "file": "src/md5-browser.ts",
+          "function": "md5ii",
+          "line": 201,
+          "action": "Use object parameter pattern for md5ii (7 parameters)",
+          "currentValue": 7,
+          "targetValue": 3,
+          "scoreGain": 3,
+          "effortEstimate": "easy",
+          "issueIds": [
+            "md5ii-too-many-params"
+          ],
+          "suggestion": {
+            "before": "function md5ii(param1, param2, param3, param4, param5, param6) { }",
+            "after": "interface md5iiOptions {\n  param1: string;\n  param2: number;\n  param3?: boolean;\n  // ... other params\n}\n\nfunction md5ii(options: md5iiOptions) {\n  const { param1, param2, param3 = true } = options;\n  // ...\n}",
+            "explanation": "Object parameters are easier to use and maintain"
+          },
+          "id": "qw-5",
+          "priority": 2,
+          "roi": 6,
+          "criticality": "isolated",
+          "criticalityScore": 2.5,
+          "strategicPriority": "low"
+        },
+        {
+          "type": "reduce-parameters",
+          "file": "src/v1.ts",
+          "function": "v1Bytes",
+          "line": 141,
+          "action": "Use object parameter pattern for v1Bytes (7 parameters)",
+          "currentValue": 7,
+          "targetValue": 3,
+          "scoreGain": 3,
+          "effortEstimate": "easy",
+          "issueIds": [
+            "v1Bytes-too-many-params"
+          ],
+          "suggestion": {
+            "before": "function v1Bytes(param1, param2, param3, param4, param5, param6) { }",
+            "after": "interface v1BytesOptions {\n  param1: string;\n  param2: number;\n  param3?: boolean;\n  // ... other params\n}\n\nfunction v1Bytes(options: v1BytesOptions) {\n  const { param1, param2, param3 = true } = options;\n  // ...\n}",
+            "explanation": "Object parameters are easier to use and maintain"
+          },
+          "id": "qw-9",
+          "priority": 2,
+          "roi": 6,
+          "criticality": "isolated",
+          "criticalityScore": 3,
+          "strategicPriority": "low"
+        },
+        {
+          "type": "extract-function",
+          "file": "src/md5-browser.ts",
+          "function": "wordsToMd5",
+          "line": 54,
+          "endLine": 148,
+          "action": "Break down wordsToMd5 (95 LOC) into smaller functions",
+          "currentValue": 95,
+          "targetValue": 30,
+          "scoreGain": 5,
+          "effortEstimate": "hard",
+          "issueIds": [
+            "wordsToMd5-long-function"
+          ],
+          "id": "qw-1",
+          "priority": 3,
+          "roi": 2.5,
+          "criticality": "isolated",
+          "criticalityScore": 2.5,
+          "strategicPriority": "low"
+        },
+        {
+          "type": "extract-function",
+          "file": "src/sha1-browser.ts",
+          "function": "sha1",
+          "line": 20,
+          "endLine": 108,
+          "action": "Break down sha1 (89 LOC) into smaller functions",
+          "currentValue": 89,
+          "targetValue": 30,
+          "scoreGain": 4,
+          "effortEstimate": "hard",
+          "issueIds": [
+            "sha1-long-function"
+          ],
+          "id": "qw-7",
+          "priority": 3,
+          "roi": 2,
+          "criticality": "isolated",
+          "criticalityScore": 2,
+          "strategicPriority": "low"
+        }
+      ],
+      "byPriority": {
+        "high": [
+          "qw-6",
+          "qw-8",
+          "qw-10",
+          "qw-12",
+          "qw-13",
+          "qw-14",
+          "qw-15",
+          "qw-16"
+        ],
+        "medium": [
+          "qw-11",
+          "qw-2",
+          "qw-3",
+          "qw-4",
+          "qw-5",
+          "qw-9"
+        ],
+        "low": [
+          "qw-1",
+          "qw-7"
+        ]
+      },
+      "byStrategicValue": {
+        "strategic": [],
+        "standard": [
+          "qw-6",
+          "qw-8",
+          "qw-10",
+          "qw-12",
+          "qw-13",
+          "qw-14",
+          "qw-15",
+          "qw-16"
+        ],
+        "maintenance": [
+          "qw-11",
+          "qw-2",
+          "qw-3",
+          "qw-4",
+          "qw-5",
+          "qw-9",
+          "qw-1",
+          "qw-7"
+        ]
+      },
+      "problemPatterns": [
+        {
+          "category": "Poorly Named",
+          "count": 8,
+          "percentage": 50,
+          "totalGain": 24,
+          "averageGain": 3,
+          "averageEffort": 1,
+          "description": "Code quality improvement opportunity (thresholds: 0-8)",
+          "strategicImplications": "8 issues spread across various file types indicate systemic code quality concerns.",
+          "topFiles": [
+            "src/sha1-browser.ts",
+            "src/v1.ts",
+            "src/v3.ts"
+          ]
+        },
+        {
+          "category": "Parameter Overload",
+          "count": 5,
+          "percentage": 31,
+          "totalGain": 15,
+          "averageGain": 3,
+          "averageEffort": 2,
+          "description": "Functions with excessive parameter count (thresholds: 3-7)",
+          "strategicImplications": "5 issues spread across various file types indicate systemic code quality concerns.",
+          "topFiles": [
+            "src/md5-browser.ts",
+            "src/v1.ts"
+          ]
+        },
+        {
+          "category": "God Functions",
+          "count": 3,
+          "percentage": 19,
+          "totalGain": 17,
+          "averageGain": 6,
+          "averageEffort": 3.67,
+          "description": "Functions handling multiple distinct responsibilities (thresholds: 1-95)",
+          "strategicImplications": "3 issues spread across various file types indicate systemic code quality concerns.",
+          "topFiles": [
+            "src/v35.ts",
+            "src/md5-browser.ts",
+            "src/sha1-browser.ts"
+          ]
+        }
+      ],
+      "summary": {
+        "totalWins": 16,
+        "immediateWins": 13,
+        "estimatedHours": 9.5,
+        "topFiles": [
+          "src/md5-browser.ts",
+          "src/sha1-browser.ts",
+          "src/v1.ts",
+          "src/v3.ts",
+          "src/v4.ts"
+        ]
+      }
+    }
+  },
+  "durationMs": 139629
+}

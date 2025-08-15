@@ -1,0 +1,763 @@
+{
+  "project": "express",
+  "repo": "https://github.com/expressjs/express.git",
+  "type": "web framework",
+  "stars": "66.2k",
+  "stableVersion": "v5.1.0",
+  "description": "Fast web framework for Node.js",
+  "category": "medium",
+  "emblematicFiles": {
+    "coreFiles": [
+      "lib/application.js",
+      "lib/express.js",
+      "lib/router/index.js"
+    ],
+    "architecturalFiles": [
+      "lib/middleware/init.js",
+      "lib/view.js"
+    ],
+    "performanceCriticalFiles": [
+      "lib/router/layer.js",
+      "lib/router/route.js"
+    ],
+    "complexAlgorithmFiles": [
+      "lib/utils.js",
+      "lib/request.js",
+      "lib/response.js"
+    ]
+  },
+  "analysis": {
+    "details": [
+      {
+        "file": "index.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 3,
+          "functionCount": 0,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/application.js",
+        "metrics": {
+          "complexity": 5,
+          "loc": 263,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "large-file",
+            "severity": "medium",
+            "location": {
+              "file": "lib/application.js",
+              "line": 1
+            },
+            "description": "File size 263 lines exceeds medium threshold",
+            "threshold": 200,
+            "actualValue": 263,
+            "excessRatio": 1.31
+          }
+        ],
+        "functions": [
+          {
+            "name": "logerror",
+            "line": 615,
+            "endLine": 618,
+            "complexity": 3,
+            "loc": 4,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/application.js",
+                  "line": 615,
+                  "function": "logerror"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "tryRender",
+            "line": 625,
+            "endLine": 631,
+            "complexity": 2,
+            "loc": 7,
+            "parameterCount": 3,
+            "issues": [
+              {
+                "type": "multiple-responsibilities",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/application.js",
+                  "line": 625,
+                  "function": "tryRender"
+                },
+                "description": "Function has 2 distinct responsibilities (error-handling, presentation), violates Single Responsibility Principle",
+                "threshold": 1,
+                "actualValue": 2,
+                "excessRatio": 2
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 82
+      },
+      {
+        "file": "lib/express.js",
+        "metrics": {
+          "complexity": 2,
+          "loc": 35,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "createApplication",
+            "line": 36,
+            "endLine": 56,
+            "complexity": 1,
+            "loc": 21,
+            "parameterCount": 0,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "<anonymous>",
+            "line": 37,
+            "endLine": 39,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 3,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/request.js",
+        "metrics": {
+          "complexity": 1,
+          "loc": 156,
+          "functionCount": 1,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "defineGetter",
+            "line": 509,
+            "endLine": 515,
+            "complexity": 1,
+            "loc": 7,
+            "parameterCount": 3,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/response.js",
+        "metrics": {
+          "complexity": 22,
+          "loc": 468,
+          "functionCount": 9,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "critical-file-complexity",
+            "severity": "critical",
+            "location": {
+              "file": "lib/response.js",
+              "line": 1
+            },
+            "description": "File complexity 22 exceeds critical threshold",
+            "threshold": 50,
+            "actualValue": 22,
+            "excessRatio": 0.44
+          },
+          {
+            "type": "large-file",
+            "severity": "high",
+            "location": {
+              "file": "lib/response.js",
+              "line": 1
+            },
+            "description": "File size 468 lines exceeds high threshold",
+            "threshold": 300,
+            "actualValue": 468,
+            "excessRatio": 1.56
+          }
+        ],
+        "functions": [
+          {
+            "name": "sendfile",
+            "line": 913,
+            "endLine": 1001,
+            "complexity": 2,
+            "loc": 89,
+            "parameterCount": 4,
+            "issues": [
+              {
+                "type": "long-function",
+                "severity": "medium",
+                "location": {
+                  "file": "lib/response.js",
+                  "line": 913,
+                  "function": "sendfile"
+                },
+                "description": "Function has 89 lines, consider splitting for better maintainability",
+                "threshold": 50,
+                "actualValue": 89,
+                "excessRatio": 1.78
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "onaborted",
+            "line": 918,
+            "endLine": 925,
+            "complexity": 2,
+            "loc": 8,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/response.js",
+                  "line": 918,
+                  "function": "onaborted"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "ondirectory",
+            "line": 928,
+            "endLine": 935,
+            "complexity": 2,
+            "loc": 8,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/response.js",
+                  "line": 928,
+                  "function": "ondirectory"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "onerror",
+            "line": 938,
+            "endLine": 942,
+            "complexity": 2,
+            "loc": 5,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/response.js",
+                  "line": 938,
+                  "function": "onerror"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "onend",
+            "line": 945,
+            "endLine": 949,
+            "complexity": 2,
+            "loc": 5,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/response.js",
+                  "line": 945,
+                  "function": "onend"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "onfile",
+            "line": 952,
+            "endLine": 954,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/response.js",
+                  "line": 952,
+                  "function": "onfile"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "onfinish",
+            "line": 957,
+            "endLine": 972,
+            "complexity": 5,
+            "loc": 16,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          },
+          {
+            "name": "onstream",
+            "line": 975,
+            "endLine": 977,
+            "complexity": 1,
+            "loc": 3,
+            "parameterCount": 0,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/response.js",
+                  "line": 975,
+                  "function": "onstream"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "stringify",
+            "line": 1015,
+            "endLine": 1039,
+            "complexity": 5,
+            "loc": 25,
+            "parameterCount": 4,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 2
+      },
+      {
+        "file": "lib/utils.js",
+        "metrics": {
+          "complexity": 9,
+          "loc": 120,
+          "functionCount": 3,
+          "duplicationRatio": 0
+        },
+        "issues": [],
+        "functions": [
+          {
+            "name": "acceptParams",
+            "line": 87,
+            "endLine": 118,
+            "complexity": 7,
+            "loc": 32,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          },
+          {
+            "name": "createETagGenerator",
+            "line": 247,
+            "endLine": 255,
+            "complexity": 1,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          },
+          {
+            "name": "parseExtendedQueryString",
+            "line": 265,
+            "endLine": 269,
+            "complexity": 1,
+            "loc": 5,
+            "parameterCount": 1,
+            "issues": [],
+            "metrics": {
+              "nestingDepth": 0
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 100
+      },
+      {
+        "file": "lib/view.js",
+        "metrics": {
+          "complexity": 12,
+          "loc": 91,
+          "functionCount": 2,
+          "duplicationRatio": 0
+        },
+        "issues": [
+          {
+            "type": "complexity",
+            "severity": "medium",
+            "location": {
+              "file": "lib/view.js",
+              "line": 1
+            },
+            "description": "File complexity 12 exceeds medium threshold",
+            "threshold": 15,
+            "actualValue": 12,
+            "excessRatio": 0.8
+          }
+        ],
+        "functions": [
+          {
+            "name": "View",
+            "line": 52,
+            "endLine": 95,
+            "complexity": 10,
+            "loc": 44,
+            "parameterCount": 2,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/view.js",
+                  "line": 52,
+                  "function": "View"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 2
+            }
+          },
+          {
+            "name": "tryStat",
+            "line": 197,
+            "endLine": 205,
+            "complexity": 2,
+            "loc": 9,
+            "parameterCount": 1,
+            "issues": [
+              {
+                "type": "impure-function",
+                "severity": "low",
+                "location": {
+                  "file": "lib/view.js",
+                  "line": 197,
+                  "function": "tryStat"
+                },
+                "description": "Function has side effects or depends on external state"
+              }
+            ],
+            "metrics": {
+              "nestingDepth": 1
+            }
+          }
+        ],
+        "dependencies": {
+          "incomingDependencies": 0,
+          "outgoingDependencies": 0,
+          "instability": 0,
+          "cohesionScore": 0,
+          "percentileUsageRank": 0,
+          "isInCycle": false
+        },
+        "healthScore": 84
+      }
+    ],
+    "overview": {
+      "grade": "C",
+      "statistics": {
+        "totalFiles": 7,
+        "totalLOC": 1136,
+        "avgComplexity": 7.43,
+        "avgLOC": 162,
+        "avgDuplicationRatio": 0
+      },
+      "scores": {
+        "complexity": 88,
+        "duplication": 100,
+        "maintainability": 62,
+        "reliability": 48,
+        "overall": 76
+      },
+      "summary": "Good overall health with 1 file requiring attention"
+    },
+    "context": {
+      "project": {
+        "name": "express",
+        "path": "/Users/fstepho/dev/insightcode-cli/temp-analysis/express",
+        "version": "5.1.0",
+        "repository": "expressjs/express"
+      },
+      "analysis": {
+        "timestamp": "2025-08-15T09:53:04.615Z",
+        "durationMs": 139597,
+        "toolVersion": "0.8.0",
+        "filesAnalyzed": 7,
+        "duplicationMode": "legacy"
+      }
+    },
+    "quickWinsAnalysis": {
+      "totalPotentialGain": 60,
+      "quickWins": [
+        {
+          "type": "split-file",
+          "file": "lib/response.js",
+          "line": 1,
+          "action": "Split this 468 LOC file into smaller modules (high size issue)",
+          "currentValue": 468,
+          "targetValue": 300,
+          "scoreGain": 36,
+          "effortEstimate": "complex",
+          "issueIds": [
+            "large-file"
+          ],
+          "id": "qw-3",
+          "priority": 2,
+          "roi": 9,
+          "criticality": "isolated",
+          "criticalityScore": 4.5,
+          "strategicPriority": "low"
+        },
+        {
+          "type": "extract-function",
+          "file": "lib/application.js",
+          "function": "tryRender",
+          "line": 625,
+          "action": "Split tryRender into single-responsibility functions (2 responsibilities detected)",
+          "currentValue": 2,
+          "targetValue": 1,
+          "scoreGain": 8,
+          "effortEstimate": "moderate",
+          "issueIds": [
+            "tryRender-multiple-responsibilities"
+          ],
+          "id": "qw-2",
+          "priority": 2,
+          "roi": 8,
+          "criticality": "isolated",
+          "criticalityScore": 2,
+          "strategicPriority": "low"
+        },
+        {
+          "type": "split-file",
+          "file": "lib/application.js",
+          "line": 1,
+          "action": "Split this 263 LOC file into smaller modules (medium size issue)",
+          "currentValue": 263,
+          "targetValue": 200,
+          "scoreGain": 12,
+          "effortEstimate": "hard",
+          "issueIds": [
+            "large-file"
+          ],
+          "id": "qw-1",
+          "priority": 2,
+          "roi": 6,
+          "criticality": "isolated",
+          "criticalityScore": 2,
+          "strategicPriority": "low"
+        },
+        {
+          "type": "extract-function",
+          "file": "lib/response.js",
+          "function": "sendfile",
+          "line": 913,
+          "endLine": 1001,
+          "action": "Break down sendfile (89 LOC) into smaller functions",
+          "currentValue": 89,
+          "targetValue": 30,
+          "scoreGain": 4,
+          "effortEstimate": "hard",
+          "issueIds": [
+            "sendfile-long-function"
+          ],
+          "id": "qw-4",
+          "priority": 3,
+          "roi": 2,
+          "criticality": "isolated",
+          "criticalityScore": 4.5,
+          "strategicPriority": "low"
+        }
+      ],
+      "byPriority": {
+        "high": [],
+        "medium": [
+          "qw-3",
+          "qw-2",
+          "qw-1"
+        ],
+        "low": [
+          "qw-4"
+        ]
+      },
+      "byStrategicValue": {
+        "strategic": [],
+        "standard": [],
+        "maintenance": [
+          "qw-3",
+          "qw-2",
+          "qw-1",
+          "qw-4"
+        ]
+      },
+      "problemPatterns": [
+        {
+          "category": "Large Files",
+          "count": 2,
+          "percentage": 50,
+          "totalGain": 48,
+          "averageGain": 24,
+          "averageEffort": 4.5,
+          "description": "Files exceeding optimal size thresholds (thresholds: 200-468)",
+          "strategicImplications": "2 issues spread across various file types indicate systemic code quality concerns.",
+          "topFiles": [
+            "lib/response.js",
+            "lib/application.js"
+          ]
+        },
+        {
+          "category": "God Functions",
+          "count": 2,
+          "percentage": 50,
+          "totalGain": 12,
+          "averageGain": 6,
+          "averageEffort": 3.5,
+          "description": "Functions handling multiple distinct responsibilities (thresholds: 1-89)",
+          "strategicImplications": "2 issues spread across various file types indicate systemic code quality concerns.",
+          "topFiles": [
+            "lib/application.js",
+            "lib/response.js"
+          ]
+        }
+      ],
+      "summary": {
+        "totalWins": 4,
+        "immediateWins": 0,
+        "estimatedHours": 9,
+        "topFiles": [
+          "lib/response.js",
+          "lib/application.js"
+        ]
+      }
+    }
+  },
+  "durationMs": 139626
+}

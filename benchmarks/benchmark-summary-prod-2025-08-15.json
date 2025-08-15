@@ -1,0 +1,17 @@
+{
+  "totalProjects": 9,
+  "successfulAnalyses": 9,
+  "failedAnalyses": 0,
+  "totalDuration": 1712430,
+  "realDuration": 297036,
+  "totalLines": 728756,
+  "avgComplexity": 33.9,
+  "avgDuplication": 0.02,
+  "gradeDistribution": {
+    "D": 3,
+    "C": 3,
+    "B": 1,
+    "F": 2
+  },
+  "modeCategory": "production"
+}
