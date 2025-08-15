@@ -2,10 +2,11 @@
 
 ## ❓ What are the current project scoring weights?
 
-**Current weights (v0.6.0+):**
-- **45%** Complexity 
-- **30%** Maintainability
-- **25%** Duplication (with mode-aware thresholds)
+**Current weights (v0.8.0+):**
+- **35%** Complexity 
+- **25%** Maintainability
+- **20%** Duplication (with mode-aware thresholds)
+- **20%** Reliability (based on detected issues)
 
 **Note**: v0.6.0 introduced dual-mode duplication thresholds - see below for details.
 
@@ -17,26 +18,27 @@
 
 **Project weights vs. File Health Scores are different:**
 
-- **Project-level scoring**: Uses weighted aggregation (45/30/25) for overall project assessment
+- **Project-level scoring**: Uses weighted aggregation (35/25/20/20) for overall project assessment
 - **File-level Health Scores**: Use direct penalty summation without weights
 
 ```
-Project Score = (Complexity × 45%) + (Maintainability × 30%) + (Duplication × 25%)
+Project Score = (Complexity × 35%) + (Maintainability × 25%) + (Duplication × 20%) + (Reliability × 20%)
 File Health Score = 100 - (complexity_penalty + size_penalty + duplication_penalty + issues_penalty)
 ```
 
-## ❓ Why did the weights change from 40/30/30 to 45/30/25?
+## ❓ Why have the weights evolved over time?
 
 **Timeline:**
-- **v0.2.0-v0.3.0**: Used 40/30/30 (legacy)
-- **v0.6.0+**: Updated to 45/30/25 (current)
+- **v0.2.0-v0.3.0**: Used 40/30/30 (3 dimensions)
+- **v0.6.0-v0.7.0**: Updated to 45/30/25 (3 dimensions)
+- **v0.8.0+**: Updated to 35/25/20/20 (4 dimensions with Reliability)
 
 **Rationale**: Internal hypothesis that complexity is the primary defect predictor deserves higher weight.
 
 ## ❓ How do I know which weights apply where?
 
 **Clear indicators:**
-- **Project reports**: Show weighted scores (45/30/25)
+- **Project reports**: Show weighted scores (35/25/20/20)
 - **File Health Scores**: Show unweighted penalties
 - **Documentation**: Always specifies which system applies
 
@@ -65,7 +67,7 @@ Same codebase can receive different duplication scores (and thus project grades)
 ## ⚠️ User Warning
 
 **When using InsightCode results:**
-- Project weights (45/30/25) are internal hypotheses, not scientific standards
+- Project weights (35/25/20/20) are internal hypotheses, not scientific standards
 - Duplication mode choice significantly affects scoring - choose appropriately for your context
 - Use results as guidance, not absolute truth
 - Consider your specific project context and requirements
@@ -73,4 +75,4 @@ Same codebase can receive different duplication scores (and thus project grades)
 
 ---
 
-*Last updated: v0.6.0 - This FAQ will be updated as we gather more empirical data.*
+*Last updated: v0.8.0 - This FAQ will be updated as we gather more empirical data.*

@@ -1,12 +1,13 @@
 // File: src/scoring.ts
 
-import { FileIssue, FileDetail } from './types';
+import { FileIssue, FileDetail, CodeIssue } from './types';
 import { DUPLICATION_LEVELS } from './scoring.utils';
 import { COMPLEXITY_SCORING_THRESHOLDS } from './thresholds.constants';
 import {
   PROJECT_SCORING_WEIGHTS,
   FILE_MAINTAINABILITY_SCORING_THRESHOLDS,
-  FILE_HEALTH_PENALTY_CONSTANTS
+  FILE_HEALTH_PENALTY_CONSTANTS,
+  RELIABILITY_SCORING_THRESHOLDS
 } from './thresholds.constants';
 import { percentageToRatio, ratioToPercentage, DUPLICATION_SCORING } from './scoring.utils';
 
@@ -100,13 +101,35 @@ export function calculateDuplicationScore(duplicationRatio: number, duplicationM
 }
 
 /**
- * Calculate maintainability score from 0 to 100 based on size metrics.
+ * Calculate maintainability score from 0 to 100 based on comprehensive software metrics.
  * 
- * INTERNAL CONVENTION: Inspired by Clean Code principles suggesting files should be small.
- * Industry guidance: < 200 LOC is often considered good, 300+ becomes harder to maintain.
+ * MODERN MAINTAINABILITY INDEX: Combines multiple dimensions of code quality:
+ * - Size metrics: LOC and function count (Clean Code principles)
+ * - Cohesion: How related are the functions in this file (LCOM-based)
+ * - Coupling: Dependency stability and complexity (Martin's metrics)
+ * - Structural quality: Based on architectural patterns
+ * 
+ * This replaces the basic size-only approach with industry-standard metrics.
  */
-export function calculateFileMaintainabilityScore(fileLoc: number, fileFunctionCount: number): number {
-  // Internal convention (Clean Code inspired): <= 200 LOC is considered maintainable
+export function calculateFileMaintainabilityScore(fileLoc: number, fileFunctionCount: number): number;
+export function calculateFileMaintainabilityScore(
+  fileLoc: number, 
+  fileFunctionCount: number, 
+  cohesionScore?: number, 
+  instability?: number, 
+  incomingDeps?: number, 
+  outgoingDeps?: number
+): number;
+export function calculateFileMaintainabilityScore(
+  fileLoc: number, 
+  fileFunctionCount: number, 
+  cohesionScore: number = 1.0, // Default: assume perfect cohesion if not provided
+  instability: number = 0.5,   // Default: moderate instability
+  incomingDeps: number = 0,    // Default: no dependencies
+  outgoingDeps: number = 0     // Default: no dependencies
+): number {
+  
+  // 1. SIZE SCORE (25% weight) - Clean Code inspired
   const sizeScore = fileLoc <= FILE_MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FILE_SIZE
     ? 100 
     : 100 * Math.exp(
@@ -114,7 +137,7 @@ export function calculateFileMaintainabilityScore(fileLoc: number, fileFunctionC
         Math.pow(fileLoc - FILE_MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FILE_SIZE, FILE_MAINTAINABILITY_SCORING_THRESHOLDS.SIZE_PENALTY_POWER)
       );
 
-  // Score based on function count
+  // 2. FUNCTION COUNT SCORE (25% weight) - Cognitive load management
   const functionScore = fileFunctionCount <= FILE_MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FUNCTION_COUNT
     ? 100
     : 100 * Math.exp(
@@ -122,29 +145,121 @@ export function calculateFileMaintainabilityScore(fileLoc: number, fileFunctionC
         Math.pow(fileFunctionCount - FILE_MAINTAINABILITY_SCORING_THRESHOLDS.OPTIMAL_FUNCTION_COUNT, FILE_MAINTAINABILITY_SCORING_THRESHOLDS.FUNCTION_PENALTY_POWER)
       );
   
-  return Math.max(0, Math.round((sizeScore + functionScore) / 2));
+  // 3. COHESION SCORE (30% weight) - LCOM-inspired: higher cohesion = easier to maintain
+  // Cohesion ranges from 0 (no cohesion) to 1 (perfect cohesion)
+  const cohesionMaintainabilityScore = cohesionScore * 100;
+  
+  // 4. COUPLING SCORE (20% weight) - Martin's stability metrics
+  // Good maintainability: stable dependencies (low instability) but not overly coupled
+  let couplingScore = 100;
+  
+  // Penalize high instability (unstable files are harder to maintain)
+  if (instability > 0.7) {
+    const instabilityPenalty = (instability - 0.7) / 0.3; // 0-1 scale for instability > 0.7
+    couplingScore -= instabilityPenalty * 40; // Up to 40 point penalty
+  }
+  
+  // Penalize excessive coupling (too many dependencies)
+  const totalDeps = incomingDeps + outgoingDeps;
+  if (totalDeps > 10) { // Threshold for "highly coupled"
+    const couplingPenalty = Math.min((totalDeps - 10) / 20, 1); // Cap at 100% penalty
+    couplingScore -= couplingPenalty * 30; // Up to 30 point penalty
+  }
+  
+  couplingScore = Math.max(0, couplingScore);
+  
+  // WEIGHTED COMBINATION of all maintainability factors
+  // Size: 25%, Functions: 25%, Cohesion: 30%, Coupling: 20%
+  const weightedScore = (
+    (sizeScore * 0.25) +
+    (functionScore * 0.25) + 
+    (cohesionMaintainabilityScore * 0.30) +
+    (couplingScore * 0.20)
+  );
+  
+  return Math.max(0, Math.round(weightedScore));
+}
+
+/**
+ * Calculate reliability score from 0 to 100 based on detected issues/defects severity and count.
+ * 
+ * RELIABILITY DIMENSION: New scoring dimension that evaluates code reliability
+ * based on detected issues/defects (god functions, deep nesting, poor naming, architecture issues, etc.)
+ * 
+ * METHODOLOGY:
+ * - Perfect score (100): No issues/defects detected
+ * - Progressive penalties based on severity using RELIABILITY_SCORING_THRESHOLDS
+ * - Exponential decay for multiple issues (follows Pareto principle)
+ * - No artificial caps - files with many critical issues get very low reliability scores
+ * 
+ * This complements the existing complexity/duplication/maintainability scores
+ * by explicitly accounting for code reliability through defect detection.
+ */
+export function calculateFileReliabilityScore(issues: CodeIssue[]): number {
+  if (issues.length === 0) return RELIABILITY_SCORING_THRESHOLDS.BASE_SCORE;
+  
+  // Calculate weighted issue count based on severity using configured weights
+  let weightedIssueCount = 0;
+  
+  issues.forEach(issue => {
+    switch (issue.severity) {
+      case 'critical':
+        weightedIssueCount += RELIABILITY_SCORING_THRESHOLDS.SEVERITY_WEIGHTS.CRITICAL;
+        break;
+      case 'high':
+        weightedIssueCount += RELIABILITY_SCORING_THRESHOLDS.SEVERITY_WEIGHTS.HIGH;
+        break;
+      case 'medium':
+        weightedIssueCount += RELIABILITY_SCORING_THRESHOLDS.SEVERITY_WEIGHTS.MEDIUM;
+        break;
+      case 'low':
+        weightedIssueCount += RELIABILITY_SCORING_THRESHOLDS.SEVERITY_WEIGHTS.LOW;
+        break;
+      default:
+        weightedIssueCount += RELIABILITY_SCORING_THRESHOLDS.SEVERITY_WEIGHTS.DEFAULT;
+    }
+  });
+  
+  // Progressive penalty: exponential decay based on weighted issue count
+  // This ensures that:
+  // - 1-2 minor issues: ~80-90 score (good but not perfect)
+  // - 3-5 mixed issues: ~60-80 score (moderate quality) 
+  // - Many issues or critical issues: <50 score (poor quality)
+  // - Extreme cases (10+ critical issues): ~0 score (catastrophic)
+  
+  const baseScore = RELIABILITY_SCORING_THRESHOLDS.BASE_SCORE;
+  const decayFactor = RELIABILITY_SCORING_THRESHOLDS.DECAY_FACTOR;
+  const exponentialPower = RELIABILITY_SCORING_THRESHOLDS.EXPONENTIAL_POWER;
+  
+  const penalty = baseScore * (1 - Math.exp(-decayFactor * Math.pow(weightedIssueCount, exponentialPower)));
+  const score = baseScore - penalty;
+  
+  return Math.max(0, Math.round(score));
 }
 
 // --- Global scoring and grading functions (weighted scoring) ---
 
 /**
- * Calculate the final weighted score based on internal hypotheses.
+ * Calculate the final weighted score based on updated 4-dimensional scoring.
  * 
- * WEIGHTS BASED ON INTERNAL HYPOTHESIS (requires empirical validation):
- * - 45% Complexity: Internal hypothesis - Primary defect predictor
- * - 30% Maintainability: Internal hypothesis - Development velocity impact  
- * - 25% Duplication: Internal hypothesis - Technical debt indicator
+ * UPDATED WEIGHTS (4-dimensional scoring):
+ * - 35% Complexity: Primary defect predictor (reduced but still highest)
+ * - 25% Maintainability: Development velocity impact  
+ * - 20% Duplication: Technical debt indicator
+ * - 20% Reliability: NEW - Code reliability based on detected defects
  * 
  * Note: These weights are internal conventions and require empirical validation.
  */
 export function calculateProjectWeightedScore(
   projectComplexityScore: number,
   projectDuplicationScore: number, 
-  projectMaintainabilityScore: number
+  projectMaintainabilityScore: number,
+  projectReliabilityScore: number
 ): number {
   return (projectComplexityScore * PROJECT_SCORING_WEIGHTS.COMPLEXITY) + 
          (projectMaintainabilityScore * PROJECT_SCORING_WEIGHTS.MAINTAINABILITY) + 
-         (projectDuplicationScore * PROJECT_SCORING_WEIGHTS.DUPLICATION);
+         (projectDuplicationScore * PROJECT_SCORING_WEIGHTS.DUPLICATION) +
+         (projectReliabilityScore * PROJECT_SCORING_WEIGHTS.RELIABILITY);
 }
 
 /**
@@ -253,13 +368,24 @@ export function calculateFileHealthScore(file: {
     loc: number; 
     duplicationRatio: number;
   }; 
-  issues: FileIssue[]; 
+  issues: FileIssue[];
+  functions?: Array<{ issues?: FileIssue[] }>; // Include function issues 
 }, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
   
   const complexityPenalty = getFileComplexityPenalty(file.metrics.complexity);
   const duplicationPenalty = getFileDuplicationPenalty(file.metrics.duplicationRatio, duplicationMode);
   const sizePenalty = getFileSizePenalty(file.metrics.loc);
-  const issuesPenalty = getIssuesPenalty(file.issues);
+  
+  // Include both file-level and function-level issues
+  const allIssues = [...file.issues];
+  if (file.functions) {
+    for (const func of file.functions) {
+      if (func.issues) {
+        allIssues.push(...func.issues);
+      }
+    }
+  }
+  const issuesPenalty = getIssuesPenalty(allIssues);
   
   const totalPenalty = complexityPenalty + duplicationPenalty + sizePenalty + issuesPenalty;
   

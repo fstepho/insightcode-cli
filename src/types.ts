@@ -107,7 +107,8 @@ export interface Overview {
     complexity: Score;      // 0-100 Weighted complexity score
     duplication: Score;    // 0-100 Weighted duplication score
     maintainability: Score; // 0-100 Weighted maintainability score
-    overall: Score;        // 0-100 Overall weighted score
+    reliability: Score;    // 0-100 Reliability score (NEW: based on detected defects/issues)
+    overall: Score;        // 0-100 Overall weighted score (4-dimensional)
   };
   
   summary: string;  // Human-readable one-liner
@@ -130,7 +131,7 @@ export interface FileDetail {
   dependencies: FileDependencyAnalysis
   
   issues: FileIssue[];              // Issues niveau fichier SEULEMENT
-  functions?: FunctionAnalysis[];    // REMPLACE functionIssues
+  functions: FunctionAnalysis[];    // REMPLACE functionIssues
   
   healthScore: Score;   // 0-100 (100 = perfect)
 }
@@ -156,7 +157,18 @@ export type FunctionPatternType =
 /**
  * File-level issue types (only base metrics)
  */
-export type FileIssueType = BaseIssueType;
+/**
+ * File-level issue types (includes base metrics + file-specific issues)
+ */
+export type FileIssueType = 
+  | BaseIssueType  // 'complexity' et 'size' existants
+  | 'large-file'
+  | 'very-large-file' 
+  | 'high-file-complexity'
+  | 'critical-file-complexity'
+  | 'high-duplication'
+  | 'too-many-functions'
+  | 'low-cohesion';  // Pour usage futur
 
 /**
  * Function-level issue types (base metrics + patterns)
@@ -169,28 +181,35 @@ export type FunctionIssueType = FunctionPatternType;
 export type IssueType = FileIssueType | FunctionIssueType;
 
 /**
- * File-level issue for base metrics (complexity, duplication, size) at file scope
+ * Base interface for all quality issues (common structure)
  */
-export interface FileIssue {
-  type: FileIssueType;
+export interface BaseIssue {
   severity: 'critical' | 'high' | 'medium' | 'low';
   location: {
     file: string;
     line: number;
     column?: number;
     endLine?: number;
+    function?: string; // Optional - present for function-level issues
   };
   description: string;
   threshold?: number; // For metric-based issues
+  actualValue?: number; // Actual value for the metric (e.g., complexity, LOC)
   excessRatio?: number; // How much over threshold - used for ROI sorting
+}
+
+/**
+ * File-level issue for base metrics (complexity, duplication, size) at file scope
+ */
+export interface FileIssue extends BaseIssue {
+  type: FileIssueType;
 }
 
 /**
  * Function-level issue for base metrics + patterns within specific functions
  */
-export interface FunctionIssue {
+export interface FunctionIssue extends BaseIssue {
   type: FunctionIssueType;
-  severity: 'critical' | 'high' | 'medium' | 'low';
   location: {
     file: string;
     line: number;
@@ -198,10 +217,13 @@ export interface FunctionIssue {
     endLine?: number;
     function: string; // Required for function-level issues
   };
-  description: string;
-  threshold?: number; // For metric-based issues (complexity, size thresholds)
-  excessRatio?: number; // How much over threshold - used for ROI sorting
 }
+
+/**
+ * Union type for code analysis - allows treating all issues uniformly
+ * Covers quality, architecture, performance, security, and testing issues
+ */
+export type CodeIssue = FileIssue | FunctionIssue;
 
 /**
  * Detailed analysis of a single function
@@ -215,6 +237,10 @@ export interface FunctionAnalysis {
   parameterCount: number;
   issues: FunctionIssue[];  // Les issues de cette fonction
   snippet?: string;         // Code snippet pour fonctions critiques
+  metrics?: {               // Métriques additionnelles
+    nestingDepth?: number;  // Profondeur d'imbrication maximale
+    purity?: number;        // Score de pureté (0-100)
+  };
 }
 
 /**
@@ -300,6 +326,8 @@ export interface CliOptions {
   strictDuplication?: boolean;
   quickWins?: boolean;
   winsOnly?: boolean;
+  ide?: 'vscode' | 'cursor' | 'webstorm' | 'sublime' | 'atom'; // AJOUT
+  links?: boolean; // AJOUT - disable clickable links in terminal output
 }
 
 /**

@@ -122,11 +122,12 @@ export class OverviewCalculator {
     // Step 1: Weight by architectural criticality (CriticismScore)
     const weightedMetrics = this.calculateWeightedMetrics(fileDetails);
     
-    // Step 2: Apply PROJECT_SCORING_WEIGHTS (45/30/25)
+    // Step 2: Apply PROJECT_SCORING_WEIGHTS (35/25/20/20)
     const overallScore = 
       (weightedMetrics.complexity * PROJECT_SCORING_WEIGHTS.COMPLEXITY) +
       (weightedMetrics.maintainability * PROJECT_SCORING_WEIGHTS.MAINTAINABILITY) +
-      (weightedMetrics.duplication * PROJECT_SCORING_WEIGHTS.DUPLICATION);
+      (weightedMetrics.duplication * PROJECT_SCORING_WEIGHTS.DUPLICATION) +
+      (weightedMetrics.reliability * PROJECT_SCORING_WEIGHTS.RELIABILITY);
     
     return {
       grade: getGrade(overallScore),
@@ -134,6 +135,7 @@ export class OverviewCalculator {
         complexity: weightedMetrics.complexity,
         maintainability: weightedMetrics.maintainability,
         duplication: weightedMetrics.duplication,
+        reliability: weightedMetrics.reliability,
         overall: overallScore
       },
       statistics: this.calculateStatistics(fileDetails),
@@ -149,10 +151,10 @@ export class OverviewCalculator {
 
 | Level | Formula | Weights Applied? | Usage |
 |-------|---------|------------------|--------|
-| **Project Scoring** | Two-step: (1) CriticismScore weighting → (2) 45/30/25 weights | ✅ YES | Overall project grade |
+| **Project Scoring** | Two-step: (1) CriticismScore weighting → (2) 35/25/20/20 weights | ✅ YES | Overall project grade |
 | **File Health Scores** | `100 - (penalties sum)` | ❌ NO | Individual file assessment |
 
-**Important:** The 45/30/25 weights are **INTERNAL HYPOTHESES**, not industry standards. They require empirical validation.
+**Important:** The 35/25/20/20 weights are **INTERNAL HYPOTHESES**, not industry standards. They require empirical validation.
 
 ### **Duplication Mode Architecture (v0.7.0)**
 
@@ -259,7 +261,7 @@ npm run qa
 - **ISO/IEC 25010**: Maintainability quality model compliance
 
 ### ⚠️ **Internal Hypotheses**
-- **PROJECT_SCORING_WEIGHTS (45/30/25)**: Internal hypotheses requiring validation
+- **PROJECT_SCORING_WEIGHTS (35/25/20/20)**: Internal hypotheses requiring validation
 - **Power harmonization (1.8)**: Mathematical consistency across penalty types
 - **CriticismScore formula**: Internal architectural weighting system
 

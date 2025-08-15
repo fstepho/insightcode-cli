@@ -1,14 +1,15 @@
 // analyzer/OverviewCalculator.ts - Centralized overview calculation
 
-import { Overview, FileDetail, validateScore } from '../types';
+import { Overview, FileDetail, CodeIssue, validateScore } from '../types';
 import { 
   calculateFileComplexityScore, 
   calculateDuplicationScore, 
   calculateFileMaintainabilityScore, 
+  calculateFileReliabilityScore,
   calculateProjectWeightedScore,
   calculateFileCriticismScore 
 } from '../scoring';
-import { getGrade, isCriticalFile, GRADE_CONFIG, COMPLEXITY_LEVELS, getDuplicationThreshold } from '../scoring.utils';
+import { getGrade, isCriticalFile, GRADE_CONFIG } from '../scoring.utils';
 
 /**
  * Calculates comprehensive overview from file details
@@ -43,10 +44,11 @@ export class OverviewCalculator {
    * 2. Files with higher criticism scores contribute more to final project scores
    *    (Pareto principle: 20% of files often cause 80% of problems)
    * 
-   * 3. Final project score combines three dimensions:
-   *    - Complexity: 45% (primary defect predictor hypothesis)
-   *    - Maintainability: 30% (development velocity impact)
-   *    - Duplication: 25% (technical debt indicator)
+   * 3. Final project score combines four dimensions:
+   *    - Complexity: 35% (primary defect predictor hypothesis)
+   *    - Maintainability: 25% (development velocity impact)
+   *    - Duplication: 20% (technical debt indicator)
+   *    - Reliability: 20% (defect risk indicator)
    * 
    * NOTE: No outlier masking - extreme values receive extreme penalties
    */
@@ -54,12 +56,14 @@ export class OverviewCalculator {
     complexity: number;
     duplication: number;
     maintainability: number;
+    reliability: number;
     overall: number;
   } {
     // Calculate weighted scores using criticism-based approach
     let weightedComplexityScore = 0;
     let weightedDuplicationScore = 0;
     let weightedMaintainabilityScore = 0;
+    let weightedReliabilityScore = 0;
     let totalCriticismScore = 0;
 
     // First pass: calculate total criticism score
@@ -76,29 +80,71 @@ export class OverviewCalculator {
         
         weightedComplexityScore += calculateFileComplexityScore(file.metrics.complexity) * fileWeight;
         weightedDuplicationScore += calculateDuplicationScore(file.metrics.duplicationRatio, duplicationMode) * fileWeight;
-        weightedMaintainabilityScore += calculateFileMaintainabilityScore(file.metrics.loc, file.metrics.functionCount) * fileWeight;
+        weightedMaintainabilityScore += calculateFileMaintainabilityScore(
+          file.metrics.loc, 
+          file.metrics.functionCount,
+          file.dependencies.cohesionScore,
+          file.dependencies.instability,
+          file.dependencies.incomingDependencies,
+          file.dependencies.outgoingDependencies
+        ) * fileWeight;
+        
+        // Calculate reliability score including both file-level and function-level issues  
+        const combinedIssues: CodeIssue[] = [...file.issues];
+        if (file.functions) {
+          file.functions.forEach(func => {
+            if (func.issues) {
+              combinedIssues.push(...func.issues);
+            }
+          });
+        }
+        
+        weightedReliabilityScore += calculateFileReliabilityScore(combinedIssues) * fileWeight;
       });
     } else {
       // Fallback to simple averages
       weightedComplexityScore = fileDetails.reduce((sum, f) => sum + calculateFileComplexityScore(f.metrics.complexity), 0) / fileDetails.length;
       weightedDuplicationScore = fileDetails.reduce((sum, f) => sum + calculateDuplicationScore(f.metrics.duplicationRatio, duplicationMode), 0) / fileDetails.length;
-      weightedMaintainabilityScore = fileDetails.reduce((sum, f) => sum + calculateFileMaintainabilityScore(f.metrics.loc, f.metrics.functionCount), 0) / fileDetails.length;
+      weightedMaintainabilityScore = fileDetails.reduce((sum, f) => sum + calculateFileMaintainabilityScore(
+        f.metrics.loc, 
+        f.metrics.functionCount,
+        f.dependencies.cohesionScore,
+        f.dependencies.instability,
+        f.dependencies.incomingDependencies,
+        f.dependencies.outgoingDependencies
+      ), 0) / fileDetails.length;
+      
+      // Calculate reliability score in fallback mode
+      weightedReliabilityScore = fileDetails.reduce((sum, f) => {
+        const combinedIssues: CodeIssue[] = [...f.issues];
+        if (f.functions) {
+          f.functions.forEach(func => {
+            if (func.issues) {
+              combinedIssues.push(...func.issues);
+            }
+          });
+        }
+        return sum + calculateFileReliabilityScore(combinedIssues);
+      }, 0) / fileDetails.length;
     }
     
     weightedComplexityScore = validateScore(weightedComplexityScore);
     weightedDuplicationScore = validateScore(weightedDuplicationScore);
     weightedMaintainabilityScore = validateScore(weightedMaintainabilityScore);
+    weightedReliabilityScore = validateScore(weightedReliabilityScore);
 
     const overallScore = validateScore(calculateProjectWeightedScore(
       weightedComplexityScore,
       weightedDuplicationScore,
-      weightedMaintainabilityScore
+      weightedMaintainabilityScore,
+      weightedReliabilityScore
     ));
 
     return {
       complexity: weightedComplexityScore,
       duplication: weightedDuplicationScore,
       maintainability: weightedMaintainabilityScore,
+      reliability: weightedReliabilityScore,
       overall: overallScore
     };
   }
@@ -157,6 +203,7 @@ export class OverviewCalculator {
         complexity: 0, 
         duplication: 0,
         maintainability: 0,
+        reliability: 0,
         overall: 0
       },
       summary: 'No files to analyze'

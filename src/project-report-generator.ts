@@ -221,6 +221,7 @@ function generateScoreTable(scores: AnalysisResult['overview']['scores'], avgDup
     table += `| Complexity | ${scores.complexity}/100 | ${getFormattedScoreStatus(scores.complexity).full} |\n`;
     table += `| Duplication | ${duplicationText} | ${getFormattedScoreStatus(scores.duplication).full} |\n`;
     table += `| Maintainability | ${scores.maintainability}/100 | ${getFormattedScoreStatus(scores.maintainability).full} |\n`;
+    table += `| Reliability | ${scores.reliability}/100 | ${getFormattedScoreStatus(scores.reliability).full} |\n`;
     table += `| **Overall** | **${scores.overall}/100** | **${getFormattedScoreStatus(scores.overall).full}** |\n`;
     return table;
 }
@@ -237,23 +238,25 @@ function generateScoringMethodologyNotes(analysis?: AnalysisResult): string {
     notes += `Weighted_Complexity = Σ(File_Complexity × CriticismScore) / Σ(CriticismScore)\n`;
     notes += `Weighted_Maintainability = Σ(File_Maintainability × CriticismScore) / Σ(CriticismScore)\n`;
     notes += `Weighted_Duplication = Σ(File_Duplication × CriticismScore) / Σ(CriticismScore)\n`;
+    notes += `Weighted_Reliability = Σ(File_Reliability × CriticismScore) / Σ(CriticismScore)\n`;
     notes += `\`\`\`\n\n`;
     
     notes += `**Step 2:** Final score combines weighted metrics:\n`;
     notes += `\`\`\`\n`;
-    notes += `Overall Score = (Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)\n`;
+    notes += `Overall Score = (Weighted_Complexity × 35%) + (Weighted_Maintainability × 25%) + (Weighted_Duplication × 20%) + (Weighted_Reliability × 20%)\n`;
     notes += `\`\`\`\n\n`;
 
     notes += `#### 🧮 Metric Configuration\n`;
     notes += `| Metric | Final Weight | Thresholds & Research Basis |\n`;
     notes += `|--------|--------------|-----------------------------|\n`;
-    notes += `| **Complexity** | 45% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |\n`;
-    notes += `| **Maintainability** | 30% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |\n`;
+    notes += `| **Complexity** | 35% | McCabe (1976): ≤10 = low, ≤15 = medium, ≤20 = high, ≤50 = very high, >50 = extreme |\n`;
+    notes += `| **Maintainability** | 25% | Clean Code principles: ≤200 LOC/file preferred, progressive penalties |\n`;
     if (duplicationMode === 'strict') {
-        notes += `| **Duplication** | 25% | Strict threshold: ≤3% (SonarQube-aligned) |\n`;
+        notes += `| **Duplication** | 20% | Strict threshold: ≤3% (SonarQube-aligned) |\n`;
     } else {
-        notes += `| **Duplication** | 25% | Legacy threshold: ≤15% considered excellent for brownfield projects |\n`;
+        notes += `| **Duplication** | 20% | Legacy threshold: ≤15% considered excellent for brownfield projects |\n`;
     }
+    notes += `| **Reliability** | 20% | Based on detected issues: deep nesting, long functions, complex conditions |\n`;
     notes += `\n`;
 
     notes += `#### 🧭 Architectural Criticality Formula\n`;
@@ -300,11 +303,15 @@ function generateFunctionDeepDiveSection(functionsWithFile: FunctionWithFile[]):
     const rows = functionsWithFile.map(func => {
         // Use harmonized issue formatting for consistency with implications
         const issueData = formatFunctionIssuesForDeepDive(func, 'markdown');
-        return `| \`${func.name}\` | \`${func.file}\` | **${func.complexity}** | ${func.loc} | ${issueData.issuesSummaryWithImplications} |`;
+        // Shorten long file paths for better readability
+        const shortPath = func.file.length > 40 ? 
+            `.../${func.file.split('/').slice(-2).join('/')}` : 
+            func.file;
+        return `| \`${func.name}\` | \`${shortPath}\` | **${func.complexity}** | ${func.loc} | ${issueData.issuesSummaryWithImplications} |`;
     });
 
     const table = [
-        `| Function | File | Complexity | Lines | Key Issues (Implications) |`,
+        `| Function | File | Complexity | Lines | Key Issues|`,
         `|:---|:---|:---|:---|:---|`,
         ...rows
     ].join('\n');

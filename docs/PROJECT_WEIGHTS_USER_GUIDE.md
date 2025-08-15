@@ -2,10 +2,11 @@
 
 ## 🎯 Quick Answer
 
-**Current project weights (v0.6.0+):**
-- **45%** Complexity (internal hypothesis)
-- **30%** Maintainability (internal hypothesis) 
-- **25%** Duplication (internal hypothesis)
+**Current project weights (v0.8.0+):**
+- **35%** Complexity (internal hypothesis)
+- **25%** Maintainability (internal hypothesis) 
+- **20%** Duplication (internal hypothesis)
+- **20%** Reliability (internal hypothesis)
 
 **⚠️ These are NOT industry standards** - they are internal hypotheses requiring empirical validation.
 
@@ -18,7 +19,7 @@
 | Step | Process | Formula |
 |------|---------|---------|
 | **Step 1** | Weight by architectural criticality | `Weighted_Metric = Σ(File_Metric × CriticismScore) / Σ(CriticismScore)` |
-| **Step 2** | Combine weighted metrics | `(Weighted_Complexity × 45%) + (Weighted_Maintainability × 30%) + (Weighted_Duplication × 25%)` |
+| **Step 2** | Combine weighted metrics | `(Weighted_Complexity × 35%) + (Weighted_Maintainability × 25%) + (Weighted_Duplication × 20%) + (Weighted_Reliability × 20%)` |
 
 **File Health Scoring (Direct Penalties):**
 
@@ -36,9 +37,10 @@ Step 1: Architectural Criticality Weighting
 
 Step 2: Final Score Calculation
 Overall Score: 73/100 (Grade: C)
-├── Weighted_Complexity: 65/100 (45% final weight) = 29.25 points
-├── Weighted_Maintainability: 80/100 (30% final weight) = 24.00 points  
-└── Weighted_Duplication: 85/100 (25% final weight) = 21.25 points
+├── Weighted_Complexity: 65/100 (35% final weight) = 22.75 points
+├── Weighted_Maintainability: 80/100 (25% final weight) = 20.00 points  
+├── Weighted_Duplication: 85/100 (20% final weight) = 17.00 points
+└── Weighted_Reliability: 67/100 (20% final weight) = 13.40 points
 ```
 
 **CriticismScore Example:**
@@ -116,14 +118,15 @@ insightcode
 | **Strict** | ~70/100 | Reflects industry expectations | New projects, CI/CD integration |
 | **Legacy** | ~100/100 | Tolerant for existing code | Legacy analysis, gradual improvement |
 
-**Note**: Mode choice affects the 25% duplication weight in project scoring, potentially impacting overall project grade.
+**Note**: Mode choice affects the 20% duplication weight in project scoring, potentially impacting overall project grade.
 
 ## 🔄 Weight Evolution History
 
 | Version | Weights | Status | Notes |
 |---------|---------|--------|--------|
 | v0.2.0-v0.3.0 | 40/30/30 | Legacy | Complexity/Duplication/Maintainability |
-| v0.6.0+ | 45/30/25 | Current | Complexity/Maintainability/Duplication |
+| v0.6.0-v0.7.0 | 45/30/25 | Previous | Complexity/Maintainability/Duplication |
+| v0.8.0+ | 35/25/20/20 | Current | Complexity/Maintainability/Duplication/Reliability |
 | Future | TBD | Planned | Empirical validation and user configuration |
 
 ## 🛠️ For Advanced Users
@@ -141,9 +144,11 @@ The tool provides raw data for your own weighting schemes:
 const rawComplexity = analysis.overview.scores.complexity;
 const rawMaintainability = analysis.overview.scores.maintainability;
 const rawDuplication = analysis.overview.scores.duplication;
+const rawReliability = analysis.overview.scores.reliability;
 
 // Apply your own weights
-const customScore = (rawComplexity * 0.60) + (rawMaintainability * 0.25) + (rawDuplication * 0.15);
+const customScore = (rawComplexity * 0.40) + (rawMaintainability * 0.25) + 
+                   (rawDuplication * 0.20) + (rawReliability * 0.15);
 ```
 
 ## 🔮 Future Roadmap

@@ -29,7 +29,7 @@ InsightCode v0.7.0 implements a **dual scoring architecture** that addresses two
 
 #### **System 2: Project-Level Scoring (Experimental)**
 - **Two-step aggregation**: (1) Architectural criticality weighting → (2) Hypothesis-based combination
-- **Experimental weights**: 45% Complexity / 30% Maintainability / 25% Duplication
+- **Experimental weights**: 35% Complexity / 25% Maintainability / 20% Duplication / 20% Reliability
 - **Novel CriticismScore**: Architectural importance weighting (requires validation)
 
 ### 🚫 **Academic Honesty: Experimental vs. Validated Components**
@@ -279,7 +279,7 @@ Where:
 
 **Project Score Formula**:
 ```typescript
-ProjectScore = (WeightedComplexity × 45%) + (WeightedMaintainability × 30%) + (WeightedDuplication × 25%)
+ProjectScore = (WeightedComplexity × 35%) + (WeightedMaintainability × 25%) + (WeightedDuplication × 20%) + (WeightedReliability × 20%)
 ```
 
 **Where each WeightedMetric**:
@@ -291,20 +291,25 @@ WeightedMetric = Σ(FileMetric × CriticismScore) / Σ(CriticismScore)
 
 > **🚨 Critical Note**: These coefficients will be recalibrated after defect/bug correlation study (see Empirical Validation Roadmap section).
 
-#### 45% Complexity Weight ⚠️ **Experimental**
+#### 35% Complexity Weight ⚠️ **Experimental**
 **Hypothesis**: Complexity is the primary defect predictor
 **Academic Support**: Multiple studies correlate complexity with defect density
-**Limitation**: Specific 45% weight is internal hypothesis, not empirically derived
+**Limitation**: Specific 35% weight is internal hypothesis, not empirically derived
 
-#### 30% Maintainability Weight ⚠️ **Experimental**
+#### 25% Maintainability Weight ⚠️ **Experimental**
 **Hypothesis**: Development velocity impact secondary to complexity
 **Academic Support**: Clean Code principles, cognitive load theory
 **Limitation**: Weight relative to complexity unvalidated
 
-#### 25% Duplication Weight ⚠️ **Experimental**
+#### 20% Duplication Weight ⚠️ **Experimental**
 **Hypothesis**: Technical debt indicator, important but fixable
 **Academic Support**: Fowler technical debt theory
 **Limitation**: Relative importance unvalidated against other metrics
+
+#### 20% Reliability Weight ⚠️ **Experimental**
+**Hypothesis**: Direct measure of defect risk based on detected issues
+**Academic Support**: Static analysis defect correlation studies
+**Limitation**: Weight relative to other metrics unvalidated
 
 ### Comparison with Academic Aggregation Methods
 
@@ -385,7 +390,7 @@ Academic literature suggests several aggregation methods:
 
 #### Experimental Deviations (Requiring Validation)
 - **CriticismScore weighting**: Novel architectural importance metric
-- **45/30/25 weights**: Internal hypotheses vs. survey-based industry weights
+- **35/25/20/20 weights**: Internal hypotheses vs. survey-based industry weights
 - **Two-step aggregation**: Differs from arithmetic mean or econometric indices
 
 ---
@@ -395,9 +400,9 @@ Academic literature suggests several aggregation methods:
 ### Current Limitations
 
 #### Methodological Limitations
-1. **Project weights unvalidated**: 45/30/25 ratios are internal hypotheses
+1. **Project weights unvalidated**: 35/25/20/20 ratios are internal hypotheses
 2. **CriticismScore experimental**: No empirical validation against architectural impact
-3. **Limited quality model coverage**: 3/8 ISO/IEC 25010 characteristics
+3. **Limited quality model coverage**: 4/8 ISO/IEC 25010 characteristics
 
 #### Technical Limitations
 1. **Language specificity**: Optimized for TypeScript/JavaScript
@@ -444,7 +449,7 @@ DefectProbability = β₀ + β₁(Complexity) + β₂(Maintainability) + β₃(D
 ```
 
 **Expected Outcomes:**
-- **Weight Optimization**: Derive empirically-based weights replacing 45/30/25 hypothesis
+- **Weight Optimization**: Derive empirically-based weights replacing 35/25/20/20 hypothesis
 - **CriticismScore Validation**: Confirm correlation between architectural centrality and defect impact
 - **Threshold Refinement**: Optimize penalty curve coefficients (1.8 power, multipliers)
 
@@ -571,7 +576,7 @@ InsightCode v0.7.0 implements a **dual scoring architecture** that combines acad
 ### Experimental Innovations (Requiring Validation)
 1. **CriticismScore methodology**: Novel architectural importance weighting
 2. **Two-step project aggregation**: Architectural criticality integration
-3. **Hypothesis-driven weights**: 45/30/25 complexity/maintainability/duplication emphasis
+3. **Hypothesis-driven weights**: 35/25/20/20 complexity/maintainability/duplication/reliability emphasis
 
 ### Research Integrity
 This methodology maintains academic honesty by:

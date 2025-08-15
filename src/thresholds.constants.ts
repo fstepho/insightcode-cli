@@ -47,19 +47,29 @@ export const CRITICAL_FILE_HEALTH_SCORE: FileHealthScoreThreshold = 80;
  */
 
 interface ScoringWeights {
-  readonly COMPLEXITY: 0.45;
-  readonly MAINTAINABILITY: 0.30;
-  readonly DUPLICATION: 0.25;
+  readonly COMPLEXITY: number;
+  readonly MAINTAINABILITY: number;
+  readonly DUPLICATION: number;
+  readonly RELIABILITY: number;
 }
 
 /**
- * Weighting factors for overall score calculation
+ * Weighting factors for overall score calculation with new Reliability dimension
+ * 
+ * UPDATED WEIGHTS (4-dimensional scoring):
+ * - Complexity: 35% (down from 45%) - Still primary defect predictor
+ * - Maintainability: 25% (down from 30%) - Development velocity impact  
+ * - Duplication: 20% (down from 25%) - Technical debt indicator
+ * - Reliability: 20% (NEW) - Code reliability based on detected issues/defects
+ * 
+ * Total: 100% (35% + 25% + 20% + 20%)
  * Based on internal hypotheses requiring empirical validation
  */
 export const PROJECT_SCORING_WEIGHTS: ScoringWeights = {
-  COMPLEXITY: 0.45,        // Internal hypothesis: Primary defect predictor (requires empirical validation)
-  MAINTAINABILITY: 0.30,   // Internal hypothesis: Development velocity impact (requires empirical validation)
-  DUPLICATION: 0.25        // Internal hypothesis: Technical debt indicator (requires empirical validation)
+  COMPLEXITY: 0.35,        // Primary defect predictor - reduced but still highest weight
+  MAINTAINABILITY: 0.25,   // Development velocity impact - balanced weight
+  DUPLICATION: 0.20,       // Technical debt indicator - moderate weight
+  RELIABILITY: 0.20        // NEW: Code reliability - significant weight for detected defects
 } as const;
 
 /**
@@ -115,6 +125,30 @@ export const FILE_MAINTAINABILITY_SCORING_THRESHOLDS = {
   SIZE_PENALTY_POWER: 2,               // Power 2: quadratic penalty for very large files emphasizes exponential difficulty in maintenance
   FUNCTION_PENALTY_MULTIPLIER: 0.008,  // 0.008 (empirical): moderate penalty for excessive function count balancing flexibility with maintainability
   FUNCTION_PENALTY_POWER: 2            // Power 2: quadratic penalty discourages monolithic files and encourages modular design
+} as const;
+
+/**
+ * Reliability scoring thresholds for the new Reliability dimension
+ * 
+ * RELIABILITY SCORING: Converts detected issues/defects into a 0-100 reliability score
+ * (Different from FILE_HEALTH_PENALTY_CONSTANTS which are used for health score penalties)
+ * 
+ * METHODOLOGY:
+ * - Progressive severity weighting: Critical issues impact reliability 4x more than low issues
+ * - Exponential decay: Multiple issues cause exponentially worse reliability (Pareto principle)
+ * - Target ranges: 1-2 minor issues ~80-90, mixed issues ~60-80, many critical issues <50
+ */
+export const RELIABILITY_SCORING_THRESHOLDS = {
+  SEVERITY_WEIGHTS: {
+    CRITICAL: 4.0,    // Critical issues have 4x impact on reliability score
+    HIGH: 2.5,        // High issues have 2.5x impact on reliability
+    MEDIUM: 1.5,      // Medium issues have 1.5x impact on reliability
+    LOW: 1.0,         // Low issues have base impact on reliability
+    DEFAULT: 1.0      // Default weight for unknown severity
+  },
+  DECAY_FACTOR: 0.15,        // 0.15: Controls how quickly score degrades with more issues (empirically tuned)
+  EXPONENTIAL_POWER: 1.2,    // 1.2: Slight exponential curve for multiple issues (less aggressive than penalties)
+  BASE_SCORE: 100            // Perfect score when no issues detected
 } as const;
 
 
@@ -211,7 +245,7 @@ export const CONTEXT_EXTRACTION_THRESHOLDS = {
   FUNCTION_LINES: 50,            // 50 lines: critical threshold for function size (Martin Clean Code recommendation)
   PARAMETER_COUNT: 6,            // 6 parameters: maximum for maintainable function signatures (Clean Code principle)
   NESTING_DEPTH: 4,              // 4 levels: critical nesting depth where cognitive complexity becomes problematic
-  FUNCTION_NESTING_DEPTH: 3,     // 3 levels: nesting depth within functions for readability analysis
+  FUNCTION_NESTING_DEPTH: 5,     // 5 levels: updated from 3 - more realistic threshold for modern codebases
   MAX_CRITICAL_FUNCTIONS: 5,     // 5 functions max: limit critical functions shown to focus on most important issues
   SNIPPET_LINES: 8,              // 8 lines: optimal snippet size for context without overwhelming output
   SNIPPET_THRESHOLD: 10,         // 10 lines: threshold to add "... more code ..." indicator for truncated content

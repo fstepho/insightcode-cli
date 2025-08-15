@@ -161,6 +161,7 @@ function generateOverview(overview: Overview): string[] {
         { key: 'Complexity', score: scores.complexity, color: Ansi.orange },
         { key: 'Duplication', score: scores.duplication, color: Ansi.green },
         { key: 'Maintainability', score: scores.maintainability, color: Ansi.yellow },
+        { key: 'Reliability', score: scores.reliability, color: Ansi.blue },
     ];
 
     metrics.forEach(({ key, score, color }, index) => {

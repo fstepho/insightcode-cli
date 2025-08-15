@@ -3,11 +3,11 @@
 
   🎯 Éléments CRITIQUES nécessitant validation empirique
 
-  1. Poids de scoring projet (45/30/25)
+  1. Poids de scoring projet (35/25/20/20)
 
   - Statut : Hypothèses internes NON validées
   - Localisation : src/thresholds.constants.ts:125-127
-  - Impact : Calcul des scores globaux de projet
+  - Impact : Calcul des scores globaux de projet (4 dimensions)
   - Validation requise : Corrélation avec prédiction de défauts
 
   2. Coefficients mathématiques
@@ -33,9 +33,10 @@
 
   Scoring
 
-  1. Complexité = 45% : "Primary defect predictor" - à valider contre données réelles
-  2. Maintainabilité = 30% : "Development velocity impact" - mesurer corrélation
-  3. Duplication = 25% : "Technical debt indicator" - quantifier impact
+  1. Complexité = 35% : "Primary defect predictor" - à valider contre données réelles
+  2. Maintainabilité = 25% : "Development velocity impact" - mesurer corrélation
+  3. Duplication = 20% : "Technical debt indicator" - quantifier impact
+  4. Reliability = 20% : "Defect risk indicator" - valider contre bugs réels
 
   Coefficients techniques
 

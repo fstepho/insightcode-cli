@@ -4,10 +4,11 @@
 
 ## 📊 Understanding InsightCode Scores
 
-InsightCode CLI calculates an **Overall Quality Score** (0-100) using a **criticality-weighted model**. It's based on three core metrics:
-- **Cyclomatic Complexity** - The logical complexity of your code.
-- **Code Duplication** - The percentage of copy-pasted code.
-- **Maintainability** - A score based on file size and function count.
+InsightCode CLI calculates an **Overall Quality Score** (0-100) using a **criticality-weighted model**. It's based on four core metrics:
+- **Cyclomatic Complexity** (35%) - The logical complexity of your code.
+- **Maintainability** (25%) - A score based on file size and function count.
+- **Code Duplication** (20%) - The percentage of copy-pasted code.
+- **Reliability** (20%) - Measures potential defects based on detected code quality issues.
 
 However, the final score is not a simple average. Each file's contribution is weighted by its **Criticality Score**, which is a combination of its own complexity and its architectural **Impact** (how many other files depend on it).
 
