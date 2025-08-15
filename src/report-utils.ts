@@ -1,7 +1,7 @@
 // File: src/shared-analysis-utils.ts
 // Centralisation des fonctions d'analyse partagées entre reporter.ts et project-report-generator.ts
 
-import { FileDetail, FunctionAnalysis, Grade, EmblematicFiles } from './types';
+import { FileDetail, FunctionAnalysis, Grade, EmblematicFiles, FileIssueType } from './types';
 import { 
     getGradeInfoByGrade,
     getScoreStatus,
@@ -12,7 +12,6 @@ import {
     ISSUE_SEVERITY,
     GRADE_CONFIG
 } from './scoring.utils';
-import { getPatternImplication } from './markdown-report-utils';
 
 // Type for function analysis with file information
 export type FunctionWithFile = FunctionAnalysis & { file: string };
@@ -154,7 +153,7 @@ function getComplexityThresholds() {
  * Centralised function analysis extraction
  * Harmonises function extraction logic from FileDetail.functions
  */
-function extractFunctionsWithFiles(details: FileDetail[]): FunctionWithFile[] {
+export function extractFunctionsWithFiles(details: FileDetail[]): FunctionWithFile[] {
     return details.flatMap((detail: FileDetail) => 
         detail.functions?.map((func: FunctionAnalysis) => ({ ...func, file: detail.file })) || []
     );
@@ -319,8 +318,7 @@ export function formatFunctionIssuesForDeepDive(func: FunctionWithFile, format: 
     // Enhanced summary with implications (new version)
     const issuesSummaryWithImplications = hasIssues 
         ? sortedIssues.map(issue => {
-            const implication = getPatternImplication(issue.type, 'quality');
-            return `**${issue.type}** (${implication})`;
+            return `**${issue.type}** : ${issue.description || 'No description'}`;
           }).join('<br/>')
         : '_None_';
     
@@ -334,14 +332,13 @@ export function formatFunctionIssuesForDeepDive(func: FunctionWithFile, format: 
         }
     });
     
-    // Enhanced detailed format with implications (new version)
+    // Enhanced detailed format with descriptions (new version)
     const issuesDetailedWithImplications = sortedIssues.map(issue => {
         const severityInfo = formatIssueSeverity(issue.severity as any);
-        const implication = getPatternImplication(issue.type, 'quality');
         if (format === 'cli') {
-            return `- ${issue.type} (${issue.severity}): ${implication}`;
+            return `- ${issue.type} (${issue.severity}): ${issue.description || 'No description'}`;
         } else {
-            return `**${severityInfo.emoji} ${issue.type}** (${issue.severity}): ${implication}`;
+            return `**${severityInfo.emoji} ${issue.type}** (${issue.severity}): ${issue.description || 'No description'}`;
         }
     });
     
@@ -399,6 +396,8 @@ export interface RiskyFileDisplayInfo {
     healthScore: number;
     primaryConcern: string;
     isEmblematic: boolean;
+    criticismScore: number;
+    criticismLevel: 'Low' | 'Medium' | 'High' | 'Critical';
     metrics: {
         complexity: number;
         duplicationRatio: number;
@@ -406,7 +405,7 @@ export interface RiskyFileDisplayInfo {
         formattedMetrics: string; // Compact format for CLI
     };
     primaryIssue?: {
-        type: string;
+        type: FileIssueType;
         severity: string;
         description?: string;
     };
@@ -463,6 +462,13 @@ function formatRiskyFileInfo(file: FileDetail, emblematicFiles?: EmblematicFiles
         description: sortedIssues[0].description
     } : undefined;
     
+    // Calculate criticism score (architectural importance)
+    const { calculateFileCriticismScore } = require('./scoring');
+    const criticismScore = calculateFileCriticismScore(file);
+    
+    // Determine criticism level based on score
+    const criticismLevel = getCriticismLevel(criticismScore);
+    
     // Format metrics compactly
     const formattedMetrics = formatFileMetrics(file.metrics);
     
@@ -471,6 +477,8 @@ function formatRiskyFileInfo(file: FileDetail, emblematicFiles?: EmblematicFiles
         healthScore: file.healthScore,
         primaryConcern: filePrimaryConcern,
         isEmblematic,
+        criticismScore,
+        criticismLevel,
         metrics: {
             complexity: file.metrics.complexity,
             duplicationRatio: file.metrics.duplicationRatio,
@@ -495,24 +503,92 @@ export function formatRiskyFileIssue(riskyFile: RiskyFileDisplayInfo, format: 'c
     
     if (format === 'cli') {
         const icon = severityInfo.emoji;
-        const fullText = `${icon} ${issue.type} (${issue.severity})`;
         
-        // Truncate if needed for CLI display
-        if (fullText.length <= maxLength) {
-            return fullText;
+        // AMÉLIORATION : Afficher la métrique exacte quand possible
+        const metricValue = getIssueMetricValue(issue.type, riskyFile);
+        
+        if (metricValue) {
+            const metricText = `${icon} ${metricValue}`;
+            if (metricText.length <= maxLength) {
+                return metricText;
+            }
         }
         
-        const shortSeverity = issue.severity.substring(0, 4);
-        const shortText = `${icon} ${issue.type} (${shortSeverity}.)`;
+        // AMÉLIORATION : Noms d'issues plus courts mais compréhensibles
+        const shortIssueName = getShortIssueName(issue.type);
+        const shortText = `${icon} ${shortIssueName}`;
+        
         if (shortText.length <= maxLength) {
             return shortText;
         }
         
-        const availableSpace = maxLength - (shortText.length - issue.type.length);
-        const shortType = issue.type.substring(0, availableSpace - 4) + '...';
-        return `${icon} ${shortType} (${shortSeverity}.)`;
+        // Fallback avec troncature intelligente
+        const availableSpace = maxLength - icon.length - 2; // -2 pour l'espace et les points
+        const truncatedName = shortIssueName.substring(0, availableSpace - 3) + '...';
+        return `${icon} ${truncatedName}`;
+        
     } else {
         // Markdown format - can be more verbose
         return `**${severityInfo.emoji} ${issue.type}** (${issue.severity})`;
     }
+}
+
+/**
+ * NOUVEAU : Extraire la valeur métrique spécifique pour l'affichage
+ */
+function getIssueMetricValue(issueType: FileIssueType, riskyFile: RiskyFileDisplayInfo): string | null {
+    const metrics = riskyFile.metrics;
+     const sizeK = formatK(metrics.loc);
+    switch (issueType) {
+        case 'critical-file-complexity':
+            return `Critical Complexity: ${metrics.complexity}`;
+        case 'high-file-complexity':
+            return `High Complexity: ${metrics.complexity}`;
+        case 'complexity':
+            return `Complexity: ${metrics.complexity}`;
+        case 'very-large-file':
+            return `Very Large File: ${sizeK} LOC`;
+        case 'large-file':
+            return `Large File: ${sizeK} LOC`;
+        case 'size':
+            return `Size: ${sizeK} LOC`;
+        case 'high-duplication':
+            const dupPercent = (metrics.duplicationRatio * 100).toFixed(0);
+            return `Duplication: ${dupPercent}%`;
+        case 'too-many-functions':
+            // Nécessiterait d'ajouter le count de fonctions dans RiskyFileDisplayInfo
+            return `Functions: High`;
+            
+        default:
+            return null;
+    }
+}
+
+/**
+ * NOUVEAU : Noms d'issues raccourcis mais compréhensibles
+ */
+function getShortIssueName(issueType: FileIssueType): string {
+    const shortNames: Record<string, string> = {
+        'critical-file-complexity': 'Critical Complex',
+        'high-file-complexity': 'High Complex',
+        'very-large-file': 'Very Large',
+        'large-file': 'Large File',
+        'high-duplication': 'High Duplication',
+        'too-many-functions': 'Too Many Funcs',
+        'low-cohesion': 'Low Cohesion',
+        'complexity': 'Complex',
+        'size': 'Large'
+    };
+    
+    return shortNames[issueType] || issueType;
+}
+
+/**
+ * Convert criticism score to a human-readable level
+ */
+function getCriticismLevel(criticismScore: number): 'Low' | 'Medium' | 'High' | 'Critical' {
+    if (criticismScore >= 75) return 'Critical';
+    if (criticismScore >= 50) return 'High';
+    if (criticismScore >= 25) return 'Medium';
+    return 'Low';
 }

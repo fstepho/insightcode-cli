@@ -41,7 +41,7 @@ const Ansi = {
   orange: (s: string) => Ansi.color(208, s),
   yellow: (s: string) => Ansi.color(220, s),
   green: (s: string) => Ansi.color(77, s),
-  
+  dim: (s: string) => Ansi.color(250, s),
   // Grade-specific colors derived from shared utils
   gradeColor: (grade: Grade, s: string) => {
     const gradeDisplay = formatGradeDisplay(grade);
@@ -264,7 +264,15 @@ function generateRiskyFiles(details: FileDetail[], emblematicFiles?: EmblematicF
         lines.push(createTableRow([score, Ansi.gray(filePath), Ansi.gray(metricsStr), issueStr], widths));
     });
 
+    
     lines.push(Ansi.bold(`└${'─'.repeat(totalWidth - 2)}┘`));
+
+    // AJOUT : Légende en bas du tableau
+    lines.push(Ansi.bold(`└${'─'.repeat(totalWidth - 2)}┘`));
+    lines.push(''); // Espacement
+    lines.push(Ansi.dim('Legend: S=Score, C=Complexity, D=Duplication %, L=Lines of Code, ⭐=Emblematic file'));
+
+
     return lines;
 }
 function generateDeepDive(analysis: AnalysisResult): string[] {

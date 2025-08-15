@@ -1,8 +1,9 @@
+// File: src/project-report-generator.ts
 /**
  * Générateur de rapports pour un projet individuel
  */
 
-import { AnalysisResult, FileDetail, FunctionIssue, ReportResult, EmblematicFiles, Grade, DuplicationMode } from './types';
+import { AnalysisResult, FileDetail, FunctionIssue, ReportResult, EmblematicFiles, Grade, DuplicationMode, QuickWin, QuickWinsAnalysis, Overview, Context, FunctionAnalysis, Score } from './types';
 import { 
     getAverageExcessRatio, 
     generateFileHealthDistribution,
@@ -21,7 +22,9 @@ import {
     formatFunctionIssuesForDeepDive,
     // Risky Files harmonization
     prepareRiskyFilesData,
-    RiskyFileDisplayInfo
+    RiskyFileDisplayInfo,
+    // Function extraction
+    extractFunctionsWithFiles
 } from './report-utils';
 import { FILE_SIZE_THRESHOLDS, IMPROVEMENT_SUGGESTION_THRESHOLDS } from './thresholds.constants';
 import {
@@ -34,13 +37,16 @@ import {
     isArchitecturePattern,
     getPatternImplication
 } from './markdown-report-utils';
+import { QuickWinsReporter } from './quick-wins-reporter';
+import { IdeLinkGenerator } from './ide-links';
+import path from 'path';
 
 // FunctionWithFile type moved to shared-analysis-utils.ts
 
 /**
  * Génère un rapport détaillé pour un seul projet
  */
-export function generateProjectReport(result: ReportResult): string {
+export function generateProjectReport(result: ReportResult, enableLinks: boolean): string {
     const { project, analysis, durationMs } = result;
     
     let markdown = `# InsightCode Analysis Report: ${project}\n\n`;
@@ -54,6 +60,15 @@ export function generateProjectReport(result: ReportResult): string {
     markdown += `- **Stars:** ${result.stars}\n`;
     markdown += `- **Category:** ${result.category}\n\n`;
     
+    // Quality Summary - MOVED UP for priority
+    markdown += `## Quality Summary\n\n`;
+    markdown += generateQualitySummary(analysis, result.emblematicFiles);
+    
+    // Quick Wins
+    if (analysis.quickWinsAnalysis && analysis.quickWinsAnalysis.quickWins.length > 0) {
+        markdown += generateQuickWinsSection(analysis.quickWinsAnalysis, analysis.context.project.path, enableLinks);
+    }
+    
     // Analysis Context
     markdown += `## Analysis Context\n\n`;
     markdown += `- **Timestamp:** ${analysis.context.analysis.timestamp}\n`;
@@ -61,22 +76,18 @@ export function generateProjectReport(result: ReportResult): string {
     markdown += `- **Files Analyzed:** ${analysis.context.analysis.filesAnalyzed}\n`;
     markdown += `- **Tool Version:** ${analysis.context.analysis.toolVersion}\n\n`;
     
-    // Quality Summary
-    markdown += `## Quality Summary\n\n`;
-    markdown += generateQualitySummary(analysis, result.emblematicFiles);
-    
-    // Methodology Notes
-    markdown += `\n### 📊 Scoring Methodology\n\n`;
-    markdown += generateScoringMethodologyNotes(analysis);
-    
     // Key Statistics
-    markdown += `### Key Statistics\n\n`;
+    markdown += `## Key Statistics\n\n`;
     markdown += `| Metric | Value |\n`;
     markdown += `|--------|-------|\n`;
     markdown += `| Total Files | ${analysis.overview.statistics.totalFiles} |\n`;
     markdown += `| Total Lines of Code | ${formatNumber(analysis.overview.statistics.totalLOC)} |\n`;
     markdown += `| Average Complexity | ${analysis.overview.statistics.avgComplexity.toFixed(1)} |\n`;
     markdown += `| Average LOC per File | ${Math.round(analysis.overview.statistics.avgLOC)} |\n\n`;
+    
+    // Methodology Notes
+    markdown += `### 📊 Scoring Methodology\n\n`;
+    markdown += generateScoringMethodologyNotes(analysis);
     
     // Health Distribution
     markdown += `## File Health Distribution\n\n`;
@@ -99,13 +110,14 @@ export function generateProjectReport(result: ReportResult): string {
     markdown += `## Dependency Analysis\n\n`;
     markdown += generateDependencyInsights(analysis.details);
     
-    // Issue Analysis
+    // Issue Analysis - use all functions for complete statistics
+    const allFunctionsData = extractFunctionsWithFiles(analysis.details);
     markdown += `## Issue Analysis\n\n`;
-    markdown += generateIssueAnalysis(analysis.details, deepDiveData.functions);
+    markdown += generateIssueAnalysis(analysis.details, allFunctionsData);
     
-    // Pattern Analysis - using harmonized Deep Dive data
-    if (deepDiveData.hasData) {
-        markdown += generatePatternAnalysis(deepDiveData.functions);
+    // Pattern Analysis - use all functions for complete statistics
+    if (allFunctionsData.length > 0) {
+        markdown += generatePatternAnalysis(allFunctionsData);
     }
     
     // Technical Notes
@@ -150,7 +162,7 @@ function generateQualitySummary(
 
   // 2. Executive-style bullet (primary concern, context, etc.)
   //    — we reuse the existing logic but strip its own grade line to avoid repetition.
-  out += generateExecutiveSummary(analysis, emblematicFiles) + '\n';
+  out += generateNarrativeSummary(analysis, emblematicFiles) + '\n';
 
   // 3. Compact score table (complexity / maintainability / duplication / overall)
   out += generateScoreTable(
@@ -159,6 +171,210 @@ function generateQualitySummary(
   );
 
   return out;
+}
+
+/**
+ * Generates a narrative and directive executive summary based on analysis data.
+ * @param analysis The complete analysis results object.
+ * @param emblematicFiles The emblematic files for context.
+ * @returns A markdown string containing the narrative summary.
+ */
+// ========== HELPER INTERFACES ==========
+/**
+ * Interface for critical file data used in narrative generation
+ */
+
+/**
+ * Interface for problem pattern data
+ */
+interface ProblemPattern {
+    category: string;
+    count: number;
+    percentage: number;
+}
+
+// ========== HELPER FUNCTIONS ==========
+/**
+ * Generates a narrative and directive executive summary based on analysis data.
+ * @param analysis The complete analysis results object.
+ * @param emblematicFiles The emblematic files for context.
+ * @returns A markdown string containing the narrative summary.
+ */
+function generateNarrativeSummary(analysis: AnalysisResult, emblematicFiles?: EmblematicFiles): string {
+    const { overview, details, quickWinsAnalysis: quickWins, context } = analysis;
+    const riskyFilesData = prepareRiskyFilesData(details, emblematicFiles);
+    const criticalFiles = riskyFilesData.files;
+
+    // Handle healthy codebase scenario
+    if (criticalFiles.length === 0) {
+        return generateHealthyCodebaseSummary(overview);
+    }
+
+    // Build narrative for codebases with issues
+    return generateIssueNarrative(
+        criticalFiles,
+        overview,
+        details,
+        quickWins,
+        context
+    );
+}
+
+/**
+ * Generates a summary for a healthy codebase with no critical issues.
+ */
+function generateHealthyCodebaseSummary(overview: Overview): string {
+    let summary = `**✅ Excellent news:** No critical issues detected. The codebase maintains high quality standards.\n\n`;
+    
+    const avgComplexity = overview.statistics.avgComplexity;
+    const duplicationRate = ratioToPercentage(overview.statistics.avgDuplicationRatio || 0);
+
+    // Suggest proactive improvements even for healthy codebases
+    if (avgComplexity > IMPROVEMENT_SUGGESTION_THRESHOLDS.AVG_COMPLEXITY) {
+        summary += `**💡 Proactive improvement:** Consider reducing average complexity (currently ${avgComplexity.toFixed(1)}) through strategic function decomposition.\n\n`;
+    } else if (duplicationRate > IMPROVEMENT_SUGGESTION_THRESHOLDS.DUPLICATION_PERCENTAGE) {
+        summary += `**💡 Proactive improvement:** Consider addressing code duplication (currently ${duplicationRate.toFixed(1)}%) to enhance maintainability.\n\n`;
+    }
+    
+    return summary;
+}
+
+/**
+ * Generates a narrative for codebases with identified issues.
+ */
+function generateIssueNarrative(
+    criticalFiles: RiskyFileDisplayInfo[],
+    overview: Overview,
+    details: FileDetail[],
+    quickWins: QuickWinsAnalysis | undefined,
+    context: Context
+): string {
+    const projectHealth = assessProjectHealth(overview.grade);
+    const mainHotspot = identifyMainHotspot(criticalFiles);
+    const criticalExamples = getCriticalExamples(criticalFiles, mainHotspot);
+    const patterns = getTopProblemPatterns(quickWins);
+    const mostComplexFunction = findMostComplexFunction(details, mainHotspot);
+    const architecturalWin = findArchitecturalQuickWin(quickWins);
+
+    // Build the narrative
+    let narrative = `With a grade of **${overview.grade}**, **${context.project.name}** is a **${projectHealth}** project. `;
+    narrative += `Our analysis identifies the **\`${mainHotspot}\`** module as the primary technical debt concentration. `;
+
+    // Add critical file examples
+    if (criticalExamples.length > 0) {
+        narrative += formatCriticalExamples(criticalExamples);
+    }
+    
+    // Add problem patterns
+    if (patterns.length > 0) {
+        narrative += formatProblemPatterns(patterns);
+    }
+    
+    // Add strategic recommendation
+    narrative += `\n\n**🎯 Strategic recommendation:** Focus Phase 1 efforts on stabilizing the \`${mainHotspot}\` module. `;
+    narrative += formatActionItems(architecturalWin, mostComplexFunction);
+
+    return narrative + '\n';
+}
+
+/**
+ * Helper functions for cleaner code organization
+ */
+function assessProjectHealth(grade: Grade): string {
+    if (grade <= 'B') return 'robust';
+    if (grade === 'C') return 'maintainable but improvable';
+    return 'requiring immediate attention';
+}
+
+function identifyMainHotspot(criticalFiles: RiskyFileDisplayInfo[]): string {
+    const directoryCounts = criticalFiles
+        .map(f => f.file.split('/')[0])
+        .reduce((acc, dir) => {
+            acc[dir] = (acc[dir] || 0) + 1;
+            return acc;
+        }, {} as Record<string, number>);
+
+    if (Object.keys(directoryCounts).length === 0) {
+        return 'the codebase';
+    }
+
+    return Object.entries(directoryCounts)
+        .sort((a, b) => b[1] - a[1])[0][0];
+}
+
+function getCriticalExamples(criticalFiles: RiskyFileDisplayInfo[], hotspot: string): RiskyFileDisplayInfo[] {
+    return criticalFiles
+        .filter(f => f.file.startsWith(hotspot))
+        .slice(0, 2);
+}
+
+function getTopProblemPatterns(quickWins: QuickWinsAnalysis | undefined): ProblemPattern[] {
+    return quickWins?.problemPatterns
+        ?.map(p => ({
+            category: p.category,
+            count: p.count,
+            percentage: p.percentage
+        }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 2) || [];
+}
+
+function findMostComplexFunction(details: FileDetail[], hotspot: string): FunctionAnalysis & { file: string } | undefined {
+    const allFunctions = details.flatMap(d => 
+        d.functions?.map(f => ({...f, file: d.file})) || []
+    );
+    
+    return allFunctions
+        .filter(f => f.file.startsWith(hotspot))
+        .sort((a, b) => b.complexity - a.complexity)[0];
+}
+
+function findArchitecturalQuickWin(quickWins: QuickWinsAnalysis | undefined): QuickWin | undefined {
+    const architecturalActions: QuickWin['type'][] = ['split-file', 'reduce-parameters', 'extract-module'];
+    return quickWins?.quickWins?.find(qw => architecturalActions.includes(qw.type));
+}
+
+function formatCriticalExamples(examples: RiskyFileDisplayInfo[]): string {
+    if (examples.length === 0) return '';
+    
+    let text = `Key concerns include \`${examples[0].file}\` (health score: ${examples[0].healthScore}%)`;
+    if (examples.length > 1) {
+        text += ` and \`${examples[1].file}\` (health score: ${examples[1].healthScore}%)`;
+    }
+    return text + '. ';
+}
+
+function formatProblemPatterns(patterns: ProblemPattern[]): string {
+    if (patterns.length === 0) return '';
+    
+    const pattern1 = patterns[0];
+    const cleanCategory1 = pattern1.category.replace(/ Issues| Violations/g, '').toLowerCase();
+    let text = `The most prevalent issues are **${cleanCategory1}** (${pattern1.percentage.toFixed(0)}% of all issues)`;
+    
+    if (patterns[1]) {
+        const cleanCategory2 = patterns[1].category.replace(/ Issues| Violations/g, '').toLowerCase();
+        text += ` followed by **${cleanCategory2}**`;
+    }
+    
+    return text + '. ';
+}
+
+function formatActionItems(architecturalWin?: QuickWin, complexFunction?: FunctionAnalysis & { file: string }): string {
+    const actions = [];
+    
+    if (architecturalWin) {
+        actions.push(`implementing **${architecturalWin.action}** on \`${architecturalWin.file}\``);
+    }
+    
+    if (complexFunction) {
+        actions.push(`refactoring the high-complexity function **\`${complexFunction.name}\`** (complexity: ${complexFunction.complexity})`);
+    }
+
+    if (actions.length === 0) {
+        return 'Begin with a comprehensive review to identify specific improvement opportunities.';
+    }
+
+    return `Prioritize ${actions.join(' and ')} for maximum impact.`;
 }
 
 function generateExecutiveSummary(analysis: AnalysisResult, emblematicFiles?: EmblematicFiles): string {
@@ -276,18 +492,34 @@ function generateScoringMethodologyNotes(analysis?: AnalysisResult): string {
     return notes;
 }
 
+/**
+ * Get emoji for criticism level
+ */
+function getCriticismEmoji(level: 'Low' | 'Medium' | 'High' | 'Critical'): string {
+    switch (level) {
+        case 'Critical': return '🔥';
+        case 'High': return '⚠️';
+        case 'Medium': return '🟡';
+        case 'Low': return '🟢';
+        default: return '❓';
+    }
+}
 
 function generateCriticalFilesSection(riskyFiles: RiskyFileDisplayInfo[]): string {
-    let markdown = `| File | Health | Primary Concern |\n`;
-    markdown += `|------|--------|-----------------|\n`;
+    let markdown = `| File | Health | Criticism | Primary Concern |\n`;
+    markdown += `|------|--------|-----------|------------------|\n`;
     
     riskyFiles.forEach(riskyFile => {
         const fileLabel = riskyFile.isEmblematic ? `⭐ ${riskyFile.file}` : riskyFile.file;
         
+        // Format criticism level with emoji for visual impact
+        const criticismEmoji = getCriticismEmoji(riskyFile.criticismLevel);
+        const criticismDisplay = `${criticismEmoji} ${riskyFile.criticismLevel}`;
+        
         // Use standardized primary concern (without recommendations as requested)
         const primaryConcern = riskyFile.primaryConcern;
         
-        markdown += `| ${fileLabel} | ${riskyFile.healthScore}% | ${primaryConcern} |\n`;
+        markdown += `| ${fileLabel} | ${riskyFile.healthScore}% | ${criticismDisplay} | ${primaryConcern} |\n`;
     });
     
     markdown += `\n*⭐ indicates emblematic/core files*\n\n`;
@@ -349,9 +581,15 @@ function generateDependencyInsights(details: FileDetail[]): string {
         .sort((a, b) => b.dependencies.incomingDependencies - a.dependencies.incomingDependencies)
         .slice(0, 5);
     
-    // Unstable files
+    // Unstable files (exclude entry points like index.ts)
+    const isEntryPoint = (file: string) => {
+        const fileName = file.split('/').pop()?.toLowerCase() || '';
+        return fileName === 'index.ts' || fileName === 'index.js' || 
+               fileName.includes('main.') || fileName.includes('entry.');
+    };
+    
     const unstableFiles = applicationFiles
-        .filter(d => d.dependencies.instability > 0.8)
+        .filter(d => d.dependencies.instability > 0.8 && !isEntryPoint(d.file))
         .slice(0, 5);
     
     let markdown = `### Hub Files (High Impact)\n\n`;
@@ -444,6 +682,7 @@ function generateIssueAnalysis(details: FileDetail[], functionsWithFile: Functio
         sortedFileTypes.forEach(([type, count]) => {
             const filteredIssues = fileIssues.filter(i => i.type === type && i.excessRatio !== undefined) as Array<typeof fileIssues[0] & {excessRatio: number}>;
         const avgExcess = filteredIssues.length > 0 ? getAverageExcessRatio(filteredIssues) : 0;
+          // Use generic implication for file-level patterns  
           const implication = getPatternImplication(type, 'quality');
           markdown += `| ${capitalize(type)} | ${count} | ${avgExcess}x threshold | ${implication} |\n`;
         });
@@ -475,6 +714,7 @@ function generateIssueAnalysis(details: FileDetail[], functionsWithFile: Functio
                 ? `\`${affectedFunctions.join('`, `')}\`` + (functionIssues.filter(i => i.type === type).length > 2 ? '...' : '')
                 : '_Various_';
                 
+            // Use generic implication for function-level patterns
             const implication = getPatternImplication(type, 'quality');
             markdown += `| ${capitalize(type)} | ${count} | ${functionList} | ${implication} |\n`;
         });
@@ -527,6 +767,39 @@ function generatePatternAnalysis(functionsWithFile: FunctionWithFile[]): string 
         return '';
     }
     
+    return markdown;
+}
+
+
+// AJOUT : Fonction pour générer la section Quick Wins
+function generateQuickWinsSection(quickWinsAnalysis: QuickWinsAnalysis, analysisPath: string, enableLinks: boolean): string {
+    if (!quickWinsAnalysis || quickWinsAnalysis.quickWins.length === 0) {
+        return '';
+    }
+
+    const quickWinsReporter = new QuickWinsReporter({
+        ide: IdeLinkGenerator.detectIDE(),
+        projectRoot: path.resolve(analysisPath),
+        enableLinks: enableLinks
+    });
+      
+      
+    // Générer la section markdown en utilisant le reporter existant
+    let markdown = `## 🚀 Quick Wins Analysis\n\n`;
+    
+    // Ajouter les métriques de base
+    markdown += `**Summary:**\n`;
+    markdown += `- **Total potential score gain:** +${quickWinsAnalysis.totalPotentialGain} points\n`;
+    markdown += `- **Quick wins identified:** ${quickWinsAnalysis.quickWins.length}\n`;
+    markdown += `- **Immediate wins (< 30min):** ${quickWinsAnalysis.summary.immediateWins}\n`;
+    markdown += `- **Estimated total effort:** ${quickWinsAnalysis.summary.estimatedHours.toFixed(1)} hours\n\n`;
+    
+    // Ajouter le rapport markdown complet du QuickWinsReporter
+    // En supprimant le header principal pour éviter la duplication
+    const fullReport = quickWinsReporter.generateMarkdownReport(quickWinsAnalysis);
+    const reportWithoutHeader = fullReport.replace(/^## 🚀 Quick Wins Analysis\s*\n/, '');
+    
+    markdown += reportWithoutHeader;
     
     return markdown;
 }

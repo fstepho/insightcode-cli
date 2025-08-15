@@ -1,42 +1,5 @@
 // File: src/utils.ts
 
-/**
- * A utility function to deeply merge two objects.
- * The source object's properties will overwrite the target object's properties.
- * This is useful for merging user-provided configuration with default settings.
- * @param target The target object to merge into.
- * @param source The source object to merge from.
- * @returns The merged object.
- */
-export function deepMerge<T extends Record<string, unknown>>(target: T, source: Partial<T>): T {
-  const output = { ...target };
-
-  if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach(key => {
-      const sourceValue = source[key];
-      const targetValue = target[key];
-      
-      if (isObject(sourceValue)) {
-        if (!(key in target)) {
-          (output as Record<string, unknown>)[key] = sourceValue;
-        } else {
-          (output as Record<string, unknown>)[key] = deepMerge(targetValue as Record<string, unknown>, sourceValue as Partial<Record<string, unknown>>);
-        }
-      } else {
-        (output as Record<string, unknown>)[key] = sourceValue;
-      }
-    });
-  }
-
-  return output;
-}
-
-/**
- * Helper function to check if a variable is a non-null object.
- */
-function isObject(item: unknown): item is Record<string, unknown> {
-  return Boolean(item && typeof item === 'object' && !Array.isArray(item));
-}
 
 /**
  * Normalizes file paths for consistent cross-platform usage.
