@@ -11,6 +11,7 @@ interface FileDetailWithContent extends FileDetail {
 describe('Duplication Detection', () => {
   const createFileDetail = (file: string, content: string, loc: number = 10): FileDetailWithContent => ({
     file,
+    absolutePath: `/project/${file}`,
     metrics: {
       complexity: 1,
       loc,
@@ -28,7 +29,8 @@ describe('Duplication Detection', () => {
     issues: [],
     healthScore: 100,
     // Store the content for duplication detection
-    content
+    content,
+    functions: []
   });
 
   it('should detect no duplication in unique files', () => {

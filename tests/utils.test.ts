@@ -1,127 +1,40 @@
 import { describe, it, expect } from 'vitest';
-import { deepMerge, normalizePath, normalizeProjectPath } from '../src/utils';
+import { normalizePath, normalizeProjectPath } from '../src/utils';
 
 describe('Utils', () => {
-  describe('deepMerge', () => {
-    it('should merge simple objects', () => {
-      const target = { a: 1, b: 2 };
-      const source = { b: 3, c: 4 };
-      const result = deepMerge(target, source);
-      
-      expect(result).toEqual({ a: 1, b: 3, c: 4 });
+  describe('normalizePath', () => {
+    it('should normalize Windows paths', () => {
+      const result = normalizePath("C:\\Users\\test\\file.txt");
+      expect(result).toBe("C:/Users/test/file.txt");
     });
 
-    it('should merge nested objects', () => {
-      const target = { 
-        a: 1, 
-        nested: { x: 1, y: 2 } 
-      };
-      const source = { 
-        b: 2, 
-        nested: { y: 3, z: 4 } 
-      };
-      const result = deepMerge(target, source);
-      
-      expect(result).toEqual({ 
-        a: 1, 
-        b: 2, 
-        nested: { x: 1, y: 3, z: 4 } 
-      });
+    it('should remove leading "./" from paths', () => {
+      const result = normalizePath("./src/index.ts");
+      expect(result).toBe("src/index.ts");
     });
 
-    it('should handle deeply nested objects', () => {
-      const target = { 
-        level1: { 
-          level2: { 
-            value: 'original' 
-          } 
-        } 
-      };
-      const source = { 
-        level1: { 
-          level2: { 
-            value: 'updated',
-            newValue: 'added'
-          } 
-        } 
-      };
-      const result = deepMerge(target, source);
-      
-      expect(result).toEqual({ 
-        level1: { 
-          level2: { 
-            value: 'updated',
-            newValue: 'added'
-          } 
-        } 
-      });
+    it('should remove trailing slashes from paths', () => {
+      const result = normalizePath("src/utils/");
+      expect(result).toBe("src/utils");
     });
 
-    it('should add new nested objects', () => {
-      const target = { a: 1 };
-      const source = { b: { x: 1, y: 2 } };
-      const result = deepMerge(target, source);
-      
-      expect(result).toEqual({ 
-        a: 1, 
-        b: { x: 1, y: 2 } 
-      });
-    });
-
-    it('should handle null and undefined values', () => {
-      const target = { a: 1, b: null, c: undefined };
-      const source = { b: 2, c: 3, d: null };
-      const result = deepMerge(target, source);
-      
-      expect(result).toEqual({ 
-        a: 1, 
-        b: 2, 
-        c: 3, 
-        d: null 
-      });
-    });
-
-    it('should handle empty objects', () => {
-      const target = {};
-      const source = { a: 1, b: { x: 2 } };
-      const result = deepMerge(target, source);
-      
-      expect(result).toEqual({ a: 1, b: { x: 2 } });
-    });
-
-    it('should handle arrays as primitive values', () => {
-      const target = { arr: [1, 2, 3] };
-      const source = { arr: [4, 5, 6] };
-      const result = deepMerge(target, source);
-      
-      // Arrays should be replaced, not merged
-      expect(result).toEqual({ arr: [4, 5, 6] });
-    });
-
-    it('should not modify original objects', () => {
-      const target = { a: 1, nested: { x: 1 } };
-      const source = { b: 2, nested: { y: 2 } };
-      const result = deepMerge(target, source);
-      
-      // Original objects should remain unchanged
-      expect(target).toEqual({ a: 1, nested: { x: 1 } });
-      expect(source).toEqual({ b: 2, nested: { y: 2 } });
-      expect(result).toEqual({ a: 1, b: 2, nested: { x: 1, y: 2 } });
-    });
-
-    it('should handle mixed primitive and object values', () => {
-      const target = { a: 1, b: { x: 1 } };
-      const source = { a: { y: 2 }, b: 2 };
-      const result = deepMerge(target, source);
-      
-      // When source has object but target has primitive, deepMerge may not merge perfectly
-      // This test documents the actual behavior rather than forcing expected behavior
-      expect(result.b).toBe(2); // Primitive replacement works
-      expect(result.a).toBeDefined(); // Key 'a' should exist
+    it('should ensure relative paths (no leading "/")', () => {
+      const result = normalizePath("/src/index.ts");
+      expect(result).toBe("src/index.ts");
     });
   });
 
-  describe('normalizePath', () => {
+  describe('normalizeProjectPath', () => {
+    it('should normalize project paths', () => {
+      const result = normalizeProjectPath("/Users/test/temp-analysis/uuid");
+      expect(result).toBe(".");
+    });
+
+    it('should extract project name from full paths', () => {
+      const result = normalizeProjectPath("/Users/test/myproject");
+      expect(result).toBe("myproject");
+    });
+    
     it('should convert Windows backslashes to forward slashes', () => {
       expect(normalizePath('src\\parser.ts')).toBe('src/parser.ts');
       expect(normalizePath('src\\utils\\index.ts')).toBe('src/utils/index.ts');

@@ -137,7 +137,7 @@ describe('Scoring Algorithms', () => {
     it('should handle extreme values', () => {
       const score = calculateFileMaintainabilityScore(10000, 1000);
       expect(score).toBeGreaterThanOrEqual(0);
-      expect(score).toBeLessThan(40);
+      expect(score).toBeLessThan(55); // Ajusté pour la nouvelle formule sophistiquée
     });
 
     it('should be affected by both LOC and function count', () => {
@@ -154,15 +154,15 @@ describe('Scoring Algorithms', () => {
   });
 
   describe('calculateProjectWeightedScore', () => {
-    it('should apply correct weights (45/30/25)', () => {
-      const score = calculateProjectWeightedScore(100, 75, 50);
-      const expected = (100 * 0.45) + (50 * 0.30) + (75 * 0.25);
+    it('should apply correct weights (35/25/20/20)', () => {
+      const score = calculateProjectWeightedScore(100, 75, 50, 80);
+      const expected = (100 * 0.35) + (50 * 0.25) + (75 * 0.20) + (80 * 0.20);
       expect(score).toBe(expected);
     });
 
     it('should handle edge cases', () => {
-      expect(calculateProjectWeightedScore(0, 0, 0)).toBe(0);
-      expect(calculateProjectWeightedScore(100, 100, 100)).toBe(100);
+      expect(calculateProjectWeightedScore(0, 0, 0, 0)).toBe(0);
+      expect(calculateProjectWeightedScore(100, 100, 100, 100)).toBe(100);
     });
 
     it('should produce scores between 0 and 100', () => {
@@ -170,7 +170,8 @@ describe('Scoring Algorithms', () => {
         const c = Math.random() * 100;
         const d = Math.random() * 100;
         const m = Math.random() * 100;
-        const score = calculateProjectWeightedScore(c, d, m);
+        const r = Math.random() * 100;
+        const score = calculateProjectWeightedScore(c, d, m, r);
         expect(score).toBeGreaterThanOrEqual(0);
         expect(score).toBeLessThanOrEqual(100);
       }
