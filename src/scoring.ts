@@ -1,6 +1,6 @@
 // File: src/scoring.ts
 
-import { FileIssue, FileDetail, CodeIssue } from './types';
+import { FileIssue, FunctionIssue, FileDetail, CodeIssue } from './types';
 import { DUPLICATION_LEVELS } from './scoring.utils';
 import { COMPLEXITY_SCORING_THRESHOLDS } from './thresholds.constants';
 import {
@@ -338,7 +338,7 @@ function getFileSizePenalty(loc: number): number {
   return basePenalty + exponentialPenalty; // Can exceed 40+ for massive files
 }
 
-function getIssuesPenalty(issues: FileIssue[]): number {
+function getIssuesPenalty(issues: CodeIssue[]): number {
   // Issues penalty without artificial caps - following Pareto principle
   const penalty = issues.reduce((currentPenalty, issue) => {
     switch (issue.severity) {
@@ -369,7 +369,7 @@ export function calculateFileHealthScore(file: {
     duplicationRatio: number;
   }; 
   issues: FileIssue[];
-  functions?: Array<{ issues?: FileIssue[] }>; // Include function issues 
+  functions?: Array<{ issues?: FunctionIssue[] }>; // Include function issues 
 }, duplicationMode: 'strict' | 'legacy' = 'legacy'): number {
   
   const complexityPenalty = getFileComplexityPenalty(file.metrics.complexity);
@@ -377,7 +377,7 @@ export function calculateFileHealthScore(file: {
   const sizePenalty = getFileSizePenalty(file.metrics.loc);
   
   // Include both file-level and function-level issues
-  const allIssues = [...file.issues];
+  const allIssues: CodeIssue[] = [...file.issues];
   if (file.functions) {
     for (const func of file.functions) {
       if (func.issues) {
